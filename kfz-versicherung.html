@@ -989,6 +989,20 @@
     </div>
   </footer>
 
+  <!-- Funnel Modal (needed for openCalendlyDirect) -->
+  <div class="funnel-overlay" id="funnelOverlay" onclick="closeFunnelOutside(event)">
+    <div class="funnel-modal" role="dialog" aria-modal="true">
+      <button class="funnel-close" onclick="closeFunnel()" aria-label="Schließen">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="funnel-progress-wrap">
+        <div class="funnel-progress-bar" id="funnelBar"></div>
+      </div>
+      <p class="funnel-step-label" id="funnelStepLabel">Schritt 1 von 4</p>
+      <div class="funnel-body" id="funnelBody"></div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
   <script src="cookie.js"></script>
   <script src="analytics.js" defer></script>
