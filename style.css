@@ -149,7 +149,7 @@ p   { line-height: 1.7; }
 .btn-online-abschluss {
   background: linear-gradient(135deg, rgb(88,28,135), rgb(255,33,120), rgb(88,28,135)) !important;
   background-size: 200% 200% !important;
-  animation: shimmer-gradient 3s ease-in-out infinite;
+  animation: shimmer-gradient 4s ease-in-out infinite;
   box-shadow: 0 2px 10px rgba(255,33,120,.35) !important;
   border: none !important;
   outline: none !important;
