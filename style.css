@@ -897,13 +897,12 @@ p   { line-height: 1.7; }
 }
 .faq-item.open .faq-chevron { transform: rotate(180deg); }
 .faq-a {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows .35s var(--ease);
-}
-.faq-item.open .faq-a { grid-template-rows: 1fr; }
-.faq-a-inner {
+  max-height: 0;
   overflow: hidden;
+  transition: max-height .4s var(--ease);
+}
+.faq-item.open .faq-a { max-height: 600px; }
+.faq-a-inner {
   padding: 0 26px;
   font-size: 15px;
   color: var(--gray-500);
