@@ -32,13 +32,12 @@
       position: relative;
       z-index: 1;
       min-height: 420px;
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 280px;
       align-items: center;
-      justify-content: center;
+      gap: 32px;
     }
     .page-hero-left {
-      width: 100%;
-      max-width: 700px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -107,14 +106,13 @@
     }
     .page-hero-btn-secondary:hover { background: rgba(255,255,255,.18); transform: translateY(-2px); }
     .page-hero-photo {
-      position: absolute;
-      right: 28px;
-      top: 50%;
-      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .page-hero-photo img {
-      width: 260px;
-      height: 260px;
+      width: 240px;
+      height: 240px;
       border-radius: 50%;
       object-fit: cover;
       object-position: center top;
@@ -122,6 +120,7 @@
       display: block;
     }
     @media (max-width: 900px) {
+      .page-hero-split { grid-template-columns: 1fr; }
       .page-hero-photo { display: none; }
     }
 
