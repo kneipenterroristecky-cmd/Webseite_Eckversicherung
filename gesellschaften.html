@@ -82,19 +82,26 @@
       transform: translateY(-4px);
     }
     .partner-logo {
-      width: 64px;
-      height: 64px;
-      border-radius: 12px;
+      width: 80px;
+      height: 56px;
+      border-radius: 10px;
       background: #fff;
       border: 1px solid #e2e8f0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      overflow: hidden;
+      flex-shrink: 0;
+      font-size: 12px;
       font-weight: 900;
       color: rgb(33,103,204);
       letter-spacing: -0.5px;
-      flex-shrink: 0;
+    }
+    .partner-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 8px;
     }
     .partner-name {
       font-size: 13px;
@@ -194,75 +201,58 @@
     </div>
 
     <div class="partner-grid">
-      <div class="partner-card reveal" data-delay="0"><div class="partner-logo">ACE</div><div class="partner-name">ACE</div></div>
-      <div class="partner-card reveal" data-delay="50"><div class="partner-logo">AXA</div><div class="partner-name">AXA-DBV</div></div>
-      <div class="partner-card reveal" data-delay="100"><div class="partner-logo">ACC</div><div class="partner-name">ACC</div></div>
-      <div class="partner-card reveal" data-delay="150"><div class="partner-logo">AU</div><div class="partner-name">Aachen und Münchener</div></div>
-      <div class="partner-card reveal" data-delay="200"><div class="partner-logo">AB</div><div class="partner-name">Aachener Bausparkasse</div></div>
-      <div class="partner-card reveal" data-delay="250"><div class="partner-logo">ADV</div><div class="partner-name">Advocard</div></div>
-      <div class="partner-card reveal" data-delay="300"><div class="partner-logo">ALL</div><div class="partner-name">Allianz</div></div>
-      <div class="partner-card reveal" data-delay="350"><div class="partner-logo">AL</div><div class="partner-name">Alte Leipziger</div></div>
-      <div class="partner-card reveal" data-delay="0"><div class="partner-logo">AMB</div><div class="partner-name">AMbAV</div></div>
-      <div class="partner-card reveal" data-delay="50"><div class="partner-logo">AMM</div><div class="partner-name">Ammerländer</div></div>
-      <div class="partner-card reveal" data-delay="100"><div class="partner-logo">ARA</div><div class="partner-name">ARAG</div></div>
-      <div class="partner-card reveal" data-delay="150"><div class="partner-logo">ASP</div><div class="partner-name">Aspecta</div></div>
-      <div class="partner-card reveal" data-delay="200"><div class="partner-logo">ATR</div><div class="partner-name">Atradius</div></div>
-      <div class="partner-card reveal" data-delay="250"><div class="partner-logo">AXA</div><div class="partner-name">AXA</div></div>
-      <div class="partner-card reveal" data-delay="300"><div class="partner-logo">BAD</div><div class="partner-name">Baden-Badener</div></div>
-      <div class="partner-card reveal" data-delay="350"><div class="partner-logo">BAR</div><div class="partner-name">Barmenia</div></div>
-      <div class="partner-card reveal" data-delay="0"><div class="partner-logo">BAS</div><div class="partner-name">Basler</div></div>
-      <div class="partner-card reveal" data-delay="50"><div class="partner-logo">BB</div><div class="partner-name">Bayerische Beamten Kammer</div></div>
-      <div class="partner-card reveal" data-delay="100"><div class="partner-logo">BBV</div><div class="partner-name">BBV</div></div>
-      <div class="partner-card reveal" data-delay="150"><div class="partner-logo">BHW</div><div class="partner-name">BHW</div></div>
-      <div class="partner-card reveal" data-delay="200"><div class="partner-logo">CL</div><div class="partner-name">Canada Life</div></div>
-      <div class="partner-card reveal" data-delay="250"><div class="partner-logo">CEN</div><div class="partner-name">Central</div></div>
-      <div class="partner-card reveal" data-delay="300"><div class="partner-logo">CON</div><div class="partner-name">Concordia</div></div>
-      <div class="partner-card reveal" data-delay="350"><div class="partner-logo">CON</div><div class="partner-name">Condor</div></div>
-      <div class="partner-card reveal" data-delay="0"><div class="partner-logo">CON</div><div class="partner-name">Continentale</div></div>
-      <div class="partner-card reveal" data-delay="50"><div class="partner-logo">CSS</div><div class="partner-name">CSS</div></div>
-      <div class="partner-card reveal" data-delay="100"><div class="partner-logo">DBV</div><div class="partner-name">DBV</div></div>
-      <div class="partner-card reveal" data-delay="150"><div class="partner-logo">DKV</div><div class="partner-name">DKV</div></div>
-      <div class="partner-card reveal" data-delay="200"><div class="partner-logo">DL</div><div class="partner-name">Delta Lloyd</div></div>
-      <div class="partner-card reveal" data-delay="250"><div class="partner-logo">DEU</div><div class="partner-name">DEURAG</div></div>
-      <div class="partner-card reveal" data-delay="300"><div class="partner-logo">DR</div><div class="partner-name">Deutscher Ring KV</div></div>
-      <div class="partner-card reveal" data-delay="350"><div class="partner-logo">DIA</div><div class="partner-name">Dialog</div></div>
-      <div class="partner-card reveal" data-delay="0"><div class="partner-logo">DB</div><div class="partner-name">Die Bayerische</div></div>
-      <div class="partner-card reveal" data-delay="50"><div class="partner-logo">DOM</div><div class="partner-name">DOMCURA</div></div>
-      <div class="partner-card reveal" data-delay="100"><div class="partner-logo">DWS</div><div class="partner-name">DWS</div></div>
-      <div class="partner-card reveal" data-delay="150"><div class="partner-logo">ERG</div><div class="partner-name">ERGO</div></div>
-      <div class="partner-card reveal" data-delay="200"><div class="partner-logo">ER</div><div class="partner-name">Europäische Reiseversicherung</div></div>
-      <div class="partner-card reveal" data-delay="250"><div class="partner-logo">EA</div><div class="partner-name">Evbd AG</div></div>
-      <div class="partner-card reveal" data-delay="300"><div class="partner-logo">GAR</div><div class="partner-name">Garanta</div></div>
-      <div class="partner-card reveal" data-delay="350"><div class="partner-logo">GEN</div><div class="partner-name">Generali</div></div>
-      <div class="partner-card reveal" data-delay="0"><div class="partner-logo">GOT</div><div class="partner-name">Gothaer</div></div>
-      <div class="partner-card reveal" data-delay="50"><div class="partner-logo">HD</div><div class="partner-name">Haftpflichtkasse Darmstadt</div></div>
-      <div class="partner-card reveal" data-delay="100"><div class="partner-logo">HAL</div><div class="partner-name">Hallesche</div></div>
-      <div class="partner-card reveal" data-delay="150"><div class="partner-logo">HM</div><div class="partner-name">Hanse Merkur</div></div>
-      <div class="partner-card reveal" data-delay="200"><div class="partner-logo">HDI</div><div class="partner-name">HDI</div></div>
-      <div class="partner-card reveal" data-delay="250"><div class="partner-logo">ITZ</div><div class="partner-name">Itzehoer</div></div>
-      <div class="partner-card reveal" data-delay="300"><div class="partner-logo">KAR</div><div class="partner-name">Karlsruher</div></div>
-      <div class="partner-card reveal" data-delay="350"><div class="partner-logo">KRA</div><div class="partner-name">KRAVAG</div></div>
-      <div class="partner-card reveal" data-delay="0"><div class="partner-logo">L1</div><div class="partner-name">LV 1871</div></div>
-      <div class="partner-card reveal" data-delay="50"><div class="partner-logo">MAN</div><div class="partner-name">Mannheimer</div></div>
-      <div class="partner-card reveal" data-delay="100"><div class="partner-logo">MV</div><div class="partner-name">Münchener Verein</div></div>
-      <div class="partner-card reveal" data-delay="150"><div class="partner-logo">NR</div><div class="partner-name">Neue Rechtsschutz</div></div>
-      <div class="partner-card reveal" data-delay="200"><div class="partner-logo">NÜR</div><div class="partner-name">Nürnberger</div></div>
-      <div class="partner-card reveal" data-delay="250"><div class="partner-logo">REC</div><div class="partner-name">Rechtsschutz-Union</div></div>
-      <div class="partner-card reveal" data-delay="300"><div class="partner-logo">RHI</div><div class="partner-name">Rhion</div></div>
-      <div class="partner-card reveal" data-delay="350"><div class="partner-logo">RR</div><div class="partner-name">Roland Rechtsschutz</div></div>
-      <div class="partner-card reveal" data-delay="0"><div class="partner-logo">R+V</div><div class="partner-name">R+V</div></div>
-      <div class="partner-card reveal" data-delay="50"><div class="partner-logo">SCH</div><div class="partner-name">Schleswiger</div></div>
-      <div class="partner-card reveal" data-delay="100"><div class="partner-logo">SI</div><div class="partner-name">Signal Iduna</div></div>
-      <div class="partner-card reveal" data-delay="150"><div class="partner-logo">SL</div><div class="partner-name">Standard Life</div></div>
-      <div class="partner-card reveal" data-delay="200"><div class="partner-logo">STU</div><div class="partner-name">Stuttgarter</div></div>
-      <div class="partner-card reveal" data-delay="250"><div class="partner-logo">SL</div><div class="partner-name">Swiss Life</div></div>
-      <div class="partner-card reveal" data-delay="300"><div class="partner-logo">UEL</div><div class="partner-name">Uelzener</div></div>
-      <div class="partner-card reveal" data-delay="350"><div class="partner-logo">UK</div><div class="partner-name">Union Krankenversicherung</div></div>
-      <div class="partner-card reveal" data-delay="0"><div class="partner-logo">UNI</div><div class="partner-name">Universa</div></div>
-      <div class="partner-card reveal" data-delay="50"><div class="partner-logo">VHV</div><div class="partner-name">VHV</div></div>
-      <div class="partner-card reveal" data-delay="100"><div class="partner-logo">VOL</div><div class="partner-name">Volkswohlbund</div></div>
-      <div class="partner-card reveal" data-delay="150"><div class="partner-logo">WÜR</div><div class="partner-name">Württembergische</div></div>
-      <div class="partner-card reveal" data-delay="200"><div class="partner-logo">ZUR</div><div class="partner-name">Zurich</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="ACE"><img src="https://logo.clearbit.com/chubb.com" alt="ACE" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">ACE</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="AXA-DBV"><img src="https://logo.clearbit.com/axa.de" alt="AXA-DBV" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">AXA-DBV</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="A&amp;M"><img src="https://logo.clearbit.com/amv.de" alt="Aachen und Münchener" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Aachen und Münchener</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="AB"><img src="https://logo.clearbit.com/aachener-bausparkasse.de" alt="Aachener Bausparkasse" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Aachener Bausparkasse</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="ADV"><img src="https://logo.clearbit.com/advocard.de" alt="Advocard" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Advocard</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="ALL"><img src="https://logo.clearbit.com/allianz.de" alt="Allianz" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Allianz</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="AL"><img src="https://logo.clearbit.com/alte-leipziger.de" alt="Alte Leipziger" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Alte Leipziger</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="AMM"><img src="https://logo.clearbit.com/ammerlaender.de" alt="Ammerländer" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Ammerländer</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="ARAG"><img src="https://logo.clearbit.com/arag.de" alt="ARAG" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">ARAG</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="ATR"><img src="https://logo.clearbit.com/atradius.de" alt="Atradius" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Atradius</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="AXA"><img src="https://logo.clearbit.com/axa.de" alt="AXA" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">AXA</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="BAR"><img src="https://logo.clearbit.com/barmenia.de" alt="Barmenia" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Barmenia</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="BAS"><img src="https://logo.clearbit.com/basler.de" alt="Basler" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Basler</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="BBK"><img src="https://logo.clearbit.com/bbkk.de" alt="Bayerische Beamten Kammer" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Bayerische Beamten Kammer</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="CL"><img src="https://logo.clearbit.com/canadalife.de" alt="Canada Life" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Canada Life</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="CEN"><img src="https://logo.clearbit.com/central.de" alt="Central" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Central</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="CON"><img src="https://logo.clearbit.com/concordia.de" alt="Concordia" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Concordia</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="CON"><img src="https://logo.clearbit.com/condor.de" alt="Condor" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Condor</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="CON"><img src="https://logo.clearbit.com/continentale.de" alt="Continentale" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Continentale</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="DKV"><img src="https://logo.clearbit.com/dkv.com" alt="DKV" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">DKV</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="DEU"><img src="https://logo.clearbit.com/deurag.de" alt="DEURAG" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">DEURAG</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="DIA"><img src="https://logo.clearbit.com/dialog-versicherung.de" alt="Dialog" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Dialog</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="DB"><img src="https://logo.clearbit.com/diebayerische.de" alt="Die Bayerische" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Die Bayerische</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="DOM"><img src="https://logo.clearbit.com/domcura.de" alt="DOMCURA" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">DOMCURA</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="DWS"><img src="https://logo.clearbit.com/dws.com" alt="DWS" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">DWS</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="ERGO"><img src="https://logo.clearbit.com/ergo.de" alt="ERGO" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">ERGO</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="ERV"><img src="https://logo.clearbit.com/erv.de" alt="Europäische Reiseversicherung" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Europäische Reiseversicherung</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="GAR"><img src="https://logo.clearbit.com/garanta.de" alt="Garanta" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Garanta</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="GEN"><img src="https://logo.clearbit.com/generali.de" alt="Generali" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Generali</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="GOT"><img src="https://logo.clearbit.com/gothaer.de" alt="Gothaer" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Gothaer</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="HD"><img src="https://logo.clearbit.com/haftpflichtkasse.de" alt="Haftpflichtkasse Darmstadt" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Haftpflichtkasse Darmstadt</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="HAL"><img src="https://logo.clearbit.com/hallesche.de" alt="Hallesche" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Hallesche</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="HM"><img src="https://logo.clearbit.com/hansemerkur.de" alt="Hanse Merkur" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Hanse Merkur</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="HDI"><img src="https://logo.clearbit.com/hdi.de" alt="HDI" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">HDI</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="ITZ"><img src="https://logo.clearbit.com/itzehoer.de" alt="Itzehoer" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Itzehoer</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="KRA"><img src="https://logo.clearbit.com/kravag.de" alt="KRAVAG" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">KRAVAG</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="L1871"><img src="https://logo.clearbit.com/lv1871.de" alt="LV 1871" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">LV 1871</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="MV"><img src="https://logo.clearbit.com/muenchener-verein.de" alt="Münchener Verein" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Münchener Verein</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="NÜR"><img src="https://logo.clearbit.com/nuernberger.de" alt="Nürnberger" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Nürnberger</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="RHI"><img src="https://logo.clearbit.com/rhion.de" alt="Rhion" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Rhion</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="ROL"><img src="https://logo.clearbit.com/roland.de" alt="Roland Rechtsschutz" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Roland Rechtsschutz</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="R+V"><img src="https://logo.clearbit.com/ruv.de" alt="R+V" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">R+V</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="SI"><img src="https://logo.clearbit.com/signal-iduna.de" alt="Signal Iduna" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Signal Iduna</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="SL"><img src="https://logo.clearbit.com/standardlife.de" alt="Standard Life" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Standard Life</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="STU"><img src="https://logo.clearbit.com/stuttgarter.de" alt="Stuttgarter" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Stuttgarter</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="SWL"><img src="https://logo.clearbit.com/swisslife.de" alt="Swiss Life" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Swiss Life</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="UEL"><img src="https://logo.clearbit.com/uelzener.de" alt="Uelzener" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Uelzener</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="UNI"><img src="https://logo.clearbit.com/universa.de" alt="Universa" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Universa</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="VHV"><img src="https://logo.clearbit.com/vhv.de" alt="VHV" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">VHV</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="VOL"><img src="https://logo.clearbit.com/volkswohlbund.de" alt="Volkswohlbund" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Volkswohlbund</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="WÜR"><img src="https://logo.clearbit.com/wuerttembergische.de" alt="Württembergische" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Württembergische</div></div>
+      <div class="partner-card reveal"><div class="partner-logo" data-abbr="ZUR"><img src="https://logo.clearbit.com/zurich.de" alt="Zurich" onerror="this.parentElement.innerHTML=this.parentElement.dataset.abbr"></div><div class="partner-name">Zurich</div></div>
     </div>
 
     <!-- CTA -->
