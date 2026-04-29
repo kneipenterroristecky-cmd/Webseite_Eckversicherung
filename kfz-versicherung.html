@@ -11,11 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
-    /* ── Page Hero ── */
+    /* ── Page Hero (Split) ── */
     .page-hero {
       background: var(--navy);
-      padding: 80px 0 72px;
-      text-align: center;
       position: relative;
       overflow: hidden;
     }
@@ -23,28 +21,104 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(26,80,200,.25) 0%, transparent 60%);
+      background: linear-gradient(135deg, rgba(26,80,200,.3) 0%, transparent 60%);
       pointer-events: none;
+      z-index: 0;
     }
-    .page-hero-container {
-      max-width: 760px;
+    .page-hero-split {
+      max-width: 1100px;
       margin: 0 auto;
       padding: 0 28px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      align-items: stretch;
+      min-height: 420px;
       position: relative;
       z-index: 1;
     }
+    .page-hero-left {
+      padding: 72px 48px 72px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
     .page-hero-title {
-      font-size: clamp(32px, 5vw, 52px);
+      font-size: clamp(30px, 4vw, 48px);
       font-weight: 900;
       color: #fff;
       letter-spacing: -.4px;
-      margin-bottom: 18px;
+      margin: 0;
       line-height: 1.15;
     }
     .page-hero-sub {
-      font-size: 17px;
-      color: rgba(255,255,255,.6);
+      font-size: 16px;
+      color: rgba(255,255,255,.65);
       line-height: 1.7;
+      margin: 0;
+      max-width: 500px;
+    }
+    .page-hero-trust {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .page-hero-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: rgba(255,255,255,.85);
+      font-weight: 600;
+    }
+    .page-hero-trust-icon {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(96,165,250,.25);
+      display: flex; align-items: center; justify-content: center;
+      color: #60a5fa; font-size: 9px; flex-shrink: 0;
+    }
+    .page-hero-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .page-hero-btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgb(33,103,204); color: #fff;
+      font-size: 15px; font-weight: 700;
+      padding: 14px 26px; border-radius: 12px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .page-hero-btn-primary:hover { background: #1a50c8; transform: translateY(-2px); }
+    .page-hero-btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.1); color: #fff;
+      font-size: 15px; font-weight: 600;
+      padding: 14px 26px; border-radius: 12px;
+      text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,.25);
+      transition: background .2s, transform .2s;
+    }
+    .page-hero-btn-secondary:hover { background: rgba(255,255,255,.18); transform: translateY(-2px); }
+    .page-hero-photo {
+      position: relative;
+      overflow: hidden;
+      align-self: stretch;
+    }
+    .page-hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    @media (max-width: 760px) {
+      .page-hero-split { grid-template-columns: 1fr; }
+      .page-hero-photo { height: 260px; order: -1; }
+      .page-hero-left { padding: 36px 0 48px; }
     }
 
     /* ── Main Content Wrapper ── */
@@ -515,14 +589,30 @@
 
   <!-- PAGE HERO -->
   <section class="page-hero">
-    <div class="page-hero-container">
-      <div class="section-label" style="justify-content:center; margin-bottom:16px;">
-        <span class="label-bar"></span>
-        <span>MOBILITÄT & KFZ</span>
-        <span class="label-bar"></span>
+    <div class="page-hero-split">
+      <div class="page-hero-left">
+        <div class="section-label left" style="margin-bottom:4px;">
+          <span class="label-bar short"></span><span>MOBILITÄT & KFZ</span>
+        </div>
+        <h1 class="page-hero-title">KFZ-Versicherung –<br>der beste Tarif für Sie</h1>
+        <p class="page-hero-sub">Haftpflicht, Kasko oder Schutzbrief – ich vergleiche für Sie die Tarife zahlreicher Gesellschaften und finde den optimalen Schutz für Ihr Fahrzeug.</p>
+        <div class="page-hero-trust">
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Unabhängiger Vergleich – über 100 Gesellschaften</div>
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Kostenlos & unverbindlich</div>
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Persönliche Betreuung auch im Schadensfall</div>
+        </div>
+        <div class="page-hero-buttons">
+          <button class="page-hero-btn-primary" onclick="openFunnel();window._track&&_track('cta','KFZ Hero – Termin')">
+            <i class="fas fa-calendar-check"></i> Termin buchen
+          </button>
+          <a href="tel:+491743225885" class="page-hero-btn-secondary" onclick="window._track&&_track('cta','KFZ Hero – Anrufen')">
+            <i class="fas fa-phone"></i> 0174 / 322 58 85
+          </a>
+        </div>
       </div>
-      <h1 class="page-hero-title">KFZ-Versicherung</h1>
-      <p class="page-hero-sub">Haftpflicht, Kasko oder Schutzbrief – ich vergleiche für Sie die Tarife zahlreicher Gesellschaften und finde den optimalen Schutz für Ihr Fahrzeug.</p>
+      <div class="page-hero-photo">
+        <img src="uebermich.png" alt="Daniel Eck – Ihr Versicherungsmakler" />
+      </div>
     </div>
   </section>
 
@@ -727,33 +817,6 @@
         </div>
       </div>
 
-    </div>
-
-    <!-- Personal CTA mit Foto -->
-    <div class="kfz-personal-cta reveal">
-      <div class="kfz-personal-cta-content">
-        <div class="section-label left" style="margin-bottom:4px;">
-          <span class="label-bar short"></span><span>KOSTENLOSE BERATUNG</span>
-        </div>
-        <h2>Jetzt Ihren KFZ-Tarif kostenlos vergleichen</h2>
-        <p>Als unabhängiger Makler finde ich für Sie den passenden Schutz – aus über 100 Gesellschaften, ohne Konzernbindung und ohne versteckte Kosten.</p>
-        <div class="kfz-cta-trust">
-          <div class="kfz-cta-trust-item"><div class="kfz-cta-trust-icon"><i class="fas fa-check"></i></div>Unabhängiger Marktvergleich</div>
-          <div class="kfz-cta-trust-item"><div class="kfz-cta-trust-icon"><i class="fas fa-check"></i></div>Kostenlos & unverbindlich</div>
-          <div class="kfz-cta-trust-item"><div class="kfz-cta-trust-icon"><i class="fas fa-check"></i></div>Persönliche Betreuung auch im Schadensfall</div>
-        </div>
-        <div class="kfz-cta-buttons">
-          <button class="kfz-cta-btn-primary" onclick="openFunnel();window._track&&_track('cta','KFZ – Persönlicher CTA')">
-            <i class="fas fa-calendar-check"></i> Termin buchen
-          </button>
-          <a href="tel:+491743225885" class="kfz-cta-btn-secondary" onclick="window._track&&_track('cta','KFZ – Anrufen CTA')">
-            <i class="fas fa-phone"></i> 0174 / 322 58 85
-          </a>
-        </div>
-      </div>
-      <div class="kfz-personal-cta-photo">
-        <img src="uebermich.png" alt="Daniel Eck – Ihr Versicherungsmakler" />
-      </div>
     </div>
 
     <!-- Makler-Vorteil -->
