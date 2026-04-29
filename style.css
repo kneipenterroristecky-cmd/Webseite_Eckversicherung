@@ -150,6 +150,9 @@ p   { line-height: 1.7; }
   box-shadow: 0 2px 10px rgba(255,33,120,.35) !important;
   position: relative;
   overflow: hidden;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
+  transform: translateZ(0);
 }
 .btn-online-abschluss::before {
   content: '';
