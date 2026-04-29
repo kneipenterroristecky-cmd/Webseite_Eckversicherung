@@ -28,22 +28,22 @@
     .page-hero-split {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 0 28px;
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      align-items: stretch;
-      min-height: 420px;
+      padding: 72px 28px;
       position: relative;
       z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 420px;
     }
     .page-hero-left {
-      padding: 72px 48px 72px 0;
+      max-width: 640px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
       text-align: center;
       gap: 20px;
+      padding-right: 200px;
     }
     .page-hero-title {
       font-size: clamp(30px, 4vw, 48px);
@@ -107,10 +107,10 @@
     }
     .page-hero-btn-secondary:hover { background: rgba(255,255,255,.18); transform: translateY(-2px); }
     .page-hero-photo {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 40px 0 40px 20px;
+      position: absolute;
+      right: 28px;
+      top: 50%;
+      transform: translateY(-50%);
     }
     .page-hero-photo img {
       width: 260px;
@@ -122,9 +122,8 @@
       display: block;
     }
     @media (max-width: 760px) {
-      .page-hero-split { grid-template-columns: 1fr; }
-      .page-hero-photo { height: 260px; order: -1; }
-      .page-hero-left { padding: 36px 0 48px; }
+      .page-hero-left { padding-right: 0; }
+      .page-hero-photo { display: none; }
     }
 
     /* ── Main Content Wrapper ── */
