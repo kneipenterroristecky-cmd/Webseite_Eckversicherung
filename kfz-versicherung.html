@@ -189,9 +189,9 @@
 
     /* ── Coverage Cards (3 Hauptbausteine) ── */
     .kfz-coverage {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
       margin-bottom: 72px;
     }
     .cov-card {
@@ -200,80 +200,58 @@
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 4px 24px rgba(0,0,0,.06);
-      display: grid;
-      grid-template-columns: 320px 1fr;
-    }
-    .cov-card-left {
-      background: var(--navy);
-      padding: 36px 32px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
     }
-    .cov-card-icon {
-      width: 52px; height: 52px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.12);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; color: #fff;
-      margin-bottom: 20px;
+    .cov-card-img {
+      position: relative;
+      height: 160px;
+      overflow: hidden;
+    }
+    .cov-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .cov-card-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(23,45,80,.85) 0%, rgba(23,45,80,.3) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 16px 20px;
+      gap: 6px;
     }
     .cov-card-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 900;
       color: #fff;
-      margin-bottom: 10px;
       line-height: 1.2;
-    }
-    .cov-card-desc {
-      font-size: 14px;
-      color: rgba(255,255,255,.65);
-      line-height: 1.7;
-    }
-    .cov-example {
-      margin-top: 24px;
-      background: rgba(255,255,255,.07);
-      border-left: 3px solid #60a5fa;
-      border-radius: 0 10px 10px 0;
-      padding: 14px 16px;
-    }
-    .cov-example-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      color: #60a5fa;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    .cov-example p {
-      font-size: 13px;
-      color: rgba(255,255,255,.75);
-      line-height: 1.6;
       margin: 0;
     }
-    .cov-card-right {
-      padding: 36px 36px 36px 36px;
+    .cov-card-body {
+      padding: 20px 22px 24px;
+      flex: 1;
     }
-    .cov-card-right h4 {
+    .cov-card-desc {
       font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--blue);
-      margin-bottom: 18px;
+      color: var(--gray-500);
+      line-height: 1.6;
+      margin-bottom: 16px;
     }
     .cov-list {
       list-style: none;
       padding: 0; margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 9px;
     }
     .cov-list li {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      font-size: 15px;
+      gap: 10px;
+      font-size: 13px;
       color: var(--gray-500);
       line-height: 1.5;
     }
@@ -537,7 +515,7 @@
 
     /* ── Responsive ── */
     @media (max-width: 860px) {
-      .cov-card { grid-template-columns: 1fr; }
+      .kfz-coverage { grid-template-columns: 1fr; }
       .kfz-makler { grid-template-columns: 1fr; padding: 36px 28px; gap: 36px; }
       .kfz-personal-cta { grid-template-columns: 1fr; }
       .kfz-personal-cta-photo { height: 280px; }
@@ -647,123 +625,63 @@
 
       <!-- KFZ-Haftpflicht -->
       <div class="cov-card reveal">
-        <div class="cov-card-left">
-          <div>
-            <div class="pflicht-badge"><i class="fas fa-circle-exclamation"></i> Gesetzliche Pflicht</div>
-            <div class="cov-card-icon"><i class="fas fa-car-burst"></i></div>
+        <div class="cov-card-img">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80" alt="KFZ-Haftpflicht" loading="lazy" />
+          <div class="cov-card-img-overlay">
+            <div class="pflicht-badge" style="margin-bottom:0;"><i class="fas fa-circle-exclamation"></i> Gesetzliche Pflicht</div>
             <div class="cov-card-title">KFZ-Haftpflicht&shy;versicherung</div>
-            <div class="cov-card-desc">Die Kfz-Haftpflicht ist in Deutschland gesetzlich vorgeschrieben. Sie übernimmt die Kosten, wenn Sie mit Ihrem Fahrzeug einen Schaden an Dritten verursachen – egal ob am anderen Auto, an Personen oder an Sachgegenständen.</div>
-          </div>
-          <div class="cov-example">
-            <div class="cov-example-label"><i class="fas fa-lightbulb"></i> Praxisbeispiel</div>
-            <p>Sie streifen beim Ausparken ein fremdes Fahrzeug und verursachen einen Lackschaden von 2.000 €. Ihre Haftpflicht übernimmt die vollständigen Reparaturkosten des Geschädigten.</p>
           </div>
         </div>
-        <div class="cov-card-right">
-          <h4>Das ist versichert</h4>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Pflichtversicherung für jedes zugelassene Fahrzeug. Übernimmt Schäden, die Sie Dritten zufügen – an deren Fahrzeug, Person oder Eigentum.</p>
           <ul class="cov-list">
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Sachschäden an Dritten</strong> – Reparatur oder Wiederbeschaffung des beschädigten Fahrzeugs oder Gegenstands</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Personenschäden</strong> – Behandlungskosten, Schmerzensgeld, Verdienstausfall und mehr – oft in Millionenhöhe</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Vermögensschäden</strong> – finanzielle Folgeschäden durch den verursachten Unfall</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Prüfung unberechtigter Ansprüche</strong> – die Versicherung wehrt überzogene Forderungen für Sie ab</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Mitversicherte Personen</strong> – Familie und berechtigte Fahrer sind ebenfalls geschützt</span>
-            </li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Sachschäden</strong> an Fahrzeugen & Gegenständen Dritter</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Personenschäden</strong> – Behandlung, Schmerzensgeld, Verdienstausfall</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Vermögensschäden</strong> – finanzielle Folgeschäden</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Abwehr</strong> unberechtigter Ansprüche</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Mitversichert:</strong> Familie & berechtigte Fahrer</span></li>
           </ul>
         </div>
       </div>
 
       <!-- Teilkasko -->
       <div class="cov-card reveal">
-        <div class="cov-card-left">
-          <div>
-            <div class="optional-badge"><i class="fas fa-circle-plus"></i> Optionale Erweiterung</div>
-            <div class="cov-card-icon"><i class="fas fa-car-side"></i></div>
+        <div class="cov-card-img">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Teilkasko" loading="lazy" />
+          <div class="cov-card-img-overlay">
+            <div class="optional-badge" style="margin-bottom:0;"><i class="fas fa-circle-plus"></i> Optionale Erweiterung</div>
             <div class="cov-card-title">Teilkasko&shy;versicherung</div>
-            <div class="cov-card-desc">Die Teilkasko schützt Ihr eigenes Fahrzeug vor Schäden durch äußere Einflüsse, die Sie nicht selbst verursacht haben. Ideal für Fahrzeuge, bei denen Sie das Risiko von Diebstahl, Unwetter oder Wildunfällen absichern möchten.</div>
-          </div>
-          <div class="cov-example">
-            <div class="cov-example-label"><i class="fas fa-lightbulb"></i> Praxisbeispiel</div>
-            <p>Ein Sturm wirft einen Ast auf Ihre Motorhaube und verursacht eine tiefe Delle. Die Teilkasko übernimmt die Reparaturkosten – abzüglich Ihrer gewählten Selbstbeteiligung.</p>
           </div>
         </div>
-        <div class="cov-card-right">
-          <h4>Das ist versichert</h4>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Schützt Ihr Fahrzeug vor Schäden durch äußere Einflüsse – unabhängig davon, wer Schuld trägt.</p>
           <ul class="cov-list">
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Diebstahl & Einbruch</strong> – vollständiger Fahrzeugdiebstahl sowie Einbruch mit Beschädigung</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Glasbruch & Steinschlag</strong> – Schäden an Scheiben durch Steinschlag oder Glasbruch</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Wildunfälle</strong> – Kollisionen mit Wild- und Haarwild auf der Fahrbahn</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Naturgewalten</strong> – Sturm, Hagel, Blitzschlag, Überschwemmung und Lawinen</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Brand & Explosion</strong> – Fahrzeugbrand durch technischen Defekt oder Fremdeinwirkung</span>
-            </li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Diebstahl & Einbruch</strong></span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Glasbruch & Steinschlag</strong></span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Wildunfälle</strong> mit Haarwild</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Naturgewalten</strong> – Sturm, Hagel, Überschwemmung</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Brand & Explosion</strong></span></li>
           </ul>
         </div>
       </div>
 
       <!-- Vollkasko -->
       <div class="cov-card reveal">
-        <div class="cov-card-left">
-          <div>
-            <div class="optional-badge"><i class="fas fa-circle-plus"></i> Optionale Erweiterung</div>
-            <div class="cov-card-icon"><i class="fas fa-shield-halved"></i></div>
+        <div class="cov-card-img">
+          <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=600&q=80" alt="Vollkasko" loading="lazy" />
+          <div class="cov-card-img-overlay">
+            <div class="optional-badge" style="margin-bottom:0;"><i class="fas fa-circle-plus"></i> Optionale Erweiterung</div>
             <div class="cov-card-title">Vollkasko&shy;versicherung</div>
-            <div class="cov-card-desc">Die Vollkasko bietet den umfassendsten Schutz: alle Teilkasko-Leistungen plus Schutz bei selbstverschuldeten Unfällen und Vandalismus. Besonders empfehlenswert für neue oder hochwertige Fahrzeuge.</div>
-          </div>
-          <div class="cov-example">
-            <div class="cov-example-label"><i class="fas fa-lightbulb"></i> Praxisbeispiel</div>
-            <p>Sie rutschen auf nasser Fahrbahn von der Straße und beschädigen Ihr Fahrzeug an einem Leitpfosten. Die Vollkasko übernimmt die Reparaturkosten – auch wenn der Unfall selbstverschuldet war.</p>
           </div>
         </div>
-        <div class="cov-card-right">
-          <h4>Das ist versichert</h4>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Maximaler Schutz: alle Teilkasko-Leistungen plus Absicherung bei selbstverschuldeten Unfällen und Vandalismus.</p>
           <ul class="cov-list">
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Alle Teilkasko-Leistungen</strong> – Diebstahl, Glasbruch, Wildschaden, Naturgewalten, Brand</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Selbstverschuldete Unfälle</strong> – Reparatur Ihres eigenen Fahrzeugs auch bei eigener Schuld</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Vandalismus</strong> – mutwillige Beschädigungen durch unbekannte Dritte</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Fahrerflucht durch Dritte</strong> – Schäden durch Unfallflüchtige ohne ermittelten Verursacher</span>
-            </li>
-            <li>
-              <div class="cov-check"><i class="fas fa-check"></i></div>
-              <span><strong>Rabattschutz möglich</strong> – nach einem Schaden bleibt Ihre SF-Klasse auf Wunsch erhalten</span>
-            </li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Alle Teilkasko-Leistungen</strong> inklusive</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Selbstverschuldete Unfälle</strong> am eigenen Fahrzeug</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Vandalismus</strong> durch unbekannte Dritte</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Fahrerflucht</strong> ohne ermittelten Verursacher</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Rabattschutz</strong> auf Wunsch möglich</span></li>
           </ul>
         </div>
       </div>
