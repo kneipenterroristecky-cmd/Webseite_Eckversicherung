@@ -141,27 +141,15 @@ p   { line-height: 1.7; }
   transition: background .2s var(--ease), transform .15s var(--ease), box-shadow .2s var(--ease);
 }
 .btn-nav:hover { background: var(--blue-h); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(26,80,200,.4); }
-@keyframes shimmer-sweep {
-  0%   { left: -80%; }
-  100% { left: 160%; }
-}
 .btn-online-abschluss {
-  background: linear-gradient(90deg, rgb(33,103,204), rgb(255,33,120)) !important;
+  background: linear-gradient(90deg, rgb(88,28,135), rgb(255,33,120)) !important;
   box-shadow: 0 2px 10px rgba(255,33,120,.35) !important;
-  position: relative;
-  overflow: hidden;
 }
-.btn-online-abschluss::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -80%;
-  width: 55%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.38), transparent);
-  animation: shimmer-sweep 3s ease-in-out infinite;
-  pointer-events: none;
+.btn-online-abschluss:hover {
+  background: linear-gradient(90deg, rgb(70,20,110), rgb(220,20,100)) !important;
+  box-shadow: 0 4px 16px rgba(255,33,120,.5) !important;
+  transform: translateY(-1px);
 }
-.btn-online-abschluss:hover { background: linear-gradient(90deg, rgb(26,80,180), rgb(220,20,110)) !important; box-shadow: 0 4px 16px rgba(255,33,120,.5) !important; transform: translateY(-1px); }
 
 
 /* Hamburger */
