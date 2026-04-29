@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VersicherungsEck – Ihre Zukunft. Meine Verantwortung.</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .testimonials-track {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      width: max-content !important;
+      gap: 0 !important;
+      padding: 16px 0 24px;
+      align-items: flex-start;
+      animation: marquee 40s linear infinite;
+      will-change: transform;
+    }
+    .testimonials-track:hover { animation-play-state: paused; }
+    .testi-card {
+      width: 260px;
+      flex-shrink: 0 !important;
+      flex-grow: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center;
+      text-align: center;
+      padding: 0 44px;
+      border-right: 1px solid #e2e8f0;
+    }
+    .testi-card:last-child { border-right: none; }
+    .testi-img-wrap {
+      width: 160px !important;
+      height: 160px !important;
+      border-radius: 50% !important;
+      overflow: hidden !important;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    }
+    .testi-img-wrap img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      border-radius: 50% !important;
+      display: block !important;
+    }
+    .testi-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: rgb(33, 103, 204);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .testi-card p {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      flex: 1;
+    }
+    .testi-quote { display: none !important; }
+
+    /* ===== QUIZ ===== */
+    .section-quiz { background: #fff; }
+    .quiz-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+    .quiz-benefits {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column; gap: 18px;
+    }
+    .quiz-benefit {
+      display: flex; align-items: flex-start; gap: 14px;
+      color: var(--gray-500); font-size: 15px; line-height: 1.6;
+    }
+    .quiz-benefit-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(26,80,200,.10);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--blue); font-size: 14px; flex-shrink: 0;
+    }
+    .quiz-wrap {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 40px rgba(23,45,80,.10);
+      border: 1px solid var(--gray-100);
+      padding: 40px 44px 44px;
+    }
+    .quiz-progress-wrap {
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 2px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .quiz-progress-bar {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 2px;
+      transition: width .5s ease;
+    }
+    .quiz-step-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--blue);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .quiz-question {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .quiz-question-sub { font-size: 13px; color: #94a3b8; margin-bottom: 24px; }
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .quiz-options.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .quiz-option {
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: border-color .15s, background .15s, box-shadow .15s;
+      background: #fff;
+      user-select: none;
+    }
+    .quiz-option:hover { border-color: var(--blue); background: rgba(26,80,200,.04); }
+    .quiz-option.selected {
+      border-color: var(--blue);
+      background: rgba(26,80,200,.08);
+      box-shadow: 0 0 0 3px rgba(26,80,200,.10);
+    }
+    .quiz-opt-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: rgba(26,80,200,.10);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--blue);
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: background .15s, color .15s;
+    }
+    .quiz-option.selected .quiz-opt-icon { background: var(--blue); color: #fff; }
+    .quiz-opt-text strong {
+      display: block; font-size: 13px; font-weight: 700;
+      color: var(--navy); margin-bottom: 1px; line-height: 1.3;
+    }
+    .quiz-opt-text span { font-size: 11px; color: #94a3b8; }
+    .quiz-btn {
+      width: 100%; padding: 15px;
+      background: var(--blue); color: #fff;
+      border: none; border-radius: 12px;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      font-family: inherit;
+    }
+    .quiz-btn:hover { background: #1646a8; transform: translateY(-1px); }
+    .quiz-result-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 5px 14px; border-radius: 99px;
+      font-size: 12px; font-weight: 700;
+      margin-bottom: 18px; letter-spacing: .02em;
+    }
+    .qbadge-red    { background: #fee2e2; color: #dc2626; }
+    .qbadge-orange { background: #fef3c7; color: #b45309; }
+    .qbadge-green  { background: #dcfce7; color: #16a34a; }
+    .quiz-result-title {
+      font-size: 22px; font-weight: 900; color: var(--navy);
+      margin-bottom: 10px; line-height: 1.25;
+    }
+    .quiz-result-sub { font-size: 14px; color: #64748b; line-height: 1.75; margin-bottom: 24px; }
+    .quiz-gaps {
+      list-style: none; padding: 4px 16px; margin: 0 0 28px;
+      background: #f8fafc; border-radius: 12px;
+    }
+    .quiz-gaps li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: #475569;
+      padding: 11px 0; border-bottom: 1px solid #e2e8f0; line-height: 1.55;
+    }
+    .quiz-gaps li:last-child { border-bottom: none; }
+    .quiz-gaps li i { color: var(--blue); margin-top: 2px; flex-shrink: 0; font-size: 13px; }
+    .quiz-restart {
+      background: none; border: none; color: #94a3b8;
+      font-size: 12px; cursor: pointer; margin-top: 14px;
+      text-decoration: underline; display: block;
+      text-align: center; width: 100%; font-family: inherit;
+    }
+    .quiz-restart:hover { color: var(--navy); }
+    .quiz-mobile-heading { display: none; }
+    @media (max-width: 900px) {
+      .quiz-layout { grid-template-columns: 1fr; }
+      .quiz-info { display: none; }
+      .quiz-mobile-heading { display: block; text-align: center; margin-bottom: 24px; }
+      .quiz-mobile-heading .section-label { justify-content: center; }
+      .quiz-mobile-heading .section-title { font-size: clamp(26px, 7vw, 36px); }
+      .section-quiz { background: var(--gray-50) !important; }
+      .quiz-wrap { box-shadow: 0 4px 40px rgba(23,45,80,.10); max-width: 680px; margin: 0 auto; }
+    }
+    @media (max-width: 768px) {
+      .quiz-wrap { padding: 28px 24px 32px; }
+      .quiz-options.cols-3 { grid-template-columns: 1fr 1fr; }
+      .quiz-question { font-size: 18px; }
+    }
+    @media (max-width: 480px) {
+      .quiz-wrap { padding: 22px 16px 28px; border-radius: 16px; }
+      .quiz-options, .quiz-options.cols-3 { grid-template-columns: 1fr; }
+      .quiz-question { font-size: 16px; }
+    }
+
+    /* ===== STICKY MOBILE CTA ===== */
+    .mobile-cta-bar {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .mobile-cta-bar {
+        display: flex;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        z-index: 999;
+        background: #fff;
+        border-top: 1px solid #e2e8f0;
+        box-shadow: 0 -4px 20px rgba(23,45,80,.12);
+        padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+        gap: 8px;
+      }
+      .mobile-cta-bar a,
+      .mobile-cta-bar button {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 10px 6px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+        line-height: 1;
+      }
+      .mobile-cta-bar a i,
+      .mobile-cta-bar button i {
+        font-size: 18px;
+      }
+      .mobile-cta-call {
+        background: #f1f5f9;
+        color: var(--navy);
+      }
+      .mobile-cta-call:active { background: #e2e8f0; }
+      .mobile-cta-wa {
+        background: #f0fdf4;
+        color: #16a34a;
+      }
+      .mobile-cta-wa:active { background: #dcfce7; }
+      .mobile-cta-termin {
+        background: rgb(33,103,204);
+        color: #fff;
+      }
+      .mobile-cta-termin:active { background: #1646a8; }
+      /* Abstand damit Inhalte nicht hinter der Bar verschwinden */
+      body { padding-bottom: 85px; }
+    }
+    @media (min-width: 769px) {
+      body { padding-bottom: 0; }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
+  <script src="https://assets.calendly.com/assets/external/widget.js"></script>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-container">
+      <div class="topbar-right">
+        <a href="tel:+491743225885"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+        <a href="mailto:daniel@eckversicherung.de"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="#home" class="logo">
+        <img src="Logo Eck weis.png" alt="Daniel Eck Versicherungsmakler" class="logo-img" />
+        <div class="logo-text">
+          <span class="logo-name" style="color: rgb(33, 103, 204)">Daniel Eck</span>
+          <span class="logo-subtitle">Versicherungsmakler</span>
+        </div>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="private-versicherungen.html" class="nav-link">Private Versicherungen</a>
+        <a href="gewerbliche-versicherungen.html" class="nav-link">Gewerbliche Versicherungen</a>
+        <a href="#ueber-mich" class="nav-link">Über mich</a>
+        <a href="faq.html" class="nav-link">FAQ</a>
+        <a href="kontakt.html" class="nav-link">Kontakt</a>
+        <button onclick="openCalendlyDirect();window._track&&_track('cta','Termin – Navbar')" class="btn btn-nav" style="background-color: rgb(33, 103, 204); border:none; cursor:pointer;">Termin buchen</button>
+      </nav>
+
+      <button class="hamburger" id="hamburger" aria-label="Menü">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="Ueberflug_SM.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-container">
+      <div class="hero-content">
+        <p class="hero-eyebrow animate-hero" style="--delay:.1s">
+          <span class="eyebrow-line"></span>
+          <span>SEIT ÜBER 20 JAHREN</span>
+        </p>
+        <h1 class="hero-title animate-hero" style="--delay:.25s">
+          Unser Service –<br />
+          Ihre <span class="hero-highlight">Sicherheit.</span>
+        </h1>
+        <p class="hero-desc animate-hero" style="--delay:.4s">
+          Unabhängige Versicherungsberatung in 3. Generation – persönlich, transparent und immer in Ihrem Interesse.
+        </p>
+        <div class="hero-btns animate-hero" style="--delay:.55s">
+          <button onclick="openFunnel();window._track&&_track('cta','Hero – Erstberatung')" class="btn btn-primary">
+            Kostenlose Erstberatung anfordern <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+        <div class="hero-trust animate-hero" style="--delay:.7s">
+          <span><i class="far fa-circle"></i> 100% Unabhängig</span>
+          <span><i class="far fa-circle"></i> Gegründet 2002</span>
+        </div>
+      </div>
+
+      <div class="hero-visual animate-hero-img" style="--delay:.3s">
+        <div class="hero-img-wrapper">
+          <div class="hero-img-deco top-left"></div>
+          <div class="hero-img-deco bottom-right"></div>
+          <img src="Dummybild 1.png" alt="Ihr Versicherungsexperte Daniel Eck" class="hero-img" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEISTUNGEN -->
+  <section class="section section-gray" id="leistungen">
+    <div class="section-container">
+      <div class="section-label reveal">
+        <span class="label-bar"></span>
+        <span>DIENSTLEISTUNGEN</span>
+        <span class="label-bar"></span>
+      </div>
+      <h2 class="section-title reveal">Was biete ich?</h2>
+      <p class="section-sub reveal" style="font-size: 19px; line-height: 1.6; font-weight: 500; max-width: 640px; margin: 0 auto 90px; color: #475569;">
+        Meine Philosophie: Meine Kunden haben nur die Versicherungen,
+die sie auch wirklich brauchen.
+      </p>
+
+      <div class="cards-row-3">
+        <div class="service-card reveal" data-delay="0">
+          <div class="service-icon"><i class="fas fa-user-check"></i></div>
+          <h3>Unabhängig von Gesellschaften</h3>
+          <p>Ich arbeite nicht für Versicherungen, sondern ausschließlich für Sie. Neutrale Beratung mit Zugriff auf über 100 Anbieter.</p>
+        </div>
+        <div class="service-card reveal" data-delay="100">
+          <div class="service-icon"><i class="fas fa-scale-balanced"></i></div>
+          <h3>Schadensfallmanagement</h3>
+          <p>Im Schadensfall kümmere ich mich persönlich um die Regulierung – schnell, unkompliziert und mit maximaler Erstattung.</p>
+        </div>
+        <div class="service-card reveal" data-delay="200">
+          <div class="service-icon"><i class="fas fa-piggy-bank"></i></div>
+          <h3>Optimale Konditionen</h3>
+          <p>Ich prüfe regelmäßig, ob es noch etwas preiswerter geht. Meine Kunden erzielen jährlich tolle Einsparungen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÜBER MICH -->
+  <section class="section section-white" id="ueber-mich">
+    <div class="section-container">
+      <div class="about-grid">
+        <div class="about-img-col reveal-left">
+          <div class="about-img-frame">
+            <div class="about-img-wrap">
+              <img src="Dummybild 3.png" alt="Daniel Eck" />
+            </div>
+            <div class="about-badge" style="background-color: rgb(33, 103, 204)">
+              <span class="badge-num counter" data-target="20">0</span>
+              <span class="badge-plus">+</span>
+              <span class="badge-label">Jahre Erfahrung</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-text-col reveal-right">
+          <div class="section-label left">
+            <span class="label-bar short"></span>
+            <span>ÜBER MICH</span>
+          </div>
+          <h2 class="section-title left">
+            Persönliche Beratung<br />und Expertise
+          </h2>
+          <p>Die Geschichte unseres Familienunternehmens reicht bis in die Zeit der DDR zurück. Schon meiner Großmutter lag das Wohl ihrer Kundinnen und Kunden am Herzen – sie sorgte dafür, dass jeder bestmöglich versorgt war.</p>
+          <p>Mein Vater bleibt auch heute noch aktiv im Geschäft – und es macht ihn besonders stolz, dass ich seinen Weg weitergehe. Gemeinsam gestalten wir die Zukunft unseres Familienunternehmens, in dem Tradition und Innovation Hand in Hand gehen.</p>
+
+          <div class="about-stats">
+            <div class="about-stat">
+              <div class="about-stat-icon"><i class="fas fa-users"></i></div>
+              <div>
+                <strong>3. Generation</strong>
+                <span>Familientradition</span>
+              </div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-icon"><i class="fas fa-calendar-check"></i></div>
+              <div>
+                <strong>Seit 2002</strong>
+                <span>In Schmalkalden</span>
+              </div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-icon"><i class="fas fa-award"></i></div>
+              <div>
+                <strong>100%</strong>
+                <span>Unabhängig</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section section-testimonials" id="testimonials" style="padding-top: 120px;">
+    <div class="section-container">
+      <div class="section-label reveal">
+        <span class="label-bar"></span>
+        <span>KUNDENMEINUNGEN</span>
+        <span class="label-bar"></span>
+      </div>
+      <h2 class="section-title reveal">Was meine Kunden sagen</h2>
+    </div>
+
+    <div class="testimonials-track-wrapper">
+      <div class="testimonials-track" style="display:flex;flex-direction:row;flex-wrap:nowrap;width:max-content;">
+        <!-- Set 1 -->
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Markus K." /></div>
+          <div class="testi-name">Markus K., Privatkunde</div>
+          <p>„Endlich nur noch Versicherungen, die ich wirklich brauche. Jederzeit wieder!"</p>
+          <div class="testi-quote">"</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Sandra R." /></div>
+          <div class="testi-name">Sandra R., Kundin seit 2015</div>
+          <p>„Beim Wasserschaden hat Daniel sofort reagiert. Professionell und menschlich!"</p>
+          <div class="testi-quote">"</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Thomas H." /></div>
+          <div class="testi-name">Thomas H., Gewerbekunde</div>
+          <p>„Als Selbstständiger war ich überfordert. Daniel hat alles perfekt geregelt."</p>
+          <div class="testi-quote">"</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/17.jpg" alt="Anna B." /></div>
+          <div class="testi-name">Anna B., Privatkundin</div>
+          <p>„Durch Daniels Empfehlung spare ich über 400 € im Jahr. Absolute Empfehlung!"</p>
+          <div class="testi-quote">"</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Frank L." /></div>
+          <div class="testi-name">Frank L., Kunde in 2. Generation</div>
+          <p>„Schon meine Eltern waren Kunden. Echtes Vertrauen und Verlässlichkeit."</p>
+          <div class="testi-quote">"</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/90.jpg" alt="Katrin W." /></div>
+          <div class="testi-name">Katrin W., Kundin seit 2019</div>
+          <p>„Daniel denkt wirklich mit und ist immer erreichbar. Absolute Weiterempfehlung!"</p>
+          <div class="testi-quote">"</div>
+        </div>
+        <!-- Set 2 – Duplikat für nahtlose Schleife -->
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Markus K." /></div>
+          <div class="testi-name">Markus K., Privatkunde</div>
+          <p>„Endlich nur noch Versicherungen, die ich wirklich brauche. Jederzeit wieder!"</p>
+          <div class="testi-quote">"</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Sandra R." /></div>
+          <div class="testi-name">Sandra R., Kundin seit 2015</div>
+          <p>„Beim Wasserschaden hat Daniel sofort reagiert. Professionell und menschlich!"</p>
+          <div class="testi-quote">"</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Thomas H." /></div>
+          <div class="testi-name">Thomas H., Gewerbekunde</div>
+          <p>„Als Selbstständiger war ich überfordert. Daniel hat alles perfekt geregelt."</p>
+          <div class="testi-quote">"</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/17.jpg" alt="Anna B." /></div>
+          <div class="testi-name">Anna B., Privatkundin</div>
+          <p>„Durch Daniels Empfehlung spare ich über 400 € im Jahr. Absolute Empfehlung!"</p>
+          <div class="testi-quote">"</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Frank L." /></div>
+          <div class="testi-name">Frank L., Kunde in 2. Generation</div>
+          <p>„Schon meine Eltern waren Kunden. Echtes Vertrauen und Verlässlichkeit."</p>
+          <div class="testi-quote">"</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/90.jpg" alt="Katrin W." /></div>
+          <div class="testi-name">Katrin W., Kundin seit 2019</div>
+          <p>„Daniel denkt wirklich mit und ist immer erreichbar. Absolute Weiterempfehlung!"</p>
+          <div class="testi-quote">"</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VORTEILE -->
+  <section class="section section-vorteile" id="vorteile">
+    <div class="section-container">
+      <div class="section-label reveal">
+        <span class="label-bar"></span>
+        <span>VORTEILE</span>
+        <span class="label-bar"></span>
+      </div>
+      <h2 class="section-title white reveal">Der VersicherungsEck Vorteil</h2>
+      <p class="section-sub white reveal">Ihre Zukunft. Meine Verantwortung.</p>
+
+      <div class="cards-row-4">
+        <div class="vorteil-card reveal" data-delay="0">
+          <div class="vorteil-icon"><i class="fas fa-user-check"></i></div>
+          <h3>Individuelle Beratung</h3>
+          <p>Persönlicher Ansprechpartner, der Ihre Situation versteht und eine maßgeschneiderte Bedarfsanalyse erstellt.</p>
+        </div>
+        <div class="vorteil-card reveal" data-delay="100">
+          <div class="vorteil-icon"><i class="fas fa-chart-bar"></i></div>
+          <h3>Umfassender Marktüberblick</h3>
+          <p>Zugriff auf Angebote von über 100 Versicherungsgesellschaften für den optimalen Vergleich.</p>
+        </div>
+        <div class="vorteil-card reveal" data-delay="200">
+          <div class="vorteil-icon"><i class="fas fa-shield-halved"></i></div>
+          <h3>Schadensfallmanagement</h3>
+          <p>Professionelle Unterstützung im Schadensfall – schnell, unkompliziert und mit maximaler Erstattung.</p>
+        </div>
+        <div class="vorteil-card reveal" data-delay="300">
+          <div class="vorteil-icon"><i class="fas fa-arrow-trend-down"></i></div>
+          <h3>Sparpotenzial</h3>
+          <p>Durch unabhängige Beratung und regelmäßige Optimierung erzielen meine Kunden tolle Einsparungen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERSICHERUNGEN -->
+  <section class="section section-gray" id="versicherungen">
+    <div class="section-container">
+      <div class="section-label reveal">
+        <span class="label-bar"></span>
+        <span>VERSICHERUNGSSPARTEN</span>
+        <span class="label-bar"></span>
+      </div>
+      <h2 class="section-title reveal">Sicherheit für das, was Sie aufgebaut haben.</h2>
+
+      <div class="vers-grid">
+        <div class="vers-card-new reveal-left">
+          <div class="vers-card-header blue" style="background-color: rgb(33, 103, 204)">
+            <h3>Private Versicherungen</h3>
+            <p>Schutz für Sie und Ihre Familie</p>
+          </div>
+          <div class="vers-card-body">
+            <ul class="vers-list-new">
+              <li><div class="vers-item-icon"><i class="fas fa-car"></i></div><span>Kfz Versicherungen</span></li>
+              <li><div class="vers-item-icon"><i class="fas fa-shield"></i></div><span>Privathaftpflicht</span></li>
+              <li><div class="vers-item-icon"><i class="fas fa-house"></i></div><span>Gebäudeversicherung</span></li>
+              <li><div class="vers-item-icon"><i class="fas fa-heart"></i></div><span>Private Rentenversicherung</span></li>
+              <li><div class="vers-item-icon"><i class="fas fa-briefcase"></i></div><span>Berufsunfähigkeit</span></li>
+            </ul>
+            <a href="private-versicherungen.html" class="vers-link-new">Alle Versicherungssparten <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <div class="vers-card-new reveal-right">
+          <div class="vers-card-header dark">
+            <h3>Gewerbliche Versicherungen</h3>
+            <p>Sicherheit für Ihr Unternehmen</p>
+          </div>
+          <div class="vers-card-body">
+            <ul class="vers-list-new">
+              <li><div class="vers-item-icon"><i class="fas fa-building"></i></div><span>Ertragsausfall</span></li>
+              <li><div class="vers-item-icon"><i class="fas fa-shield-halved"></i></div><span>Betriebsinhalt</span></li>
+              <li><div class="vers-item-icon"><i class="fas fa-piggy-bank"></i></div><span>Betriebliche AV</span></li>
+              <li><div class="vers-item-icon"><i class="fas fa-kit-medical"></i></div><span>Betriebskranken</span></li>
+              <li><div class="vers-item-icon"><i class="fas fa-car"></i></div><span>KFZ Flotte</span></li>
+            </ul>
+            <a href="gewerbliche-versicherungen.html" class="vers-link-new">Alle Versicherungssparten <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="section section-quiz" id="quiz">
+    <div class="section-container">
+      <div class="quiz-layout">
+
+        <!-- Linke Info-Spalte (nur Desktop) -->
+        <div class="quiz-info reveal-left">
+          <div class="section-label left" style="margin-bottom:20px;">
+            <span class="label-bar short"></span>
+            <span>SELBST-CHECK</span>
+          </div>
+          <h2 class="section-title left" style="margin-bottom:18px;">
+            Wie gut bin<br />ich versichert?
+          </h2>
+          <p style="font-size:17px;line-height:1.75;margin-bottom:36px;max-width:380px;color:#475569;">
+            3 Fragen – ein persönliches Ergebnis. Situationsabhängig, kostenlos und unverbindlich.
+          </p>
+          <ul class="quiz-benefits">
+            <li class="quiz-benefit">
+              <div class="quiz-benefit-icon"><i class="fas fa-bolt"></i></div>
+              <span>In unter 2 Minuten abgeschlossen</span>
+            </li>
+            <li class="quiz-benefit">
+              <div class="quiz-benefit-icon"><i class="fas fa-user-shield"></i></div>
+              <span>Individuell auf Ihre Lebenssituation zugeschnitten</span>
+            </li>
+            <li class="quiz-benefit">
+              <div class="quiz-benefit-icon"><i class="fas fa-circle-check"></i></div>
+              <span>Sofortiges Ergebnis mit konkreten Handlungsempfehlungen</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Mobiler Titel (nur unterhalb 900px) -->
+        <div class="quiz-mobile-heading">
+          <div class="section-label left" style="margin-bottom:12px;">
+            <span class="label-bar short"></span>
+            <span>SELBST-CHECK</span>
+          </div>
+          <h2 class="section-title left" style="margin-bottom:6px;">
+            Wie gut bin ich versichert?
+          </h2>
+        </div>
+
+        <!-- Rechte Quiz-Karte -->
+        <div class="quiz-wrap reveal-right">
+          <div class="quiz-progress-wrap">
+            <div class="quiz-progress-bar" id="quizBar"></div>
+          </div>
+          <p class="quiz-step-label" id="quizStepLabel"></p>
+          <div id="quizBody"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TERMIN -->
+  <section class="section section-termin" id="termin">
+    <div class="section-container">
+      <div class="termin-grid">
+        <div class="termin-img-col reveal-left">
+          <div class="termin-img-frame">
+            <div class="termin-img-deco"></div>
+            <img src="Dummybild 2.png" alt="Persönliches Beratungsgespräch" />
+          </div>
+        </div>
+        <div class="termin-card reveal-right">
+          <div class="section-label left">
+            <span class="label-bar short"></span>
+            <span>TERMINBUCHUNG</span>
+          </div>
+          <h2 class="section-title left white">
+            Persönliches<br />Beratungsgespräch
+          </h2>
+          <p class="termin-meta">
+            <i class="far fa-clock"></i> 30 Min. &nbsp;•&nbsp; Kostenlos
+          </p>
+          <ul class="termin-features">
+            <li><i class="fas fa-circle-check"></i> Individuelle Bedarfsanalyse</li>
+            <li><i class="fas fa-circle-check"></i> Unverbindlicher Tarifvergleich</li>
+            <li><i class="fas fa-circle-check"></i> Transparente Empfehlung</li>
+          </ul>
+          <button onclick="openFunnel();window._track&&_track('cta','Termin – Sektion')" class="btn btn-primary btn-full" style="background-color: rgb(33, 103, 204); width:100%; cursor:pointer;">
+            Jetzt Termin buchen <i class="fas fa-arrow-right"></i>
+          </button>
+          <div class="termin-contact-grid">
+            <span><i class="fas fa-phone"></i> 0174 / 322 58 85</span>
+            <span><i class="fas fa-envelope"></i> daniel@eckversicherung.de</span>
+            <a href="https://www.google.com/maps/place/Talstra%C3%9Fe+73,+98574+Schmalkalden" target="_blank" class="contact-full maps-link" style="color: rgba(255,255,255,.85) !important; font-size: 12px;"><i class="fas fa-location-dot"></i> Talstraße 73, 98574 Schmalkalden</a>hmalkalden</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-white" id="faq" style="height: 800px">
+    <div class="section-container">
+      <div class="section-label reveal">
+        <span class="label-bar"></span>
+        <span>FAQ</span>
+        <span class="label-bar"></span>
+      </div>
+      <h2 class="section-title reveal">Häufige Fragen</h2>
+
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false">
+            <span>Was macht ein Versicherungsmakler?</span>
+            <i class="fas fa-chevron-down faq-chevron"></i>
+          </button>
+          <div class="faq-a" role="region">
+            <div class="faq-a-inner">
+              Ein Versicherungsmakler ist ein unabhängiger Experte, der im Auftrag seiner Kunden handelt – nicht im Auftrag einer Versicherungsgesellschaft. Ich vergleiche für Sie die Angebote von über 100 Versicherern und finde den besten Schutz zu den besten Konditionen.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false">
+            <span>Was ist der Unterschied zwischen einem Versicherungsmakler und einem Versicherungsvertreter?</span>
+            <i class="fas fa-chevron-down faq-chevron"></i>
+          </button>
+          <div class="faq-a" role="region">
+            <div class="faq-a-inner">
+              Ein Versicherungsvertreter arbeitet für eine bestimmte Gesellschaft und kann nur deren Produkte anbieten. Ein Versicherungsmakler wie ich ist unabhängig und neutral – ich habe Zugriff auf mehrere Anbieter und handle ausschließlich in Ihrem Interesse.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false">
+            <span>Kostet mich die Beratung durch einen Versicherungsmakler etwas?</span>
+            <i class="fas fa-chevron-down faq-chevron"></i>
+          </button>
+          <div class="faq-a" role="region">
+            <div class="faq-a-inner">
+              Die Beratung durch mich als Versicherungsmakler ist für Sie komplett kostenlos. Meine Vergütung erfolgt über eine sogenannte Courtage, die direkt vom Versicherer gezahlt wird – ohne Aufpreis für Sie.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-more reveal" style="text-align:left; margin-top: 40px; max-width: 760px; margin-left: auto; margin-right: auto;">
+        <a href="faq.html" class="btn btn-primary" style="background-color: rgb(33, 103, 204)">
+          Weitere Fragen? <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="kontakt">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#home" class="logo footer-logo">
+          <div class="footer-logo-bracket"></div>
+          <div class="logo-text">
+            <span class="logo-name">Daniel Eck</span>
+            <span class="logo-subtitle">Versicherungsmakler</span>
+          </div>
+        </a>
+        <p>Unabhängige Versicherungsberatung in 3. Generation. Persönlich, transparent und immer in Ihrem Interesse.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#leistungen">Leistungen</a></li>
+          <li><a href="#ueber-mich">Über mich</a></li>
+          <li><a href="#versicherungen">Versicherungen</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <ul class="footer-contact-list">
+          <li><i class="fas fa-phone"></i><a href="tel:+491743225885">0174 / 322 58 85</a></li>
+          <li><i class="fas fa-envelope"></i><a href="mailto:daniel@eckversicherung.de">daniel@eckversicherung.de</a></li>
+          <li><i class="fas fa-location-dot"></i><a href="https://www.google.com/maps/place/Talstra%C3%9Fe+73,+98574+Schmalkalden" target="_blank" class="maps-link">Talstraße 73<br />98574 Schmalkalden</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Schadenhotline</h4>
+        <a href="tel:+491743225885" class="schadenhotline-box" style="background-color: rgb(33, 103, 204)">
+          <i class="fas fa-phone"></i>
+          <div>
+            <span class="sh-number">0174 / 322 58 85</span>
+            <span class="sh-label">Im Schadensfall sofort anrufen</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 VersicherungsEck – Daniel Eck. Alle Rechte vorbehalten.</p>
+      <div class="footer-bottom-links">
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="impressum.html">Impressum</a>
+        <a href="erstinformation.html">Erstinformation</a>
+        <a href="#" onclick="openCookieSettings();return false;">Cookie-Einstellungen</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Funnel Modal -->
+  <div class="funnel-overlay" id="funnelOverlay" onclick="closeFunnelOutside(event)">
+    <div class="funnel-modal" role="dialog" aria-modal="true">
+
+      <button class="funnel-close" onclick="closeFunnel()" aria-label="Schließen">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <!-- Progress -->
+      <div class="funnel-progress-wrap">
+        <div class="funnel-progress-bar" id="funnelBar"></div>
+      </div>
+      <p class="funnel-step-label" id="funnelStepLabel">Schritt 1 von 4</p>
+
+      <!-- Step Content -->
+      <div class="funnel-body" id="funnelBody"></div>
+
+    </div>
+  </div>
+
+  <!-- STICKY MOBILE CTA -->
+  <div class="mobile-cta-bar" id="mobileCta">
+    <a href="tel:+491743225885" class="mobile-cta-call" onclick="window._track&&_track('cta','Anrufen – Mobile Bar')">
+      <i class="fas fa-phone"></i>
+      <span>Anrufen</span>
+    </a>
+    <a href="https://wa.me/491743225885" target="_blank" rel="noopener" class="mobile-cta-wa" onclick="window._track&&_track('cta','WhatsApp – Mobile Bar')">
+      <i class="fab fa-whatsapp"></i>
+      <span>WhatsApp</span>
+    </a>
+    <button class="mobile-cta-termin" onclick="openFunnel();window._track&&_track('cta','Termin – Mobile Bar')">
+      <i class="fas fa-calendar-check"></i>
+      <span>Termin buchen</span>
+    </button>
+  </div>
+
+  <!-- WhatsApp Float Button -->
+  <div class="wa-wrap" id="waWrap">
+    <a href="https://wa.me/491743225885" target="_blank" rel="noopener" class="wa-btn" aria-label="WhatsApp Kontakt">
+      <span class="wa-tooltip">Hier direkt schreiben<span class="wa-arrow"></span></span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- ===== COOKIE BANNER ===== -->
+  <div id="cookieBanner" class="cookie-banner">
+    <div class="cookie-banner-inner">
+      <div class="cookie-banner-text">
+        <p><strong><i class="fas fa-cookie-bite"></i> Diese Website verwendet Cookies</strong></p>
+        <p>Wir nutzen Cookies, um Ihnen die bestmögliche Nutzererfahrung zu bieten und unsere Buchungsfunktion bereitzustellen. Sie können Ihre Einstellungen jederzeit anpassen.</p>
+      </div>
+      <div class="cookie-banner-btns">
+        <button class="cookie-btn-settings" onclick="openCookieSettings()">Einstellungen</button>
+        <button class="cookie-btn-necessary" onclick="acceptNecessary()">Nur notwendige</button>
+        <button class="cookie-btn-accept" onclick="acceptAll()">Alle akzeptieren</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== COOKIE SETTINGS MODAL ===== -->
+  <div id="cookieSettings" class="cookie-settings-overlay" onclick="if(event.target===this)closeCookieSettings()">
+    <div class="cookie-settings-modal">
+      <button class="cookie-settings-close" onclick="closeCookieSettings()"><i class="fas fa-times"></i></button>
+      <h2><i class="fas fa-sliders-h"></i> Cookie-Einstellungen</h2>
+      <p class="cookie-settings-intro">Hier können Sie festlegen, welche Cookies Sie zulassen möchten. Notwendige Cookies sind immer aktiv, da die Website ohne sie nicht funktioniert.</p>
+
+      <div class="cookie-category">
+        <div class="cookie-category-header">
+          <div>
+            <strong>Notwendige Cookies</strong>
+            <span class="cookie-tag">Immer aktiv</span>
+          </div>
+          <label class="cookie-toggle cookie-toggle-disabled">
+            <input type="checkbox" checked disabled />
+            <span class="cookie-toggle-slider"></span>
+          </label>
+        </div>
+        <p>Diese Cookies sind für den Betrieb der Website unbedingt erforderlich und können nicht deaktiviert werden. Sie speichern keine persönlichen Daten.</p>
+      </div>
+
+      <div class="cookie-category">
+        <div class="cookie-category-header">
+          <div>
+            <strong>Funktionale Cookies</strong>
+            <span class="cookie-tag cookie-tag-optional">Optional</span>
+          </div>
+          <label class="cookie-toggle">
+            <input type="checkbox" id="toggleFunktional" />
+            <span class="cookie-toggle-slider"></span>
+          </label>
+        </div>
+        <p>Ermöglichen erweiterte Funktionen wie die Online-Terminbuchung über Calendly. Ohne diese Cookies ist die Buchungsfunktion nicht verfügbar.</p>
+      </div>
+
+      <div class="cookie-category">
+        <div class="cookie-category-header">
+          <div>
+            <strong>Statistik-Cookies</strong>
+            <span class="cookie-tag cookie-tag-optional">Optional</span>
+          </div>
+          <label class="cookie-toggle">
+            <input type="checkbox" id="toggleStatistik" />
+            <span class="cookie-toggle-slider"></span>
+          </label>
+        </div>
+        <p>Helfen uns zu verstehen, wie Besucher die Website nutzen, um sie kontinuierlich zu verbessern. Alle Daten werden anonymisiert erfasst.</p>
+      </div>
+
+      <div class="cookie-category">
+        <div class="cookie-category-header">
+          <div>
+            <strong>Marketing-Cookies</strong>
+            <span class="cookie-tag cookie-tag-optional">Optional</span>
+          </div>
+          <label class="cookie-toggle">
+            <input type="checkbox" id="toggleMarketing" />
+            <span class="cookie-toggle-slider"></span>
+          </label>
+        </div>
+        <p>Werden verwendet, um Ihnen relevante Inhalte und Werbung anzeigen zu können. Diese Cookies können von Drittanbietern gesetzt werden.</p>
+      </div>
+
+      <div class="cookie-settings-footer">
+        <button class="cookie-btn-necessary" onclick="acceptNecessary()">Nur notwendige</button>
+        <button class="cookie-btn-save" onclick="saveSettings()">Auswahl speichern</button>
+        <button class="cookie-btn-accept" onclick="acceptAll()">Alle akzeptieren</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="cookie.js"></script>
+  <script src="analytics.js" defer></script>
+
+  <script>
+  (function () {
+
+    /* ── Feste Schritte 1 & 2 ────────────────────────────────── */
+    var steps = [
+      {
+        id: 'situation',
+        question: 'Welche Situation trifft auf Sie zu?',
+        type: 'single', cols: 2,
+        options: [
+          { value: 'angestellt',     label: 'Angestellt',            icon: 'fa-briefcase',     sub: 'Festanstellung' },
+          { value: 'familie',        label: 'Familie mit Kindern',   icon: 'fa-house-chimney', sub: 'Mit Nachwuchs' },
+          { value: 'selbststaendig', label: 'Selbstständig',         icon: 'fa-chart-line',    sub: 'Unternehmer / Freiberufler' },
+          { value: 'ruhestand',      label: 'Im Ruhestand',          icon: 'fa-sun',           sub: 'Rentner / Pensionär' }
+        ]
+      },
+      {
+        id: 'letztercheck',
+        question: 'Wann wurden Ihre Versicherungen zuletzt geprüft?',
+        type: 'single', cols: 2,
+        options: [
+          { value: 2, label: 'Dieses Jahr',            icon: 'fa-circle-check',         sub: '0–12 Monate' },
+          { value: 1, label: 'Vor 1–3 Jahren',         icon: 'fa-clock',                sub: 'Eine Weile her' },
+          { value: 0, label: 'Vor mehr als 3 Jahren',  icon: 'fa-triangle-exclamation', sub: 'Zu lange her' },
+          { value: 0, label: 'Noch nie geprüft',       icon: 'fa-circle-question',      sub: 'Weiß ich nicht' }
+        ]
+      }
+      /* Schritt 3 wird dynamisch je nach Situation generiert */
+    ];
+
+    /* ── Situationsspezifische Optionen für Frage 3 ─────────── */
+    var q3options = {
+      angestellt: [
+        { value: 'haftpflicht',  label: 'Privathaftpflicht',  icon: 'fa-shield',        critical: true },
+        { value: 'bu',           label: 'Berufsunfähigkeit',  icon: 'fa-person-cane',   critical: true },
+        { value: 'hausrat',      label: 'Hausrat',            icon: 'fa-couch',         critical: false },
+        { value: 'rechtsschutz', label: 'Rechtsschutz',       icon: 'fa-gavel',         critical: false },
+        { value: 'kranken',      label: 'Kranken-Zusatz',     icon: 'fa-heart-pulse',   critical: false },
+        { value: 'keine',        label: 'Keines / Unsicher',  icon: 'fa-circle-question', critical: false }
+      ],
+      familie: [
+        { value: 'haftpflicht',  label: 'Privathaftpflicht',      icon: 'fa-shield',          critical: true },
+        { value: 'bu',           label: 'Berufsunfähigkeit',      icon: 'fa-person-cane',     critical: true },
+        { value: 'risikoleben',  label: 'Risikolebensvers.',      icon: 'fa-heart',           critical: true },
+        { value: 'hausrat',      label: 'Hausrat',                icon: 'fa-couch',           critical: false },
+        { value: 'kranken',      label: 'Kranken-Zusatz',         icon: 'fa-heart-pulse',     critical: false },
+        { value: 'keine',        label: 'Keines / Unsicher',      icon: 'fa-circle-question', critical: false }
+      ],
+      selbststaendig: [
+        { value: 'betriebshaft', label: 'Betriebshaftpflicht',    icon: 'fa-building-shield', critical: true },
+        { value: 'bu',           label: 'Berufsunfähigkeit',      icon: 'fa-person-cane',     critical: true },
+        { value: 'rechtsschutz', label: 'Rechtsschutz',           icon: 'fa-gavel',           critical: true },
+        { value: 'ertragsaus',   label: 'Ertragsausfall',         icon: 'fa-chart-line',      critical: false },
+        { value: 'kranken',      label: 'Kranken-Zusatz',         icon: 'fa-heart-pulse',     critical: false },
+        { value: 'keine',        label: 'Keines / Unsicher',      icon: 'fa-circle-question', critical: false }
+      ],
+      ruhestand: [
+        { value: 'haftpflicht',  label: 'Privathaftpflicht',      icon: 'fa-shield',          critical: true },
+        { value: 'hausrat',      label: 'Hausrat',                icon: 'fa-couch',           critical: true },
+        { value: 'pflege',       label: 'Pflege-Zusatz',          icon: 'fa-hand-holding-heart', critical: true },
+        { value: 'kranken',      label: 'Kranken-Zusatz',         icon: 'fa-heart-pulse',     critical: false },
+        { value: 'reise',        label: 'Reiseschutz',            icon: 'fa-plane',           critical: false },
+        { value: 'keine',        label: 'Keines / Unsicher',      icon: 'fa-circle-question', critical: false }
+      ]
+    };
+
+    /* ── Spezifische Lücken-Texte je Coverage ────────────────── */
+    var gapTexts = {
+      haftpflicht:  { icon: 'fa-triangle-exclamation', text: '<strong>Privathaftpflicht fehlt</strong> – Schadensersatzforderungen können innerhalb von Sekunden existenzbedrohend werden.' },
+      bu:           { icon: 'fa-triangle-exclamation', text: '<strong>Berufsunfähigkeit nicht abgesichert</strong> – das größte finanzielle Risiko für alle Erwerbstätigen.' },
+      risikoleben:  { icon: 'fa-triangle-exclamation', text: '<strong>Risikolebensversicherung fehlt</strong> – Ihre Familie wäre im Todesfall finanziell ungeschützt.' },
+      betriebshaft: { icon: 'fa-triangle-exclamation', text: '<strong>Betriebshaftpflicht fehlt</strong> – als Selbstständiger haften Sie persönlich für betrieblich verursachte Schäden.' },
+      rechtsschutz: { icon: 'fa-circle-info',          text: '<strong>Rechtsschutz fehlt</strong> – Streitigkeiten mit Kunden oder Lieferanten können ohne Absicherung teuer werden.' },
+      ertragsaus:   { icon: 'fa-circle-info',          text: '<strong>Ertragsausfallversicherung fehlt</strong> – Krankheit oder Unfall ohne Absicherung kann den Betrieb gefährden.' },
+      hausrat:      { icon: 'fa-circle-info',          text: '<strong>Hausrat nicht abgesichert</strong> – Einbruch, Feuer oder Wasserschäden treffen Sie sonst ungefedert.' },
+      pflege:       { icon: 'fa-triangle-exclamation', text: '<strong>Pflege-Zusatz fehlt</strong> – die gesetzliche Pflegeversicherung deckt oft weniger als die Hälfte der tatsächlichen Kosten.' }
+    };
+
+    /* ── Situationsspezifische Titel & Hinweise im Ergebnis ──── */
+    var situationHints = {
+      angestellt:     { checkHint: '<strong>Letzter Check zu lange her</strong> – Tarife und Leistungen haben sich verändert, Einsparungen sind wahrscheinlich.' },
+      familie:        { checkHint: '<strong>Letzter Check zu lange her</strong> – mit Kindern ändert sich der Absicherungsbedarf stark. Jetzt aktualisieren.' },
+      selbststaendig: { checkHint: '<strong>Letzter Check zu lange her</strong> – Ihr Unternehmen wächst, Ihr Schutz sollte Schritt halten.' },
+      ruhestand:      { checkHint: '<strong>Letzter Check zu lange her</strong> – im Ruhestand verändern sich Ihre Prioritäten. Jetzt optimieren und Beiträge sparen.' }
+    };
+
+    var situationTitles = {
+      angestellt:     'für Angestellte',
+      familie:        'für Familien',
+      selbststaendig: 'für Selbstständige',
+      ruhestand:      'im Ruhestand'
+    };
+
+    var currentStep = 0;
+    var answers = {};
+    var multiSelected = [];
+
+    /* ── Render ──────────────────────────────────────────────── */
+    function render() {
+      var totalSteps = 3;
+      var pct = Math.round(((currentStep + 1) / totalSteps) * 100);
+      document.getElementById('quizBar').style.width = pct + '%';
+      document.getElementById('quizStepLabel').textContent = 'Frage ' + (currentStep + 1) + ' von ' + totalSteps;
+
+      if (currentStep < 2) {
+        renderSingleStep(steps[currentStep]);
+      } else {
+        renderMultiStep();
+      }
+    }
+
+    function renderSingleStep(step) {
+      var html = '<h3 class="quiz-question">' + step.question + '</h3>';
+      html += '<div class="quiz-options' + (step.cols === 3 ? ' cols-3' : '') + '">';
+      step.options.forEach(function (opt) {
+        html += '<div class="quiz-option" data-value="' + opt.value + '" onclick="quizSingle(this,\'' + opt.value + '\',\'' + step.id + '\')">'
+          + '<div class="quiz-opt-icon"><i class="fas ' + opt.icon + '"></i></div>'
+          + '<div class="quiz-opt-text"><strong>' + opt.label + '</strong>'
+          + (opt.sub ? '<span>' + opt.sub + '</span>' : '')
+          + '</div></div>';
+      });
+      html += '</div>';
+      document.getElementById('quizBody').innerHTML = html;
+    }
+
+    function renderMultiStep() {
+      var sit = answers['situation'] || 'angestellt';
+      var opts = q3options[sit];
+      var html = '<h3 class="quiz-question">Welche Absicherungen haben Sie bereits?</h3>'
+        + '<p class="quiz-question-sub">Mehrfachauswahl möglich</p>'
+        + '<div class="quiz-options cols-3">';
+      opts.forEach(function (opt) {
+        html += '<div class="quiz-option" data-value="' + opt.value + '" onclick="quizMulti(this,\'' + opt.value + '\')">'
+          + '<div class="quiz-opt-icon"><i class="fas ' + opt.icon + '"></i></div>'
+          + '<div class="quiz-opt-text"><strong>' + opt.label + '</strong></div></div>';
+      });
+      html += '</div><button class="quiz-btn" onclick="quizSubmitMulti()">Ergebnis anzeigen <i class="fas fa-arrow-right"></i></button>';
+      document.getElementById('quizBody').innerHTML = html;
+    }
+
+    /* ── Interaktion ─────────────────────────────────────────── */
+    window.quizSingle = function (el, value, stepId) {
+      document.querySelectorAll('.quiz-option').forEach(function (o) { o.classList.remove('selected'); });
+      el.classList.add('selected');
+      answers[stepId] = typeof value === 'string' && !isNaN(value) ? parseInt(value) : value;
+      /* letztercheck liefert Zahlen-value als String → parseInt */
+      if (stepId === 'letztercheck') answers[stepId] = parseInt(value) || 0;
+      setTimeout(function () { currentStep++; multiSelected = []; render(); }, 280);
+    };
+
+    window.quizMulti = function (el, value) {
+      if (value === 'keine') {
+        multiSelected = [];
+        document.querySelectorAll('.quiz-option').forEach(function (o) { o.classList.remove('selected'); });
+        if (!el.classList.contains('selected')) { el.classList.add('selected'); multiSelected.push('keine'); }
+      } else {
+        var keineEl = document.querySelector('[data-value="keine"]');
+        if (keineEl) keineEl.classList.remove('selected');
+        multiSelected = multiSelected.filter(function (v) { return v !== 'keine'; });
+        if (el.classList.contains('selected')) {
+          el.classList.remove('selected');
+          multiSelected = multiSelected.filter(function (v) { return v !== value; });
+        } else {
+          el.classList.add('selected');
+          multiSelected.push(value);
+        }
+      }
+    };
+
+    window.quizSubmitMulti = function () {
+      answers['absicherung'] = multiSelected.slice();
+      showResult();
+    };
+
+    /* ── Ergebnis ────────────────────────────────────────────── */
+    function showResult() {
+      if (window._track) _track('quiz', 'Abgeschlossen');
+      var situation   = answers['situation'] || 'angestellt';
+      var checkScore  = answers['letztercheck'] || 0;
+      var coverages   = (answers['absicherung'] || []).filter(function (v) { return v !== 'keine'; });
+      var noCoverages = coverages.length === 0 || (answers['absicherung'] || []).indexOf('keine') > -1;
+
+      /* Wie viele kritische Absicherungen fehlen? */
+      var opts = q3options[situation];
+      var criticalList   = opts.filter(function (o) { return o.critical && o.value !== 'keine'; });
+      var criticalMissing = criticalList.filter(function (o) { return coverages.indexOf(o.value) === -1; });
+      var criticalScore  = criticalList.length > 0
+        ? Math.round(((criticalList.length - criticalMissing.length) / criticalList.length) * 2)
+        : 2;
+
+      var total = checkScore + criticalScore; /* 0–4 */
+
+      /* Lücken aufbauen */
+      var gapList = [];
+      criticalMissing.forEach(function (o) {
+        if (gapTexts[o.value]) gapList.push(gapTexts[o.value]);
+      });
+      if (checkScore < 2) {
+        var hint = (situationHints[situation] || situationHints['angestellt']).checkHint;
+        gapList.push({ icon: 'fa-clock', text: hint });
+      }
+      if (gapList.length === 0) {
+        gapList.push({ icon: 'fa-circle-info', text: 'Ein kostenloser Vergleich zeigt oft Einsparpotenziale bei gleicher oder besserer Leistung.' });
+      }
+
+      /* Tier */
+      var tier, badge, title, sub;
+      var sitLabel = situationTitles[situation] || '';
+      if (noCoverages || total <= 1) {
+        tier  = 'red';
+        badge = '⚠ Handlungsbedarf erkannt';
+        title = 'Ihr Schutz ' + sitLabel + ' hat deutliche Lücken.';
+        sub   = 'Wichtige Absicherungen fehlen. Das kann im Ernstfall sehr teuer werden. Ein kostenloser Check schafft in 30 Minuten Klarheit.';
+      } else if (total <= 3) {
+        tier  = 'orange';
+        badge = '◑ Optimierungspotenzial erkannt';
+        title = 'Solide Basis ' + sitLabel + ' – Luft nach oben.';
+        sub   = 'Guter Ansatz, aber Ihre Situation lässt sich noch deutlich verbessern. Ein unverbindliches Gespräch deckt Lücken und Sparpotenzial auf.';
+      } else {
+        tier  = 'green';
+        badge = '✓ Gut aufgestellt';
+        title = 'Sie sind ' + sitLabel + ' solide abgesichert.';
+        sub   = 'Das ist erfreulich! Der Markt verändert sich laufend – oft lassen sich bei gleicher Leistung Beiträge sparen. Lohnt sich trotzdem, kurz zu prüfen.';
+      }
+
+      /* Antworten global verfügbar machen für Calendly-Übergabe */
+      window.quizAnswers = { situation: situation, letztercheck: checkScore, absicherung: (answers['absicherung'] || []) };
+
+      document.getElementById('quizBar').style.width = '100%';
+      document.getElementById('quizStepLabel').textContent = 'Ihr persönliches Ergebnis';
+
+      var gapsHtml = gapList.slice(0, 3).map(function (g) {
+        return '<li><i class="fas ' + g.icon + '"></i><span>' + g.text + '</span></li>';
+      }).join('');
+
+      document.getElementById('quizBody').innerHTML =
+          '<div class="quiz-result-badge qbadge-' + tier + '"><i class="fas fa-shield-halved"></i> ' + badge + '</div>'
+        + '<h3 class="quiz-result-title">' + title + '</h3>'
+        + '<p class="quiz-result-sub">' + sub + '</p>'
+        + '<ul class="quiz-gaps">' + gapsHtml + '</ul>'
+        + '<button class="quiz-btn" onclick="openCalendlyDirect()">Jetzt Termin buchen <i class="fas fa-calendar-check"></i></button>'
+        + '<button class="quiz-restart" onclick="quizRestart()">Quiz wiederholen</button>';
+    }
+
+    window.quizRestart = function () {
+      currentStep = 0; answers = {}; multiSelected = [];
+      document.getElementById('quizBar').style.width = '0%';
+      render();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', render);
+    } else {
+      render();
+    }
+  }());
+
+  </script>
+</body>
+</html>

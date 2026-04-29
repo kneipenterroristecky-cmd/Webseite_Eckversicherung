@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kontakt – VersicherungsEck Daniel Eck</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    .page-hero {
+      background: var(--navy);
+      padding: 80px 0 72px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(26,80,200,.25) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .page-hero-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 28px;
+      position: relative;
+      z-index: 1;
+    }
+    .page-hero-title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -.4px;
+      margin-bottom: 18px;
+      line-height: 1.15;
+    }
+    .page-hero-sub {
+      font-size: 17px;
+      color: rgba(255,255,255,.6);
+      line-height: 1.7;
+    }
+
+    /* Kontakt Grid */
+    .kontakt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 48px;
+      align-items: start;
+      padding: 72px 0 96px;
+    }
+
+    /* Info Cards */
+    .kontakt-info { display: flex; flex-direction: column; gap: 20px; }
+    .kontakt-card {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 24px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .kontakt-card:hover {
+      border-color: rgb(33,103,204);
+      box-shadow: 0 4px 20px rgba(33,103,204,.1);
+    }
+    .kontakt-card-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: rgba(33,103,204,.1);
+      display: flex; align-items: center; justify-content: center;
+      color: rgb(33,103,204);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .kontakt-card-body h4 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    .kontakt-card-body a,
+    .kontakt-card-body p {
+      font-size: 15px;
+      font-weight: 600;
+      color: #172d50;
+      text-decoration: none;
+      line-height: 1.5;
+      transition: color .2s;
+    }
+    .kontakt-card-body a:hover { color: rgb(33,103,204); }
+
+    /* Kontaktformular */
+    .kontakt-form-wrap {
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 36px 36px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.06);
+    }
+    .kontakt-form-wrap h3 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #172d50;
+      margin-bottom: 6px;
+    }
+    .kontakt-form-wrap p {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 28px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #172d50;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 12px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #172d50;
+      background: #f8fafc;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: rgb(33,103,204);
+      box-shadow: 0 0 0 3px rgba(33,103,204,.1);
+      background: #fff;
+    }
+    .form-group textarea { height: 120px; }
+    .form-submit {
+      width: 100%;
+      padding: 14px;
+      background: rgb(33,103,204);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .form-submit:hover {
+      background: #1a50c8;
+      transform: translateY(-1px);
+    }
+
+    /* Map */
+    .kontakt-map {
+      margin-top: 24px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1.5px solid #e2e8f0;
+    }
+    .kontakt-map iframe {
+      width: 100%;
+      height: 220px;
+      display: block;
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .kontakt-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .kontakt-form-wrap { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-container">
+      <div class="topbar-right">
+        <a href="tel:+491743225885"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+        <a href="mailto:daniel@eckversicherung.de"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="start.html" class="logo">
+        <img src="Logo Eck weis.png" alt="Daniel Eck Versicherungsmakler" class="logo-img" />
+        <div class="logo-text">
+          <span class="logo-name" style="color: rgb(33, 103, 204)">Daniel Eck</span>
+          <span class="logo-subtitle">Versicherungsmakler</span>
+        </div>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="private-versicherungen.html" class="nav-link">Private Versicherungen</a>
+        <a href="start.html#versicherungen" class="nav-link">Gewerbliche Versicherungen</a>
+        <a href="start.html#ueber-mich" class="nav-link">Über mich</a>
+        <a href="faq.html" class="nav-link">FAQ</a>
+        <a href="kontakt.html" class="nav-link active">Kontakt</a>
+        <a href="start.html#termin" class="btn btn-nav" style="background-color: rgb(33, 103, 204)">Termin buchen</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Menü">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-container">
+      <div class="section-label" style="justify-content:center; margin-bottom:16px;">
+        <span class="label-bar"></span>
+        <span>KONTAKT</span>
+        <span class="label-bar"></span>
+      </div>
+      <h1 class="page-hero-title">Nehmen Sie Kontakt auf</h1>
+      <p class="page-hero-sub">Ich freue mich auf Ihre Nachricht – persönlich, per Telefon oder E-Mail.</p>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <section class="section section-white" style="padding: 0;">
+    <div class="section-container">
+      <div class="kontakt-grid">
+
+        <!-- Kontaktinfos -->
+        <div class="kontakt-info">
+
+          <div class="kontakt-card reveal">
+            <div class="kontakt-card-icon"><i class="fas fa-phone"></i></div>
+            <div class="kontakt-card-body">
+              <h4>Telefon</h4>
+              <a href="tel:+491743225885">0174 / 322 58 85</a>
+            </div>
+          </div>
+
+          <div class="kontakt-card reveal">
+            <div class="kontakt-card-icon"><i class="fas fa-envelope"></i></div>
+            <div class="kontakt-card-body">
+              <h4>E-Mail</h4>
+              <a href="mailto:daniel@eckversicherung.de">daniel@eckversicherung.de</a>
+            </div>
+          </div>
+
+          <div class="kontakt-card reveal">
+            <div class="kontakt-card-icon"><i class="fas fa-location-dot"></i></div>
+            <div class="kontakt-card-body">
+              <h4>Adresse</h4>
+              <a href="https://www.google.com/maps/place/Talstra%C3%9Fe+73,+98574+Schmalkalden" target="_blank">
+                Talstraße 73<br />98574 Schmalkalden
+              </a>
+            </div>
+          </div>
+
+          <div class="kontakt-card reveal">
+            <div class="kontakt-card-icon"><i class="fab fa-whatsapp"></i></div>
+            <div class="kontakt-card-body">
+              <h4>WhatsApp</h4>
+              <a href="https://wa.me/491743225885" target="_blank">Hier direkt schreiben</a>
+            </div>
+          </div>
+
+          <!-- Google Maps -->
+          <div class="kontakt-map reveal">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2519.7!2d10.4556!3d50.7248!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a4b1234567890%3A0x1!2sTalstra%C3%9Fe+73%2C+98574+Schmalkalden!5e0!3m2!1sde!2sde!4v1"
+              allowfullscreen="" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+
+        </div>
+
+        <!-- Kontaktformular -->
+        <div class="kontakt-form-wrap reveal-right">
+          <h3>Nachricht senden</h3>
+          <p>Füllen Sie das Formular aus – ich melde mich schnellstmöglich bei Ihnen.</p>
+
+          <form action="mailto:daniel@eckversicherung.de" method="post" enctype="text/plain">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="vorname">Vorname</label>
+                <input type="text" id="vorname" name="vorname" placeholder="Max" required />
+              </div>
+              <div class="form-group">
+                <label for="nachname">Nachname</label>
+                <input type="text" id="nachname" name="nachname" placeholder="Mustermann" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">E-Mail-Adresse</label>
+              <input type="email" id="email" name="email" placeholder="max@beispiel.de" required />
+            </div>
+            <div class="form-group">
+              <label for="telefon">Telefon (optional)</label>
+              <input type="tel" id="telefon" name="telefon" placeholder="0174 / 000 00 00" />
+            </div>
+            <div class="form-group">
+              <label for="thema">Thema</label>
+              <select id="thema" name="thema">
+                <option value="">Bitte wählen...</option>
+                <option>Private Versicherung</option>
+                <option>Gewerbliche Versicherung</option>
+                <option>Bestandsvertrag prüfen</option>
+                <option>Schadensfall</option>
+                <option>Sonstiges</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="nachricht">Ihre Nachricht</label>
+              <textarea id="nachricht" name="nachricht" placeholder="Wie kann ich Ihnen helfen?" required></textarea>
+            </div>
+            <button type="submit" class="form-submit">
+              Nachricht senden <i class="fas fa-arrow-right"></i>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="kontakt">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="start.html" class="logo footer-logo">
+          <div class="footer-logo-bracket"></div>
+          <div class="logo-text">
+            <span class="logo-name">Daniel Eck</span>
+            <span class="logo-subtitle">Versicherungsmakler</span>
+          </div>
+        </a>
+        <p>Unabhängige Versicherungsberatung in 3. Generation. Persönlich, transparent und immer in Ihrem Interesse.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="private-versicherungen.html">Private Versicherungen</a></li>
+          <li><a href="start.html#versicherungen">Gewerbliche Versicherungen</a></li>
+          <li><a href="start.html#ueber-mich">Über mich</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <ul class="footer-contact-list">
+          <li><i class="fas fa-phone"></i><a href="tel:+491743225885">0174 / 322 58 85</a></li>
+          <li><i class="fas fa-envelope"></i><a href="mailto:daniel@eckversicherung.de">daniel@eckversicherung.de</a></li>
+          <li><i class="fas fa-location-dot"></i><a href="https://www.google.com/maps/place/Talstra%C3%9Fe+73,+98574+Schmalkalden" target="_blank" class="maps-link">Talstraße 73<br />98574 Schmalkalden</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Schadenhotline</h4>
+        <a href="tel:+491743225885" class="schadenhotline-box" style="background-color: rgb(33, 103, 204)">
+          <i class="fas fa-phone"></i>
+          <div>
+            <span class="sh-number">0174 / 322 58 85</span>
+            <span class="sh-label">Im Schadensfall sofort anrufen</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 VersicherungsEck – Daniel Eck. Alle Rechte vorbehalten.</p>
+      <div class="footer-bottom-links">
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="impressum.html">Impressum</a>
+        <a href="erstinformation.html">Erstinformation</a>
+        <a href="#" onclick="openCookieSettings();return false;">Cookie-Einstellungen</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

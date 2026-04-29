@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Analytics – VersicherungsEck</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e293b;font-size:14px;min-height:100vh}
+
+/* ── Login ── */
+#loginWrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-card{background:#fff;border-radius:20px;padding:48px 44px;width:100%;max-width:420px;box-shadow:0 8px 40px rgba(23,45,80,.15)}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.login-logo-icon{width:44px;height:44px;background:#172d50;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px}
+.login-logo h1{font-size:18px;font-weight:800;color:#172d50;line-height:1.2}
+.login-logo span{font-size:12px;color:#64748b;font-weight:400}
+.login-label{font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
+.login-input{width:100%;padding:11px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;margin-bottom:16px}
+.login-input:focus{border-color:#1a50c8}
+.login-btn{width:100%;padding:13px;background:#1a50c8;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;margin-top:4px}
+.login-btn:hover{background:#1540a0}
+.login-err{color:#dc2626;font-size:13px;margin-top:10px;display:none}
+
+/* ── Dashboard ── */
+#dashWrap{display:none;flex-direction:column;min-height:100vh}
+.dash-nav{background:#172d50;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dash-nav-left{display:flex;align-items:center;gap:12px}
+.dash-nav-icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+.dash-nav h2{color:#fff;font-size:15px;font-weight:700}
+.dash-nav-right{display:flex;align-items:center;gap:16px}
+.dash-nav-live{display:flex;align-items:center;gap:6px;color:#86efac;font-size:12px;font-weight:600}
+.dash-nav-live span{width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.dash-logout{background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s}
+.dash-logout:hover{background:rgba(255,255,255,.2)}
+
+.dash-main{flex:1;padding:24px;max-width:1400px;margin:0 auto;width:100%}
+
+/* Filter-Bar */
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px}
+.filter-bar select,.filter-bar input[type=date],.filter-bar input[type=text]{padding:8px 12px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#fff;cursor:pointer;color:#1e293b}
+.filter-bar select:focus,.filter-bar input:focus{border-color:#1a50c8}
+.filter-search{flex:1;min-width:180px;max-width:280px}
+.filter-btn{padding:8px 16px;background:#1a50c8;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.filter-btn-sec{background:#fff;color:#475569;border:2px solid #e2e8f0}
+.filter-btn-sec:hover{border-color:#94a3b8}
+.export-btn{margin-left:auto;padding:8px 16px;background:#172d50;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px}
+
+/* Stat-Karten */
+.stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:20px}
+.stat-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.stat-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:8px}
+.stat-val{font-size:28px;font-weight:800;color:#172d50;line-height:1}
+.stat-sub{font-size:12px;color:#94a3b8;margin-top:4px}
+.stat-card.accent{background:#172d50}
+.stat-card.accent .stat-label{color:#93c5fd}
+.stat-card.accent .stat-val{color:#fff}
+.stat-card.accent .stat-sub{color:#93c5fd}
+
+/* Charts */
+.charts-row{display:grid;grid-template-columns:1fr 320px;gap:16px;margin-bottom:20px}
+.chart-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.chart-card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+.chart-wrap{position:relative;height:220px}
+
+/* Tabellen-Reihe */
+.tables-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.table-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden}
+.table-card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+.mini-table{width:100%;border-collapse:collapse}
+.mini-table th{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;padding:6px 8px;text-align:left;border-bottom:2px solid #f1f5f9}
+.mini-table td{padding:8px;border-bottom:1px solid #f8fafc;color:#334155}
+.mini-table tr:last-child td{border-bottom:none}
+.mini-table .bar-cell{position:relative}
+.bar-bg{position:absolute;left:0;top:0;bottom:0;background:#eff6ff;border-radius:4px;z-index:0}
+.bar-val{position:relative;z-index:1;font-weight:600;color:#1a50c8}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.badge-pv{background:#eff6ff;color:#1a50c8}
+.badge-sec{background:#f0fdf4;color:#16a34a}
+.badge-cta{background:#fef3c7;color:#b45309}
+.badge-quiz{background:#fdf4ff;color:#9333ea}
+.badge-funnel{background:#fff1f2;color:#e11d48}
+
+/* Log-Tabelle */
+.log-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
+.log-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.log-header h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em}
+.log-count{font-size:12px;color:#94a3b8}
+.log-table-wrap{overflow-x:auto}
+.log-table{width:100%;border-collapse:collapse;min-width:800px}
+.log-table th{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;padding:8px 10px;text-align:left;border-bottom:2px solid #f1f5f9;white-space:nowrap;cursor:pointer;user-select:none}
+.log-table th:hover{color:#475569}
+.log-table td{padding:8px 10px;border-bottom:1px solid #f8fafc;color:#334155;white-space:nowrap}
+.log-table tr:hover td{background:#f8fafc}
+.log-table tr:last-child td{border-bottom:none}
+.log-table .dim{color:#94a3b8}
+.flag{margin-right:4px}
+
+/* Pagination */
+.pagination{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:16px}
+.page-btn{width:32px;height:32px;border:2px solid #e2e8f0;border-radius:8px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#475569;transition:all .15s}
+.page-btn:hover,.page-btn.active{background:#1a50c8;border-color:#1a50c8;color:#fff}
+.page-btn:disabled{opacity:.3;cursor:not-allowed;background:#fff;border-color:#e2e8f0;color:#94a3b8}
+.page-info{font-size:13px;color:#64748b}
+
+/* Archiv */
+.archive-select{margin-bottom:4px}
+
+/* ── Conversion-Trichter ── */
+.funnel-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
+.funnel-card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:20px}
+.funnel-steps{display:flex;align-items:stretch;gap:0}
+.funnel-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+.funnel-step:not(:last-child)::after{content:'→';position:absolute;right:-10px;top:28px;font-size:18px;color:#cbd5e1;z-index:1}
+.funnel-bar-wrap{width:100%;padding:0 8px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.funnel-bar-outer{width:100%;background:#f1f5f9;border-radius:8px;overflow:hidden;height:80px;display:flex;align-items:flex-end}
+.funnel-bar-inner{width:100%;background:linear-gradient(to top,#1a50c8,#4f83f0);border-radius:8px;transition:height .6s ease;min-height:4px}
+.funnel-step-label{font-size:11px;font-weight:700;color:#64748b;text-align:center;margin-top:6px;line-height:1.3}
+.funnel-step-count{font-size:20px;font-weight:800;color:#172d50}
+.funnel-step-pct{font-size:11px;color:#94a3b8;margin-top:2px}
+.funnel-conv{font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;margin-top:4px}
+.funnel-conv.good{background:#dcfce7;color:#16a34a}
+.funnel-conv.mid{background:#fef9c3;color:#b45309}
+.funnel-conv.bad{background:#fee2e2;color:#dc2626}
+
+/* ── Tageszeit-Heatmap ── */
+.heatmap-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
+.heatmap-card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+.heatmap-grid{display:grid;grid-template-columns:repeat(24,1fr);gap:4px}
+.heatmap-col{display:flex;flex-direction:column;align-items:center;gap:3px}
+.heatmap-cell{width:100%;aspect-ratio:1;border-radius:4px;background:#f1f5f9;transition:background .3s;cursor:default;position:relative}
+.heatmap-cell:hover::after{content:attr(title);position:absolute;bottom:110%;left:50%;transform:translateX(-50%);background:#172d50;color:#fff;font-size:11px;padding:3px 7px;border-radius:6px;white-space:nowrap;z-index:10}
+.heatmap-hour{font-size:9px;color:#94a3b8;font-weight:600}
+.heatmap-day-labels{display:flex;gap:4px;margin-bottom:4px;padding-left:0}
+.heatmap-legend{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:#64748b}
+.heatmap-legend-bar{display:flex;gap:3px}
+.heatmap-legend-cell{width:14px;height:14px;border-radius:3px}
+
+/* Loading */
+.loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:48px;color:#64748b}
+.spinner{width:22px;height:22px;border:3px solid #e2e8f0;border-top-color:#1a50c8;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Empty */
+.empty{text-align:center;padding:48px;color:#94a3b8}
+.empty i{font-size:32px;margin-bottom:12px;display:block}
+
+/* Responsive */
+@media(max-width:1200px){
+  .stats-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:1024px){
+  .stats-grid{grid-template-columns:repeat(3,1fr)}
+  .charts-row{grid-template-columns:1fr}
+  .tables-row{grid-template-columns:1fr}
+  .funnel-steps{flex-wrap:wrap}
+  .funnel-step{min-width:30%}
+}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .heatmap-grid{gap:2px}
+  .heatmap-hour{font-size:7px}
+  .dash-main{padding:14px}
+  .filter-bar{gap:7px}
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="loginWrap">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon"><i class="fas fa-shield-halved"></i></div>
+      <div>
+        <h1>VersicherungsEck</h1>
+        <span>Analytics Dashboard</span>
+      </div>
+    </div>
+    <label class="login-label">Apps Script URL</label>
+    <input class="login-input" id="loginUrl" type="url" value="https://script.google.com/macros/s/AKfycbzxyEcTAME2BJN30Qtyk2vwt0VsDpbyAg4okkZgKvkaeclAgebU7ljT9YeRbrQT_VI/exec" />
+    <label class="login-label">Passwort</label>
+    <input class="login-input" id="loginPw" type="password" value="Defekt102!" />
+    <button class="login-btn" onclick="doLogin()"><i class="fas fa-arrow-right-to-bracket"></i> Anmelden</button>
+    <div class="login-err" id="loginErr">Falsches Passwort oder ungültige URL.</div>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div id="dashWrap">
+  <nav class="dash-nav">
+    <div class="dash-nav-left">
+      <div class="dash-nav-icon"><i class="fas fa-chart-line"></i></div>
+      <h2>Analytics &nbsp;·&nbsp; VersicherungsEck</h2>
+    </div>
+    <div class="dash-nav-right">
+      <div class="dash-nav-live"><span></span>Live</div>
+      <button class="dash-logout" onclick="doLogout()"><i class="fas fa-right-from-bracket"></i> Abmelden</button>
+    </div>
+  </nav>
+
+  <div class="dash-main" id="dashMain">
+    <div class="loading"><div class="spinner"></div> Daten werden geladen …</div>
+  </div>
+</div>
+
+<script>
+// ================================================================
+//  State
+// ================================================================
+var EP       = '';
+var PW       = '';
+var allRows  = [];
+var filtered = [];
+var page     = 1;
+var pageSize = 50;
+var sortCol  = 'Datum';
+var sortAsc  = false;
+
+var chartLine   = null;
+var chartDonut  = null;
+
+// ================================================================
+//  Login
+// ================================================================
+function doLogin() {
+  var url = document.getElementById('loginUrl').value.trim();
+  var pw  = document.getElementById('loginPw').value.trim();
+  if (!url || !pw) { showErr('Bitte URL und Passwort eingeben.'); return; }
+
+  // Credentials testen
+  fetch(url + '?action=data&pw=' + encodeURIComponent(pw))
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function (d) {
+      if (!d.ok) {
+        showErr('Falsches Passwort. Bitte in Code.gs prüfen (DASHBOARD_PW).');
+        return;
+      }
+      EP = url; PW = pw;
+      localStorage.setItem('_eckEP', EP);
+      localStorage.setItem('_eckPW', PW);
+      startDash(d.rows || []);
+    })
+    .catch(function (err) {
+      if (err && err.message && err.message.indexOf('HTTP') === 0) {
+        showErr('Serverfehler: ' + err.message + '. Apps Script Bereitstellung prüfen.');
+      } else {
+        showErr('Verbindung fehlgeschlagen – hast du Code.gs als Web-App deployed? (Zugriff: Jeder)');
+      }
+    });
+}
+
+function showErr(msg) {
+  var el = document.getElementById('loginErr');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+document.getElementById('loginPw').addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+// Auto-Login aus localStorage
+(function () {
+  var ep = localStorage.getItem('_eckEP');
+  var pw = localStorage.getItem('_eckPW');
+  if (!ep || !pw) return;
+  document.getElementById('loginUrl').value = ep;
+  document.getElementById('loginPw').value  = pw;
+  fetch(ep + '?action=data&pw=' + encodeURIComponent(pw))
+    .then(function (r) { return r.json(); })
+    .then(function (d) { if (d.ok) { EP = ep; PW = pw; startDash(d.rows || []); } })
+    .catch(function () { /* Auto-Login still shows form with pre-filled values */ });
+})();
+
+function doLogout() {
+  localStorage.removeItem('_eckEP');
+  localStorage.removeItem('_eckPW');
+  location.reload();
+}
+
+// ================================================================
+//  Dashboard starten
+// ================================================================
+function startDash(rows) {
+  document.getElementById('loginWrap').style.display = 'none';
+  var dw = document.getElementById('dashWrap');
+  dw.style.display = 'flex';
+
+  allRows = rows;
+  renderDash();
+
+  // Alle 60 s neu laden
+  setInterval(function () { reload(); }, 60000);
+}
+
+function reload() {
+  fetch(EP + '?action=data&pw=' + encodeURIComponent(PW))
+    .then(function (r) { return r.json(); })
+    .then(function (d) { if (d.ok) { allRows = d.rows || []; applyFilters(); } })
+    .catch(function () {});
+}
+
+// ================================================================
+//  Haupt-Render
+// ================================================================
+function renderDash() {
+  applyFilters();
+
+  var main = document.getElementById('dashMain');
+  main.innerHTML =
+    renderFilterBar() +
+    renderStats() +
+    renderFunnel() +
+    renderCharts() +
+    renderHeatmap() +
+    renderTables() +
+    renderLog();
+
+  initCharts();
+  bindFilters();
+  renderLogRows();
+}
+
+// ================================================================
+//  Filter
+// ================================================================
+function getFilterValues() {
+  var from   = (document.getElementById('fFrom')   || {}).value || '';
+  var to     = (document.getElementById('fTo')     || {}).value || '';
+  var type   = (document.getElementById('fType')   || {}).value || 'all';
+  var device = (document.getElementById('fDevice') || {}).value || 'all';
+  var month  = (document.getElementById('fMonth')  || {}).value || 'all';
+  var search = ((document.getElementById('fSearch') || {}).value || '').toLowerCase();
+  return { from: from, to: to, type: type, device: device, month: month, search: search };
+}
+
+function applyFilters() {
+  var f = getFilterValues();
+
+  filtered = allRows.filter(function (r) {
+    // Datum-Filter: "DD.MM.YYYY" → vergleichbar machen
+    var d = r['Datum'] || '';
+    var dSorted = d.split('.').reverse().join('-'); // YYYY-MM-DD
+
+    if (f.from && dSorted < f.from) return false;
+    if (f.to   && dSorted > f.to)   return false;
+    if (f.month !== 'all') {
+      var ym = dSorted.slice(0, 7); // YYYY-MM
+      if (ym !== f.month) return false;
+    }
+    if (f.type   !== 'all' && r['Typ']   !== f.type)   return false;
+    if (f.device !== 'all' && r['Gerät'] !== f.device) return false;
+
+    if (f.search) {
+      var hay = Object.values(r).join(' ').toLowerCase();
+      if (hay.indexOf(f.search) === -1) return false;
+    }
+    return true;
+  });
+
+  page = 1;
+}
+
+function bindFilters() {
+  ['fFrom','fTo','fType','fDevice','fMonth'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('change', function () { applyFilters(); refreshStats(); renderLogRows(); updateCharts(); });
+  });
+  var fs = document.getElementById('fSearch');
+  if (fs) fs.addEventListener('input', function () { applyFilters(); renderLogRows(); });
+
+  var reset = document.getElementById('fReset');
+  if (reset) reset.addEventListener('click', function () {
+    ['fFrom','fTo','fSearch'].forEach(function (id) { var el = document.getElementById(id); if (el) el.value = ''; });
+    ['fType','fDevice','fMonth'].forEach(function (id) { var el = document.getElementById(id); if (el) el.value = 'all'; });
+    applyFilters(); refreshStats(); renderLogRows(); updateCharts();
+  });
+
+  var exp = document.getElementById('exportBtn');
+  if (exp) exp.addEventListener('click', exportCSV);
+}
+
+// ================================================================
+//  Filter-Bar HTML
+// ================================================================
+function renderFilterBar() {
+  var months = getMonths();
+  var monthOpts = '<option value="all">Alle Monate</option>' +
+    months.map(function (m) {
+      var label = m.slice(5, 7) + '/' + m.slice(0, 4);
+      return '<option value="' + m + '">' + label + '</option>';
+    }).join('');
+
+  return '<div class="filter-bar">' +
+    '<input type="date" id="fFrom" title="Von" />' +
+    '<input type="date" id="fTo"   title="Bis" />' +
+    '<select id="fType">' +
+      '<option value="all">Alle Typen</option>' +
+      '<option value="pageview">Seitenaufruf</option>' +
+      '<option value="section">Abschnitt</option>' +
+      '<option value="cta">CTA-Klick</option>' +
+      '<option value="quiz">Quiz</option>' +
+      '<option value="funnel">Funnel</option>' +
+    '</select>' +
+    '<select id="fDevice">' +
+      '<option value="all">Alle Geräte</option>' +
+      '<option value="Mobile">Mobile</option>' +
+      '<option value="Tablet">Tablet</option>' +
+      '<option value="Desktop">Desktop</option>' +
+    '</select>' +
+    '<select id="fMonth" class="archive-select">' + monthOpts + '</select>' +
+    '<input type="text" id="fSearch" class="filter-search" placeholder="&#xf002; Suchen …" />' +
+    '<button id="fReset" class="filter-btn filter-btn-sec"><i class="fas fa-rotate-left"></i></button>' +
+    '<button id="exportBtn" class="export-btn"><i class="fas fa-download"></i> CSV</button>' +
+  '</div>';
+}
+
+function getMonths() {
+  var set = {};
+  allRows.forEach(function (r) {
+    var d = r['Datum'] || '';
+    var ym = d.split('.').reverse().join('-').slice(0, 7);
+    if (ym) set[ym] = 1;
+  });
+  return Object.keys(set).sort().reverse();
+}
+
+// ================================================================
+//  Statistik-Karten
+// ================================================================
+function countPV(rows) {
+  return rows.filter(function (r) { return r['Typ'] === 'pageview'; }).length;
+}
+function uniqueSessions(rows) {
+  var s = {};
+  rows.filter(function (r) { return r['Typ'] === 'pageview'; })
+      .forEach(function (r) { s[r['Session']] = 1; });
+  return Object.keys(s).length;
+}
+function todayStr() {
+  var d = new Date();
+  return ('0'+d.getDate()).slice(-2) + '.' + ('0'+(d.getMonth()+1)).slice(-2) + '.' + d.getFullYear();
+}
+function last7() {
+  var d = new Date(); d.setDate(d.getDate() - 7);
+  return d;
+}
+
+function uniqueVisitors(rows) {
+  var v = {};
+  rows.filter(function (r) { return r['Typ'] === 'pageview'; })
+      .forEach(function (r) { if (r['BesucherID']) v[r['BesucherID']] = 1; });
+  return Object.keys(v).length;
+}
+function returningVisitors(rows) {
+  // Besucher-IDs die mehr als 1x pageview haben (an unterschiedlichen Tagen)
+  var vDays = {};
+  rows.filter(function (r) { return r['Typ'] === 'pageview' && r['BesucherID']; })
+      .forEach(function (r) {
+        if (!vDays[r['BesucherID']]) vDays[r['BesucherID']] = {};
+        vDays[r['BesucherID']][r['Datum']] = 1;
+      });
+  return Object.keys(vDays).filter(function (v) { return Object.keys(vDays[v]).length > 1; }).length;
+}
+
+function renderStats() {
+  var today  = allRows.filter(function (r) { return r['Datum'] === todayStr(); });
+  var pvAll  = countPV(allRows);
+  var pvToday = countPV(today);
+  var uAll   = uniqueSessions(allRows);
+  var uToday = uniqueSessions(today);
+
+  var t7 = new Date(); t7.setDate(t7.getDate() - 7);
+  var rows7 = allRows.filter(function (r) { var d = parseDate(r['Datum']); return d && d >= t7; });
+  var pv7 = countPV(rows7);
+
+  var t30 = new Date(); t30.setDate(t30.getDate() - 30);
+  var rows30 = allRows.filter(function (r) { var d = parseDate(r['Datum']); return d && d >= t30; });
+  var pv30 = countPV(rows30);
+
+  var ret  = returningVisitors(allRows);
+  var vtot = uniqueVisitors(allRows);
+  var retPct = vtot > 0 ? Math.round(ret / vtot * 100) : 0;
+
+  return '<div class="stats-grid" id="statsGrid">' +
+    statCard('Heute', pvToday + ' Aufrufe', uToday + ' Sessions', false) +
+    statCard('7 Tage', pv7 + ' Aufrufe', uniqueSessions(rows7) + ' Sessions', false) +
+    statCard('30 Tage', pv30 + ' Aufrufe', uniqueSessions(rows30) + ' Sessions', false) +
+    statCard('Gesamt', pvAll + ' Aufrufe', uAll + ' Sessions', true) +
+    statCard('Wiederkehrend', ret + ' Besucher', retPct + ' % aller Besucher', false) +
+    statCard('Neu', (vtot - ret) + ' Besucher', (100 - retPct) + ' % Erstbesucher', false) +
+  '</div>';
+}
+
+function statCard(label, val, sub, accent) {
+  return '<div class="stat-card' + (accent ? ' accent' : '') + '">' +
+    '<div class="stat-label">' + label + '</div>' +
+    '<div class="stat-val">' + val + '</div>' +
+    '<div class="stat-sub">' + sub + '</div>' +
+  '</div>';
+}
+
+function refreshStats() {
+  // Re-render nur die Stat-Karten
+  var sg = document.getElementById('statsGrid');
+  if (!sg) return;
+  var tmp = document.createElement('div');
+  tmp.innerHTML = renderStats();
+  sg.replaceWith(tmp.firstChild);
+}
+
+function parseDate(str) {
+  if (!str) return null;
+  var p = str.split('.');
+  if (p.length !== 3) return null;
+  return new Date(p[2], p[1]-1, p[0]);
+}
+
+// ================================================================
+//  Conversion-Trichter
+// ================================================================
+function renderFunnel() {
+  var pvRows  = allRows.filter(function (r) { return r['Typ'] === 'pageview'; });
+  var steps = [
+    { label: 'Besucher',          count: uniqueSessions(pvRows) },
+    { label: 'Quiz gesehen',      count: uniqSid(allRows, 'section',  'Quiz') },
+    { label: 'Quiz abgeschlossen',count: uniqSid(allRows, 'quiz',     'Abgeschlossen') },
+    { label: 'Funnel gestartet',  count: uniqSid(allRows, 'funnel',   'Start') },
+    { label: 'Termin-CTA geklickt', count: uniqSidCta(allRows) }
+  ];
+
+  var max = steps[0].count || 1;
+
+  var html = '<div class="funnel-card"><h3><i class="fas fa-filter"></i> Conversion-Trichter</h3><div class="funnel-steps">';
+  steps.forEach(function (s, i) {
+    var pct     = max > 0 ? Math.round(s.count / max * 100) : 0;
+    var barH    = Math.max(6, pct);
+    var convHtml = '';
+    if (i > 0 && steps[i-1].count > 0) {
+      var conv = Math.round(s.count / steps[i-1].count * 100);
+      var cls  = conv >= 50 ? 'good' : conv >= 20 ? 'mid' : 'bad';
+      convHtml = '<div class="funnel-conv ' + cls + '">' + conv + '%</div>';
+    }
+    html +=
+      '<div class="funnel-step">' +
+        '<div class="funnel-bar-wrap">' +
+          '<div class="funnel-step-count">' + s.count + '</div>' +
+          convHtml +
+          '<div class="funnel-bar-outer">' +
+            '<div class="funnel-bar-inner" style="height:' + barH + '%"></div>' +
+          '</div>' +
+          '<div class="funnel-step-label">' + s.label + '</div>' +
+          '<div class="funnel-step-pct">' + pct + '% der Besucher</div>' +
+        '</div>' +
+      '</div>';
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function uniqSid(rows, type, extra) {
+  var s = {};
+  rows.filter(function (r) { return r['Typ'] === type && r['Extra'] === extra; })
+      .forEach(function (r) { s[r['Session']] = 1; });
+  return Object.keys(s).length;
+}
+function uniqSidCta(rows) {
+  var s = {};
+  rows.filter(function (r) { return r['Typ'] === 'cta' && /Termin/i.test(r['Extra']); })
+      .forEach(function (r) { s[r['Session']] = 1; });
+  return Object.keys(s).length;
+}
+
+// ================================================================
+//  Tageszeit-Heatmap
+// ================================================================
+function renderHeatmap() {
+  var counts = {};
+  for (var h = 0; h < 24; h++) counts[h] = 0;
+
+  allRows.filter(function (r) { return r['Typ'] === 'pageview'; })
+    .forEach(function (r) {
+      var t = (r['Uhrzeit'] || '').split(':');
+      var hr = parseInt(t[0], 10);
+      if (!isNaN(hr)) counts[hr] = (counts[hr] || 0) + 1;
+    });
+
+  var max = Math.max.apply(null, Object.values(counts)) || 1;
+
+  var cells = '';
+  for (var h = 0; h < 24; h++) {
+    var v   = counts[h] || 0;
+    var pct = v / max;
+    var bg  = pct === 0 ? '#f1f5f9'
+            : pct < .25 ? '#bfdbfe'
+            : pct < .5  ? '#60a5fa'
+            : pct < .75 ? '#2563eb'
+            :              '#172d50';
+    cells += '<div class="heatmap-col">' +
+      '<div class="heatmap-cell" style="background:' + bg + '" title="' + h + ':00 – ' + v + ' Aufrufe"></div>' +
+      '<div class="heatmap-hour">' + (h < 10 ? '0'+h : h) + '</div>' +
+    '</div>';
+  }
+
+  return '<div class="heatmap-card">' +
+    '<h3><i class="fas fa-clock"></i> Besuche nach Tageszeit</h3>' +
+    '<div class="heatmap-grid">' + cells + '</div>' +
+    '<div class="heatmap-legend">Wenig ' +
+      '<div class="heatmap-legend-bar">' +
+        ['#f1f5f9','#bfdbfe','#60a5fa','#2563eb','#172d50'].map(function(c){
+          return '<div class="heatmap-legend-cell" style="background:'+c+'"></div>';
+        }).join('') +
+      '</div>' +
+    ' Viel</div>' +
+  '</div>';
+}
+
+// ================================================================
+//  Charts
+// ================================================================
+function renderCharts() {
+  return '<div class="charts-row">' +
+    '<div class="chart-card">' +
+      '<h3><i class="fas fa-chart-line"></i> Seitenaufrufe – letzte 30 Tage</h3>' +
+      '<div class="chart-wrap"><canvas id="chartLine"></canvas></div>' +
+    '</div>' +
+    '<div class="chart-card">' +
+      '<h3><i class="fas fa-mobile-screen-button"></i> Geräte</h3>' +
+      '<div class="chart-wrap"><canvas id="chartDonut"></canvas></div>' +
+    '</div>' +
+  '</div>';
+}
+
+function initCharts() {
+  buildLineChart();
+  buildDonutChart();
+}
+
+function updateCharts() {
+  if (chartLine)  { chartLine.destroy();  chartLine  = null; }
+  if (chartDonut) { chartDonut.destroy(); chartDonut = null; }
+  buildLineChart();
+  buildDonutChart();
+}
+
+function buildLineChart() {
+  var ctx = document.getElementById('chartLine');
+  if (!ctx) return;
+
+  // Letzten 30 Tage generieren
+  var labels = []; var counts = {};
+  for (var i = 29; i >= 0; i--) {
+    var d = new Date(); d.setDate(d.getDate() - i);
+    var lbl = ('0'+d.getDate()).slice(-2) + '.' + ('0'+(d.getMonth()+1)).slice(-2);
+    labels.push(lbl);
+    counts[lbl] = 0;
+  }
+
+  var t30 = new Date(); t30.setDate(t30.getDate() - 30);
+  filtered.filter(function (r) {
+    return r['Typ'] === 'pageview' && parseDate(r['Datum']) >= t30;
+  }).forEach(function (r) {
+    var d = r['Datum'] || ''; var parts = d.split('.');
+    var lbl = parts[0] + '.' + parts[1];
+    if (counts[lbl] !== undefined) counts[lbl]++;
+  });
+
+  chartLine = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Aufrufe',
+        data: labels.map(function (l) { return counts[l]; }),
+        borderColor: '#1a50c8',
+        backgroundColor: 'rgba(26,80,200,.08)',
+        borderWidth: 2.5,
+        pointRadius: 3,
+        pointBackgroundColor: '#1a50c8',
+        tension: 0.4,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 }, maxTicksLimit: 10 } },
+        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { precision: 0, font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+function buildDonutChart() {
+  var ctx = document.getElementById('chartDonut');
+  if (!ctx) return;
+
+  var pv = filtered.filter(function (r) { return r['Typ'] === 'pageview'; });
+  var counts = { Mobile: 0, Tablet: 0, Desktop: 0 };
+  pv.forEach(function (r) { if (counts[r['Gerät']] !== undefined) counts[r['Gerät']]++; });
+
+  chartDonut = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Mobile', 'Tablet', 'Desktop'],
+      datasets: [{
+        data: [counts.Mobile, counts.Tablet, counts.Desktop],
+        backgroundColor: ['#1a50c8', '#64748b', '#172d50'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 14 } }
+      },
+      cutout: '65%'
+    }
+  });
+}
+
+// ================================================================
+//  Mini-Tabellen (Referrer + Top-Abschnitte)
+// ================================================================
+function renderTables() {
+  return '<div class="tables-row">' +
+    '<div class="table-card"><h3><i class="fas fa-arrow-turn-up"></i> Referrer</h3>' + buildRefTable() + '</div>' +
+    '<div class="table-card"><h3><i class="fas fa-eye"></i> Meistbesuchte Abschnitte</h3>' + buildSectionTable() + '</div>' +
+  '</div>';
+}
+
+function buildRefTable() {
+  var counts = {};
+  filtered.filter(function (r) { return r['Typ'] === 'pageview'; })
+          .forEach(function (r) { var ref = r['Referrer'] || 'Direkt'; counts[ref] = (counts[ref]||0)+1; });
+  var list = Object.keys(counts).map(function (k) { return [k, counts[k]]; }).sort(function (a,b) { return b[1]-a[1]; }).slice(0,8);
+  var max = list[0] ? list[0][1] : 1;
+  if (!list.length) return '<div class="empty" style="padding:20px">Keine Daten</div>';
+  return '<table class="mini-table"><tr><th>Herkunft</th><th>Aufrufe</th></tr>' +
+    list.map(function (l) {
+      var pct = Math.round(l[1]/max*100);
+      return '<tr><td>' + esc(l[0]) + '</td>' +
+        '<td class="bar-cell" style="width:80px"><div class="bar-bg" style="width:'+pct+'%"></div><span class="bar-val">'+l[1]+'</span></td></tr>';
+    }).join('') + '</table>';
+}
+
+function buildSectionTable() {
+  var counts = {};
+  filtered.filter(function (r) { return r['Typ'] === 'section'; })
+          .forEach(function (r) { var ex = r['Extra'] || '–'; counts[ex] = (counts[ex]||0)+1; });
+  var list = Object.keys(counts).map(function (k) { return [k, counts[k]]; }).sort(function (a,b) { return b[1]-a[1]; });
+  var max = list[0] ? list[0][1] : 1;
+  if (!list.length) return '<div class="empty" style="padding:20px">Noch keine Daten</div>';
+  return '<table class="mini-table"><tr><th>Abschnitt</th><th>Aufrufe</th></tr>' +
+    list.map(function (l) {
+      var pct = Math.round(l[1]/max*100);
+      return '<tr><td>' + esc(l[0]) + '</td>' +
+        '<td class="bar-cell" style="width:80px"><div class="bar-bg" style="width:'+pct+'%"></div><span class="bar-val">'+l[1]+'</span></td></tr>';
+    }).join('') + '</table>';
+}
+
+// ================================================================
+//  Event-Log
+// ================================================================
+function renderLog() {
+  return '<div class="log-card">' +
+    '<div class="log-header">' +
+      '<h3><i class="fas fa-list-ul"></i> Besucherprotokoll</h3>' +
+      '<span class="log-count" id="logCount"></span>' +
+    '</div>' +
+    '<div class="log-table-wrap">' +
+      '<table class="log-table">' +
+        '<thead><tr>' +
+          '<th onclick="sortBy(\'Datum\')">Datum ↕</th>' +
+          '<th onclick="sortBy(\'Uhrzeit\')">Uhrzeit ↕</th>' +
+          '<th>Typ</th>' +
+          '<th onclick="sortBy(\'Land\')">Ort ↕</th>' +
+          '<th onclick="sortBy(\'Gerät\')">Gerät ↕</th>' +
+          '<th onclick="sortBy(\'Browser\')">Browser ↕</th>' +
+          '<th onclick="sortBy(\'Referrer\')">Herkunft ↕</th>' +
+          '<th>Extra</th>' +
+          '<th class="dim">Session</th>' +
+        '</tr></thead>' +
+        '<tbody id="logBody"></tbody>' +
+      '</table>' +
+    '</div>' +
+    '<div class="pagination" id="pagination"></div>' +
+  '</div>';
+}
+
+function renderLogRows() {
+  var body = document.getElementById('logBody');
+  var cnt  = document.getElementById('logCount');
+  if (!body) return;
+
+  // Sortieren
+  var sorted = filtered.slice().sort(function (a, b) {
+    var va = a[sortCol] || ''; var vb = b[sortCol] || '';
+    return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+  });
+
+  if (cnt) cnt.textContent = filtered.length + ' Einträge';
+
+  var total = sorted.length;
+  var pages = Math.max(1, Math.ceil(total / pageSize));
+  if (page > pages) page = pages;
+  var start = (page - 1) * pageSize;
+  var slice = sorted.slice(start, start + pageSize);
+
+  if (!slice.length) {
+    body.innerHTML = '<tr><td colspan="9"><div class="empty"><i class="fas fa-inbox"></i>Keine Einträge gefunden</div></td></tr>';
+  } else {
+    body.innerHTML = slice.map(function (r) {
+      return '<tr>' +
+        '<td><strong>' + esc(r['Datum']) + '</strong></td>' +
+        '<td class="dim">' + esc(r['Uhrzeit']) + '</td>' +
+        '<td>' + typeBadge(r['Typ']) + '</td>' +
+        '<td>' + (r['Land'] ? '<span class="flag">&#127760;</span>' + esc(r['Stadt'] ? r['Stadt'] + ', ' + r['Land'] : r['Land']) : '<span class="dim">–</span>') + '</td>' +
+        '<td>' + esc(r['Gerät']) + '</td>' +
+        '<td>' + esc(r['Browser']) + '</td>' +
+        '<td>' + esc(r['Referrer'] || 'Direkt') + '</td>' +
+        '<td class="dim">' + esc(r['Extra']) + '</td>' +
+        '<td class="dim" style="font-size:11px">' + esc((r['Session']||'').slice(0,8)) + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  renderPagination(pages);
+}
+
+function typeBadge(t) {
+  var map = {
+    pageview: ['badge-pv',  'Aufruf'],
+    section:  ['badge-sec', 'Abschnitt'],
+    cta:      ['badge-cta', 'CTA'],
+    quiz:     ['badge-quiz','Quiz'],
+    funnel:   ['badge-funnel','Funnel']
+  };
+  var m = map[t] || ['badge-pv', t || '–'];
+  return '<span class="badge ' + m[0] + '">' + m[1] + '</span>';
+}
+
+function renderPagination(pages) {
+  var el = document.getElementById('pagination');
+  if (!el) return;
+  if (pages <= 1) { el.innerHTML = ''; return; }
+
+  var html = '<button class="page-btn" onclick="goPage(' + (page-1) + ')" ' + (page<=1?'disabled':'') + '><i class="fas fa-chevron-left"></i></button>';
+  for (var i = 1; i <= pages; i++) {
+    if (pages > 10 && Math.abs(i - page) > 2 && i !== 1 && i !== pages) {
+      if (i === 2 || i === pages - 1) html += '<span class="page-info">…</span>';
+      continue;
+    }
+    html += '<button class="page-btn' + (i===page?' active':'') + '" onclick="goPage('+i+')">'+i+'</button>';
+  }
+  html += '<button class="page-btn" onclick="goPage(' + (page+1) + ')" ' + (page>=pages?'disabled':'') + '><i class="fas fa-chevron-right"></i></button>';
+  el.innerHTML = html;
+}
+
+function goPage(p) { page = p; renderLogRows(); }
+function sortBy(col) { if (sortCol === col) sortAsc = !sortAsc; else { sortCol = col; sortAsc = false; } renderLogRows(); }
+
+// ================================================================
+//  CSV Export
+// ================================================================
+function exportCSV() {
+  var hdrs = ['Datum','Uhrzeit','Typ','Seite','Referrer','Gerät','Browser','OS','Sprache','Land','Stadt','Session','Extra'];
+  var csv  = hdrs.join(';') + '\n';
+  filtered.forEach(function (r) {
+    csv += hdrs.map(function (h) { return '"' + (r[h]||'').replace(/"/g,'""') + '"'; }).join(';') + '\n';
+  });
+  var blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a'); a.href = url;
+  a.download = 'analytics_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+// ================================================================
+//  Helfer
+// ================================================================
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
