@@ -146,8 +146,8 @@ p   { line-height: 1.7; }
   100% { left: 160%; }
 }
 .btn-online-abschluss {
-  background: rgb(255,39,159) !important;
-  box-shadow: 0 2px 10px rgba(255,39,159,.35) !important;
+  background: rgb(255,33,120) !important;
+  box-shadow: 0 2px 10px rgba(255,33,120,.35) !important;
   position: relative;
   overflow: hidden;
 }
@@ -161,7 +161,7 @@ p   { line-height: 1.7; }
   animation: shimmer-sweep 3s ease-in-out infinite;
   pointer-events: none;
 }
-.btn-online-abschluss:hover { background: rgb(220,20,130) !important; box-shadow: 0 4px 16px rgba(255,39,159,.5) !important; transform: translateY(-1px); }
+.btn-online-abschluss:hover { background: rgb(220,20,130) !important; box-shadow: 0 4px 16px rgba(255,33,120,.5) !important; transform: translateY(-1px); }
 
 
 /* Hamburger */
