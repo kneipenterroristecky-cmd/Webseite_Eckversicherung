@@ -1316,7 +1316,7 @@ p   { line-height: 1.7; }
   .nav-links.open { display: flex; }
   .nav-link { padding: 13px 12px; border-radius: 8px; border-bottom: 1px solid #f1f5f9; }
   .btn-nav { margin: 10px 0 0; text-align: center; justify-content: center; }
-  .navbar { position: relative; }
+  .navbar { position: sticky; top: 0; }
 
   /* Hero – kompakt, zentriert, kein Overflow */
   .hero { padding: 14px 0 90px; overflow-x: hidden; }
