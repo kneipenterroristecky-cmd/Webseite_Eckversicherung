@@ -1055,9 +1055,8 @@ p   { line-height: 1.7; }
    FOOTER
    ================================================ */
 .mobile-cta-bar { display: none; }
-
-/* ================================================
-   FOOTER
+.footer {
+  background: var(--navy);
   padding-top: 72px;
   overflow-x: hidden;
 }
