@@ -121,6 +121,60 @@
       pointer-events: none;
     }
 
+    .oa-makler {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      margin-top: 64px;
+      background: #fff;
+      border: 1.5px solid var(--gray-100);
+      border-radius: 24px;
+      padding: 40px 48px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.06);
+    }
+    .oa-makler-img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 8px 32px rgba(0,0,0,.12);
+    }
+    .oa-makler-text h2 {
+      font-size: clamp(18px, 2.2vw, 24px);
+      font-weight: 800;
+      color: var(--navy);
+      margin: 0 0 12px;
+      line-height: 1.3;
+    }
+    .oa-makler-text p {
+      font-size: 14px;
+      color: var(--gray-500);
+      line-height: 1.7;
+      margin: 0 0 20px;
+    }
+    .oa-makler-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .oa-makler-badges span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--blue);
+      background: rgba(26,80,200,.07);
+      border-radius: 100px;
+      padding: 5px 14px;
+    }
+    .oa-makler-badges i { font-size: 12px; }
+    @media (max-width: 680px) {
+      .oa-makler { flex-direction: column; text-align: center; padding: 32px 24px; gap: 24px; }
+      .oa-makler-badges { justify-content: center; }
+    }
+
     .oa-hint {
       margin-top: 48px;
       background: var(--navy);
@@ -264,6 +318,23 @@
         <div class="oa-card-arrow" style="color:var(--gray-500);">In Kürze verfügbar</div>
       </div>
 
+    </div>
+
+    <!-- Persönlicher Ansprechpartner -->
+    <div class="oa-makler reveal">
+      <img src="Dummybild 1_rund.png" alt="Daniel Eck – Ihr Versicherungsmakler" class="oa-makler-img" />
+      <div class="oa-makler-text">
+        <div class="section-label" style="margin-bottom:10px;">
+          <span class="label-bar"></span><span>IHR MAKLER</span><span class="label-bar"></span>
+        </div>
+        <h2>Alle Verträge laufen über mich – persönlich &amp; transparent.</h2>
+        <p>Ich bin Daniel Eck, unabhängiger Versicherungsmakler in 3. Generation. Egal welche Versicherung Sie hier online abschließen – ich bin Ihr direkter Ansprechpartner. Sie erhalten von mir eine persönliche Betreuung, Unterstützung im Schadensfall und bei allen Fragen rund um Ihren Vertrag.</p>
+        <div class="oa-makler-badges">
+          <span><i class="fas fa-check-circle"></i> Unabhängige Beratung</span>
+          <span><i class="fas fa-check-circle"></i> 3. Generation</span>
+          <span><i class="fas fa-check-circle"></i> Persönlich erreichbar</span>
+        </div>
+      </div>
     </div>
 
     <!-- Hinweis -->
