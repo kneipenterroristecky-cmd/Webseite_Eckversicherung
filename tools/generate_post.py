@@ -21,27 +21,32 @@ client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
 beitrag = client.messages.create(
     model="claude-opus-4-5",
-    max_tokens=2500,
+    max_tokens=4000,
     messages=[{
         "role": "user",
-        "content": f"""Du bist Daniel Eck, Versicherungsmakler aus Schmalkalden (VersicherungsEck, Talstraße 73).
-Du führst einen unabhängigen Versicherungsmaklerbetrieb in 3. Generation.
+        "content": f"""Du bist ich – ein Versicherungsmakler aus Schmalkalden (VersicherungsEck, Talstraße 73).
+Ich führe einen unabhängigen Versicherungsmaklerbetrieb in 3. Generation.
 
-Schreibe einen praxisnahen Blog-Beitrag auf Deutsch über: **{topic['title']}**
+Schreibe einen ausführlichen, praxisnahen Blog-Beitrag in der Ich-Perspektive über: **{topic['title']}**
+
+Wichtig: Schreibe immer aus der Ich-Perspektive. Nicht "Daniel Eck empfiehlt" sondern "Ich empfehle",
+nicht "Als Makler weiß er" sondern "Als Makler weiß ich". Der Leser wird mit „Sie" angesprochen.
 
 Dein Schreibstil:
-- Persönlich und direkt, du sprichst den Leser mit „Sie" an
+- Persönlich, authentisch, direkt – wie ein Gespräch unter vier Augen
 - Kein Fachchinesisch – einfache, klare Sprache
-- Echte Tipps aus deinem Makleralltag, konkrete Beispiele
-- Du bist ehrlich: auch wenn etwas kompliziert ist, sagst du es
+- Echte Tipps und Erfahrungen aus dem Makleralltag, konkrete Beispiele und Zahlen
+- Ehrlich: auch Nachteile und Fallstricke ansprechen
 - Keine leeren Floskeln wie „In der heutigen schnelllebigen Zeit..."
 
 Struktur (nur HTML-Content, KEINE komplette HTML-Seite):
-- Einleitung: 2-3 Sätze die direkt in das Thema einsteigen (als <p>)
-- 3-4 Abschnitte mit <h2>-Überschrift und 2-3 <p>-Absätzen
-- Falls passend: eine <ul>-Liste mit konkreten Tipps
-- Abschluss: kurzer persönlicher Abschnitt mit Einladung zum Gespräch
+- Einleitung: 3-4 Sätze die persönlich und direkt ins Thema einsteigen (als <p>)
+- 4-5 Abschnitte mit <h2>-Überschrift und je 3-4 ausführlichen <p>-Absätzen
+- Mindestens eine <ul>-Liste mit konkreten, nützlichen Tipps (6-8 Punkte)
+- Zwischenfazit oder Praxisbeispiel als eigener Absatz
+- Abschluss: persönlicher Absatz mit konkreter Einladung zum Gespräch (Telefonnummer 0174 / 322 58 85)
 
+Der Beitrag soll mindestens 600-800 Wörter lang sein.
 Gib NUR den HTML-Inhalt aus (h2, p, ul, li Tags). Kein html/head/body."""
     }]
 )
