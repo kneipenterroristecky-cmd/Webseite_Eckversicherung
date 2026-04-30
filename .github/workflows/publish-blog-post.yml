@@ -1,0 +1,56 @@
+name: 2 – Blog veröffentlichen (manuell nach Freigabe)
+
+on:
+  workflow_dispatch:   # Nur manuell – Sie starten das nach der E-Mail
+
+jobs:
+  veroeffentlichen:
+    name: Auf Webseite, Facebook & Instagram veröffentlichen
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Letzten Entwurf herunterladen
+        uses: actions/download-artifact@v4
+        with:
+          name: blog-entwurf
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+        continue-on-error: true
+
+      - name: Fallback – Entwurf aus Repository laden
+        run: |
+          if [ ! -f "tools/draft_meta.json" ]; then
+            echo "Kein Artifact gefunden – verwende lokale draft_meta.json"
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Abhängigkeiten installieren
+        run: pip install requests
+
+      - name: Überall veröffentlichen
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+        run: python tools/publish_post.py
+
+      - name: Issue schließen
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE=$(gh issue list --label "blog-entwurf" --state open --json number --jq '.[0].number')
+          if [ -n "$ISSUE" ]; then
+            gh issue close $ISSUE --comment "✅ Veröffentlicht!"
+          fi

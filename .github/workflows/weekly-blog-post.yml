@@ -1,18 +1,17 @@
-name: Wöchentlicher Blog-Beitrag
+name: 1 – Blog-Beitrag erstellen (automatisch montags)
 
 on:
   schedule:
-    - cron: '0 7 * * 1'   # Jeden Montag um 07:00 Uhr UTC (= 08:00 / 09:00 DE)
-  workflow_dispatch:        # Auch manuell auslösbar
+    - cron: '0 7 * * 1'   # Jeden Montag 08:00 Uhr DE
+  workflow_dispatch:        # Auch manuell startbar
 
 jobs:
-  # ── Job 1: Beitrag mit KI erstellen ───────────────────────────────────────
   erstellen:
-    name: 📝 Beitrag erstellen
+    name: Beitrag mit KI erstellen
     runs-on: ubuntu-latest
-    outputs:
-      post_title: ${{ steps.gen.outputs.post_title }}
-      post_filename: ${{ steps.gen.outputs.post_filename }}
+    permissions:
+      contents: write
+      issues: write
     steps:
       - uses: actions/checkout@v4
 
@@ -24,27 +23,10 @@ jobs:
         run: pip install anthropic requests
 
       - name: Blog-Beitrag generieren
-        id: gen
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           SITE_URL: ${{ secrets.SITE_URL }}
         run: python tools/generate_post.py
-
-      - name: Vorschau in GitHub Actions Summary anzeigen
-        run: |
-          echo "## 📄 Entwurf: $(cat tools/draft_meta.json | python3 -c "import sys,json; print(json.load(sys.stdin)['title'])")" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Datum:** $(date '+%d.%m.%Y')" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Facebook-Text:**" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          cat tools/draft_meta.json | python3 -c "import sys,json; print(json.load(sys.stdin)['social_summary'])" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Instagram-Caption:**" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          cat tools/draft_meta.json | python3 -c "import sys,json; print(json.load(sys.stdin)['instagram_caption'])" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Entwurf als Artifact speichern
         uses: actions/upload-artifact@v4
@@ -55,34 +37,44 @@ jobs:
             tools/draft_meta.json
           retention-days: 7
 
-  # ── Job 2: Freigabe + Veröffentlichung ────────────────────────────────────
-  veroeffentlichen:
-    name: 🚀 Veröffentlichen
-    needs: erstellen
-    runs-on: ubuntu-latest
-    environment: freigabe      # ← Hier müssen Sie in GitHub klicken!
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Entwurf herunterladen
-        uses: actions/download-artifact@v4
-        with:
-          name: blog-entwurf
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Abhängigkeiten installieren
-        run: pip install requests
-
-      - name: Überall veröffentlichen
+      - name: GitHub Issue mit Vorschau erstellen
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
-          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
-          IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
-          SITE_URL: ${{ secrets.SITE_URL }}
-        run: python tools/publish_post.py
+        run: |
+          TITLE=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['title'])")
+          SUMMARY=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['social_summary'])")
+          INSTA=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['instagram_caption'])")
+          FILENAME=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['filename'])")
+          DATE=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['date_de'])")
+
+          gh issue create \
+            --title "📝 Blog-Entwurf $DATE: $TITLE" \
+            --body "## Neuer Blog-Beitrag zur Freigabe
+
+          **Titel:** $TITLE
+          **Datum:** $DATE
+          **Datei:** blog/posts/$FILENAME
+
+          ---
+
+          ### Facebook-Text:
+          \`\`\`
+          $SUMMARY
+          \`\`\`
+
+          ### Instagram-Caption:
+          \`\`\`
+          $INSTA
+          \`\`\`
+
+          ---
+
+          ## ✅ So genehmigen Sie den Beitrag:
+
+          1. Lesen Sie den Entwurf oben
+          2. Wenn alles passt: Gehen Sie zu **Actions → '2 – Blog veröffentlichen'**
+          3. Klicken Sie **Run workflow**
+          4. Fertig – wird automatisch auf Webseite, Facebook & Instagram gepostet
+
+          > Dieses Issue automatisch schließen nach Veröffentlichung." \
+            --label "blog-entwurf"
