@@ -760,12 +760,10 @@ p   { line-height: 1.7; }
   border: 1px solid rgba(255,255,255,.08);
   border-radius: var(--r-lg);
   padding: 30px 24px;
-  transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease);
 }
 .vorteil-card:hover {
-  transform: translateY(-6px);
-  background: rgba(255,255,255,.08);
-  border-color: rgba(26,80,200,.35);
+  background: initial;
+  border-color: initial;
   box-shadow: 0 12px 40px rgba(0,0,0,.3);
 }
 .vorteil-icon {
@@ -778,7 +776,6 @@ p   { line-height: 1.7; }
   margin-bottom: 18px;
   transition: background .25s, color .25s;
 }
-.vorteil-card:hover .vorteil-icon { background: var(--blue); color: #fff; }
 .vorteil-card h3 {
   font-size: 15px;
   font-weight: 700;
