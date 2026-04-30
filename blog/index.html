@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog – VersicherungsEck Daniel Eck</title>
+  <meta name="description" content="Versicherungstipps, Ratgeber und Neuigkeiten von Ihrem unabhängigen Versicherungsmakler Daniel Eck aus Schmalkalden." />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    .page-hero {
+      background: var(--navy);
+      padding: 72px 0 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(26,80,200,.25) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .page-hero-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 28px;
+      position: relative;
+      z-index: 1;
+    }
+    .page-hero-title {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+    .page-hero-sub {
+      font-size: 17px;
+      color: rgba(255,255,255,.7);
+      line-height: 1.6;
+    }
+    .blog-index {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 28px 90px;
+    }
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+    .blog-card {
+      display: block;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 28px;
+      text-decoration: none;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .blog-card:hover {
+      box-shadow: 0 8px 32px rgba(23,45,80,.12);
+      transform: translateY(-3px);
+    }
+    .blog-card-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .blog-card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+    .blog-card-date {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 16px;
+    }
+    .blog-card-more {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+    .blog-card-more i { margin-left: 4px; }
+    .blog-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: #94a3b8;
+      font-size: 16px;
+    }
+    @media (max-width: 640px) {
+      .blog-grid { grid-template-columns: 1fr; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-container">
+      <div class="topbar-right">
+        <a href="tel:+491743225885"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+        <a href="mailto:daniel@eckversicherung.de"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="../start.html" class="logo">
+        <img src="../Logo Eck weis.png" alt="Daniel Eck Versicherungsmakler" class="logo-img" />
+        <div class="logo-text">
+          <span class="logo-name" style="color: rgb(33, 103, 204)">Daniel Eck</span>
+          <span class="logo-subtitle">Versicherungsmakler</span>
+        </div>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="../private-versicherungen.html" class="nav-link">Private Versicherungen</a>
+        <a href="../gewerbliche-versicherungen.html" class="nav-link">Gewerbliche Versicherungen</a>
+        <a href="../start.html#team" class="nav-link">Über uns</a>
+        <a href="../faq.html" class="nav-link">FAQ</a>
+        <a href="../kontakt.html" class="nav-link">Kontakt</a>
+        <a href="../onlineabschluss.html" class="btn btn-nav btn-online-abschluss"><i class="fas fa-laptop"></i> Onlineabschluss</a>
+        <a href="../start.html#termin" class="btn btn-nav" style="background-color: rgb(33, 103, 204)">Termin buchen</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Menü">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <div class="page-hero-container">
+      <h1 class="page-hero-title">Ratgeber & Tipps</h1>
+      <p class="page-hero-sub">Praxisnahe Informationen rund ums Thema Versicherung – von Ihrem unabhängigen Makler aus Schmalkalden.</p>
+    </div>
+  </section>
+
+  <!-- BEITRÄGE -->
+  <div class="blog-index">
+    <div class="blog-grid">
+      <!-- POSTS_START -->
+      <div class="blog-empty">
+        <i class="fas fa-pen-to-square" style="font-size:32px; display:block; margin-bottom:12px;"></i>
+        Die ersten Beiträge erscheinen in Kürze.
+      </div>
+      <!-- POSTS_END -->
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../start.html" class="logo footer-logo">
+          <div class="footer-logo-bracket"></div>
+          <div class="logo-text">
+            <span class="logo-name">Daniel Eck</span>
+            <span class="logo-subtitle">Versicherungsmakler</span>
+          </div>
+        </a>
+        <p>Unabhängige Versicherungsberatung in 3. Generation. Persönlich, transparent und immer in Ihrem Interesse.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="../start.html#leistungen">Leistungen</a></li>
+          <li><a href="../start.html#team">Über uns</a></li>
+          <li><a href="../private-versicherungen.html">Private Versicherungen</a></li>
+          <li><a href="../gewerbliche-versicherungen.html">Gewerbliche Versicherungen</a></li>
+          <li><a href="../faq.html">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <ul class="footer-contact-list">
+          <li><i class="fas fa-phone"></i><a href="tel:+491743225885">0174 / 322 58 85</a></li>
+          <li><i class="fas fa-envelope"></i><a href="mailto:daniel@eckversicherung.de">daniel@eckversicherung.de</a></li>
+          <li><i class="fas fa-location-dot"></i><a href="https://www.google.com/maps/place/Talstra%C3%9Fe+73,+98574+Schmalkalden" target="_blank">Talstraße 73<br />98574 Schmalkalden</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Schadenhotline</h4>
+        <a href="tel:+491743225885" class="schadenhotline-box" style="background-color: rgb(33, 103, 204)">
+          <i class="fas fa-phone"></i>
+          <div>
+            <span class="sh-number">0174 / 322 58 85</span>
+            <span class="sh-label">Im Schadensfall sofort anrufen</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 VersicherungsEck – Daniel Eck. Alle Rechte vorbehalten.</p>
+      <div class="footer-bottom-links">
+        <a href="../datenschutz.html">Datenschutz</a>
+        <a href="../impressum.html">Impressum</a>
+        <a href="../erstinformation.html">Erstinformation</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+  <script src="../cookie.js"></script>
+  <div class="mobile-cta-bar">
+    <a href="tel:+491743225885" class="mobile-cta-call"><i class="fas fa-phone"></i><span>Anrufen</span></a>
+    <a href="https://wa.me/491743225885" target="_blank" rel="noopener" class="mobile-cta-wa"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+    <a href="../kontakt.html" class="mobile-cta-termin"><i class="fas fa-calendar-check"></i><span>Termin buchen</span></a>
+  </div>
+</body>
+</html>
