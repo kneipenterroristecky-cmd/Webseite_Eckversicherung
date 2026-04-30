@@ -491,10 +491,7 @@ p   { line-height: 1.7; }
   align-items: flex-start;
   padding: 30px 28px;
   background: #fff;
-  transition: background .2s;
-  cursor: default;
 }
-.svc-item:hover { background: #f8faff; }
 .svc-icon-wrap {
   width: 48px; height: 48px;
   border-radius: 13px;
@@ -503,9 +500,7 @@ p   { line-height: 1.7; }
   font-size: 20px;
   color: var(--blue);
   flex-shrink: 0;
-  transition: background .25s, color .25s;
 }
-.svc-item:hover .svc-icon-wrap { background: var(--blue); color: #fff; }
 .svc-item h3 {
   font-size: 15px;
   font-weight: 800;
