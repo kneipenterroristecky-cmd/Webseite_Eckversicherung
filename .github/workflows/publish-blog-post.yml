@@ -14,20 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Letzten Entwurf herunterladen
-        uses: actions/download-artifact@v4
-        with:
-          name: blog-entwurf
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ github.event.workflow_run.id }}
-        continue-on-error: true
-
-      - name: Fallback – Entwurf aus Repository laden
-        run: |
-          if [ ! -f "tools/draft_meta.json" ]; then
-            echo "Kein Artifact gefunden – verwende lokale draft_meta.json"
-          fi
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -50,7 +36,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ISSUE=$(gh issue list --label "blog-entwurf" --state open --json number --jq '.[0].number')
+          ISSUE=$(gh issue list --state open --json number,title --jq '[.[] | select(.title | startswith("📝 Blog-Entwurf"))] | .[0].number')
           if [ -n "$ISSUE" ]; then
             gh issue close $ISSUE --comment "✅ Veröffentlicht!"
           fi

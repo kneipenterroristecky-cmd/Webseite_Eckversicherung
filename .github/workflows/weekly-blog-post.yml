@@ -28,14 +28,13 @@ jobs:
           SITE_URL: ${{ secrets.SITE_URL }}
         run: python tools/generate_post.py
 
-      - name: Entwurf als Artifact speichern
-        uses: actions/upload-artifact@v4
-        with:
-          name: blog-entwurf
-          path: |
-            blog/posts/
-            tools/draft_meta.json
-          retention-days: 7
+      - name: Entwurf ins Repository committen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add blog/posts/ tools/draft_meta.json
+          git commit -m "📝 Blog-Entwurf: $(python3 -c \"import json; print(json.load(open('tools/draft_meta.json'))['title'])\")"
+          git push
 
       - name: GitHub Issue mit Vorschau erstellen
         env:
