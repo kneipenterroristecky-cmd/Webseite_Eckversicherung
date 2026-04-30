@@ -537,9 +537,10 @@
     /* ── Responsive ── */
     @media (max-width: 860px) {
       .kfz-coverage { grid-template-columns: 1fr; }
-      .kfz-makler { grid-template-columns: 1fr 1fr; padding: 36px 36px 36px 0; gap: 32px; }
-      .kfz-makler-photo { display: none; }
-      .kfz-makler-left { padding: 36px 0 36px 36px; }
+      .kfz-makler { grid-template-columns: 1fr; padding: 0; gap: 0; }
+      .kfz-makler-photo { height: 280px; min-height: unset; object-fit: cover; object-position: center top; }
+      .kfz-makler-left { padding: 28px 24px; }
+      .kfz-makler-advantages { padding: 0 24px 28px; }
       .kfz-personal-cta { grid-template-columns: 1fr; }
       .kfz-personal-cta-photo { height: 280px; }
       .kfz-personal-cta-content { padding: 36px 32px; }
