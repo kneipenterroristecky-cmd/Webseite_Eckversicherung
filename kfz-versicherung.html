@@ -362,12 +362,24 @@
     .kfz-makler {
       background: var(--navy);
       border-radius: 20px;
-      padding: 48px 52px;
+      padding: 0 52px 0 0;
       margin-bottom: 56px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 52px;
-      align-items: center;
+      grid-template-columns: 220px 1fr 1fr;
+      gap: 48px;
+      align-items: stretch;
+      overflow: hidden;
+    }
+    .kfz-makler-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      min-height: 320px;
+    }
+    .kfz-makler-left {
+      padding: 48px 0;
     }
     .kfz-makler-left h2 {
       font-size: 26px;
@@ -386,6 +398,8 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
+      padding: 48px 0;
+      justify-content: center;
     }
     .adv-item {
       display: flex;
@@ -523,7 +537,9 @@
     /* ── Responsive ── */
     @media (max-width: 860px) {
       .kfz-coverage { grid-template-columns: 1fr; }
-      .kfz-makler { grid-template-columns: 1fr; padding: 36px 28px; gap: 36px; }
+      .kfz-makler { grid-template-columns: 1fr 1fr; padding: 36px 36px 36px 0; gap: 32px; }
+      .kfz-makler-photo { display: none; }
+      .kfz-makler-left { padding: 36px 0 36px 36px; }
       .kfz-personal-cta { grid-template-columns: 1fr; }
       .kfz-personal-cta-photo { height: 280px; }
       .kfz-personal-cta-content { padding: 36px 32px; }
@@ -823,8 +839,8 @@
 
     <!-- Makler-Vorteil -->
     <div class="kfz-makler reveal">
+      <img src="Dummybild 1_rund.png" alt="Daniel Eck – Versicherungsmakler" class="kfz-makler-photo" />
       <div class="kfz-makler-left">
-        <img src="Dummybild 1_rund.png" alt="Daniel Eck – Versicherungsmakler" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.2);margin-bottom:20px;display:block;" />
         <h2>Warum über mich als Makler versichern?</h2>
         <p>Ich vergleiche für Sie die Tarife zahlreicher Versicherungsgesellschaften – objektiv, individuell und kostenlos. Und im Schadensfall stehe ich als Ihr persönlicher Ansprechpartner an Ihrer Seite.</p>
         <a href="kontakt.html" class="btn btn-primary" style="background-color: rgb(33, 103, 204); text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">
