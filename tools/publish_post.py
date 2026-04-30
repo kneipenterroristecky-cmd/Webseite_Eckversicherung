@@ -27,6 +27,39 @@ gh_headers = {
 
 errors = []
 
+
+def _update_blog_index(meta, repo, headers):
+    """Fügt den neuen Beitrag oben in blog/index.html ein."""
+    index_url = f"https://api.github.com/repos/{repo}/contents/blog/index.html"
+    r = requests.get(index_url, headers=headers)
+    if r.status_code != 200:
+        return
+    current = r.json()
+    html = base64.b64decode(current["content"]).decode("utf-8")
+
+    # Platzhalter entfernen falls noch vorhanden
+    html = html.replace(
+        '\n      <div class="blog-empty">\n        <i class="fas fa-pen-to-square" style="font-size:32px; display:block; margin-bottom:12px;"></i>\n        Die ersten Beiträge erscheinen in Kürze.\n      </div>', ""
+    )
+
+    new_card = f"""      <a href="posts/{meta['filename']}" class="blog-card reveal">
+        <div class="blog-card-label">{meta['label']}</div>
+        <h2 class="blog-card-title">{meta['title']}</h2>
+        <p class="blog-card-date">{meta['date_de']}</p>
+        <span class="blog-card-more">Weiterlesen <i class="fas fa-arrow-right"></i></span>
+      </a>"""
+
+    html = html.replace("<!-- POSTS_START -->", f"<!-- POSTS_START -->\n{new_card}", 1)
+
+    updated_b64 = base64.b64encode(html.encode("utf-8")).decode()
+    requests.put(index_url, headers=headers, json={
+        "message": f"Blog-Index: {meta['title']} hinzugefügt",
+        "content": updated_b64,
+        "sha": current["sha"],
+        "branch": "master"
+    })
+
+
 # ════════════════════════════════════════════════════════════════════════════════
 # 1. WEBSEITE – Blog-Post committen
 # ════════════════════════════════════════════════════════════════════════════════
@@ -50,39 +83,11 @@ try:
     r.raise_for_status()
     print(f"   ✅ Webseite: {meta['post_url']}")
 
-    # Blog-Index aktualisieren
     _update_blog_index(meta, REPO, gh_headers)
 
 except Exception as e:
     errors.append(f"Webseite: {e}")
     print(f"   ❌ Webseite fehlgeschlagen: {e}")
-
-
-def _update_blog_index(meta, repo, headers):
-    """Fügt den neuen Beitrag oben in blog/index.html ein."""
-    index_url = f"https://api.github.com/repos/{repo}/contents/blog/index.html"
-    r = requests.get(index_url, headers=headers)
-    if r.status_code != 200:
-        return
-    current = r.json()
-    html = base64.b64decode(current["content"]).decode("utf-8")
-
-    new_card = f"""      <a href="posts/{meta['filename']}" class="blog-card reveal">
-        <div class="blog-card-label">{meta['label']}</div>
-        <h2 class="blog-card-title">{meta['title']}</h2>
-        <p class="blog-card-date">{meta['date_de']}</p>
-        <span class="blog-card-more">Weiterlesen <i class="fas fa-arrow-right"></i></span>
-      </a>"""
-
-    html = html.replace("<!-- POSTS_START -->", f"<!-- POSTS_START -->\n{new_card}", 1)
-
-    updated_b64 = base64.b64encode(html.encode("utf-8")).decode()
-    requests.put(index_url, headers=headers, json={
-        "message": f"Blog-Index: {meta['title']} hinzugefügt",
-        "content": updated_b64,
-        "sha": current["sha"],
-        "branch": "master"
-    })
 
 
 # ════════════════════════════════════════════════════════════════════════════════
