@@ -24,8 +24,14 @@ beitrag = client.messages.create(
     max_tokens=4000,
     messages=[{
         "role": "user",
-        "content": f"""Du bist ich – ein Versicherungsmakler aus Schmalkalden (VersicherungsEck, Talstraße 73).
-Ich führe einen unabhängigen Versicherungsmaklerbetrieb in 3. Generation.
+        "content": f"""Du bist ich – Daniel Eck, Versicherungsmakler aus Schmalkalden (VersicherungsEck, Talstraße 73).
+
+Mein Hintergrund – wichtig für Glaubwürdigkeit:
+- Ich bin seit 2023 als Makler tätig – das sind knapp 2 Jahre eigene Berufserfahrung
+- Unser Betrieb existiert seit 2002 – mein Vater hat ihn gegründet, ich führe ihn weiter
+- Wenn ich von "langjähriger Erfahrung" spreche, meine ich die des Unternehmens (seit 2002), nicht meine persönliche
+- Meine eigene Erfahrung seit 2023 erwähne ich höchstens als "seit ich 2023 ins Geschäft eingestiegen bin" o.ä.
+- Nie behaupten, ich hätte 20 Jahre Berufserfahrung – das wäre unglaubwürdig
 
 Schreibe einen ausführlichen, praxisnahen Blog-Beitrag in der Ich-Perspektive über: **{topic['title']}**
 
@@ -35,9 +41,10 @@ nicht "Als Makler weiß er" sondern "Als Makler weiß ich". Der Leser wird mit �
 Dein Schreibstil:
 - Persönlich, authentisch, direkt – wie ein Gespräch unter vier Augen
 - Kein Fachchinesisch – einfache, klare Sprache
-- Echte Tipps und Erfahrungen aus dem Makleralltag, konkrete Beispiele und Zahlen
+- Echte Tipps aus dem Makleralltag, konkrete Beispiele und Zahlen
 - Ehrlich: auch Nachteile und Fallstricke ansprechen
 - Keine leeren Floskeln wie „In der heutigen schnelllebigen Zeit..."
+- Keine übertriebenen Erfahrungsaussagen die nicht zu 2 Jahren passen
 
 Struktur (nur HTML-Content, KEINE komplette HTML-Seite):
 - Einleitung: 3-4 Sätze die persönlich und direkt ins Thema einsteigen (als <p>)
@@ -58,12 +65,14 @@ meta_msg = client.messages.create(
     max_tokens=500,
     messages=[{
         "role": "user",
-        "content": f"""Für einen Blog-Beitrag von Versicherungsmakler Daniel Eck über "{topic['title']}" erstelle:
+        "content": f"""Für einen Blog-Beitrag von Versicherungsmakler Daniel Eck (VersicherungsEck Schmalkalden, seit 2023 im Betrieb, Betrieb seit 2002) über "{topic['title']}" erstelle:
+
+Die Social-Media-Texte sollen in der Ich-Perspektive geschrieben sein ("Ich erkläre", "Ich zeige", nicht "Daniel Eck zeigt").
 
 Ausgabe als JSON (keine weiteren Erklärungen):
 {{
   "title": "Überschrift max 65 Zeichen",
-  "social_summary": "Teaser für Facebook max 180 Zeichen, persönlich und neugierig machend",
+  "social_summary": "Teaser für Facebook max 180 Zeichen, persönlich in Ich-Form und neugierig machend",
   "instagram_caption": "Caption max 280 Zeichen + Zeilenumbruch + 6 deutsche Hashtags wie #Versicherung #Schmalkalden",
   "slug": "url-freundlicher-dateiname-ohne-umlaute-nur-bindestriche"
 }}"""
