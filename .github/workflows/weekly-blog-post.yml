@@ -76,5 +76,4 @@ jobs:
           3. Klicken Sie **Run workflow**
           4. Fertig – wird automatisch auf Webseite, Facebook & Instagram gepostet
 
-          > Dieses Issue automatisch schließen nach Veröffentlichung." \
-            --label "blog-entwurf"
+          > Dieses Issue automatisch schließen nach Veröffentlichung."
