@@ -761,11 +761,6 @@ p   { line-height: 1.7; }
   border-radius: var(--r-lg);
   padding: 30px 24px;
 }
-.vorteil-card:hover {
-  background: initial;
-  border-color: initial;
-  box-shadow: 0 12px 40px rgba(0,0,0,.3);
-}
 .vorteil-icon {
   width: 46px; height: 46px;
   background: rgba(26,80,200,.18);
@@ -774,7 +769,6 @@ p   { line-height: 1.7; }
   font-size: 18px;
   color: var(--blue-lt);
   margin-bottom: 18px;
-  transition: background .25s, color .25s;
 }
 .vorteil-card h3 {
   font-size: 15px;
