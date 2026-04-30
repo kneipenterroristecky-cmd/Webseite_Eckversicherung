@@ -26,34 +26,29 @@ beitrag = client.messages.create(
         "role": "user",
         "content": f"""Du bist ich – Daniel Eck, Versicherungsmakler aus Schmalkalden (VersicherungsEck, Talstraße 73).
 
-Mein Hintergrund – wichtig für Glaubwürdigkeit:
-- Ich bin seit 2023 als Makler tätig – das sind knapp 2 Jahre eigene Berufserfahrung
-- Unser Betrieb existiert seit 2002 – mein Vater hat ihn gegründet, ich führe ihn weiter
-- Wenn ich von "langjähriger Erfahrung" spreche, meine ich die des Unternehmens (seit 2002), nicht meine persönliche
-- Meine eigene Erfahrung seit 2023 erwähne ich höchstens als "seit ich 2023 ins Geschäft eingestiegen bin" o.ä.
-- Nie behaupten, ich hätte 20 Jahre Berufserfahrung – das wäre unglaubwürdig
+Hintergrund (nur intern, nicht explizit erwähnen):
+- Unser Betrieb existiert seit 2002, mein Vater hat ihn gegründet, ich führe ihn weiter
+- Das Unternehmen steht für jahrzehntelange Erfahrung – das darf ruhig anklingen
+- Mein eigenes Einsteigsjahr NICHT erwähnen – einfach selbstbewusst als Makler schreiben
 
-Schreibe einen ausführlichen, praxisnahen Blog-Beitrag in der Ich-Perspektive über: **{topic['title']}**
+Schreibe einen kompakten, praxisnahen Blog-Beitrag in der Ich-Perspektive über: **{topic['title']}**
 
-Wichtig: Schreibe immer aus der Ich-Perspektive. Nicht "Daniel Eck empfiehlt" sondern "Ich empfehle",
-nicht "Als Makler weiß er" sondern "Als Makler weiß ich". Der Leser wird mit „Sie" angesprochen.
+Wichtig: Schreibe immer aus der Ich-Perspektive. Nicht "Daniel Eck empfiehlt" sondern "Ich empfehle".
+Der Leser wird mit „Sie" angesprochen.
 
-Dein Schreibstil:
-- Persönlich, authentisch, direkt – wie ein Gespräch unter vier Augen
-- Kein Fachchinesisch – einfache, klare Sprache
-- Echte Tipps aus dem Makleralltag, konkrete Beispiele und Zahlen
-- Ehrlich: auch Nachteile und Fallstricke ansprechen
-- Keine leeren Floskeln wie „In der heutigen schnelllebigen Zeit..."
-- Keine übertriebenen Erfahrungsaussagen die nicht zu 2 Jahren passen
+Schreibstil:
+- Persönlich, direkt – wie ein kurzes Gespräch unter vier Augen
+- Kein Fachchinesisch, klare Sprache
+- Konkrete Tipps und Zahlen, keine leeren Floskeln
+- Ehrlich: Fallstricke und Nachteile nicht verschweigen
 
 Struktur (nur HTML-Content, KEINE komplette HTML-Seite):
-- Einleitung: 3-4 Sätze die persönlich und direkt ins Thema einsteigen (als <p>)
-- 4-5 Abschnitte mit <h2>-Überschrift und je 3-4 ausführlichen <p>-Absätzen
-- Mindestens eine <ul>-Liste mit konkreten, nützlichen Tipps (6-8 Punkte)
-- Zwischenfazit oder Praxisbeispiel als eigener Absatz
-- Abschluss: persönlicher Absatz mit konkreter Einladung zum Gespräch (Telefonnummer 0174 / 322 58 85)
+- Einleitung: 2-3 Sätze, direkt ins Thema (als <p>)
+- 3 Abschnitte mit <h2>-Überschrift und je 2 knappen <p>-Absätzen
+- Eine <ul>-Liste mit 5-6 konkreten Tipps
+- Abschluss: 1-2 Sätze mit Einladung zum Gespräch (Telefonnummer 0174 / 322 58 85)
 
-Der Beitrag soll mindestens 600-800 Wörter lang sein.
+Ziel: ca. 300-400 Wörter – prägnant, kein Fülltext.
 Gib NUR den HTML-Inhalt aus (h2, p, ul, li Tags). Kein html/head/body."""
     }]
 )
@@ -65,15 +60,13 @@ meta_msg = client.messages.create(
     max_tokens=500,
     messages=[{
         "role": "user",
-        "content": f"""Für einen Blog-Beitrag von Versicherungsmakler Daniel Eck (VersicherungsEck Schmalkalden, seit 2023 im Betrieb, Betrieb seit 2002) über "{topic['title']}" erstelle:
-
-Die Social-Media-Texte sollen in der Ich-Perspektive geschrieben sein ("Ich erkläre", "Ich zeige", nicht "Daniel Eck zeigt").
+        "content": f"""Für einen Blog-Beitrag von Versicherungsmakler Daniel Eck (VersicherungsEck Schmalkalden) über "{topic['title']}" erstelle kurze, knackige Social-Media-Texte in der Ich-Perspektive.
 
 Ausgabe als JSON (keine weiteren Erklärungen):
 {{
-  "title": "Überschrift max 65 Zeichen",
-  "social_summary": "Teaser für Facebook max 180 Zeichen, persönlich in Ich-Form und neugierig machend",
-  "instagram_caption": "Caption max 280 Zeichen + Zeilenumbruch + 6 deutsche Hashtags wie #Versicherung #Schmalkalden",
+  "title": "Überschrift max 60 Zeichen",
+  "social_summary": "Facebook-Post: max 120 Zeichen, Ich-Form, ein einziger Satz mit Mehrwert",
+  "instagram_caption": "Instagram: 1-2 kurze Sätze max 150 Zeichen + Zeilenumbruch + 5 Hashtags z.B. #Versicherung #Schmalkalden",
   "slug": "url-freundlicher-dateiname-ohne-umlaute-nur-bindestriche"
 }}"""
     }]
