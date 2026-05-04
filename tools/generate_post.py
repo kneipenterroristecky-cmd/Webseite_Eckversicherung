@@ -46,7 +46,7 @@ Struktur (nur HTML-Content, KEINE komplette HTML-Seite):
 - Einleitung: 2-3 Sätze, direkt ins Thema (als <p>)
 - 3 Abschnitte mit <h2>-Überschrift und je 2 knappen <p>-Absätzen
 - Eine <ul>-Liste mit 5-6 konkreten Tipps
-- Abschluss: 1-2 Sätze mit persönlicher Einladung zum Gespräch – OHNE Telefonnummer oder Adresse, stattdessen z.B. "Sprechen Sie mich einfach an – meine Kontaktdaten finden Sie hier auf der Seite."
+- Abschluss: 1-2 Sätze mit persönlicher Einladung – OHNE Telefonnummer, Adresse oder Verweis auf die Seite. Einfach natürlich enden, z.B. "Das schaue ich gerne gemeinsam mit Ihnen durch." oder "Sprechen Sie mich einfach an."
 
 Ziel: ca. 300-400 Wörter – prägnant, kein Fülltext.
 Gib NUR den HTML-Inhalt aus (h2, p, ul, li Tags). Kein html/head/body."""
