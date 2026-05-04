@@ -34,10 +34,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git stash --include-untracked
           git pull --rebase origin master
+          git stash pop
           git add blog/posts/ tools/draft_meta.json
           TITLE=$(python3 -c "import json; print(json.load(open('tools/draft_meta.json'))['title'])")
-          git commit -m "Blog-Entwurf: $TITLE" || echo "Nichts zu committen"
+          git commit -m "Blog-Entwurf: $TITLE"
           git push
 
       - name: GitHub Issue mit Vorschau erstellen
