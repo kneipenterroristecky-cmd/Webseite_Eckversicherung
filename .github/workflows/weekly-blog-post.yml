@@ -14,6 +14,8 @@ jobs:
       issues: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -32,48 +34,65 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin master
           git add blog/posts/ tools/draft_meta.json
           TITLE=$(python3 -c "import json; print(json.load(open('tools/draft_meta.json'))['title'])")
-          git commit -m "Blog-Entwurf: $TITLE"
+          git commit -m "Blog-Entwurf: $TITLE" || echo "Nichts zu committen"
           git push
 
       - name: GitHub Issue mit Vorschau erstellen
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           TITLE=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['title'])")
           SUMMARY=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['social_summary'])")
           INSTA=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['instagram_caption'])")
           FILENAME=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['filename'])")
           DATE=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['date_de'])")
+          CONTENT=$(python3 -c "
+          import json, re
+          m = json.load(open('tools/draft_meta.json'))
+          html = open(f'blog/posts/{m[\"filename\"]}').read()
+          # Nur den Inhalt zwischen blog-content div extrahieren
+          match = re.search(r'<div class=\"blog-content\">(.*?)</div>\s*<div class=\"blog-author', html, re.DOTALL)
+          if match:
+              text = match.group(1)
+              # HTML-Tags entfernen für Lesbarkeit
+              text = re.sub(r'<h2[^>]*>', '\n\n### ', text)
+              text = re.sub(r'</h2>', '', text)
+              text = re.sub(r'<li[^>]*>', '\n- ', text)
+              text = re.sub(r'<[^>]+>', '', text)
+              text = re.sub(r'\n{3,}', '\n\n', text).strip()
+              print(text[:3000])
+          ")
+          APPROVE_URL="https://github.com/${GITHUB_REPOSITORY}/actions/workflows/publish-blog-post.yml"
 
           gh issue create \
             --title "📝 Blog-Entwurf $DATE: $TITLE" \
-            --body "## Neuer Blog-Beitrag zur Freigabe
+            --body "## 📰 Neuer Beitrag zur Freigabe: $TITLE
 
-          **Titel:** $TITLE
           **Datum:** $DATE
-          **Datei:** blog/posts/$FILENAME
 
           ---
 
-          ### Facebook-Text:
-          \`\`\`
-          $SUMMARY
-          \`\`\`
+          ## Beitragsinhalt (Vorschau)
 
-          ### Instagram-Caption:
-          \`\`\`
-          $INSTA
-          \`\`\`
+          $CONTENT
 
           ---
 
-          ## ✅ So genehmigen Sie den Beitrag:
+          ### 📘 Facebook-Text:
+          > $SUMMARY
 
-          1. Lesen Sie den Entwurf oben
-          2. Wenn alles passt: Gehen Sie zu **Actions → '2 – Blog veröffentlichen'**
-          3. Klicken Sie **Run workflow**
-          4. Fertig – wird automatisch auf Webseite, Facebook & Instagram gepostet
+          ### 📸 Instagram-Caption:
+          > $INSTA
 
-          > Dieses Issue automatisch schließen nach Veröffentlichung."
+          ---
+
+          ## ✅ Freigabe – ein Klick:
+
+          👉 **[$TITLE freigeben und veröffentlichen]($APPROVE_URL)**
+
+          Seite öffnet sich → **Run workflow** klicken → fertig.
+          Beitrag erscheint dann automatisch auf Webseite, Facebook & Instagram."
