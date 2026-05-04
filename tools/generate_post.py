@@ -34,7 +34,7 @@ Hintergrund (nur intern, nicht explizit erwähnen):
 Schreibe einen kompakten, praxisnahen Blog-Beitrag in der Ich-Perspektive über: **{topic['title']}**
 
 Wichtig: Schreibe immer aus der Ich-Perspektive. Nicht "Daniel Eck empfiehlt" sondern "Ich empfehle".
-Der Leser wird mit „Sie" angesprochen.
+Der Leser wird mit „Sie" angesprochen – IMMER großgeschrieben: „Sie", „Ihr", „Ihnen", „Ihre". Niemals kleinschreiben.
 
 Schreibstil:
 - Persönlich, direkt – wie ein kurzes Gespräch unter vier Augen
