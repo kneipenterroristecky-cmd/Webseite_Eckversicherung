@@ -38,7 +38,7 @@ Der Leser wird mit „Sie" angesprochen – IMMER großgeschrieben: „Sie", „
 
 Schreibstil:
 - Persönlich, direkt – wie ein kurzes Gespräch unter vier Augen
-- Kein Fachchinesisch, klare Sprache
+- Kein Fachchinesisch, keine seltenen Fremdwörter oder Juristenwörter – nur alltagstaugliche Sprache die jeder versteht
 - Konkrete Tipps und Zahlen, keine leeren Floskeln
 - Ehrlich: Fallstricke und Nachteile nicht verschweigen
 
