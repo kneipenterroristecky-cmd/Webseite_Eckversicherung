@@ -71,6 +71,7 @@ jobs:
           APPROVE_URL="https://github.com/${GITHUB_REPOSITORY}/actions/workflows/publish-blog-post.yml"
 
           gh issue create \
+            --assignee "${{ github.repository_owner }}" \
             --title "📝 Blog-Entwurf $DATE: $TITLE" \
             --body "## 📰 Neuer Beitrag zur Freigabe: $TITLE
 
