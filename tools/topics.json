@@ -7,10 +7,10 @@
       "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Hausratversicherung: Wertgrenzen anpassen – sonst zahlt niemand",
-      "label": "Privat",
-      "unsplash_query": "home interior living room",
-      "og_image": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=630&fit=crop&auto=format"
+      "title": "Private Altersvorsorge: Was wirklich funktioniert – und was nicht",
+      "label": "Vorsorge",
+      "unsplash_query": "retirement savings planning",
+      "og_image": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Berufsunfähigkeit: Warum jetzt der beste Zeitpunkt zum Abschluss ist",
@@ -20,9 +20,21 @@
     },
     {
       "title": "Krankentagegeld: Wer zahlt, wenn Selbstständige längerfristig krank sind?",
-      "label": "Gesundheit",
-      "unsplash_query": "health medical doctor",
+      "label": "Kranken",
+      "unsplash_query": "health medical sick leave",
       "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Hausratversicherung: Wertgrenzen anpassen – sonst zahlt niemand",
+      "label": "Privat",
+      "unsplash_query": "home interior living room",
+      "og_image": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Riester-Rente 2026: Für wen lohnt sie sich noch?",
+      "label": "Vorsorge",
+      "unsplash_query": "pension savings future",
+      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format"
     }
   ],
   "2": [
@@ -37,6 +49,18 @@
       "label": "KFZ",
       "unsplash_query": "motorcycle road freedom",
       "og_image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "PKV oder GKV: Wann lohnt der Wechsel in die private Krankenversicherung?",
+      "label": "Kranken",
+      "unsplash_query": "health insurance doctor",
+      "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Krankenhaustagegeld: Warum die gesetzliche Kasse nicht reicht",
+      "label": "Kranken",
+      "unsplash_query": "hospital medical care",
+      "og_image": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Winterschäden an Haus und Wohnung: Wer zahlt wirklich?",
@@ -59,10 +83,22 @@
       "og_image": "https://images.unsplash.com/photo-1571188654248-7a89213915f7?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Fahrradversicherung: Wann lohnt sie sich – und wann nicht?",
-      "label": "Privat",
-      "unsplash_query": "bicycle cycling city",
-      "og_image": "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=1200&h=630&fit=crop&auto=format"
+      "title": "Grundfähigkeitsversicherung: Die günstige Alternative zur BU",
+      "label": "Vorsorge",
+      "unsplash_query": "hands work disability",
+      "og_image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Zahnzusatzversicherung: Jetzt abschließen – bevor die Kosten kommen",
+      "label": "Kranken",
+      "unsplash_query": "dental health smile",
+      "og_image": "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Brillenversicherung: Wann lohnt eine Sehhilfen-Zusatzversicherung?",
+      "label": "Kranken",
+      "unsplash_query": "glasses eyesight optical",
+      "og_image": "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Frühjahrscheck: Diese Versicherungslücken entdecke ich immer wieder",
@@ -86,9 +122,21 @@
     },
     {
       "title": "Auslandsreisekrankenversicherung: Ohne diese Police fahre ich nicht ins Ausland",
-      "label": "Gesundheit",
+      "label": "Kranken",
       "unsplash_query": "travel abroad health",
       "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Betriebliche Altersvorsorge: Steuern sparen und gleichzeitig vorsorgen",
+      "label": "Vorsorge",
+      "unsplash_query": "business savings pension",
+      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Krankenzusatzversicherung: Was die gesetzliche Kasse nicht zahlt",
+      "label": "Kranken",
+      "unsplash_query": "health medical treatment",
+      "og_image": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Hundehalterhaftpflicht: Im Frühling wieder Pflicht – was sie kostet",
@@ -111,10 +159,22 @@
       "og_image": "https://images.unsplash.com/photo-1527482937786-6608f6e14c15?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Gartengeräte und Hausrat: Was draußen steht, ist oft nicht versichert",
-      "label": "Privat",
-      "unsplash_query": "garden tools outdoor",
-      "og_image": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&h=630&fit=crop&auto=format"
+      "title": "Dread Disease: Absicherung bei schwerer Krankheit – was steckt dahinter?",
+      "label": "Kranken",
+      "unsplash_query": "medical serious health care",
+      "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Heilpraktikerversicherung: Naturheilkunde auf Kosten der Versicherung",
+      "label": "Kranken",
+      "unsplash_query": "natural health herbs alternative",
+      "og_image": "https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Rürup-Rente: Die Altersvorsorge für Selbstständige mit Steuerbonus",
+      "label": "Vorsorge",
+      "unsplash_query": "self employed retirement savings",
+      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Unabhängiger Makler vs. Ausschließlichkeitsvertreter: Der Unterschied zählt",
@@ -123,10 +183,10 @@
       "og_image": "https://images.unsplash.com/photo-1573497161161-c3e73707e25c?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Zahnzusatzversicherung: Jetzt abschließen – bevor die Kosten kommen",
-      "label": "Gesundheit",
-      "unsplash_query": "dental health smile",
-      "og_image": "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=1200&h=630&fit=crop&auto=format"
+      "title": "Gartengeräte und Hausrat: Was draußen steht, ist oft nicht versichert",
+      "label": "Privat",
+      "unsplash_query": "garden tools outdoor",
+      "og_image": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&h=630&fit=crop&auto=format"
     }
   ],
   "6": [
@@ -141,6 +201,18 @@
       "label": "KFZ",
       "unsplash_query": "car road trip europe",
       "og_image": "https://images.unsplash.com/photo-1493238792000-8113da705763?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Pflegeversicherung: Was die gesetzliche Absicherung wirklich zahlt",
+      "label": "Kranken",
+      "unsplash_query": "elderly care nursing",
+      "og_image": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Kinderzusatzversicherung: Wie ich die Kleinen optimal absichere",
+      "label": "Kranken",
+      "unsplash_query": "children health happy",
+      "og_image": "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Ferienwohnung vermieten: Welche Versicherung brauche ich?",
@@ -166,7 +238,19 @@
       "title": "Einbruch im Urlaub: Was die Hausratversicherung wirklich zahlt",
       "label": "Privat",
       "unsplash_query": "home security door lock",
-      "og_image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=630&fit=crop&auto=format"
+      "og_image": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Sterbegeldversicherung: Würdevoll vorsorgen – ohne die Familie zu belasten",
+      "label": "Vorsorge",
+      "unsplash_query": "family care senior dignity",
+      "og_image": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Zahnersatz: Wie ich mit der richtigen Zusatzversicherung Tausende spare",
+      "label": "Kranken",
+      "unsplash_query": "dental teeth treatment",
+      "og_image": "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Fahrraddiebstahl: So sichere ich Ihr Rad richtig ab",
@@ -195,10 +279,22 @@
       "og_image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=630&fit=crop&auto=format"
     },
     {
+      "title": "PKV für Beamte und Selbstständige: Was wirklich drin ist",
+      "label": "Kranken",
+      "unsplash_query": "private health insurance doctor",
+      "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
       "title": "Betriebshaftpflicht: Was Selbstständige unbedingt wissen müssen",
       "label": "Gewerbe",
       "unsplash_query": "business office professional",
       "og_image": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Krankentagegeld für Angestellte: Wann lohnt sich die Aufstockung?",
+      "label": "Kranken",
+      "unsplash_query": "sick leave recovery health",
+      "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Rechtsschutzversicherung: Wann sie wirklich hilft – und wann nicht",
@@ -215,16 +311,28 @@
       "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Heizungsausfall im Winter: Wer zahlt – und wer nicht?",
-      "label": "Privat",
-      "unsplash_query": "heating home winter",
-      "og_image": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
       "title": "Pflegezusatzversicherung: Warum früh abschließen so wichtig ist",
       "label": "Vorsorge",
       "unsplash_query": "elderly care family",
       "og_image": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Gesetzliche Rente reicht nicht: So schließe ich die Rentenlücke für Sie",
+      "label": "Vorsorge",
+      "unsplash_query": "pension gap retirement future",
+      "og_image": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Krankenzusatz für Senioren: Welche Leistungen wirklich sinnvoll sind",
+      "label": "Kranken",
+      "unsplash_query": "senior health care doctor",
+      "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Heizungsausfall im Winter: Wer zahlt – und wer nicht?",
+      "label": "Privat",
+      "unsplash_query": "heating home winter",
+      "og_image": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Wohngebäudeversicherung: Was Hausbesitzer jetzt prüfen sollten",
@@ -245,6 +353,18 @@
       "label": "KFZ",
       "unsplash_query": "winter tires snow car",
       "og_image": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Betriebliche Altersvorsorge: Warum Arbeitgeber hier mitsparen müssen",
+      "label": "Vorsorge",
+      "unsplash_query": "workplace pension employer",
+      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Krankenhausaufenthalt: Mit Zusatzversicherung besser versorgt",
+      "label": "Kranken",
+      "unsplash_query": "hospital room private care",
+      "og_image": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Vollkasko oder Teilkasko: Was brauche ich wirklich?",
@@ -297,6 +417,18 @@
       "label": "Ratgeber",
       "unsplash_query": "year end review planning",
       "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Pflegezusatz: Das Geschenk, das die ganze Familie entlastet",
+      "label": "Vorsorge",
+      "unsplash_query": "family care senior christmas",
+      "og_image": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Krankenversicherung zum Jahreswechsel: Jetzt Leistungen und Beiträge vergleichen",
+      "label": "Kranken",
+      "unsplash_query": "health insurance compare year",
+      "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Risikolebensversicherung: Das wichtigste Geschenk für Ihre Familie",
