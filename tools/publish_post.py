@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Veröffentlicht den freigegebenen Blog-Beitrag auf:
 1. Webseite (GitHub Commit)
@@ -101,7 +101,7 @@ if FB_PAGE_TOKEN and FB_PAGE_ID:
             f"{meta['social_summary']}\n\n"
             f"Den vollständigen Beitrag jetzt auf unserer Webseite lesen 👇\n"
             f"{meta['post_url']}\n\n"
-            f"#VersicherungsEck #DanielEck #Versicherungsmakler #Schmalkalden"
+            f"#DanielEck #DanielEck #Versicherungsmakler #Schmalkalden"
         )
         r = requests.post(
             f"https://graph.facebook.com/v21.0/{FB_PAGE_ID}/feed",

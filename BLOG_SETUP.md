@@ -1,4 +1,4 @@
-# Blog-Automatisierung: Einrichtung
+﻿# Blog-Automatisierung: Einrichtung
 
 Jeden Montag erstellt die KI automatisch einen Versicherungs-Ratgeber in Ihrem Stil,
 Sie bekommen eine E-Mail zur Freigabe, und nach einem Klick wird er auf
@@ -59,7 +59,7 @@ Klicken Sie **New repository secret** für jeden der folgenden Einträge:
 1. Gehen Sie zu: https://developers.facebook.com
 2. **Meine Apps** → **App erstellen**
 3. Typ: **Andere** → **Weiter**
-4. App-Name: "VersicherungsEck Blog" → **App erstellen**
+4. App-Name: "Daniel Eck – Versicherungsmakler Blog" → **App erstellen**
 
 ### 4c. Facebook Login hinzufügen
 1. In Ihrer App: **Produkte hinzufügen** → **Facebook Login** → **Einrichten**

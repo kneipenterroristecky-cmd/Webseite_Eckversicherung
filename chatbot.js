@@ -1,13 +1,13 @@
-/* =============================================
-   VersicherungsEck – Chatbot
+﻿/* =============================================
+   Daniel Eck – Versicherungsmakler – Chatbot
    ============================================= */
 
 (function() {
 
-const SYSTEM_PROMPT = `Du bist der ECK-Assistent von VersicherungsEck, dem Versicherungsmakler Daniel Eck aus Schmalkalden.
+const SYSTEM_PROMPT = `Du bist der ECK-Assistent von Daniel Eck – Versicherungsmakler, dem Versicherungsmakler Daniel Eck aus Schmalkalden.
 Du hilfst Besuchern der Webseite bei Fragen rund um Versicherungen – freundlich, persönlich und kompetent.
 
-Wichtige Infos über VersicherungsEck:
+Wichtige Infos über Daniel Eck – Versicherungsmakler:
 - Inhaber: Daniel Eck, unabhängiger Versicherungsmakler in 3. Generation
 - Adresse: Talstraße 73, 98574 Schmalkalden
 - Telefon: 0174 / 322 58 85
@@ -299,7 +299,7 @@ function createWindow() {
   });
 
   // Welcome message
-  addMessage('bot', 'Hallo! Ich bin der ECK-Assistent von VersicherungsEck. 👋<br>Wie kann ich Ihnen heute helfen?');
+  addMessage('bot', 'Hallo! Ich bin der ECK-Assistent von Daniel Eck – Versicherungsmakler. 👋<br>Wie kann ich Ihnen heute helfen?');
 
   // Events
   win.querySelector('#eck-close').onclick = closeChat;

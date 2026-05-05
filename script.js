@@ -1,5 +1,5 @@
 ﻿/* =============================================
-   VersicherungsEck – Interactions & Animations
+   Daniel Eck – Versicherungsmakler – Interactions & Animations
    ============================================= */
 
 /* ---- Navbar scroll shadow ---- */

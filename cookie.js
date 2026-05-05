@@ -1,5 +1,5 @@
-/* =============================================
-   VersicherungsEck – Cookie Consent
+﻿/* =============================================
+   Daniel Eck – Versicherungsmakler – Cookie Consent
    ============================================= */
 
 var COOKIE_KEY = 've_cookie_consent';

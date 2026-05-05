@@ -1,5 +1,5 @@
-// ================================================================
-//  VersicherungsEck – Analytics Backend
+﻿// ================================================================
+//  Daniel Eck – Versicherungsmakler – Analytics Backend
 //  Google Apps Script
 //
 //  SETUP (einmalig, ca. 5 Minuten):
@@ -82,7 +82,7 @@ function notify_(betreff, p, now) {
   var zeit   = Utilities.formatDate(now, 'Europe/Berlin', 'dd.MM.yyyy HH:mm');
   var body   =
     'Hallo Daniel,\n\n' +
-    'auf VersicherungsEck.de ist gerade etwas passiert:\n\n' +
+    'auf Daniel Eck – Versicherungsmakler.de ist gerade etwas passiert:\n\n' +
     '  Ereignis:  ' + betreff + '\n' +
     '  Zeit:      ' + zeit    + '\n' +
     '  Gerät:     ' + (p.device  || '–') + '  /  ' + (p.browser || '–') + '\n' +
@@ -94,7 +94,7 @@ function notify_(betreff, p, now) {
 
   MailApp.sendEmail({
     to:      NOTIFY_EMAIL,
-    subject: '🔔 ' + betreff + ' – VersicherungsEck',
+    subject: '🔔 ' + betreff + ' – Daniel Eck – Versicherungsmakler',
     body:    body
   });
 }

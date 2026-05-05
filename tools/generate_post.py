@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Erstellt einen wöchentlichen Blog-Beitrag mit Claude (KI) im Stil von Daniel Eck.
 """
@@ -24,7 +24,7 @@ beitrag = client.messages.create(
     max_tokens=4000,
     messages=[{
         "role": "user",
-        "content": f"""Du bist ich – Daniel Eck, Versicherungsmakler aus Schmalkalden (VersicherungsEck, Talstraße 73).
+        "content": f"""Du bist ich – Daniel Eck, Versicherungsmakler aus Schmalkalden (Daniel Eck – Versicherungsmakler, Talstraße 73).
 
 Hintergrund (nur intern, nicht explizit erwähnen):
 - Unser Betrieb existiert seit 2002, mein Vater hat ihn gegründet, ich führe ihn weiter
@@ -60,7 +60,7 @@ meta_msg = client.messages.create(
     max_tokens=500,
     messages=[{
         "role": "user",
-        "content": f"""Für einen Blog-Beitrag von Versicherungsmakler Daniel Eck (VersicherungsEck Schmalkalden) über "{topic['title']}" erstelle kurze, knackige Social-Media-Texte in der Ich-Perspektive.
+        "content": f"""Für einen Blog-Beitrag von Versicherungsmakler Daniel Eck (Daniel Eck – Versicherungsmakler Schmalkalden) über "{topic['title']}" erstelle kurze, knackige Social-Media-Texte in der Ich-Perspektive.
 
 Ausgabe als JSON (keine weiteren Erklärungen):
 {{

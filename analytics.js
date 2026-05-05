@@ -1,5 +1,5 @@
-/* ================================================================
-   VersicherungsEck – Analytics Tracking
+﻿/* ================================================================
+   Daniel Eck – Versicherungsmakler – Analytics Tracking
    Nach dem Apps Script Setup hier die URL eintragen:
    ================================================================ */
 (function () {
