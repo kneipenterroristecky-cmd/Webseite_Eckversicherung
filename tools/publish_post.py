@@ -96,16 +96,17 @@ except Exception as e:
 if FB_PAGE_TOKEN and FB_PAGE_ID:
     print("📡 Facebook: Beitrag posten …")
     try:
+        full_url = SITE_URL.rstrip("/") + "/" + meta['post_url'].lstrip("/")
         fb_text = (
             f"📰 {meta['title']}\n\n"
             f"{meta['social_summary']}\n\n"
-            f"Den vollständigen Beitrag jetzt auf unserer Webseite lesen 👇\n"
-            f"{meta['post_url']}\n\n"
-            f"#DanielEck #DanielEck #Versicherungsmakler #Schmalkalden"
+            f"Den vollständigen Beitrag jetzt lesen 👇\n"
+            f"{full_url}\n\n"
+            f"#DanielEck #Versicherungsmakler #Schmalkalden"
         )
         r = requests.post(
             f"https://graph.facebook.com/v21.0/{FB_PAGE_ID}/feed",
-            data={"message": fb_text, "link": meta['post_url'], "access_token": FB_PAGE_TOKEN}
+            data={"message": fb_text, "link": full_url, "access_token": FB_PAGE_TOKEN}
         )
         r.raise_for_status()
         print(f"   ✅ Facebook: gepostet (Post-ID: {r.json().get('id')})")

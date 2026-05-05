@@ -48,6 +48,8 @@ Struktur (nur HTML-Content, KEINE komplette HTML-Seite):
 - Eine <ul>-Liste mit 5-6 konkreten Tipps
 - Abschluss: 1-2 Sätze mit persönlicher Einladung – OHNE Telefonnummer, Adresse oder Verweis auf die Seite. Einfach natürlich enden, z.B. "Das schaue ich gerne gemeinsam mit Ihnen durch." oder "Sprechen Sie mich einfach an."
 
+Grundsatz für den gesamten Text: Ich prüfe das FÜR die Kunden – nicht "das sollten Sie selbst tun" sondern "das prüfe ich für Sie". Der Kunde muss sich um nichts kümmern, ich übernehme das. Beispiel statt "Das sollten Sie auch tun:" lieber "Das prüfe ich für Sie:" oder "Das schaue ich bei jedem Vertrag durch:".
+
 Ziel: ca. 300-400 Wörter – prägnant, kein Fülltext.
 Gib NUR den HTML-Inhalt aus (h2, p, ul, li Tags). Kein html/head/body."""
     }]
