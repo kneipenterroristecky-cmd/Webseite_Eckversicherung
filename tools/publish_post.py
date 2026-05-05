@@ -49,6 +49,10 @@ def _update_blog_index(meta, repo, headers):
         <span class="blog-card-more">Weiterlesen <i class="fas fa-arrow-right"></i></span>
       </a>"""
 
+    # Nur einfügen wenn Beitrag noch nicht vorhanden
+    if meta['filename'] in html:
+        return
+
     html = html.replace("<!-- POSTS_START -->", f"<!-- POSTS_START -->\n{new_card}", 1)
 
     updated_b64 = base64.b64encode(html.encode("utf-8")).decode()
