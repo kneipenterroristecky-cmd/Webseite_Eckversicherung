@@ -131,9 +131,13 @@ else:
 if IG_USER_ID and IG_ACCESS_TOKEN:
     print("📡 Instagram: Beitrag posten …")
     try:
-        # Bild von Unsplash (nach Thema)
-        query = meta.get("unsplash_query", "insurance").replace(" ", ",")
-        img_url = f"https://source.unsplash.com/1080x1080/?{query}"
+        # Direktes Unsplash-Bild (kein Redirect, quadratisch für Instagram)
+        og_image = meta.get("og_image", "")
+        if og_image:
+            img_url = og_image.replace("w=1200&h=630", "w=1080&h=1080")
+        else:
+            query = meta.get("unsplash_query", "insurance").replace(" ", ",")
+            img_url = f"https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1080&h=1080&fit=crop&auto=format"
 
         caption = meta['instagram_caption'] + "\n\n🔗 Link in Bio"
 

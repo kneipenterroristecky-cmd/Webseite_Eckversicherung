@@ -120,7 +120,8 @@ draft_meta = {
     "post_url": post_url,
     "topic": topic['title'],
     "label": topic['label'],
-    "unsplash_query": topic.get("unsplash_query", "insurance finance")
+    "unsplash_query": topic.get("unsplash_query", "insurance finance"),
+    "og_image": og_image
 }
 
 with open("tools/draft_meta.json", "w", encoding="utf-8") as f:
