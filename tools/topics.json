@@ -25,12 +25,6 @@
       "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Hausratversicherung: Wertgrenzen anpassen – sonst zahlt niemand",
-      "label": "Privat",
-      "unsplash_query": "home interior living room",
-      "og_image": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
       "title": "Riester-Rente 2026: Für wen lohnt sie sich noch?",
       "label": "Vorsorge",
       "unsplash_query": "pension savings future",
@@ -67,12 +61,6 @@
       "label": "Privat",
       "unsplash_query": "winter snow house damage",
       "og_image": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
-      "title": "Jahresurlaub planen: Reiseversicherung richtig abschließen",
-      "label": "Privat",
-      "unsplash_query": "travel planning vacation",
-      "og_image": "https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1200&h=630&fit=crop&auto=format"
     }
   ],
   "3": [
@@ -105,12 +93,6 @@
       "label": "Ratgeber",
       "unsplash_query": "spring checklist home",
       "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
-      "title": "Privathaftpflicht: Warum fast jeder sie braucht",
-      "label": "Privat",
-      "unsplash_query": "family home protection",
-      "og_image": "https://images.unsplash.com/photo-1511895426328-dc8714191011?w=1200&h=630&fit=crop&auto=format"
     }
   ],
   "4": [
@@ -143,12 +125,6 @@
       "label": "Privat",
       "unsplash_query": "dog park spring",
       "og_image": "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
-      "title": "Glasversicherung: Sinnvoll oder Geldverschwendung?",
-      "label": "Ratgeber",
-      "unsplash_query": "window glass building",
-      "og_image": "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=630&fit=crop&auto=format"
     }
   ],
   "5": [
@@ -165,28 +141,22 @@
       "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Heilpraktikerversicherung: Naturheilkunde auf Kosten der Versicherung",
-      "label": "Kranken",
-      "unsplash_query": "natural health herbs alternative",
-      "og_image": "https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
       "title": "Rürup-Rente: Die Altersvorsorge für Selbstständige mit Steuerbonus",
       "label": "Vorsorge",
       "unsplash_query": "self employed retirement savings",
       "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format"
     },
     {
+      "title": "Heilpraktikerversicherung: Naturheilkunde auf Kosten der Versicherung",
+      "label": "Kranken",
+      "unsplash_query": "natural health herbs alternative",
+      "og_image": "https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
       "title": "Unabhängiger Makler vs. Ausschließlichkeitsvertreter: Der Unterschied zählt",
       "label": "Ratgeber",
       "unsplash_query": "advisor meeting consulting",
       "og_image": "https://images.unsplash.com/photo-1573497161161-c3e73707e25c?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
-      "title": "Gartengeräte und Hausrat: Was draußen steht, ist oft nicht versichert",
-      "label": "Privat",
-      "unsplash_query": "garden tools outdoor",
-      "og_image": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&h=630&fit=crop&auto=format"
     }
   ],
   "6": [
@@ -213,12 +183,6 @@
       "label": "Kranken",
       "unsplash_query": "children health happy",
       "og_image": "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
-      "title": "Ferienwohnung vermieten: Welche Versicherung brauche ich?",
-      "label": "Privat",
-      "unsplash_query": "vacation rental apartment",
-      "og_image": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Reiserücktrittsversicherung: Wann zahlt sie – und wann nicht?",
@@ -253,12 +217,6 @@
       "og_image": "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Fahrraddiebstahl: So sichere ich Ihr Rad richtig ab",
-      "label": "Privat",
-      "unsplash_query": "bicycle city lock",
-      "og_image": "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
       "title": "Risikolebensversicherung: Schutz für Ihre Familie im schlimmsten Fall",
       "label": "Vorsorge",
       "unsplash_query": "family together love",
@@ -285,22 +243,16 @@
       "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Betriebshaftpflicht: Was Selbstständige unbedingt wissen müssen",
-      "label": "Gewerbe",
-      "unsplash_query": "business office professional",
-      "og_image": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
       "title": "Krankentagegeld für Angestellte: Wann lohnt sich die Aufstockung?",
       "label": "Kranken",
       "unsplash_query": "sick leave recovery health",
       "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Rechtsschutzversicherung: Wann sie wirklich hilft – und wann nicht",
-      "label": "Privat",
-      "unsplash_query": "law justice scales",
-      "og_image": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=1200&h=630&fit=crop&auto=format"
+      "title": "Betriebshaftpflicht: Was Selbstständige unbedingt wissen müssen",
+      "label": "Gewerbe",
+      "unsplash_query": "business office professional",
+      "og_image": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&h=630&fit=crop&auto=format"
     }
   ],
   "9": [
@@ -329,12 +281,6 @@
       "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Heizungsausfall im Winter: Wer zahlt – und wer nicht?",
-      "label": "Privat",
-      "unsplash_query": "heating home winter",
-      "og_image": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
       "title": "Wohngebäudeversicherung: Was Hausbesitzer jetzt prüfen sollten",
       "label": "Privat",
       "unsplash_query": "house building property",
@@ -349,10 +295,10 @@
       "og_image": "https://images.unsplash.com/photo-1493238792000-8113da705763?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Winterreifen und Versicherung: Was viele nicht wissen",
+      "title": "Vollkasko oder Teilkasko: Was brauche ich wirklich?",
       "label": "KFZ",
-      "unsplash_query": "winter tires snow car",
-      "og_image": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&h=630&fit=crop&auto=format"
+      "unsplash_query": "car insurance road",
+      "og_image": "https://images.unsplash.com/photo-1493238792000-8113da705763?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Betriebliche Altersvorsorge: Warum Arbeitgeber hier mitsparen müssen",
@@ -367,16 +313,10 @@
       "og_image": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Vollkasko oder Teilkasko: Was brauche ich wirklich?",
+      "title": "Winterreifen und Versicherung: Was viele nicht wissen",
       "label": "KFZ",
-      "unsplash_query": "car insurance road",
-      "og_image": "https://images.unsplash.com/photo-1493238792000-8113da705763?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
-      "title": "Hausrat im Herbst: Sind Ihre neuen Geräte mitversichert?",
-      "label": "Privat",
-      "unsplash_query": "home electronics devices",
-      "og_image": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=630&fit=crop&auto=format"
+      "unsplash_query": "winter tires snow car",
+      "og_image": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&h=630&fit=crop&auto=format"
     }
   ],
   "11": [
@@ -413,10 +353,10 @@
       "og_image": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Jahresabschluss: Diese Versicherungslücken sollten Sie noch dieses Jahr schließen",
-      "label": "Ratgeber",
-      "unsplash_query": "year end review planning",
-      "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
+      "title": "Krankenversicherung zum Jahreswechsel: Jetzt Leistungen und Beiträge vergleichen",
+      "label": "Kranken",
+      "unsplash_query": "health insurance compare year",
+      "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Pflegezusatz: Das Geschenk, das die ganze Familie entlastet",
@@ -425,16 +365,10 @@
       "og_image": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1200&h=630&fit=crop&auto=format"
     },
     {
-      "title": "Krankenversicherung zum Jahreswechsel: Jetzt Leistungen und Beiträge vergleichen",
-      "label": "Kranken",
-      "unsplash_query": "health insurance compare year",
-      "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
-    },
-    {
-      "title": "Risikolebensversicherung: Das wichtigste Geschenk für Ihre Familie",
-      "label": "Vorsorge",
-      "unsplash_query": "family christmas together",
-      "og_image": "https://images.unsplash.com/photo-1511895426328-dc8714191011?w=1200&h=630&fit=crop&auto=format"
+      "title": "Jahresabschluss: Diese Versicherungslücken sollten Sie noch dieses Jahr schließen",
+      "label": "Ratgeber",
+      "unsplash_query": "year end review planning",
+      "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
     },
     {
       "title": "Vorsätze fürs neue Jahr: So optimiere ich Ihre Versicherungen 2027",
