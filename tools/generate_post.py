@@ -10,9 +10,12 @@ SITE_URL = os.environ.get("SITE_URL", "https://kneipenterroristecky-cmd.github.i
 with open("tools/topics.json", encoding="utf-8") as f:
     topics = json.load(f)
 
-# Rotiert automatisch durch alle Themen (Kalenderwoche als Index)
-week = datetime.date.today().isocalendar()[1]
-topic = topics[week % len(topics)]
+# Saisonales Thema: Monat bestimmt die Themengruppe, Woche im Monat den Beitrag
+today_preview = datetime.date.today()
+month_key = str(today_preview.month)
+week_of_month = (today_preview.day - 1) // 7  # 0=Woche1 … 3=Woche4
+month_topics = topics[month_key]
+topic = month_topics[week_of_month % len(month_topics)]
 
 print(f"📌 Thema diese Woche: {topic['title']}")
 
@@ -85,7 +88,7 @@ date_iso = today.isoformat()
 filename = f"{date_iso}-{meta['slug']}.html"
 post_url = f"{SITE_URL}/blog/posts/{filename}"
 
-og_image = topic.get("og_image", "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&h=630&fit=crop&auto=format")
+og_image = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format")
 
 with open("tools/blog_post_template.html", encoding="utf-8") as f:
     template = f.read()

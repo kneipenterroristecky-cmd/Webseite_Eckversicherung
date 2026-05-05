@@ -1,98 +1,314 @@
-[
-  {
-    "title": "Privathaftpflicht: Warum fast jeder sie braucht – und was sie wirklich leistet",
-    "label": "Privat",
-    "unsplash_query": "family protection home",
-    "og_image": "https://images.unsplash.com/photo-1511895426328-dc8714191011?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "KFZ-Versicherung: Jetzt wechseln und bares Geld sparen",
-    "label": "KFZ",
-    "unsplash_query": "car road insurance",
-    "og_image": "https://images.unsplash.com/photo-1493238792000-8113da705763?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Berufsunfähigkeit: Die unterschätzte Gefahr und wie Sie sich absichern",
-    "label": "Vorsorge",
-    "unsplash_query": "work disability protection",
-    "og_image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Hausratversicherung: Was ist eigentlich versichert und was nicht?",
-    "label": "Privat",
-    "unsplash_query": "home interior furniture",
-    "og_image": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Unabhängiger Makler vs. Ausschließlichkeitsvertreter: Der Unterschied, der zählt",
-    "label": "Ratgeber",
-    "unsplash_query": "advisor consultant meeting",
-    "og_image": "https://images.unsplash.com/photo-1573497161161-c3e73707e25c?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Zahnzusatzversicherung: Lohnt sich das wirklich?",
-    "label": "Gesundheit",
-    "unsplash_query": "dental health teeth",
-    "og_image": "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Betriebshaftpflicht für Selbstständige: Was Sie wissen müssen",
-    "label": "Gewerbe",
-    "unsplash_query": "business office work",
-    "og_image": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Reiseversicherung: Worauf Sie beim Abschluss unbedingt achten sollten",
-    "label": "Privat",
-    "unsplash_query": "travel vacation suitcase",
-    "og_image": "https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Risikolebensversicherung: Schutz für Ihre Familie im schlimmsten Fall",
-    "label": "Vorsorge",
-    "unsplash_query": "family together protection",
-    "og_image": "https://images.unsplash.com/photo-1511895426328-dc8714191011?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "E-Bike Versicherung: Was die Hausratpolice nicht abdeckt",
-    "label": "KFZ",
-    "unsplash_query": "electric bike cycling",
-    "og_image": "https://images.unsplash.com/photo-1571188654248-7a89213915f7?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Hundehalterhaftpflicht: Pflicht oder Kür – und was sie kostet",
-    "label": "Privat",
-    "unsplash_query": "dog pet owner",
-    "og_image": "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Rechtsschutzversicherung: Wann sie wirklich hilft – und wann nicht",
-    "label": "Privat",
-    "unsplash_query": "law justice legal",
-    "og_image": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Krankentagegeld: Absicherung bei längerer Krankheit für Selbstständige",
-    "label": "Gesundheit",
-    "unsplash_query": "health medical doctor",
-    "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Pflegezusatzversicherung: Früh abschließen – warum das so wichtig ist",
-    "label": "Vorsorge",
-    "unsplash_query": "elderly care health",
-    "og_image": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Glasversicherung: Sinnvoll oder verzichtbar?",
-    "label": "Ratgeber",
-    "unsplash_query": "window glass building",
-    "og_image": "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=630&fit=crop&auto=format"
-  },
-  {
-    "title": "Versicherungscheck: Diese 5 Policen sollten Sie jetzt überprüfen",
-    "label": "Ratgeber",
-    "unsplash_query": "checklist document review",
-    "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
-  }
-]
+{
+  "1": [
+    {
+      "title": "Versicherungscheck zum Jahreswechsel: Was jetzt auf den Prüfstand gehört",
+      "label": "Ratgeber",
+      "unsplash_query": "checklist new year review",
+      "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Hausratversicherung: Wertgrenzen anpassen – sonst zahlt niemand",
+      "label": "Privat",
+      "unsplash_query": "home interior living room",
+      "og_image": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Berufsunfähigkeit: Warum jetzt der beste Zeitpunkt zum Abschluss ist",
+      "label": "Vorsorge",
+      "unsplash_query": "work office desk",
+      "og_image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Krankentagegeld: Wer zahlt, wenn Selbstständige längerfristig krank sind?",
+      "label": "Gesundheit",
+      "unsplash_query": "health medical doctor",
+      "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
+    }
+  ],
+  "2": [
+    {
+      "title": "Moped-Saison startet bald: Jetzt das Kennzeichen rechtzeitig sichern",
+      "label": "KFZ",
+      "unsplash_query": "moped scooter road",
+      "og_image": "https://images.unsplash.com/photo-1558618047-f0b2b1f95cfe?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Motorradversicherung: Was Biker vor dem Saisonstart wissen müssen",
+      "label": "KFZ",
+      "unsplash_query": "motorcycle road freedom",
+      "og_image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Winterschäden an Haus und Wohnung: Wer zahlt wirklich?",
+      "label": "Privat",
+      "unsplash_query": "winter snow house damage",
+      "og_image": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Jahresurlaub planen: Reiseversicherung richtig abschließen",
+      "label": "Privat",
+      "unsplash_query": "travel planning vacation",
+      "og_image": "https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1200&h=630&fit=crop&auto=format"
+    }
+  ],
+  "3": [
+    {
+      "title": "E-Bike-Saison: Was Ihre Hausratpolice nicht abdeckt",
+      "label": "KFZ",
+      "unsplash_query": "electric bike spring",
+      "og_image": "https://images.unsplash.com/photo-1571188654248-7a89213915f7?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Fahrradversicherung: Wann lohnt sie sich – und wann nicht?",
+      "label": "Privat",
+      "unsplash_query": "bicycle cycling city",
+      "og_image": "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Frühjahrscheck: Diese Versicherungslücken entdecke ich immer wieder",
+      "label": "Ratgeber",
+      "unsplash_query": "spring checklist home",
+      "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Privathaftpflicht: Warum fast jeder sie braucht",
+      "label": "Privat",
+      "unsplash_query": "family home protection",
+      "og_image": "https://images.unsplash.com/photo-1511895426328-dc8714191011?w=1200&h=630&fit=crop&auto=format"
+    }
+  ],
+  "4": [
+    {
+      "title": "Reiseversicherung zu Ostern: Worauf Sie jetzt achten müssen",
+      "label": "Privat",
+      "unsplash_query": "easter travel holiday",
+      "og_image": "https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Auslandsreisekrankenversicherung: Ohne diese Police fahre ich nicht ins Ausland",
+      "label": "Gesundheit",
+      "unsplash_query": "travel abroad health",
+      "og_image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Hundehalterhaftpflicht: Im Frühling wieder Pflicht – was sie kostet",
+      "label": "Privat",
+      "unsplash_query": "dog park spring",
+      "og_image": "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Glasversicherung: Sinnvoll oder Geldverschwendung?",
+      "label": "Ratgeber",
+      "unsplash_query": "window glass building",
+      "og_image": "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=630&fit=crop&auto=format"
+    }
+  ],
+  "5": [
+    {
+      "title": "Elementarschadenversicherung: Bin ich gegen Unwetter versichert?",
+      "label": "Privat",
+      "unsplash_query": "storm flood nature damage",
+      "og_image": "https://images.unsplash.com/photo-1527482937786-6608f6e14c15?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Gartengeräte und Hausrat: Was draußen steht, ist oft nicht versichert",
+      "label": "Privat",
+      "unsplash_query": "garden tools outdoor",
+      "og_image": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Unabhängiger Makler vs. Ausschließlichkeitsvertreter: Der Unterschied zählt",
+      "label": "Ratgeber",
+      "unsplash_query": "advisor meeting consulting",
+      "og_image": "https://images.unsplash.com/photo-1573497161161-c3e73707e25c?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Zahnzusatzversicherung: Jetzt abschließen – bevor die Kosten kommen",
+      "label": "Gesundheit",
+      "unsplash_query": "dental health smile",
+      "og_image": "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=1200&h=630&fit=crop&auto=format"
+    }
+  ],
+  "6": [
+    {
+      "title": "Sommerurlaub: Checkliste für den richtigen Reiseschutz",
+      "label": "Privat",
+      "unsplash_query": "summer vacation beach",
+      "og_image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "KFZ im Urlaub: Welchen Schutz brauche ich im Ausland?",
+      "label": "KFZ",
+      "unsplash_query": "car road trip europe",
+      "og_image": "https://images.unsplash.com/photo-1493238792000-8113da705763?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Ferienwohnung vermieten: Welche Versicherung brauche ich?",
+      "label": "Privat",
+      "unsplash_query": "vacation rental apartment",
+      "og_image": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Reiserücktrittsversicherung: Wann zahlt sie – und wann nicht?",
+      "label": "Privat",
+      "unsplash_query": "canceled flight airport",
+      "og_image": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&h=630&fit=crop&auto=format"
+    }
+  ],
+  "7": [
+    {
+      "title": "Unwetter und Hochwasser: Bin ich wirklich versichert?",
+      "label": "Privat",
+      "unsplash_query": "flood storm rain damage",
+      "og_image": "https://images.unsplash.com/photo-1527482937786-6608f6e14c15?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Einbruch im Urlaub: Was die Hausratversicherung wirklich zahlt",
+      "label": "Privat",
+      "unsplash_query": "home security door lock",
+      "og_image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Fahrraddiebstahl: So sichere ich Ihr Rad richtig ab",
+      "label": "Privat",
+      "unsplash_query": "bicycle city lock",
+      "og_image": "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Risikolebensversicherung: Schutz für Ihre Familie im schlimmsten Fall",
+      "label": "Vorsorge",
+      "unsplash_query": "family together love",
+      "og_image": "https://images.unsplash.com/photo-1511895426328-dc8714191011?w=1200&h=630&fit=crop&auto=format"
+    }
+  ],
+  "8": [
+    {
+      "title": "Haftpflicht für Kinder: Was Eltern wissen müssen",
+      "label": "Privat",
+      "unsplash_query": "children playing school",
+      "og_image": "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Berufsunfähigkeit für junge Menschen: Früh absichern lohnt sich",
+      "label": "Vorsorge",
+      "unsplash_query": "young professional work",
+      "og_image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Betriebshaftpflicht: Was Selbstständige unbedingt wissen müssen",
+      "label": "Gewerbe",
+      "unsplash_query": "business office professional",
+      "og_image": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Rechtsschutzversicherung: Wann sie wirklich hilft – und wann nicht",
+      "label": "Privat",
+      "unsplash_query": "law justice scales",
+      "og_image": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=1200&h=630&fit=crop&auto=format"
+    }
+  ],
+  "9": [
+    {
+      "title": "Herbstcheck: Diese 5 Versicherungen sollten Sie jetzt prüfen",
+      "label": "Ratgeber",
+      "unsplash_query": "autumn fall checklist",
+      "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Heizungsausfall im Winter: Wer zahlt – und wer nicht?",
+      "label": "Privat",
+      "unsplash_query": "heating home winter",
+      "og_image": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Pflegezusatzversicherung: Warum früh abschließen so wichtig ist",
+      "label": "Vorsorge",
+      "unsplash_query": "elderly care family",
+      "og_image": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Wohngebäudeversicherung: Was Hausbesitzer jetzt prüfen sollten",
+      "label": "Privat",
+      "unsplash_query": "house building property",
+      "og_image": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&h=630&fit=crop&auto=format"
+    }
+  ],
+  "10": [
+    {
+      "title": "KFZ-Versicherung: Jetzt vergleichen und bis 30. November wechseln",
+      "label": "KFZ",
+      "unsplash_query": "car autumn road",
+      "og_image": "https://images.unsplash.com/photo-1493238792000-8113da705763?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Winterreifen und Versicherung: Was viele nicht wissen",
+      "label": "KFZ",
+      "unsplash_query": "winter tires snow car",
+      "og_image": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Vollkasko oder Teilkasko: Was brauche ich wirklich?",
+      "label": "KFZ",
+      "unsplash_query": "car insurance road",
+      "og_image": "https://images.unsplash.com/photo-1493238792000-8113da705763?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Hausrat im Herbst: Sind Ihre neuen Geräte mitversichert?",
+      "label": "Privat",
+      "unsplash_query": "home electronics devices",
+      "og_image": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=630&fit=crop&auto=format"
+    }
+  ],
+  "11": [
+    {
+      "title": "KFZ-Versicherung wechseln: Stichtag 30. November – so spare ich für Sie hunderte Euro",
+      "label": "KFZ",
+      "unsplash_query": "car road savings",
+      "og_image": "https://images.unsplash.com/photo-1493238792000-8113da705763?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "KFZ-Versicherung: Telematik-Tarife – lohnen sie sich wirklich?",
+      "label": "KFZ",
+      "unsplash_query": "car technology driving",
+      "og_image": "https://images.unsplash.com/photo-1549924231-f129b911e442?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "KFZ: Diese Fehler beim Wechsel kosten Sie bares Geld",
+      "label": "KFZ",
+      "unsplash_query": "car insurance compare",
+      "og_image": "https://images.unsplash.com/photo-1493238792000-8113da705763?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Nach dem KFZ-Wechsel: Jetzt auch den Rest Ihrer Versicherungen prüfen",
+      "label": "Ratgeber",
+      "unsplash_query": "checklist review document",
+      "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
+    }
+  ],
+  "12": [
+    {
+      "title": "Weihnachtsgeschenke und Hausrat: Sind teure Neuanschaffungen versichert?",
+      "label": "Privat",
+      "unsplash_query": "christmas gifts home",
+      "og_image": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Jahresabschluss: Diese Versicherungslücken sollten Sie noch dieses Jahr schließen",
+      "label": "Ratgeber",
+      "unsplash_query": "year end review planning",
+      "og_image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Risikolebensversicherung: Das wichtigste Geschenk für Ihre Familie",
+      "label": "Vorsorge",
+      "unsplash_query": "family christmas together",
+      "og_image": "https://images.unsplash.com/photo-1511895426328-dc8714191011?w=1200&h=630&fit=crop&auto=format"
+    },
+    {
+      "title": "Vorsätze fürs neue Jahr: So optimiere ich Ihre Versicherungen 2027",
+      "label": "Ratgeber",
+      "unsplash_query": "new year planning goals",
+      "og_image": "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?w=1200&h=630&fit=crop&auto=format"
+    }
+  ]
+}
