@@ -85,6 +85,9 @@ date_iso = today.isoformat()
 filename = f"{date_iso}-{meta['slug']}.html"
 post_url = f"{SITE_URL}/blog/posts/{filename}"
 
+unsplash_query = topic.get("unsplash_query", "insurance").replace(" ", ",")
+og_image = f"https://source.unsplash.com/1200x630/?{unsplash_query}"
+
 with open("tools/blog_post_template.html", encoding="utf-8") as f:
     template = f.read()
 
@@ -96,6 +99,7 @@ html = (template
     .replace("{{CONTENT}}", content_html)
     .replace("{{POST_URL}}", post_url)
     .replace("{{SLUG}}", meta['slug'])
+    .replace("{{OG_IMAGE}}", og_image)
 )
 
 os.makedirs("blog/posts", exist_ok=True)
