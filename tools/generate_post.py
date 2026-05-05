@@ -85,8 +85,7 @@ date_iso = today.isoformat()
 filename = f"{date_iso}-{meta['slug']}.html"
 post_url = f"{SITE_URL}/blog/posts/{filename}"
 
-unsplash_query = topic.get("unsplash_query", "insurance").replace(" ", ",")
-og_image = f"https://source.unsplash.com/1200x630/?{unsplash_query}"
+og_image = topic.get("og_image", "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&h=630&fit=crop&auto=format")
 
 with open("tools/blog_post_template.html", encoding="utf-8") as f:
     template = f.read()
