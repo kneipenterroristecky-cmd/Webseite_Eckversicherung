@@ -16,7 +16,7 @@ REPO            = os.environ.get("GITHUB_REPOSITORY", "kneipenterroristecky-cmd/
 FB_PAGE_TOKEN   = os.environ.get("FB_PAGE_TOKEN", "")
 FB_PAGE_ID      = os.environ.get("FB_PAGE_ID", "")
 IG_USER_ID      = os.environ.get("IG_USER_ID", "")
-IG_ACCESS_TOKEN = os.environ.get("IG_ACCESS_TOKEN", "")
+IG_ACCESS_TOKEN = os.environ.get("IG_ACCESS_TOKEN", "") or FB_PAGE_TOKEN
 SITE_URL        = os.environ.get("SITE_URL", "")
 
 gh_headers = {
@@ -100,7 +100,7 @@ except Exception as e:
 if FB_PAGE_TOKEN and FB_PAGE_ID:
     print("📡 Facebook: Beitrag posten …")
     try:
-        full_url = SITE_URL.rstrip("/") + "/" + meta['post_url'].lstrip("/")
+        full_url = meta['post_url']
         fb_text = (
             f"💡 {meta['social_summary']}\n\n"
             f"Den vollständigen Beitrag jetzt lesen 👇\n\n"
