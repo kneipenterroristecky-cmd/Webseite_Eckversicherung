@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1080px; overflow: hidden; font-family: 'Arial Black', 'Arial', sans-serif; }
+  .wrap { width: 1080px; height: 1080px; position: relative; background: #111; }
+  .bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1080&h=1080&fit=crop&auto=format');
+    background-size: cover; background-position: center; opacity: 0.45;
+  }
+  .overlay { position: absolute; inset: 0; background: linear-gradient(160deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,.3) 50%,rgba(0,0,0,.65) 100%); }
+  .content { position: relative; z-index: 1; padding: 80px; height: 100%; display: flex; flex-direction: column; justify-content: center; }
+  .label { font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 28px; }
+  .label span { color: #f5c842; }
+  .title { font-size: 92px; font-weight: 900; line-height: 1.0; color: #f5a623; margin-bottom: 24px; text-transform: uppercase; }
+  .subtitle { font-size: 60px; font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 60px; }
+  .cta { font-size: 34px; font-weight: 700; color: #fff; }
+  .cta span { color: #5ddb6b; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bg"></div>
+  <div class="overlay"></div>
+  <div class="content">
+    <p class="label">Für <span>Autofahrer:</span></p>
+    <p class="title">KFZ-<br>Versicherung</p>
+    <p class="subtitle">Bis zu 40 %<br>günstiger wechseln!</p>
+    <p class="cta">Jetzt Tarif prüfen <span>👇</span></p>
+  </div>
+</div>
+</body>
+</html>
