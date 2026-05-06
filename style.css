@@ -1489,8 +1489,20 @@ p   { line-height: 1.7; }
   opacity: 0.88;
   transition: opacity .2s, transform .2s;
 }
-.social-peek-btn:hover { opacity: 1; transform: translateX(-6px); }
+.social-peek-btn:hover,
 .social-peek-btn:active { opacity: 1; transform: translateX(-6px); }
+.social-peek-btn:hover::after,
+.social-peek-btn:active::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 0; bottom: 0;
+  width: 6px;
+}
+.social-peek-fb:hover::after,
+.social-peek-fb:active::after { background: #1877f2; }
+.social-peek-ig:hover::after,
+.social-peek-ig:active::after { background: #bc1888; }
 .social-peek-tooltip {
   position: absolute;
   right: 54px;
