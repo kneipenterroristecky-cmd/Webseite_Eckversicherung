@@ -5,39 +5,35 @@
 
 /* ---- Navbar scroll shadow ---- */
 const navbar = document.getElementById('navbar');
-if (navbar) {
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 12);
-  }, { passive: true });
-}
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 12);
+}, { passive: true });
 
 /* ---- Hamburger / mobile nav ---- */
 const hamburger  = document.getElementById('hamburger');
 const navLinks   = document.getElementById('navLinks');
 
-if (hamburger && navLinks) {
-  hamburger.addEventListener('click', () => {
-    const open = navLinks.classList.toggle('open');
-    hamburger.classList.toggle('open', open);
-    hamburger.setAttribute('aria-expanded', open);
-  });
+hamburger.addEventListener('click', () => {
+  const open = navLinks.classList.toggle('open');
+  hamburger.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', open);
+});
 
-  // close on link click
-  navLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      hamburger.classList.remove('open');
-    });
+// close on link click
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    hamburger.classList.remove('open');
   });
+});
 
-  // close on outside click
-  document.addEventListener('click', e => {
-    if (navbar && !navbar.contains(e.target)) {
-      navLinks.classList.remove('open');
-      hamburger.classList.remove('open');
-    }
-  });
-}
+// close on outside click
+document.addEventListener('click', e => {
+  if (!navbar.contains(e.target)) {
+    navLinks.classList.remove('open');
+    hamburger.classList.remove('open');
+  }
+});
 
 /* ---- Active nav link on scroll ---- */
 const sections  = document.querySelectorAll('section[id], footer[id]');
@@ -564,20 +560,3 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeFunnel();
 });
 
-/* ---- Social Peek: Scroll-basiertes Show/Hide auf Mobile ---- */
-(function () {
-  var peek = document.getElementById('socialPeek');
-  if (!peek) return;
-  function isMobile() { return window.innerWidth <= 900; }
-  var lastScroll = window.pageYOffset;
-  window.addEventListener('scroll', function () {
-    if (!isMobile()) return;
-    var current = window.pageYOffset;
-    if (current > lastScroll && current > 80) {
-      peek.classList.add('is-peeked');
-    } else {
-      peek.classList.remove('is-peeked');
-    }
-    lastScroll = current;
-  }, { passive: true });
-}());
