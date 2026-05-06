@@ -1381,7 +1381,9 @@ p   { line-height: 1.7; }
 
   /* Mobile CTA Bar */
   body { padding-bottom: 85px; }
-  .social-peek { display: none; }
+  .social-peek { display: flex; transition: transform .4s ease; }
+  .social-peek.is-peeked { transform: translateX(34px); }
+  .social-peek:active { transform: translateX(0) !important; }
   .mobile-cta-bar {
     display: flex;
     position: fixed;

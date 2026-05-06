@@ -997,6 +997,23 @@
     </div>
   </div>
 
+  <script>
+  (function () {
+    var peek = document.getElementById('socialPeek');
+    if (!peek) return;
+    function isMobile() { return window.innerWidth <= 768; }
+    setTimeout(function () {
+      if (isMobile()) peek.classList.add('is-peeked');
+    }, 2000);
+    peek.addEventListener('touchstart', function () {
+      peek.classList.remove('is-peeked');
+      clearTimeout(peek._peekTimer);
+      peek._peekTimer = setTimeout(function () {
+        if (isMobile()) peek.classList.add('is-peeked');
+      }, 4000);
+    }, { passive: true });
+  })();
+  </script>
   <script src="script.js"></script>
   <script src="cookie.js"></script>
   <script src="analytics.js" defer></script>
