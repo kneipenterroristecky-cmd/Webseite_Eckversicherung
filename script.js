@@ -559,3 +559,21 @@ function funnelBack() {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeFunnel();
 });
+
+/* ---- Social Peek: Scroll-basiertes Show/Hide auf Mobile ---- */
+(function () {
+  var peek = document.getElementById('socialPeek');
+  if (!peek) return;
+  function isMobile() { return window.innerWidth <= 900; }
+  var lastScroll = window.pageYOffset;
+  window.addEventListener('scroll', function () {
+    if (!isMobile()) return;
+    var current = window.pageYOffset;
+    if (current > lastScroll && current > 80) {
+      peek.classList.add('is-peeked');
+    } else {
+      peek.classList.remove('is-peeked');
+    }
+    lastScroll = current;
+  }, { passive: true });
+}());

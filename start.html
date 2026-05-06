@@ -1002,27 +1002,6 @@
     </div>
   </div>
 
-  <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var peek = document.getElementById('socialPeek');
-    if (!peek) return;
-
-    function isMobile() { return window.innerWidth <= 900; }
-
-    var lastScroll = window.pageYOffset;
-
-    window.addEventListener('scroll', function () {
-      if (!isMobile()) return;
-      var current = window.pageYOffset;
-      if (current > lastScroll && current > 80) {
-        peek.classList.add('is-peeked');
-      } else {
-        peek.classList.remove('is-peeked');
-      }
-      lastScroll = current;
-    }, { passive: true });
-  });
-  </script>
   <script src="script.js"></script>
   <script src="cookie.js"></script>
   <script src="analytics.js" defer></script>
