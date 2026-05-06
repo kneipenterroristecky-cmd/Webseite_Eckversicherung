@@ -1381,6 +1381,7 @@ p   { line-height: 1.7; }
 
   /* Mobile CTA Bar */
   body { padding-bottom: 85px; }
+  .social-peek { display: none; }
   .mobile-cta-bar {
     display: flex;
     position: fixed;
@@ -1494,34 +1495,54 @@ p   { line-height: 1.7; }
 .social-peek-btn:active { opacity: 1; width: 58px; }
 .social-peek-tooltip {
   position: absolute;
-  right: 58px;
-  top: 0; bottom: 0;
+  right: 68px;
+  top: 50%;
+  transform: translateY(-50%) translateX(6px);
   display: flex;
   align-items: center;
-  padding: 0 14px;
+  padding: 10px 16px;
   color: #fff;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: .02em;
-  border-radius: 8px 0 0 8px;
+  border-radius: 8px;
   white-space: nowrap;
-  box-shadow: -4px 0 16px rgba(0,0,0,.2);
+  box-shadow: 0 4px 18px rgba(0,0,0,.25);
   opacity: 0;
   pointer-events: none;
   transition: opacity .2s, transform .2s;
-  transform: translateX(6px);
 }
-.social-peek-fb .social-peek-tooltip { background: #1877f2; }
-.social-peek-ig .social-peek-tooltip { background: linear-gradient(135deg, #f09433 0%, #dc2743 50%, #bc1888 100%); }
-.social-peek-tooltip-arrow { display: none; }
+.social-peek-fb .social-peek-tooltip,
+.social-peek-ig .social-peek-tooltip,
+.social-peek-wa .social-peek-tooltip { background: #fff; color: #1a1a1a; }
+.social-peek-tooltip-arrow {
+  display: block;
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid #fff;
+}
+.social-peek-ig .social-peek-tooltip-arrow {
+  border-left-color: #fff;
+}
 .social-peek-btn:hover .social-peek-tooltip,
 .social-peek-btn:active .social-peek-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
 .social-peek-fb {
-  background: #1877f2;
+  background: #2167cc;
   border-radius: 10px 0 0 10px;
 }
 .social-peek-ig {
-  background: linear-gradient(160deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  background: #2167cc;
+  border-radius: 10px 0 0 10px;
+  margin-top: 4px;
+}
+.social-peek-wa {
+  background: #2167cc;
   border-radius: 10px 0 0 10px;
   margin-top: 4px;
 }
