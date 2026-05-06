@@ -2,60 +2,111 @@
 <html>
 <head>
 <meta charset="UTF-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet" />
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { width: 1080px; height: 1080px; overflow: hidden; font-family: 'Arial Black', 'Arial', sans-serif; }
-  .wrap {
-    width: 1080px; height: 1080px;
+  body { width: 1080px; height: 1080px; overflow: hidden; font-family: 'Inter', Arial, sans-serif; background: #172d50; }
+  .wrap { width: 1080px; height: 1080px; position: relative; display: flex; flex-direction: column; }
+
+  /* Hintergrundbild oben */
+  .img-area {
+    flex: 0 0 480px;
     position: relative;
-    background: #111;
+    overflow: hidden;
   }
-  .bg {
+  .img-area img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-area::after {
+    content: '';
     position: absolute; inset: 0;
-    background-image: url('https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1080&h=1080&fit=crop&auto=format');
-    background-size: cover; background-position: center;
-    opacity: 0.45;
+    background: linear-gradient(to bottom, rgba(23,45,80,.2) 0%, rgba(23,45,80,.9) 100%);
   }
-  .overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(160deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.35) 50%, rgba(0,0,0,.65) 100%);
+
+  /* Inhalt unten */
+  .body-area {
+    flex: 1;
+    background: #172d50;
+    padding: 40px 60px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
-  .content {
-    position: relative; z-index: 1;
-    padding: 80px 80px;
-    height: 100%;
-    display: flex; flex-direction: column; justify-content: center;
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(33,103,204,.25);
+    border: 1px solid rgba(33,103,204,.5);
+    color: #7ab3f5;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 100px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    width: fit-content;
+    margin-bottom: 24px;
   }
-  .label {
-    font-size: 32px; font-weight: 700; color: #fff;
-    margin-bottom: 28px; letter-spacing: .01em;
+
+  h1 {
+    font-size: 72px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.05;
+    margin-bottom: 20px;
+    letter-spacing: -.02em;
   }
-  .label span { color: #f5c842; }
-  .title {
-    font-size: 92px; font-weight: 900; line-height: 1.0;
-    color: #f5a623; margin-bottom: 24px;
-    text-transform: uppercase; letter-spacing: -.01em;
+  h1 span { color: #2167cc; }
+
+  .sub {
+    font-size: 30px;
+    color: rgba(255,255,255,.75);
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 36px;
   }
-  .subtitle {
-    font-size: 60px; font-weight: 900; color: #fff;
-    line-height: 1.1; margin-bottom: 60px;
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
+
   .cta {
-    font-size: 34px; font-weight: 700; color: #fff;
-    display: flex; align-items: center; gap: 12px;
+    background: #2167cc;
+    color: #fff;
+    font-size: 26px;
+    font-weight: 800;
+    padding: 18px 40px;
+    border-radius: 14px;
+    letter-spacing: -.01em;
   }
-  .cta span { color: #5ddb6b; }
+
+  .brand {
+    font-size: 22px;
+    font-weight: 700;
+    color: rgba(255,255,255,.5);
+    text-align: right;
+    line-height: 1.3;
+  }
+  .brand strong { display: block; color: rgba(255,255,255,.85); font-size: 24px; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="bg"></div>
-  <div class="overlay"></div>
-  <div class="content">
-    <p class="label">Für <span>Hausbesitzer & Mieter:</span></p>
-    <p class="title">Hausrat-<br>Versicherung</p>
-    <p class="subtitle">richtig absichern –<br>nicht zu wenig zahlen!</p>
-    <p class="cta">Jetzt Schutz prüfen <span>👇</span></p>
+  <div class="img-area">
+    <img src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1080&h=480&fit=crop&auto=format" />
+  </div>
+  <div class="body-area">
+    <div>
+      <div class="tag">🏠 Hausratversicherung</div>
+      <h1>Was ist wirklich<br><span>versichert?</span></h1>
+      <p class="sub">Viele Policen zahlen im Ernstfall weniger als erwartet. Ich prüfe das kostenlos für Sie.</p>
+    </div>
+    <div class="footer">
+      <div class="cta">Jetzt kostenlos prüfen →</div>
+      <div class="brand"><strong>Daniel Eck</strong>Versicherungsmakler<br>Schmalkalden</div>
+    </div>
   </div>
 </div>
 </body>
