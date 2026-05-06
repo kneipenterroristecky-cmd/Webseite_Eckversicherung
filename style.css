@@ -1494,34 +1494,26 @@ p   { line-height: 1.7; }
 .social-peek-btn:active { opacity: 1; width: 58px; }
 .social-peek-tooltip {
   position: absolute;
-  right: 50px;
-  top: 50%;
-  transform: translateY(-50%) translateX(6px);
+  right: 58px;
+  top: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
   color: #fff;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: .02em;
-  padding: 7px 14px;
-  border-radius: 8px;
+  border-radius: 8px 0 0 8px;
   white-space: nowrap;
-  box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  box-shadow: -4px 0 16px rgba(0,0,0,.2);
   opacity: 0;
   pointer-events: none;
   transition: opacity .2s, transform .2s;
+  transform: translateX(6px);
 }
 .social-peek-fb .social-peek-tooltip { background: #1877f2; }
 .social-peek-ig .social-peek-tooltip { background: linear-gradient(135deg, #f09433 0%, #dc2743 50%, #bc1888 100%); }
-.social-peek-tooltip-arrow {
-  position: absolute;
-  right: -7px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0; height: 0;
-  border-top: 7px solid transparent;
-  border-bottom: 7px solid transparent;
-}
-.social-peek-fb .social-peek-tooltip-arrow { border-left: 7px solid #1877f2; }
-.social-peek-ig .social-peek-tooltip-arrow { border-left: 7px solid #bc1888; }
+.social-peek-tooltip-arrow { display: none; }
 .social-peek-btn:hover .social-peek-tooltip,
 .social-peek-btn:active .social-peek-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
 .social-peek-fb {
