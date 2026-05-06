@@ -2,7 +2,7 @@
 """
 Erstellt einen wöchentlichen Blog-Beitrag mit Claude (KI) im Stil von Daniel Eck.
 """
-import os, json, re, datetime, requests, anthropic
+import os, json, re, datetime, anthropic
 
 SITE_URL = os.environ.get("SITE_URL", "https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung")
 
@@ -19,27 +19,12 @@ topic = month_topics[week_of_month % len(month_topics)]
 
 print(f"📌 Thema diese Woche: {topic['title']}")
 
-# ── Unsplash-Bild dynamisch laden ─────────────────────────────────────────────
-def fetch_unsplash_base(query):
-    """Folgt der source.unsplash.com-Weiterleitung und gibt die Basis-URL zurück."""
-    try:
-        encoded = query.strip().replace(" ", ",")
-        r = requests.get(
-            f"https://source.unsplash.com/featured/1200x630/?{encoded}",
-            allow_redirects=True, timeout=15
-        )
-        base = r.url.split("?")[0]
-        print(f"   📸 Bild: {base}")
-        return base
-    except Exception as e:
-        print(f"   ⚠️  Unsplash-Fetch fehlgeschlagen: {e}")
-        return None
-
-_query = topic.get("unsplash_query", "insurance finance")
-_fallback = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format").split("?")[0]
-_unsplash_base = fetch_unsplash_base(_query) or _fallback
-og_image  = f"{_unsplash_base}?w=1200&h=630&fit=crop&auto=format"
-ig_img_url_global = f"{_unsplash_base}?w=1080&h=1080&fit=crop&auto=format"
+# ── Bild-URLs aus topics.json (stabile Unsplash-CDN-URLs) ─────────────────────
+og_image = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format")
+_og_base = og_image.split("?")[0]
+og_image = f"{_og_base}?w=1200&h=630&fit=crop&auto=format"
+ig_img_url_global = f"{_og_base}?w=1080&h=1080&fit=crop&auto=format"
+print(f"   📸 Bild: {_og_base}")
 
 # ── Blog-Beitrag schreiben ────────────────────────────────────────────────────
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
