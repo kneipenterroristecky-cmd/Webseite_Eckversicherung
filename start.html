@@ -1004,31 +1004,18 @@
 
     function isMobile() { return window.innerWidth <= 900; }
 
-    function startPeekTimer() {
-      clearTimeout(peek._t);
-      peek._t = setTimeout(function () {
-        if (isMobile()) peek.classList.add('is-peeked');
-      }, 2500);
-    }
+    var lastScroll = window.pageYOffset;
 
-    if (isMobile()) startPeekTimer();
-
-    peek.addEventListener('touchstart', function () {
-      if (peek.classList.contains('is-peeked')) {
+    window.addEventListener('scroll', function () {
+      if (!isMobile()) return;
+      var current = window.pageYOffset;
+      if (current > lastScroll && current > 80) {
+        peek.classList.add('is-peeked');
+      } else {
         peek.classList.remove('is-peeked');
-        startPeekTimer();
       }
+      lastScroll = current;
     }, { passive: true });
-
-    peek.querySelectorAll('a').forEach(function (btn) {
-      btn.addEventListener('click', function (e) {
-        if (peek.classList.contains('is-peeked')) {
-          e.preventDefault();
-          peek.classList.remove('is-peeked');
-          startPeekTimer();
-        }
-      });
-    });
   });
   </script>
   <script src="script.js"></script>

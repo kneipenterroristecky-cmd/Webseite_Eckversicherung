@@ -1478,7 +1478,7 @@ p   { line-height: 1.7; }
   gap: 4px;
   transition: transform .4s ease;
 }
-.social-peek.is-peeked { transform: translateX(34px); }
+.social-peek.is-peeked { transform: translateX(58px); }
 .social-peek-btn {
   width: 46px;
   height: 52px;
