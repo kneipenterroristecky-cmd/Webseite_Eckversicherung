@@ -92,13 +92,13 @@ meta_msg = client.messages.create(
 Ausgabe als JSON (keine weiteren Erklärungen):
 {{
   "title": "Überschrift max 60 Zeichen",
-  "social_summary": "Facebook-Post: max 120 Zeichen, Ich-Form, ein einziger Satz mit Mehrwert",
-  "instagram_caption": "Instagram: 1-2 kurze Sätze max 150 Zeichen + Zeilenumbruch + 5 Hashtags. Hashtags NUR korrekte deutsche Wörter verwenden, keine Abkürzungen oder Fantasiewörter. z.B. #Versicherung #Versicherungsschutz #Schmalkalden",
+  "social_summary": "Facebook-Post: max 120 Zeichen, Ich-Form, ein einziger Satz mit Mehrwert. IMMER Sie/Ihnen/Ihre (niemals du/dich)",
+  "instagram_caption": "Instagram: 1-2 kurze Sätze max 150 Zeichen + Zeilenumbruch + 5 Hashtags. IMMER Sie/Ihnen/Ihre. Hashtags NUR korrekte deutsche Wörter verwenden, keine Abkürzungen oder Fantasiewörter. z.B. #Versicherung #Versicherungsschutz #Schmalkalden",
   "slug": "url-freundlicher-dateiname-ohne-umlaute-nur-bindestriche",
   "ig_before": "Schlagzeile vor dem Highlight, max 20 Zeichen, kann leer sein",
   "ig_highlight": "Ein markantes Wort oder kurze Phrase die blau hervorgehoben wird, max 15 Zeichen",
   "ig_after": "Optionaler Text nach dem Highlight, max 20 Zeichen, kann leer sein",
-  "ig_sub": "Kurzer Untertitel für das Bild, max 80 Zeichen, Ich-Form",
+  "ig_sub": "Kurzer Untertitel für das Bild, max 80 Zeichen, Ich-Form, IMMER Sie/Ihnen/Ihre (niemals du/dich)",
   "ig_cta": "CTA-Button Text, max 28 Zeichen, mit Pfeil am Ende z.B. →"
 }}"""
     }]
@@ -138,29 +138,25 @@ social_html = f"""<!DOCTYPE html>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet" />
 <style>
   * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-  body {{ width: 1080px; height: 1080px; overflow: hidden; font-family: 'Inter', Arial, sans-serif; background: #172d50; }}
-  .wrap {{ width: 1080px; height: 1080px; position: relative; display: flex; flex-direction: column; }}
-  .img-area {{ flex: 0 0 480px; position: relative; overflow: hidden; }}
-  .img-area img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
-  .img-area::after {{ content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(23,45,80,.2) 0%, rgba(23,45,80,.9) 100%); }}
-  .body-area {{ flex: 1; background: #172d50; padding: 40px 60px 48px; display: flex; flex-direction: column; justify-content: space-between; }}
-  .tag {{ display: inline-flex; align-items: center; gap: 8px; background: rgba(33,103,204,.25); border: 1px solid rgba(33,103,204,.5); color: #7ab3f5; font-size: 22px; font-weight: 700; padding: 8px 20px; border-radius: 100px; letter-spacing: .05em; text-transform: uppercase; width: fit-content; margin-bottom: 24px; }}
-  h1 {{ font-size: 68px; font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 20px; letter-spacing: -.02em; }}
-  h1 span {{ color: #2167cc; }}
-  .sub {{ font-size: 30px; color: rgba(255,255,255,.75); font-weight: 500; line-height: 1.4; }}
+  body {{ width: 1080px; height: 1080px; overflow: hidden; font-family: 'Inter', Arial, sans-serif; }}
+  .wrap {{ width: 1080px; height: 1080px; position: relative; }}
+  .bg-img {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
+  .overlay {{ position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,25,50,.08) 0%, rgba(10,25,50,.45) 45%, rgba(10,25,50,.93) 100%); }}
+  .content {{ position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 64px; }}
+  .tag {{ display: inline-flex; align-items: center; gap: 8px; background: rgba(33,103,204,.4); border: 1px solid rgba(100,160,255,.5); color: #a8d0ff; font-size: 21px; font-weight: 700; padding: 8px 22px; border-radius: 100px; letter-spacing: .06em; text-transform: uppercase; width: fit-content; margin-bottom: 28px; }}
+  h1 {{ font-size: 82px; font-weight: 900; color: #fff; line-height: 1.04; margin-bottom: 24px; letter-spacing: -.025em; }}
+  h1 span {{ color: #4d9fff; }}
+  .sub {{ font-size: 30px; color: rgba(255,255,255,.78); font-weight: 500; line-height: 1.5; max-width: 860px; }}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="img-area">
-    <img src="{ig_img_url}" />
-  </div>
-  <div class="body-area">
-    <div>
-      <div class="tag">{emoji} {topic['label']}</div>
-      <h1>{h1_content}</h1>
-      <p class="sub">{ig_sub}</p>
-    </div>
+  <img class="bg-img" src="{ig_img_url}" />
+  <div class="overlay"></div>
+  <div class="content">
+    <div class="tag">{emoji} {topic['label']}</div>
+    <h1>{h1_content}</h1>
+    <p class="sub">{ig_sub}</p>
   </div>
 </div>
 </body>
