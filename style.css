@@ -1466,15 +1466,15 @@ p   { line-height: 1.7; }
 
 
 
-/* ---- Social Peek (Mobile – feste Buttons rechts) ---- */
+/* ---- Social Peek (feste Buttons rechts, unteres Drittel) ---- */
 .social-peek {
   display: flex;
   position: fixed;
   right: 0;
-  top: 50%;
+  bottom: 90px;
   z-index: 8888;
   flex-direction: column;
-  transform: translateY(-50%);
+  gap: 4px;
 }
 .social-peek-btn {
   width: 46px;
@@ -1487,10 +1487,10 @@ p   { line-height: 1.7; }
   color: #fff;
   position: relative;
   opacity: 0.88;
-  transition: opacity .2s, width .2s;
+  transition: opacity .2s, transform .2s;
 }
-.social-peek-btn:hover,
-.social-peek-btn:active { opacity: 1; width: 56px; }
+.social-peek-btn:hover { opacity: 1; transform: translateX(-6px); }
+.social-peek-btn:active { opacity: 1; transform: translateX(-6px); }
 .social-peek-tooltip {
   position: absolute;
   right: 54px;
@@ -1518,7 +1518,8 @@ p   { line-height: 1.7; }
   border-bottom: 7px solid transparent;
   border-left: 7px solid #fff;
 }
-.social-peek-btn:hover .social-peek-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
+.social-peek-btn:hover .social-peek-tooltip,
+.social-peek-btn:active .social-peek-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
 .social-peek-fb {
   background: #1877f2;
   border-radius: 10px 0 0 10px;
