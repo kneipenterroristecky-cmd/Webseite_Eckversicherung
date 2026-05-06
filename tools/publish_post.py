@@ -98,22 +98,25 @@ except Exception as e:
 # 2. FACEBOOK – Seitenbeitrag posten
 # ════════════════════════════════════════════════════════════════════════════════
 if FB_PAGE_TOKEN and FB_PAGE_ID:
-    print("📡 Facebook: Beitrag posten …")
+    print("📡 Facebook: Bild-Beitrag posten …")
     try:
         post_url = meta['post_url']
         full_url = post_url if post_url.startswith('http') else SITE_URL.rstrip("/") + "/" + post_url.lstrip("/")
         fb_text = (
             f"💡 {meta['social_summary']}\n\n"
-            f"Den vollständigen Beitrag jetzt lesen 👇\n\n"
+            f"Den vollständigen Beitrag jetzt lesen 👇\n{full_url}\n\n"
             f"#DanielEck #Versicherungsmakler #Schmalkalden"
         )
 
-        # Feed-Beitrag mit Link – Facebook zeigt automatisch Vorschaubild
+        # Foto-Post mit gestaltetem Bild (kein einfacher Link-Post)
+        social_image_url = meta.get("social_image_url", "")
+        fb_img_url = social_image_url if social_image_url else meta.get("og_image", "")
+
         r = requests.post(
-            f"https://graph.facebook.com/v21.0/{FB_PAGE_ID}/feed",
+            f"https://graph.facebook.com/v21.0/{FB_PAGE_ID}/photos",
             data={
+                "url": fb_img_url,
                 "message": fb_text,
-                "link": full_url,
                 "access_token": FB_PAGE_TOKEN
             }
         )
@@ -133,13 +136,15 @@ else:
 if IG_USER_ID and IG_ACCESS_TOKEN:
     print("📡 Instagram: Beitrag posten …")
     try:
-        # Direktes Unsplash-Bild (kein Redirect, quadratisch für Instagram)
+        # Gestaltetes Social-Media-Bild bevorzugen (via GitHub Pages)
+        social_image_url = meta.get("social_image_url", "")
         og_image = meta.get("og_image", "")
-        if og_image:
+        if social_image_url:
+            img_url = social_image_url
+        elif og_image:
             img_url = og_image.replace("w=1200&h=630", "w=1080&h=1080")
         else:
-            query = meta.get("unsplash_query", "insurance").replace(" ", ",")
-            img_url = f"https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1080&h=1080&fit=crop&auto=format"
+            img_url = "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1080&h=1080&fit=crop&auto=format"
 
         caption = meta['instagram_caption'] + "\n\n🔗 Link in Bio"
 

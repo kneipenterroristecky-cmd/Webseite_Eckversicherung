@@ -2,7 +2,7 @@
 """
 Erstellt einen wöchentlichen Blog-Beitrag mit Claude (KI) im Stil von Daniel Eck.
 """
-import os, json, re, datetime, anthropic
+import os, json, re, datetime, requests, anthropic
 
 SITE_URL = os.environ.get("SITE_URL", "https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung")
 
@@ -18,6 +18,28 @@ month_topics = topics[month_key]
 topic = month_topics[week_of_month % len(month_topics)]
 
 print(f"📌 Thema diese Woche: {topic['title']}")
+
+# ── Unsplash-Bild dynamisch laden ─────────────────────────────────────────────
+def fetch_unsplash_base(query):
+    """Folgt der source.unsplash.com-Weiterleitung und gibt die Basis-URL zurück."""
+    try:
+        encoded = query.strip().replace(" ", ",")
+        r = requests.get(
+            f"https://source.unsplash.com/featured/1200x630/?{encoded}",
+            allow_redirects=True, timeout=15
+        )
+        base = r.url.split("?")[0]
+        print(f"   📸 Bild: {base}")
+        return base
+    except Exception as e:
+        print(f"   ⚠️  Unsplash-Fetch fehlgeschlagen: {e}")
+        return None
+
+_query = topic.get("unsplash_query", "insurance finance")
+_fallback = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format").split("?")[0]
+_unsplash_base = fetch_unsplash_base(_query) or _fallback
+og_image  = f"{_unsplash_base}?w=1200&h=630&fit=crop&auto=format"
+ig_img_url_global = f"{_unsplash_base}?w=1080&h=480&fit=crop&auto=format"
 
 # ── Blog-Beitrag schreiben ────────────────────────────────────────────────────
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
@@ -62,7 +84,7 @@ content_html = beitrag.content[0].text
 # ── Meta-Daten für Social Media generieren ────────────────────────────────────
 meta_msg = client.messages.create(
     model="claude-haiku-4-5-20251001",
-    max_tokens=500,
+    max_tokens=700,
     messages=[{
         "role": "user",
         "content": f"""Für einen Blog-Beitrag von Versicherungsmakler Daniel Eck (Daniel Eck – Versicherungsmakler Schmalkalden) über "{topic['title']}" erstelle kurze, knackige Social-Media-Texte in der Ich-Perspektive.
@@ -72,7 +94,12 @@ Ausgabe als JSON (keine weiteren Erklärungen):
   "title": "Überschrift max 60 Zeichen",
   "social_summary": "Facebook-Post: max 120 Zeichen, Ich-Form, ein einziger Satz mit Mehrwert",
   "instagram_caption": "Instagram: 1-2 kurze Sätze max 150 Zeichen + Zeilenumbruch + 5 Hashtags. Hashtags NUR korrekte deutsche Wörter verwenden, keine Abkürzungen oder Fantasiewörter. z.B. #Versicherung #Versicherungsschutz #Schmalkalden",
-  "slug": "url-freundlicher-dateiname-ohne-umlaute-nur-bindestriche"
+  "slug": "url-freundlicher-dateiname-ohne-umlaute-nur-bindestriche",
+  "ig_before": "Schlagzeile vor dem Highlight, max 20 Zeichen, kann leer sein",
+  "ig_highlight": "Ein markantes Wort oder kurze Phrase die blau hervorgehoben wird, max 15 Zeichen",
+  "ig_after": "Optionaler Text nach dem Highlight, max 20 Zeichen, kann leer sein",
+  "ig_sub": "Kurzer Untertitel für das Bild, max 80 Zeichen, Ich-Form",
+  "ig_cta": "CTA-Button Text, max 28 Zeichen, mit Pfeil am Ende z.B. →"
 }}"""
     }]
 )
@@ -81,6 +108,69 @@ raw = meta_msg.content[0].text
 match = re.search(r'\{.*\}', raw, re.DOTALL)
 meta = json.loads(match.group())
 
+# ── Social-Media-Bild HTML erstellen ─────────────────────────────────────────
+LABEL_EMOJIS = {
+    "KFZ": "🚗", "Vorsorge": "🛡️", "Kranken": "🏥",
+    "Privat": "🏠", "Gewerbe": "🏢", "Ratgeber": "📋"
+}
+emoji = LABEL_EMOJIS.get(topic["label"], "📋")
+ig_before   = meta.get("ig_before", "").strip()
+ig_highlight = meta.get("ig_highlight", "").strip()
+ig_after    = meta.get("ig_after", "").strip()
+ig_sub      = meta.get("ig_sub", meta.get("social_summary", "")[:80]).strip()
+ig_cta      = meta.get("ig_cta", "Jetzt beraten lassen →").strip()
+
+h1_lines = []
+if ig_before:
+    h1_lines.append(ig_before)
+if ig_highlight:
+    h1_lines.append(f'<span>{ig_highlight}</span>')
+if ig_after:
+    h1_lines.append(ig_after)
+h1_content = "<br>".join(h1_lines) if h1_lines else meta["title"]
+
+ig_img_url = ig_img_url_global
+
+social_html = f"""<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+  body {{ width: 1080px; height: 1080px; overflow: hidden; font-family: 'Inter', Arial, sans-serif; background: #172d50; }}
+  .wrap {{ width: 1080px; height: 1080px; position: relative; display: flex; flex-direction: column; }}
+  .img-area {{ flex: 0 0 480px; position: relative; overflow: hidden; }}
+  .img-area img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+  .img-area::after {{ content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(23,45,80,.2) 0%, rgba(23,45,80,.9) 100%); }}
+  .body-area {{ flex: 1; background: #172d50; padding: 40px 60px 48px; display: flex; flex-direction: column; justify-content: space-between; }}
+  .tag {{ display: inline-flex; align-items: center; gap: 8px; background: rgba(33,103,204,.25); border: 1px solid rgba(33,103,204,.5); color: #7ab3f5; font-size: 22px; font-weight: 700; padding: 8px 20px; border-radius: 100px; letter-spacing: .05em; text-transform: uppercase; width: fit-content; margin-bottom: 24px; }}
+  h1 {{ font-size: 68px; font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 20px; letter-spacing: -.02em; }}
+  h1 span {{ color: #2167cc; }}
+  .sub {{ font-size: 30px; color: rgba(255,255,255,.75); font-weight: 500; line-height: 1.4; }}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="img-area">
+    <img src="{ig_img_url}" />
+  </div>
+  <div class="body-area">
+    <div>
+      <div class="tag">{emoji} {topic['label']}</div>
+      <h1>{h1_content}</h1>
+      <p class="sub">{ig_sub}</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>"""
+
+os.makedirs("social", exist_ok=True)
+with open("social/latest-ig.html", "w", encoding="utf-8") as f:
+    f.write(social_html)
+print("✅ Social Image HTML erstellt: social/latest-ig.html")
+
 # ── HTML-Datei erstellen ──────────────────────────────────────────────────────
 today = datetime.date.today()
 date_de = today.strftime("%d.%m.%Y")
@@ -88,7 +178,7 @@ date_iso = today.isoformat()
 filename = f"{date_iso}-{meta['slug']}.html"
 post_url = f"{SITE_URL}/blog/posts/{filename}"
 
-og_image = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format")
+social_image_url = f"{SITE_URL.rstrip('/')}/social/latest-ig.png"
 
 with open("tools/blog_post_template.html", encoding="utf-8") as f:
     template = f.read()
@@ -121,7 +211,8 @@ draft_meta = {
     "topic": topic['title'],
     "label": topic['label'],
     "unsplash_query": topic.get("unsplash_query", "insurance finance"),
-    "og_image": og_image
+    "og_image": og_image,
+    "social_image_url": social_image_url
 }
 
 with open("tools/draft_meta.json", "w", encoding="utf-8") as f:
