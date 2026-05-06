@@ -39,7 +39,7 @@ _query = topic.get("unsplash_query", "insurance finance")
 _fallback = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format").split("?")[0]
 _unsplash_base = fetch_unsplash_base(_query) or _fallback
 og_image  = f"{_unsplash_base}?w=1200&h=630&fit=crop&auto=format"
-ig_img_url_global = f"{_unsplash_base}?w=1080&h=480&fit=crop&auto=format"
+ig_img_url_global = f"{_unsplash_base}?w=1080&h=1080&fit=crop&auto=format"
 
 # ── Blog-Beitrag schreiben ────────────────────────────────────────────────────
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
