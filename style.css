@@ -1381,6 +1381,7 @@ p   { line-height: 1.7; }
 
   /* Mobile CTA Bar */
   body { padding-bottom: 85px; }
+  .social-peek-wa { display: none; }
   .mobile-cta-bar {
     display: flex;
     position: fixed;
