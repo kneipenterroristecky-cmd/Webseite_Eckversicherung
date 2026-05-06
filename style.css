@@ -1493,8 +1493,10 @@ p   { line-height: 1.7; }
   opacity: 0.88;
   transition: opacity .2s, width .2s;
 }
-.social-peek-btn:hover,
-.social-peek-btn:active { opacity: 1; width: 58px; }
+@media (hover: hover) and (pointer: fine) {
+  .social-peek-btn:hover { opacity: 1; width: 58px; }
+  .social-peek-btn:hover .social-peek-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
 .social-peek-tooltip {
   position: absolute;
   right: 68px;
@@ -1532,8 +1534,6 @@ p   { line-height: 1.7; }
 .social-peek-ig .social-peek-tooltip-arrow {
   border-left-color: #fff;
 }
-.social-peek-btn:hover .social-peek-tooltip,
-.social-peek-btn:active .social-peek-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
 .social-peek-fb {
   background: #2167cc;
   border-radius: 10px 0 0 10px;
