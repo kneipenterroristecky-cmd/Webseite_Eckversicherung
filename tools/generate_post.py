@@ -71,7 +71,7 @@ Ausgabe als JSON (keine weiteren Erklärungen):
 {{
   "title": "Überschrift max 60 Zeichen",
   "social_summary": "Facebook-Post: max 120 Zeichen, Ich-Form, ein einziger Satz mit Mehrwert",
-  "instagram_caption": "Instagram: 1-2 kurze Sätze max 150 Zeichen + Zeilenumbruch + 5 Hashtags z.B. #Versicherung #Schmalkalden",
+  "instagram_caption": "Instagram: 1-2 kurze Sätze max 150 Zeichen + Zeilenumbruch + 5 Hashtags. Hashtags NUR korrekte deutsche Wörter verwenden, keine Abkürzungen oder Fantasiewörter. z.B. #Versicherung #Versicherungsschutz #Schmalkalden",
   "slug": "url-freundlicher-dateiname-ohne-umlaute-nur-bindestriche"
 }}"""
     }]
