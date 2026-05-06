@@ -1538,16 +1538,13 @@ p   { line-height: 1.7; }
 
 /* ---- Social Peek (Mobile – feste Buttons rechts) ---- */
 .social-peek {
-  display: none;
+  display: flex;
   position: fixed;
   right: 0;
   top: 50%;
   z-index: 8888;
   flex-direction: column;
   transform: translateY(-50%);
-}
-@media (max-width: 768px) {
-  .social-peek { display: flex; }
 }
 .social-peek-btn {
   width: 46px;
