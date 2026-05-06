@@ -117,6 +117,7 @@ if FB_PAGE_TOKEN and FB_PAGE_ID:
                 "access_token": FB_PAGE_TOKEN
             }
         )
+        print(f"   FB Response: {r.status_code} – {r.text[:300]}")
         r.raise_for_status()
         print(f"   ✅ Facebook: gepostet (Post-ID: {r.json().get('id')})")
     except Exception as e:
