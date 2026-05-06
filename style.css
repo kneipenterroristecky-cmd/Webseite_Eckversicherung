@@ -1536,7 +1536,7 @@ p   { line-height: 1.7; }
 }
 
 
-/* ---- Social Peek (Mobile Slide-In) ---- */
+/* ---- Social Peek (Mobile – feste Buttons rechts) ---- */
 .social-peek {
   display: none;
   position: fixed;
@@ -1544,32 +1544,32 @@ p   { line-height: 1.7; }
   top: 50%;
   z-index: 8888;
   flex-direction: column;
-  transform: translateY(-50%) translateX(calc(100% - 14px));
-  transition: transform .7s cubic-bezier(.25,.46,.45,.94);
+  transform: translateY(-50%);
 }
 @media (max-width: 768px) {
   .social-peek { display: flex; }
 }
-.social-peek.sp-in {
-  transform: translateY(-50%) translateX(0);
-}
 .social-peek-btn {
-  width: 52px;
-  height: 58px;
+  width: 46px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  font-size: 22px;
+  font-size: 20px;
   color: #fff;
+  opacity: 0.85;
+  transition: opacity .2s;
 }
+.social-peek-btn:active { opacity: 1; }
 .social-peek-fb {
   background: #1877f2;
-  border-radius: 10px 0 0 0;
+  border-radius: 10px 0 0 10px;
 }
 .social-peek-ig {
   background: linear-gradient(160deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-  border-radius: 0 0 0 10px;
+  border-radius: 10px 0 0 10px;
+  margin-top: 4px;
 }
 
 /* ---- Footer Social Icons ---- */

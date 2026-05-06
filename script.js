@@ -2,13 +2,6 @@
    Daniel Eck – Versicherungsmakler – Interactions & Animations
    ============================================= */
 
-/* ---- Social Peek Animation ---- */
-document.addEventListener('DOMContentLoaded', function () {
-  var peek = document.getElementById('socialPeek');
-  if (!peek) return;
-  setTimeout(function () { peek.classList.add('sp-in'); }, 1200);
-  setTimeout(function () { peek.classList.remove('sp-in'); }, 4500);
-});
 
 /* ---- Navbar scroll shadow ---- */
 const navbar = document.getElementById('navbar');
