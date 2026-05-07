@@ -13,26 +13,29 @@ window.addEventListener('scroll', () => {
 const hamburger  = document.getElementById('hamburger');
 const navLinks   = document.getElementById('navLinks');
 
-hamburger.addEventListener('click', () => {
-  const open = navLinks.classList.toggle('open');
+const socialPeek = document.getElementById('socialPeek');
+const mobileCta  = document.querySelector('.mobile-cta-bar');
+
+function setMenuOpen(open) {
+  navLinks.classList.toggle('open', open);
   hamburger.classList.toggle('open', open);
   hamburger.setAttribute('aria-expanded', open);
+  if (socialPeek) socialPeek.style.display = open ? 'none' : '';
+  if (mobileCta)  mobileCta.style.display  = open ? 'none' : '';
+}
+
+hamburger.addEventListener('click', () => {
+  setMenuOpen(!navLinks.classList.contains('open'));
 });
 
 // close on link click
 navLinks.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => {
-    navLinks.classList.remove('open');
-    hamburger.classList.remove('open');
-  });
+  a.addEventListener('click', () => setMenuOpen(false));
 });
 
 // close on outside click
 document.addEventListener('click', e => {
-  if (!navbar.contains(e.target)) {
-    navLinks.classList.remove('open');
-    hamburger.classList.remove('open');
-  }
+  if (!navbar.contains(e.target)) setMenuOpen(false);
 });
 
 /* ---- Active nav link on scroll ---- */
