@@ -9,6 +9,22 @@ window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 12);
 }, { passive: true });
 
+/* ---- Social Peek: bei Scroll-Down verstecken ---- */
+(function() {
+  var lastScrollY = window.scrollY;
+  window.addEventListener('scroll', function() {
+    var sp = document.getElementById('socialPeek');
+    if (!sp) return;
+    var y = window.scrollY;
+    if (y > lastScrollY && y > 80) {
+      sp.classList.add('peek-hidden');
+    } else {
+      sp.classList.remove('peek-hidden');
+    }
+    lastScrollY = y;
+  }, { passive: true });
+})();
+
 /* ---- Hamburger / mobile nav ---- */
 const hamburger  = document.getElementById('hamburger');
 const navLinks   = document.getElementById('navLinks');
