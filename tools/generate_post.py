@@ -164,17 +164,6 @@ date_iso = today.isoformat()
 filename = f"{date_iso}-{meta['slug']}.html"
 post_url = f"{SITE_URL}/blog/posts/{filename}"
 
-# "Mehr dazu"-Link vor den Hashtags in die Instagram-Caption einfügen
-ig_cap = meta['instagram_caption']
-hashtag_pos = ig_cap.find('#')
-if hashtag_pos != -1:
-    meta['instagram_caption'] = (
-        ig_cap[:hashtag_pos].rstrip() +
-        f"\n\nMehr dazu 👉 {post_url}\n\n" +
-        ig_cap[hashtag_pos:]
-    )
-else:
-    meta['instagram_caption'] += f"\n\nMehr dazu 👉 {post_url}"
 
 social_image_url = f"{SITE_URL.rstrip('/')}/social/latest-ig.png"
 
