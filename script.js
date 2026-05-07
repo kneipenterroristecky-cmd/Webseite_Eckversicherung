@@ -18,6 +18,8 @@ function setMenuOpen(open) {
   hamburger.classList.toggle('open', open);
   hamburger.setAttribute('aria-expanded', open);
   document.body.classList.toggle('nav-open', open);
+  var sp = document.getElementById('socialPeek');
+  if (sp) sp.style.display = open ? 'none' : '';
 }
 
 hamburger.addEventListener('click', () => {
