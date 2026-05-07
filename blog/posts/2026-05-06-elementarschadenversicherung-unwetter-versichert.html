@@ -281,10 +281,17 @@
   <script>
     (function() {
       var sp = document.getElementById('socialPeek');
-      if (!sp) return;
-      new MutationObserver(function() {
-        sp.style.display = document.body.classList.contains('nav-open') ? 'none' : '';
-      }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      var hb = document.getElementById('hamburger');
+      if (!sp || !hb) return;
+      function syncPeek() {
+        if (hb.classList.contains('open')) {
+          sp.style.setProperty('display', 'none', 'important');
+        } else {
+          sp.style.removeProperty('display');
+        }
+      }
+      hb.addEventListener('click', function() { requestAnimationFrame(syncPeek); });
+      document.addEventListener('click', function() { requestAnimationFrame(syncPeek); });
     })();
   </script>
 </body>
