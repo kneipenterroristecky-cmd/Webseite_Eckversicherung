@@ -69,7 +69,7 @@ content_html = beitrag.content[0].text
 # ── Meta-Daten für Social Media generieren ────────────────────────────────────
 meta_msg = client.messages.create(
     model="claude-haiku-4-5-20251001",
-    max_tokens=700,
+    max_tokens=1200,
     messages=[{
         "role": "user",
         "content": f"""Für einen Blog-Beitrag von Versicherungsmakler Daniel Eck (Daniel Eck – Versicherungsmakler Schmalkalden) über "{topic['title']}" erstelle kurze, knackige Social-Media-Texte in der Ich-Perspektive.
@@ -83,7 +83,7 @@ Ausgabe als JSON (keine weiteren Erklärungen):
 {{
   "title": "Überschrift max 60 Zeichen",
   "social_summary": "Facebook-Post: max 120 Zeichen, Ich-Form, ein einziger Satz mit Mehrwert. IMMER Sie/Ihnen/Ihre (niemals du/dich)",
-  "instagram_caption": "Instagram: 1-2 kurze Sätze max 150 Zeichen + Zeilenumbruch + 5 Hashtags. IMMER Sie/Ihnen/Ihre. Hashtags NUR korrekte deutsche Wörter verwenden, keine Abkürzungen oder Fantasiewörter. z.B. #Versicherung #Versicherungsschutz #Schmalkalden",
+  "instagram_caption": "Instagram-Caption mit echtem Mehrwert – da kein direkter Link möglich ist, muss der Text alleine überzeugen. Aufbau: 1 starker Einstiegssatz, dann 3-4 konkrete Punkte oder Tipps aus dem Artikel (als kurze Absätze mit Zeilenumbrüchen), abschließend ein Satz der zum Handeln einlädt (z.B. 'Schreiben Sie mir einfach.' oder 'Ich schaue das gerne für Sie durch.'). Danach Leerzeile + 7-10 passende Hashtags. Gesamtlänge: 600-900 Zeichen. IMMER Sie/Ihnen/Ihre (niemals du/dich). Hashtags NUR korrekte deutsche Wörter, keine Abkürzungen. z.B. #Versicherung #Elementarschutz #Schmalkalden #Versicherungsmakler",
   "slug": "url-freundlicher-dateiname-ohne-umlaute-nur-bindestriche",
   "ig_before": "Schlagzeile vor dem Highlight, max 20 Zeichen, kann leer sein",
   "ig_highlight": "Ein markantes Wort oder kurze Phrase die blau hervorgehoben wird, max 15 Zeichen",
