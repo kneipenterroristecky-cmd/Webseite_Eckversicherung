@@ -148,6 +148,19 @@ p   { line-height: 1.7; }
   62.5%  { background-position: -100% 50%; }
   100%   { background-position: -100% 50%; }
 }
+.btn-nav-wa {
+  background: #25d366 !important;
+  color: #fff !important;
+  border: none;
+}
+.btn-nav-wa:hover {
+  background: #1da851 !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+@media (max-width: 768px) {
+  .btn-nav-wa { display: none !important; }
+}
 .btn-online-abschluss {
   background-image: linear-gradient(90deg, rgb(88,28,135), rgb(255,33,120), rgb(88,28,135)) !important;
   background-size: 200% 100% !important;
