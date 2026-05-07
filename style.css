@@ -9,6 +9,7 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
   color: #1e293b;
   background: #fff;
+  overflow-x: hidden;
 }
 img { display: block; max-width: 100%; }
 a   { text-decoration: none; color: inherit; }
@@ -1478,6 +1479,7 @@ p   { line-height: 1.7; }
   align-items: flex-end;
   gap: 4px;
   transition: transform .4s ease;
+  max-width: 100vw;
 }
 .social-peek.is-peeked { transform: translateX(58px); }
 .social-peek-btn {
