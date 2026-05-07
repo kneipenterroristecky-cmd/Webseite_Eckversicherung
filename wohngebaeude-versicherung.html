@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wohngebäudeversicherung – Daniel Eck – Versicherungsmakler</title>
+  <meta name="description" content="Wohngebäudeversicherung in Schmalkalden – unabhängige Beratung durch Daniel Eck. Ich finde den optimalen Schutz für Ihr Haus – kostenlos und individuell." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
+  <script src="https://assets.calendly.com/assets/external/widget.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    .page-hero { position: relative; overflow: hidden; background: var(--navy); }
+    .page-hero-bg { position: absolute; inset: 0; background-image: url('gespraech.png'); background-size: cover; background-position: center; opacity: .18; }
+    .page-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(23,45,80,.95) 50%, rgba(23,45,80,.5) 100%); pointer-events: none; }
+    .page-hero-split { max-width: 1200px; margin: 0 auto; padding: 88px 28px; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 320px; align-items: center; gap: 60px; min-height: 480px; }
+    .page-hero-left { display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 22px; }
+    .page-hero-title { font-size: clamp(32px, 4vw, 52px); font-weight: 900; color: #fff; letter-spacing: -.4px; margin: 0; line-height: 1.1; }
+    .page-hero-sub { font-size: 17px; color: rgba(255,255,255,.7); line-height: 1.7; margin: 0; max-width: 520px; }
+    .page-hero-trust { display: flex; flex-direction: column; gap: 10px; }
+    .page-hero-trust-item { display: flex; align-items: center; gap: 12px; font-size: 15px; color: rgba(255,255,255,.9); font-weight: 600; }
+    .page-hero-trust-icon { width: 22px; height: 22px; border-radius: 50%; background: rgba(96,165,250,.3); display: flex; align-items: center; justify-content: center; color: #60a5fa; font-size: 10px; flex-shrink: 0; }
+    .page-hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+    .page-hero-btn-primary { display: inline-flex; align-items: center; gap: 9px; background: rgb(33,103,204); color: #fff; font-size: 16px; font-weight: 700; padding: 16px 32px; border-radius: 50px; text-decoration: none; border: none; cursor: pointer; transition: background .2s, transform .2s, box-shadow .2s; box-shadow: 0 4px 20px rgba(33,103,204,.4); }
+    .page-hero-btn-primary:hover { background: #1a50c8; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(33,103,204,.5); }
+    .page-hero-btn-secondary { display: inline-flex; align-items: center; gap: 9px; background: transparent; color: #fff; font-size: 16px; font-weight: 600; padding: 15px 30px; border-radius: 50px; text-decoration: none; border: 2px solid rgba(255,255,255,.4); transition: border-color .2s, background .2s, transform .2s; }
+    .page-hero-btn-secondary:hover { border-color: #fff; background: rgba(255,255,255,.08); transform: translateY(-2px); }
+    .page-hero-photo { display: flex; align-items: center; justify-content: center; }
+    .page-hero-photo img { width: 280px; height: 280px; border-radius: 50%; object-fit: cover; object-position: center top; border: 5px solid rgba(255,255,255,.2); box-shadow: 0 20px 60px rgba(0,0,0,.4); display: block; }
+    @media (max-width: 860px) {
+      .page-hero-split { grid-template-columns: 1fr; gap: 36px; padding: 60px 24px; }
+      .page-hero-photo { display: none; }
+      .page-hero-left { align-items: center; text-align: center; }
+      .page-hero-sub { max-width: 100%; }
+      .page-hero-buttons { justify-content: center; }
+      .page-hero-trust { align-items: center; }
+    }
+    .kfz-content { max-width: 1100px; margin: 0 auto; padding: 72px 28px 96px; }
+    .kfz-intro { max-width: 700px; margin: 0 auto 72px; text-align: center; }
+    .kfz-intro p { font-size: 17px; color: var(--gray-500); line-height: 1.8; }
+    .pflicht-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(220,38,38,.08); border: 1px solid rgba(220,38,38,.25); color: #dc2626; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 10px; }
+    .optional-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(26,80,200,.08); border: 1px solid rgba(26,80,200,.25); color: var(--blue); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 10px; }
+    .kfz-coverage { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 72px; }
+    .cov-card { background: #fff; border: 1.5px solid var(--gray-100); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.06); display: flex; flex-direction: column; }
+    .cov-card-img { position: relative; height: 220px; overflow: hidden; }
+    .cov-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .cov-card-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(23,45,80,.45) 0%, rgba(23,45,80,0) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 16px 20px; gap: 6px; }
+    .cov-card-img-overlay .pflicht-badge, .cov-card-img-overlay .optional-badge { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.5); color: #fff; align-self: flex-start; }
+    .cov-card-title { font-size: 18px; font-weight: 900; color: #fff; line-height: 1.2; margin: 0; }
+    .cov-card-body { padding: 20px 22px 24px; flex: 1; }
+    .cov-card-desc { font-size: 13px; color: var(--gray-500); line-height: 1.6; margin-bottom: 16px; }
+    .cov-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+    .cov-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+    .cov-check { width: 22px; height: 22px; border-radius: 6px; background: rgba(26,80,200,.1); display: flex; align-items: center; justify-content: center; color: var(--blue); font-size: 11px; flex-shrink: 0; margin-top: 1px; }
+    .cov-list li strong { color: var(--navy); font-weight: 700; }
+    .kfz-section-title { font-size: 24px; font-weight: 900; color: var(--navy); margin-bottom: 8px; }
+    .kfz-section-sub { font-size: 15px; color: var(--gray-500); margin-bottom: 36px; }
+    .gew-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-bottom: 72px; }
+    .gew-card { background: #fff; border: 1.5px solid var(--gray-100); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+    .gew-card-header { background: var(--navy); padding: 20px 22px; display: flex; align-items: center; gap: 14px; }
+    .gew-card-header-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,.12); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; flex-shrink: 0; }
+    .gew-card-header h3 { font-size: 15px; font-weight: 800; color: #fff; margin: 0; }
+    .gew-card-header p { font-size: 12px; color: rgba(255,255,255,.6); margin: 3px 0 0; }
+    .gew-card-body { padding: 18px 22px 22px; }
+    .gew-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+    .gew-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--gray-500); padding: 7px 10px; border-radius: 8px; margin: 0 -10px; }
+    .gew-icon { width: 26px; height: 26px; border-radius: 7px; background: rgba(26,80,200,.08); display: flex; align-items: center; justify-content: center; color: var(--blue); font-size: 12px; flex-shrink: 0; }
+    .kfz-makler { background: var(--navy); border-radius: 20px; padding: 0 52px 0 0; margin-bottom: 56px; display: grid; grid-template-columns: 220px 1fr 1fr; gap: 48px; align-items: stretch; overflow: hidden; }
+    .kfz-makler-photo { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; min-height: 320px; }
+    .kfz-makler-left { padding: 48px 0; }
+    .kfz-makler-left h2 { font-size: 26px; font-weight: 900; color: #fff; margin-bottom: 14px; line-height: 1.25; }
+    .kfz-makler-left p { font-size: 15px; color: rgba(255,255,255,.65); line-height: 1.7; margin-bottom: 28px; }
+    .kfz-makler-advantages { display: flex; flex-direction: column; gap: 14px; padding: 48px 0; justify-content: center; }
+    .adv-item { display: flex; align-items: center; gap: 14px; }
+    .adv-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(26,80,200,.35); display: flex; align-items: center; justify-content: center; color: #93c5fd; font-size: 16px; flex-shrink: 0; }
+    .adv-text strong { display: block; color: #fff; font-size: 14px; font-weight: 700; }
+    .adv-text span { color: rgba(255,255,255,.55); font-size: 13px; }
+    .faq-cta { max-width: 820px; margin: 0 auto; }
+    .faq-cta-inner { background: var(--navy); border-radius: 16px; padding: 32px 36px; display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+    .faq-cta-text h3 { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .faq-cta-text p { font-size: 15px; color: rgba(255,255,255,.6); margin: 0; }
+    @media (max-width: 860px) {
+      .kfz-coverage { grid-template-columns: 1fr; }
+      .kfz-makler { grid-template-columns: 1fr; padding: 0; gap: 0; }
+      .kfz-makler-photo { height: 260px; min-height: unset; }
+      .kfz-makler-left { padding: 28px 24px 20px; }
+      .kfz-makler-advantages { padding: 0 24px 28px; justify-content: flex-start; }
+    }
+    @media (max-width: 768px) {
+      .kfz-content { padding: 48px 20px 64px; }
+      .kfz-intro { margin-bottom: 48px; }
+      .kfz-intro p { font-size: 15px; }
+      .kfz-coverage { gap: 20px; margin-bottom: 48px; }
+      .kfz-section-title { font-size: 20px; }
+      .gew-grid { grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 48px; }
+      .kfz-makler-left h2 { font-size: 20px; }
+    }
+    @media (max-width: 480px) {
+      .kfz-content { padding: 36px 16px 52px; }
+      .gew-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-container">
+      <div class="topbar-right"><a href="tel:+491743225885"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a><a href="mailto:daniel@eckversicherung.de"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="start.html" class="logo"><img src="Logo Eck weis.png" alt="Daniel Eck Versicherungsmakler" class="logo-img" /><div class="logo-text"><span class="logo-name" style="color: rgb(33, 103, 204)">Daniel Eck</span><span class="logo-subtitle">Versicherungsmakler</span></div>
+      </a>
+      <nav class="nav-links" id="navLinks"><a href="private-versicherungen.html" class="nav-link active">Private Versicherungen</a><a href="gewerbliche-versicherungen.html" class="nav-link">Gewerbliche Versicherungen</a><a href="start.html#team" class="nav-link">Über uns</a><a href="faq.html" class="nav-link">FAQ</a><a href="blog/index.html" class="nav-link">Ratgeber &amp; Tipps</a><a href="onlineabschluss.html" class="btn btn-nav btn-online-abschluss"><i class="fas fa-laptop"></i> Onlineabschluss</a><button onclick="openCalendlyDirect();window._track&&_track('cta','Termin – Navbar')" class="btn btn-nav" style="background-color: rgb(33, 103, 204)">Termin buchen</button>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Menü"><span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-split">
+      <div class="page-hero-left">
+        <div class="section-label left" style="margin-bottom:4px;"><span class="label-bar short"></span><span>HAUSHALT & WOHNEN</span></div>
+        <h1 class="page-hero-title">Wohngebäude&shy;versicherung –<br>Ihr Haus rundum geschützt</h1>
+        <p class="page-hero-sub">Feuer, Sturm, Leitungswasser – Schäden am Gebäude können existenzbedrohend sein. Ich prüfe für Sie, ob Ihr Haus wirklich lückenlos versichert ist und finde den besten Tarif.</p>
+        <div class="page-hero-trust">
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Unabhängiger Vergleich – über 100 Gesellschaften</div>
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Kostenlos & unverbindlich</div>
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Persönliche Betreuung auch im Schadensfall</div>
+        </div>
+        <div class="page-hero-buttons">
+          <button class="page-hero-btn-primary" onclick="openCalendlyDirect();window._track&&_track('cta','Gebäude Hero – Termin')"><i class="fas fa-calendar-check"></i> Termin buchen</button>
+          <a href="tel:+491743225885" class="page-hero-btn-secondary"><i class="fas fa-phone"></i> 0174 / 322 58 85</a>
+        </div>
+      </div>
+      <div class="page-hero-photo"><img src="Dummybild 1_rund.png" alt="Daniel Eck – Ihr Versicherungsmakler" />
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <div class="kfz-content">
+
+    <!-- Intro -->
+    <div class="kfz-intro reveal">
+      <p>Die Wohngebäudeversicherung schützt das Gebäude selbst – Wände, Dach, Böden, Heizung und fest eingebaute Bestandteile. Als Eigentümer sind Sie damit gegen finanzielle Schäden durch Feuer, Sturm, Leitungswasser und mehr abgesichert. Ich vergleiche für Sie die Tarife und sorge dafür, dass im Ernstfall wirklich gezahlt wird.</p>
+    </div>
+
+    <!-- 3 Hauptbausteine -->
+    <div class="kfz-coverage">
+
+      <!-- Feuer & Blitzschlag -->
+      <div class="cov-card reveal">
+        <div class="cov-card-img">
+          <!-- Hausbrand / Feuerwehr löscht brennendes Gebäude -->
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80" alt="Feuer & Blitzschlag" loading="lazy" />
+          <div class="cov-card-img-overlay">
+            <div class="optional-badge" style="margin-bottom:0;"><i class="fas fa-house-chimney"></i> Grunddeckung</div>
+            <div class="cov-card-title">Feuer & Blitz&shy;schlag</div>
+          </div>
+        </div>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Schäden durch Brand, Blitz, Explosion oder Absturz von Luftfahrzeugen – häufig die teuersten Schadensereignisse überhaupt.</p>
+          <ul class="cov-list">
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Brand & Feuer</strong> am gesamten Gebäude</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Blitzschlag</strong> inkl. Überspannungsschäden</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Explosion & Verpuffung</strong></span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Absturz von Luftfahrzeugen</strong></span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Lösch-, Abbruch- & Aufräumkosten</strong></span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Leitungswasser & Sturm -->
+      <div class="cov-card reveal">
+        <div class="cov-card-img">
+          <!-- Wasserrohrbruch / Wasserschaden in Wohnung -->
+          <img src="https://images.unsplash.com/photo-1584622781867-1d339fcbe0d2?auto=format&fit=crop&w=800&q=80" alt="Leitungswasser & Sturm" loading="lazy" />
+          <div class="cov-card-img-overlay">
+            <div class="optional-badge" style="margin-bottom:0;"><i class="fas fa-droplet"></i> Grunddeckung</div>
+            <div class="cov-card-title">Leitungswasser & Sturm</div>
+          </div>
+        </div>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Rohrbruch, undichte Stellen, Sturmschäden am Dach – die häufigsten Schadenursachen in deutschen Wohngebäuden.</p>
+          <ul class="cov-list">
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Rohrbruch</strong> – Zu- und Ableitungen im Gebäude</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Nässeschäden</strong> durch austretendes Wasser</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Sturmschäden</strong> ab Windstärke 8 am Dach</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Hagelschäden</strong> an Fassade & Dachfenstern</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Frost- und Einsturmschäden</strong></span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Elementarschutz -->
+      <div class="cov-card reveal">
+        <div class="cov-card-img">
+          <!-- Überschwemmtes Wohnhaus / Hochwasser -->
+          <img src="https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=800&q=80" alt="Elementarschutz Wohngebäude" loading="lazy" />
+          <div class="cov-card-img-overlay" style="background: linear-gradient(to top, rgba(23,45,80,.55) 0%, rgba(23,45,80,0) 100%)">
+            <div class="optional-badge" style="margin-bottom:0;"><i class="fas fa-circle-plus"></i> Optionale Erweiterung</div>
+            <div class="cov-card-title">Elementar&shy;schutz</div>
+          </div>
+        </div>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Starkregen und Überschwemmungen nehmen zu. Wer diesen Baustein nicht hat, zahlt im Ernstfall alles selbst.</p>
+          <ul class="cov-list">
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Überschwemmung & Starkregen</strong></span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Rückstau</strong> aus der Kanalisation</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Erdrutsch & Erdsenkung</strong></span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Schneedruck & Lawinen</strong></span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Vulkanausbruch</strong></span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Zusatzbausteine -->
+    <div class="reveal">
+      <div class="kfz-section-title">Sinnvolle Zusatzbausteine</div>
+      <div class="kfz-section-sub">Ergänzen Sie Ihren Gebäudeschutz je nach Situation.</div>
+    </div>
+
+    <div class="gew-grid">
+
+      <div class="gew-card reveal">
+        <div class="gew-card-header">
+          <div class="gew-card-header-icon"><i class="fas fa-solar-panel"></i></div>
+          <div><h3>Photovoltaikanlage</h3><p>Solaranlage mitversichern</p></div>
+        </div>
+        <div class="gew-card-body">
+          <ul class="gew-list">
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Sturm-, Hagel- und Blitzschäden an der Anlage</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Ertragsausfall durch Schaden absicherbar</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Diebstahl von Modulen und Wechselrichter</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gew-card reveal">
+        <div class="gew-card-header">
+          <div class="gew-card-header-icon"><i class="fas fa-warehouse"></i></div>
+          <div><h3>Nebengebäude & Carport</h3><p>Alles auf dem Grundstück</p></div>
+        </div>
+        <div class="gew-card-body">
+          <ul class="gew-list">
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Garage, Carport, Gartenhaus</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Zäune und Mauern auf dem Grundstück</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Überdachungen und Anbauten</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gew-card reveal">
+        <div class="gew-card-header">
+          <div class="gew-card-header-icon"><i class="fas fa-shield-halved"></i></div>
+          <div><h3>Grobe Fahrlässigkeit</h3><p>Kein Abzug im Schadensfall</p></div>
+        </div>
+        <div class="gew-card-body">
+          <ul class="gew-list">
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Volle Leistung auch bei grob fahrlässigen Schäden</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Z.B. vergessene Kerze oder offenes Fenster bei Regen</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Kein anteiliger Abzug durch den Versicherer</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gew-card reveal">
+        <div class="gew-card-header">
+          <div class="gew-card-header-icon"><i class="fas fa-bolt"></i></div>
+          <div><h3>Überspannungsschäden</h3><p>Elektronik im Gebäude</p></div>
+        </div>
+        <div class="gew-card-body">
+          <ul class="gew-list">
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Schäden durch Blitzeinschlag im Stromnetz</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Fest eingebaute Elektrogeräte & Heizungsanlage</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Auch ohne direkten Blitzeinschlag am Gebäude</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FAQ -->
+    <div style="padding-top: 120px; padding-bottom: 120px; border-top: 1px solid #e2e8f0;">
+      <div class="section-label reveal" style="justify-content:center; margin-bottom:12px;"><span class="label-bar"></span><span>FAQ</span><span class="label-bar"></span>
+      </div>
+      <h2 class="section-title reveal" style="text-align:center; margin-bottom:36px;">Häufige Fragen zur Wohngebäudeversicherung</h2>
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Was genau versichert die Wohngebäudeversicherung?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Die Wohngebäudeversicherung schützt das Gebäude selbst – also Wände, Dach, Böden, Treppen, Fenster, Heizungsanlage und alle fest eingebauten Teile. Nicht versichert ist der Hausrat (Möbel, Elektrogeräte etc.) – dafür brauchen Sie eine separate Hausratversicherung. Ich prüfe für Sie, welche Kombination sinnvoll ist.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Muss ich als Eigentümer zwingend eine Gebäudeversicherung haben?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Gesetzlich vorgeschrieben ist sie nicht – aber praktisch unverzichtbar. Banken verlangen bei einer Immobilienfinanzierung fast immer eine Gebäudeversicherung als Bedingung für den Kredit. Und ohne Versicherung tragen Sie alle Schäden selbst – ein Brandschaden kann schnell sechsstellig werden.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Was tue ich nach einem Wasserschaden im Haus?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Wasser abstellen, Schaden dokumentieren (Fotos), Versicherer umgehend informieren – und nichts vorschnell entsorgen. Als Ihr Makler begleite ich Sie durch den Schadensfall: von der Meldung bis zur Regulierung. Ich sorge dafür, dass der Versicherer fair zahlt und keine ungerechtfertigten Abzüge gemacht werden.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Wie oft sollte ich meinen Vertrag prüfen lassen?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Mindestens alle 3–5 Jahre – oder nach größeren Umbaumaßnahmen. Viele ältere Verträge sind unterversichert, weil der Wert des Gebäudes gestiegen ist, die Versicherungssumme aber nicht angepasst wurde. Das prüfe ich kostenlos für Sie und passe den Vertrag bei Bedarf an.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Kostet mich die Beratung durch Sie als Makler etwas?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Nein – meine Beratung ist vollständig kostenlos. Als Versicherungsmakler erhalte ich eine Courtage direkt vom Versicherer, ohne Aufpreis für Sie. Sie profitieren von einem unabhängigen Vergleich und persönlicher Betreuung – von der Auswahl bis zum Schadensfall.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Makler-Vorteil -->
+    <div class="kfz-makler reveal">
+      <img src="Dummybild 1.png" alt="Daniel Eck – Versicherungsmakler" class="kfz-makler-photo" />
+      <div class="kfz-makler-left">
+        <h2>Warum Ihr Gebäude über mich absichern?</h2>
+        <p>Ich vergleiche für Sie die Tarife zahlreicher Versicherungsgesellschaften – objektiv, individuell und kostenlos. Und im Schadensfall stehe ich als Ihr persönlicher Ansprechpartner an Ihrer Seite.</p>
+        <a href="kontakt.html" class="btn btn-primary" style="background-color: rgb(33, 103, 204); text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">Jetzt Kontakt aufnehmen <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="kfz-makler-advantages">
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-magnifying-glass-dollar"></i></div><div class="adv-text"><strong>Unabhängiger Vergleich</strong><span>Aus über 200 Gesellschaften – kein Konzern-Druck</span></div></div>
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-handshake"></i></div><div class="adv-text"><strong>Persönliche Beratung</strong><span>Individuell auf Ihre Situation zugeschnitten</span></div></div>
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-file-shield"></i></div><div class="adv-text"><strong>Schadensunterstützung</strong><span>Ich begleite Sie durch den gesamten Schadensfall</span></div></div>
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-euro-sign"></i></div><div class="adv-text"><strong>Kostenlos für Sie</strong><span>Mein Honorar zahlt die Versicherungsgesellschaft</span></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="kontakt">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="start.html" class="logo footer-logo"><div class="footer-logo-bracket"></div><div class="logo-text"><span class="logo-name">Daniel Eck</span><span class="logo-subtitle">Versicherungsmakler</span></div></a><p>Unabhängige Versicherungsberatung in 3. Generation. Persönlich, transparent und immer in Ihrem Interesse.</p><div class="footer-social"><a href="https://www.facebook.com/profile.php?id=61565584784878" target="_blank" rel="noopener" class="footer-social-btn fsb-fb" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/daniel.eck.versicherungsmakler/" target="_blank" rel="noopener" class="footer-social-btn fsb-ig" aria-label="Instagram"><i class="fab fa-instagram"></i></a></div>
+      </div>
+      <div class="footer-col"><h4>Navigation</h4><ul><li><a href="start.html#leistungen">Leistungen</a></li><li><a href="start.html#team">Über uns</a></li><li><a href="private-versicherungen.html">Private Versicherungen</a></li><li><a href="gewerbliche-versicherungen.html">Gewerbliche Versicherungen</a></li><li><a href="faq.html">FAQ</a></li><li><a href="kontakt.html">Kontakt</a></li></ul>
+      </div>
+      <div class="footer-col"><h4>Kontakt</h4><ul class="footer-contact-list"><li><i class="fas fa-phone"></i><a href="tel:+491743225885">0174 / 322 58 85</a></li><li><i class="fas fa-envelope"></i><a href="mailto:daniel@eckversicherung.de">daniel@eckversicherung.de</a></li><li><i class="fas fa-location-dot"></i><a href="https://www.google.com/maps/place/Talstra%C3%9Fe+73,+98574+Schmalkalden" target="_blank" class="maps-link">Talstraße 73<br />98574 Schmalkalden</a></li></ul>
+      </div>
+      <div class="footer-col"><h4>Schadenhotline</h4><a href="tel:+491743225885" class="schadenhotline-box" style="background-color: rgb(33, 103, 204)"><i class="fas fa-phone"></i><div><span class="sh-number">0174 / 322 58 85</span><span class="sh-label">Im Schadensfall sofort anrufen</span></div></a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Daniel Eck – Versicherungsmakler. Alle Rechte vorbehalten.</p>
+      <div class="footer-bottom-links"><a href="datenschutz.html">Datenschutz</a><a href="impressum.html">Impressum</a><a href="erstinformation.html">Erstinformation</a><a href="#" onclick="openCookieSettings();return false;">Cookie-Einstellungen</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="funnel-overlay" id="funnelOverlay" onclick="closeFunnelOutside(event)">
+    <div class="funnel-modal" role="dialog" aria-modal="true">
+      <button class="funnel-close" onclick="closeFunnel()" aria-label="Schließen"><i class="fas fa-times"></i></button>
+      <div class="funnel-progress-wrap"><div class="funnel-progress-bar" id="funnelBar"></div></div>
+      <p class="funnel-step-label" id="funnelStepLabel">Schritt 1 von 4</p>
+      <div class="funnel-body" id="funnelBody"></div>
+    </div>
+  </div>
+
+  <script src="script.js?v=8"></script>
+  <script src="cookie.js"></script>
+  <script src="analytics.js" defer></script>
+  <div class="mobile-cta-bar">
+    <a href="tel:+491743225885" class="mobile-cta-call"><i class="fas fa-phone"></i><span>Anrufen</span></a>
+    <a href="kontakt.html" class="mobile-cta-termin"><i class="fas fa-calendar-check"></i><span>Termin buchen</span></a>
+  </div>
+  <div class="social-peek" id="socialPeek">
+    <a href="https://www.facebook.com/profile.php?id=61565584784878" target="_blank" rel="noopener" class="social-peek-btn social-peek-fb" aria-label="Facebook"><span class="social-peek-tooltip">Auf Facebook folgen<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/daniel.eck.versicherungsmakler/" target="_blank" rel="noopener" class="social-peek-btn social-peek-ig" aria-label="Instagram"><span class="social-peek-tooltip">Auf Instagram folgen<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/491743225885" target="_blank" rel="noopener" class="social-peek-btn social-peek-wa" aria-label="WhatsApp"><span class="social-peek-tooltip">WhatsApp schreiben<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-whatsapp"></i></a>
+  </div>
+</body>
+</html>
