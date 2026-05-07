@@ -1469,6 +1469,7 @@ p   { line-height: 1.7; }
   max-width: 100vw;
 }
 .social-peek.is-peeked { transform: translateX(46px); }
+body.nav-open .social-peek { display: none !important; }
 .social-peek-btn {
   width: 46px;
   height: 52px;

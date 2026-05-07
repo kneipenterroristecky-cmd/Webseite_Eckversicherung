@@ -17,9 +17,7 @@ function setMenuOpen(open) {
   navLinks.classList.toggle('open', open);
   hamburger.classList.toggle('open', open);
   hamburger.setAttribute('aria-expanded', open);
-  // Social-Peek lazy lookup (div steht nach dem script-Tag im DOM)
-  const peek = document.getElementById('socialPeek');
-  if (peek) peek.style.display = open ? 'none' : '';
+  document.body.classList.toggle('nav-open', open);
 }
 
 hamburger.addEventListener('click', () => {
