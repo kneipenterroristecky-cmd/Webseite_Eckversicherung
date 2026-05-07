@@ -13,15 +13,13 @@ window.addEventListener('scroll', () => {
 const hamburger  = document.getElementById('hamburger');
 const navLinks   = document.getElementById('navLinks');
 
-const socialPeek = document.getElementById('socialPeek');
-const mobileCta  = document.querySelector('.mobile-cta-bar');
-
 function setMenuOpen(open) {
   navLinks.classList.toggle('open', open);
   hamburger.classList.toggle('open', open);
   hamburger.setAttribute('aria-expanded', open);
-  if (socialPeek) socialPeek.style.display = open ? 'none' : '';
-  if (mobileCta)  mobileCta.style.display  = open ? 'none' : '';
+  // Social-Peek lazy lookup (div steht nach dem script-Tag im DOM)
+  const peek = document.getElementById('socialPeek');
+  if (peek) peek.style.display = open ? 'none' : '';
 }
 
 hamburger.addEventListener('click', () => {
