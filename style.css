@@ -736,16 +736,6 @@ p   { line-height: 1.7; }
   position: relative;
   z-index: 1;
 }
-.section-vorteile::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('Dummybild 1.png') center 60px/auto 140% no-repeat;
-  opacity: 0.10;
-  z-index: 0;
-  -webkit-mask-image: radial-gradient(ellipse 55% 80% at 50% 50%, black 30%, transparent 75%);
-  mask-image: radial-gradient(ellipse 55% 80% at 50% 50%, black 30%, transparent 75%);
-}
 .section-vorteile .section-container {
   position: relative;
   z-index: 1;
