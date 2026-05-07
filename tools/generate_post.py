@@ -74,6 +74,11 @@ meta_msg = client.messages.create(
         "role": "user",
         "content": f"""Für einen Blog-Beitrag von Versicherungsmakler Daniel Eck (Daniel Eck – Versicherungsmakler Schmalkalden) über "{topic['title']}" erstelle kurze, knackige Social-Media-Texte in der Ich-Perspektive.
 
+WICHTIG: Die Social-Media-Texte müssen inhaltlich EXAKT zum folgenden Artikel passen – insbesondere die genannte Versicherungsart (z.B. Gebäudeversicherung, Hausrat, KFZ etc.) muss übereinstimmen. Nichts erfinden was nicht im Artikel steht.
+
+Artikelinhalt:
+{content_html}
+
 Ausgabe als JSON (keine weiteren Erklärungen):
 {{
   "title": "Überschrift max 60 Zeichen",
