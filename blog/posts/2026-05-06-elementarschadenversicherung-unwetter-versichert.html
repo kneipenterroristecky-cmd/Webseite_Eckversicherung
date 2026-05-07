@@ -139,6 +139,9 @@
       color: var(--blue);
       font-weight: 600;
       text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     .blog-back {
       display: inline-flex;
@@ -160,8 +163,9 @@
       display: block;
     }
     @media (max-width: 600px) {
-      .blog-author-box { flex-direction: column; text-align: center; }
-      .blog-author-links { justify-content: center; }
+      .blog-author-box { flex-direction: column; text-align: center; padding: 20px 16px; }
+      .blog-author-links { flex-direction: column; align-items: center; gap: 10px; }
+      .blog-author-links a { justify-content: center; }
     }
     body.nav-open .social-peek { display: none !important; }
   </style>
