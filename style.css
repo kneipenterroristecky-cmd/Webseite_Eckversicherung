@@ -1408,9 +1408,7 @@ p   { line-height: 1.7; }
   .mobile-cta-bar button i { font-size: 18px; }
   .mobile-cta-call { background: #f1f5f9; color: var(--navy); }
   .mobile-cta-call:active { background: #e2e8f0; }
-  .mobile-cta-wa { background: #f0fdf4; color: #16a34a; }
-  .mobile-cta-wa:active { background: #dcfce7; }
-  .mobile-cta-termin { background: rgb(33,103,204); color: #fff; }
+.mobile-cta-termin { background: rgb(33,103,204); color: #fff; }
   .mobile-cta-termin:active { background: #1646a8; }
 
 }
