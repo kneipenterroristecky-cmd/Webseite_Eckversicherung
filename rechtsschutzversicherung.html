@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rechtsschutzversicherung – Daniel Eck – Versicherungsmakler</title>
+  <meta name="description" content="Rechtsschutzversicherung in Schmalkalden – unabhängige Beratung durch Daniel Eck. Ich prüfe für Sie, welcher Rechtsschutz zu Ihrer Lebenssituation passt – kostenlos und individuell." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
+  <script src="https://assets.calendly.com/assets/external/widget.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    .page-hero { position: relative; overflow: hidden; background: var(--navy); }
+    .page-hero-bg { position: absolute; inset: 0; background-image: url('gespraech.png'); background-size: cover; background-position: center; opacity: .18; }
+    .page-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(23,45,80,.95) 50%, rgba(23,45,80,.5) 100%); pointer-events: none; }
+    .page-hero-split { max-width: 1200px; margin: 0 auto; padding: 88px 28px; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 320px; align-items: center; gap: 60px; min-height: 480px; }
+    .page-hero-left { display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 22px; }
+    .page-hero-title { font-size: clamp(32px, 4vw, 52px); font-weight: 900; color: #fff; letter-spacing: -.4px; margin: 0; line-height: 1.1; }
+    .page-hero-sub { font-size: 17px; color: rgba(255,255,255,.7); line-height: 1.7; margin: 0; max-width: 520px; }
+    .page-hero-trust { display: flex; flex-direction: column; gap: 10px; }
+    .page-hero-trust-item { display: flex; align-items: center; gap: 12px; font-size: 15px; color: rgba(255,255,255,.9); font-weight: 600; }
+    .page-hero-trust-icon { width: 22px; height: 22px; border-radius: 50%; background: rgba(96,165,250,.3); display: flex; align-items: center; justify-content: center; color: #60a5fa; font-size: 10px; flex-shrink: 0; }
+    .page-hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+    .page-hero-btn-primary { display: inline-flex; align-items: center; gap: 9px; background: rgb(33,103,204); color: #fff; font-size: 16px; font-weight: 700; padding: 16px 32px; border-radius: 50px; text-decoration: none; border: none; cursor: pointer; transition: background .2s, transform .2s, box-shadow .2s; box-shadow: 0 4px 20px rgba(33,103,204,.4); }
+    .page-hero-btn-primary:hover { background: #1a50c8; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(33,103,204,.5); }
+    .page-hero-btn-secondary { display: inline-flex; align-items: center; gap: 9px; background: transparent; color: #fff; font-size: 16px; font-weight: 600; padding: 15px 30px; border-radius: 50px; text-decoration: none; border: 2px solid rgba(255,255,255,.4); transition: border-color .2s, background .2s, transform .2s; }
+    .page-hero-btn-secondary:hover { border-color: #fff; background: rgba(255,255,255,.08); transform: translateY(-2px); }
+    .page-hero-photo { display: flex; align-items: center; justify-content: center; }
+    .page-hero-photo img { width: 280px; height: 280px; border-radius: 50%; object-fit: cover; object-position: center top; border: 5px solid rgba(255,255,255,.2); box-shadow: 0 20px 60px rgba(0,0,0,.4); display: block; }
+    @media (max-width: 860px) {
+      .page-hero-split { grid-template-columns: 1fr; gap: 36px; padding: 60px 24px; }
+      .page-hero-photo { display: none; }
+      .page-hero-left { align-items: center; text-align: center; }
+      .page-hero-sub { max-width: 100%; }
+      .page-hero-buttons { justify-content: center; }
+      .page-hero-trust { align-items: center; }
+    }
+    .kfz-content { max-width: 1100px; margin: 0 auto; padding: 72px 28px 96px; }
+    .kfz-intro { max-width: 700px; margin: 0 auto 72px; text-align: center; }
+    .kfz-intro p { font-size: 17px; color: var(--gray-500); line-height: 1.8; }
+    .optional-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(26,80,200,.08); border: 1px solid rgba(26,80,200,.25); color: var(--blue); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 10px; }
+    .pflicht-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(220,38,38,.08); border: 1px solid rgba(220,38,38,.25); color: #dc2626; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 10px; }
+    .kfz-coverage { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 72px; }
+    .cov-card { background: #fff; border: 1.5px solid var(--gray-100); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.06); display: flex; flex-direction: column; }
+    .cov-card-img { position: relative; height: 220px; overflow: hidden; }
+    .cov-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .cov-card-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(23,45,80,.45) 0%, rgba(23,45,80,0) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 16px 20px; gap: 6px; }
+    .cov-card-img-overlay .optional-badge, .cov-card-img-overlay .pflicht-badge { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.5); color: #fff; align-self: flex-start; }
+    .cov-card-title { font-size: 18px; font-weight: 900; color: #fff; line-height: 1.2; margin: 0; }
+    .cov-card-body { padding: 20px 22px 24px; flex: 1; }
+    .cov-card-desc { font-size: 13px; color: var(--gray-500); line-height: 1.6; margin-bottom: 16px; }
+    .cov-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+    .cov-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+    .cov-check { width: 22px; height: 22px; border-radius: 6px; background: rgba(26,80,200,.1); display: flex; align-items: center; justify-content: center; color: var(--blue); font-size: 11px; flex-shrink: 0; margin-top: 1px; }
+    .cov-list li strong { color: var(--navy); font-weight: 700; }
+    .kfz-section-title { font-size: 24px; font-weight: 900; color: var(--navy); margin-bottom: 8px; }
+    .kfz-section-sub { font-size: 15px; color: var(--gray-500); margin-bottom: 36px; }
+    .gew-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-bottom: 72px; }
+    .gew-card { background: #fff; border: 1.5px solid var(--gray-100); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+    .gew-card-header { background: var(--navy); padding: 20px 22px; display: flex; align-items: flex-start; gap: 14px; height: 130px; overflow: hidden; }
+    .gew-card-header-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,.12); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; flex-shrink: 0; }
+    .gew-card-header h3 { font-size: 15px; font-weight: 800; color: #fff; margin: 0; overflow-wrap: break-word; hyphens: auto; }
+    .gew-card-header p { font-size: 12px; color: rgba(255,255,255,.6); margin: 3px 0 0; }
+    .gew-card-body { padding: 18px 22px 22px; }
+    .gew-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+    .gew-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--gray-500); padding: 7px 10px; border-radius: 8px; margin: 0 -10px; }
+    .gew-icon { width: 26px; height: 26px; border-radius: 7px; background: rgba(26,80,200,.08); display: flex; align-items: center; justify-content: center; color: var(--blue); font-size: 12px; flex-shrink: 0; }
+    .kfz-makler { background: var(--navy); border-radius: 20px; padding: 0 52px 0 0; margin-bottom: 56px; display: grid; grid-template-columns: 220px 1fr 1fr; gap: 48px; align-items: stretch; overflow: hidden; }
+    .kfz-makler-photo { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; min-height: 320px; }
+    .kfz-makler-left { padding: 48px 0; }
+    .kfz-makler-left h2 { font-size: 26px; font-weight: 900; color: #fff; margin-bottom: 14px; line-height: 1.25; }
+    .kfz-makler-left p { font-size: 15px; color: rgba(255,255,255,.65); line-height: 1.7; margin-bottom: 28px; }
+    .kfz-makler-advantages { display: flex; flex-direction: column; gap: 14px; padding: 48px 0; justify-content: center; }
+    .adv-item { display: flex; align-items: center; gap: 14px; }
+    .adv-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(26,80,200,.35); display: flex; align-items: center; justify-content: center; color: #93c5fd; font-size: 16px; flex-shrink: 0; }
+    .adv-text strong { display: block; color: #fff; font-size: 14px; font-weight: 700; }
+    .adv-text span { color: rgba(255,255,255,.55); font-size: 13px; }
+    @media (max-width: 860px) {
+      .kfz-coverage { grid-template-columns: 1fr; }
+      .kfz-makler { grid-template-columns: 1fr; padding: 0; gap: 0; }
+      .kfz-makler-photo { height: 260px; min-height: unset; }
+      .kfz-makler-left { padding: 28px 24px 20px; }
+      .kfz-makler-advantages { padding: 0 24px 28px; justify-content: flex-start; }
+    }
+    @media (max-width: 768px) {
+      .kfz-content { padding: 48px 20px 64px; }
+      .kfz-intro { margin-bottom: 48px; }
+      .kfz-intro p { font-size: 15px; }
+      .kfz-coverage { gap: 20px; margin-bottom: 48px; }
+      .kfz-section-title { font-size: 20px; }
+      .gew-grid { grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 48px; }
+      .kfz-makler-left h2 { font-size: 20px; }
+    }
+    @media (max-width: 480px) {
+      .kfz-content { padding: 36px 16px 52px; }
+      .gew-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-container">
+      <div class="topbar-right"><a href="tel:+491743225885"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a><a href="mailto:daniel@eckversicherung.de"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="start.html" class="logo"><img src="Logo Eck weis.png" alt="Daniel Eck Versicherungsmakler" class="logo-img" /><div class="logo-text"><span class="logo-name" style="color: rgb(33, 103, 204)">Daniel Eck</span><span class="logo-subtitle">Versicherungsmakler</span></div>
+      </a>
+      <nav class="nav-links" id="navLinks"><a href="private-versicherungen.html" class="nav-link active">Private Versicherungen</a><a href="gewerbliche-versicherungen.html" class="nav-link">Gewerbliche Versicherungen</a><a href="start.html#team" class="nav-link">Über uns</a><a href="faq.html" class="nav-link">FAQ</a><a href="blog/index.html" class="nav-link">Ratgeber &amp; Tipps</a><a href="onlineabschluss.html" class="btn btn-nav btn-online-abschluss"><i class="fas fa-laptop"></i> Onlineabschluss</a><button onclick="openCalendlyDirect();window._track&&_track('cta','Termin – Navbar')" class="btn btn-nav" style="background-color: rgb(33, 103, 204)">Termin buchen</button>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Menü"><span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-split">
+      <div class="page-hero-left">
+        <div class="section-label left" style="margin-bottom:4px;"><span class="label-bar short"></span><span>HAFTUNG & RECHT</span></div>
+        <h1 class="page-hero-title">Rechtsschutz&shy;versicherung&nbsp;–<br>Wenn Sie Ihr Recht durchsetzen müssen</h1>
+        <p class="page-hero-sub">Im Streitfall können Anwalts- und Gerichtskosten schnell in die Tausende gehen. Ich prüfe für Sie, welcher Rechtsschutz zu Ihrer Lebenssituation passt – und ob der Schutz im Ernstfall wirklich greift.</p>
+        <div class="page-hero-trust">
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Unabhängiger Vergleich – über 100 Gesellschaften</div>
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Kostenlos & unverbindlich</div>
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Persönliche Betreuung auch im Schadensfall</div>
+        </div>
+        <div class="page-hero-buttons">
+          <button class="page-hero-btn-primary" onclick="openCalendlyDirect();window._track&&_track('cta','Rechtsschutz Hero – Termin')"><i class="fas fa-calendar-check"></i> Termin buchen</button>
+          <a href="tel:+491743225885" class="page-hero-btn-secondary"><i class="fas fa-phone"></i> 0174 / 322 58 85</a>
+        </div>
+      </div>
+      <div class="page-hero-photo"><img src="Dummybild 1_rund.png" alt="Daniel Eck – Ihr Versicherungsmakler" />
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <div class="kfz-content">
+
+    <!-- Intro -->
+    <div class="kfz-intro reveal">
+      <p>Recht haben und Recht bekommen sind zwei verschiedene Dinge – vor allem wenn man die Kosten scheut. Ein einziger Rechtsstreit kann ohne Versicherung mehrere tausend Euro kosten. Ich prüfe für Sie, welche Bereiche Sie wirklich absichern sollten und worauf es beim Kleingedruckten ankommt.</p>
+    </div>
+
+    <!-- 3 Hauptbereiche -->
+    <div class="kfz-coverage">
+
+      <!-- Privat & Familie -->
+      <div class="cov-card reveal">
+        <div class="cov-card-img">
+          <img src="https://images.unsplash.com/photo-1758518729706-b1810dd39cc6?auto=format&fit=crop&w=800&q=80" alt="Beratungsgespräch mit Rechtsanwalt" loading="lazy" />
+          <div class="cov-card-img-overlay">
+            <div class="optional-badge" style="margin-bottom:0;"><i class="fas fa-house-user"></i> Häufigster Bereich</div>
+            <div class="cov-card-title">Privat & Familie</div>
+          </div>
+        </div>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Von Nachbarschaftsstreitigkeiten bis zu Verbraucherrechten – im privaten Alltag gibt es viele Situationen, in denen rechtliche Hilfe plötzlich nötig wird.</p>
+          <ul class="cov-list">
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Nachbarschaftsstreitigkeiten</strong> (Lärm, Grundstücksgrenzen)</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Vertragsstreitigkeiten</strong> mit Händlern & Dienstleistern</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Schadensersatz</strong> nach Unfällen durchsetzen</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Erbstreitigkeiten</strong> und Familienrecht</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Ich prüfe</strong> welche Bereiche wirklich mitversichert sind</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Beruf & Arbeit -->
+      <div class="cov-card reveal">
+        <div class="cov-card-img">
+          <img src="https://images.unsplash.com/photo-1758518732175-5d608ba3abdf?auto=format&fit=crop&w=800&q=80" alt="Professionelles Meeting am Arbeitsplatz" loading="lazy" />
+          <div class="cov-card-img-overlay">
+            <div class="optional-badge" style="margin-bottom:0;"><i class="fas fa-briefcase"></i> Wichtige Absicherung</div>
+            <div class="cov-card-title">Beruf & Arbeit</div>
+          </div>
+        </div>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Streitigkeiten mit dem Arbeitgeber – von der Kündigung bis zu nicht ausgezahlten Überstunden – sind ohne Rechtsschutz ein erhebliches finanzielles Risiko.</p>
+          <ul class="cov-list">
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Kündigungsschutz</strong> und Abfindungsverhandlungen</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Nicht ausgezahlte Löhne</strong> & Überstunden</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Mobbing und Diskriminierung</strong> am Arbeitsplatz</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Abmahnungen</strong> und arbeitsrechtliche Konflikte</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Ich prüfe</strong> Wartezeiten und Leistungsumfang</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Verkehr & Mobilität -->
+      <div class="cov-card reveal">
+        <div class="cov-card-img">
+          <img src="https://images.unsplash.com/photo-1673187139612-6bf684a74815?auto=format&fit=crop&w=800&q=80" alt="Beschädigtes Auto nach Verkehrsunfall" loading="lazy" />
+          <div class="cov-card-img-overlay">
+            <div class="optional-badge" style="margin-bottom:0;"><i class="fas fa-car-burst"></i> Hohe Prozesskosten</div>
+            <div class="cov-card-title">Verkehr & Mobilität</div>
+          </div>
+        </div>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Verkehrsunfälle, Bußgeldbescheide oder Führerscheinentzug – beim Verkehrsrechtsschutz entstehen schnell hohe Kosten für Anwalt und Gericht.</p>
+          <ul class="cov-list">
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Unfälle und Schuldfragen</strong> klären lassen</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Bußgeld- und Ordnungswidrigkeitsverfahren</strong></span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Führerscheinentzug</strong> anfechten</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Kfz-Kauf und Gewährleistung</strong> durchsetzen</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Ich prüfe</strong> ob Straf-Rechtsschutz inklusive ist</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Zusatzbausteine -->
+    <div class="reveal">
+      <div class="kfz-section-title">Worauf ich beim Vergleich achte</div>
+      <div class="kfz-section-sub">Diese Punkte entscheiden, ob der Versicherer im Streitfall wirklich zahlt.</div>
+    </div>
+
+    <div class="gew-grid">
+
+      <div class="gew-card reveal">
+        <div class="gew-card-header">
+          <div class="gew-card-header-icon"><i class="fas fa-euro-sign"></i></div>
+          <div><h3>Deckungssummen</h3><p>Hoch genug für alle Instanzen</p></div>
+        </div>
+        <div class="gew-card-body">
+          <ul class="gew-list">
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Mindestens 300.000 Euro pro Rechtsfall empfohlen</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Mehrinstanzliche Verfahren können sehr teuer werden</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Ich prüfe ob alle Bereiche ausreichend gedeckt sind</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gew-card reveal">
+        <div class="gew-card-header">
+          <div class="gew-card-header-icon"><i class="fas fa-clock"></i></div>
+          <div><h3>Wartezeiten</h3><p>Nicht jede Police gilt sofort</p></div>
+        </div>
+        <div class="gew-card-body">
+          <ul class="gew-list">
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Viele Tarife haben 3 Monate Wartezeit nach Abschluss</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Manche Bereiche (z. B. Mietrecht) warten länger</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Ich vergleiche Wartezeiten aller Anbieter für Sie</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gew-card reveal">
+        <div class="gew-card-header">
+          <div class="gew-card-header-icon"><i class="fas fa-hand-holding-dollar"></i></div>
+          <div><h3>Selbstbeteiligung</h3><p>Einfluss auf die Prämie</p></div>
+        </div>
+        <div class="gew-card-body">
+          <ul class="gew-list">
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Höhere Selbstbeteiligung senkt den Jahresbeitrag</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>250–500 Euro Selbstbeteiligung ist üblich</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Ich finde die beste Balance für Ihre Situation</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gew-card reveal">
+        <div class="gew-card-header">
+          <div class="gew-card-header-icon"><i class="fas fa-phone-volume"></i></div>
+          <div><h3>Telefonische Erst&shy;beratung</h3><p>Oft bereits inklusive</p></div>
+        </div>
+        <div class="gew-card-body">
+          <ul class="gew-list">
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Viele Tarife bieten kostenlose Rechtshotline</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Erste Einschätzung ohne Gang zum Anwalt</span></li>
+            <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Ich prüfe welche Zusatzleistungen wirklich enthalten sind</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FAQ -->
+    <div style="padding-top: 120px; padding-bottom: 120px; border-top: 1px solid #e2e8f0;">
+      <div class="section-label reveal" style="justify-content:center; margin-bottom:12px;"><span class="label-bar"></span><span>FAQ</span><span class="label-bar"></span>
+      </div>
+      <h2 class="section-title reveal" style="text-align:center; margin-bottom:36px;">Häufige Fragen zur Rechtsschutzversicherung</h2>
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Welche Bereiche deckt eine Rechtsschutzversicherung ab?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Je nach Tarif umfasst die Rechtsschutzversicherung verschiedene Lebensbereiche: Privat- und Familienrechtsschutz, Berufsrechtsschutz, Verkehrsrechtsschutz und Mietrechtsschutz. Nicht jeder Tarif deckt alle Bereiche ab. Ich prüfe für Sie, welche Kombination zu Ihrer Lebenssituation passt und wo Lücken bestehen.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Wie lange sind die Wartezeiten bei einem Neuabschluss?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Die meisten Rechtsschutzversicherungen haben eine allgemeine Wartezeit von drei Monaten nach Vertragsabschluss. Für bestimmte Bereiche wie Mietrecht oder Familienrecht kann die Wartezeit bis zu zwölf Monate betragen. Nur der Verkehrsrechtsschutz gilt in der Regel sofort. Ich achte beim Vergleich besonders auf diese Fristen.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Gilt die Rechtsschutzversicherung auch für strafrechtliche Verfahren?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Das kommt auf den Tarif an. Viele Policen übernehmen Kosten für strafrechtliche Verfahren, wenn kein vorsätzliches Handeln nachgewiesen wurde. Einige Tarife bieten einen erweiterten Straf-Rechtsschutz, der auch bei Fahrlässigkeitsvorwürfen greift. Ich vergleiche für Sie, welche Anbieter diesen Schutz inklusive haben.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Was kostet mich ein Rechtsstreit ohne Versicherung?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Ein einfaches Arbeitsrechtverfahren vor dem Arbeitsgericht kann bereits 1.500 bis 5.000 Euro kosten – je nach Streitwert und Verfahrensdauer. In höheren Instanzen oder bei komplexen Zivilsachen können schnell 10.000 Euro und mehr entstehen. Die Jahresprämie einer guten Rechtsschutzversicherung liegt oft bei weit unter 300 Euro.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Kostet mich die Beratung durch Sie als Makler etwas?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Nein – meine Beratung ist vollständig kostenlos. Als Versicherungsmakler erhalte ich eine Courtage direkt vom Versicherer, ohne Aufpreis für Sie. Sie profitieren von einem unabhängigen Vergleich und persönlicher Betreuung – von der Auswahl bis zum Schadensfall.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Makler-Vorteil -->
+    <div class="kfz-makler reveal">
+      <img src="Dummybild 1.png" alt="Daniel Eck – Versicherungsmakler" class="kfz-makler-photo" />
+      <div class="kfz-makler-left">
+        <h2>Warum die Rechtsschutzversicherung über mich abschließen?</h2>
+        <p>Ob Privat-, Berufs- oder Verkehrsrechtsschutz – ich vergleiche für Sie die passenden Tarife und achte auf Deckungssummen, Wartezeiten und Ausschlüsse im Kleingedruckten. So sind Sie im Streitfall wirklich abgesichert.</p>
+        <a href="kontakt.html" class="btn btn-primary" style="background-color: rgb(33, 103, 204); text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">Jetzt Kontakt aufnehmen <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="kfz-makler-advantages">
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-magnifying-glass-dollar"></i></div><div class="adv-text"><strong>Unabhängiger Vergleich</strong><span>Aus über 200 Gesellschaften – kein Konzern-Druck</span></div></div>
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-handshake"></i></div><div class="adv-text"><strong>Persönliche Beratung</strong><span>Individuell auf Ihre Lebenssituation zugeschnitten</span></div></div>
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-file-shield"></i></div><div class="adv-text"><strong>Schadensunterstützung</strong><span>Ich begleite Sie durch den gesamten Rechtsfall</span></div></div>
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-euro-sign"></i></div><div class="adv-text"><strong>Kostenlos für Sie</strong><span>Mein Honorar zahlt die Versicherungsgesellschaft</span></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="kontakt">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="start.html" class="logo footer-logo"><div class="footer-logo-bracket"></div><div class="logo-text"><span class="logo-name">Daniel Eck</span><span class="logo-subtitle">Versicherungsmakler</span></div></a><p>Unabhängige Versicherungsberatung in 3. Generation. Persönlich, transparent und immer in Ihrem Interesse.</p><div class="footer-social"><a href="https://www.facebook.com/profile.php?id=61565584784878" target="_blank" rel="noopener" class="footer-social-btn fsb-fb" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/daniel.eck.versicherungsmakler/" target="_blank" rel="noopener" class="footer-social-btn fsb-ig" aria-label="Instagram"><i class="fab fa-instagram"></i></a></div>
+      </div>
+      <div class="footer-col"><h4>Navigation</h4><ul><li><a href="start.html#leistungen">Leistungen</a></li><li><a href="start.html#team">Über uns</a></li><li><a href="private-versicherungen.html">Private Versicherungen</a></li><li><a href="gewerbliche-versicherungen.html">Gewerbliche Versicherungen</a></li><li><a href="faq.html">FAQ</a></li><li><a href="kontakt.html">Kontakt</a></li></ul>
+      </div>
+      <div class="footer-col"><h4>Kontakt</h4><ul class="footer-contact-list"><li><i class="fas fa-phone"></i><a href="tel:+491743225885">0174 / 322 58 85</a></li><li><i class="fas fa-envelope"></i><a href="mailto:daniel@eckversicherung.de">daniel@eckversicherung.de</a></li><li><i class="fas fa-location-dot"></i><a href="https://www.google.com/maps/place/Talstra%C3%9Fe+73,+98574+Schmalkalden" target="_blank" class="maps-link">Talstraße 73<br />98574 Schmalkalden</a></li></ul>
+      </div>
+      <div class="footer-col"><h4>Schadenhotline</h4><a href="tel:+491743225885" class="schadenhotline-box" style="background-color: rgb(33, 103, 204)"><i class="fas fa-phone"></i><div><span class="sh-number">0174 / 322 58 85</span><span class="sh-label">Im Schadensfall sofort anrufen</span></div></a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Daniel Eck – Versicherungsmakler. Alle Rechte vorbehalten.</p>
+      <div class="footer-bottom-links"><a href="datenschutz.html">Datenschutz</a><a href="impressum.html">Impressum</a><a href="erstinformation.html">Erstinformation</a><a href="#" onclick="openCookieSettings();return false;">Cookie-Einstellungen</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="funnel-overlay" id="funnelOverlay" onclick="closeFunnelOutside(event)">
+    <div class="funnel-modal" role="dialog" aria-modal="true">
+      <button class="funnel-close" onclick="closeFunnel()" aria-label="Schließen"><i class="fas fa-times"></i></button>
+      <div class="funnel-progress-wrap"><div class="funnel-progress-bar" id="funnelBar"></div></div>
+      <p class="funnel-step-label" id="funnelStepLabel">Schritt 1 von 4</p>
+      <div class="funnel-body" id="funnelBody"></div>
+    </div>
+  </div>
+
+  <script src="script.js?v=8"></script>
+  <script src="cookie.js"></script>
+  <script src="analytics.js" defer></script>
+  <div class="mobile-cta-bar">
+    <a href="tel:+491743225885" class="mobile-cta-call"><i class="fas fa-phone"></i><span>Anrufen</span></a>
+    <a href="kontakt.html" class="mobile-cta-termin"><i class="fas fa-calendar-check"></i><span>Termin buchen</span></a>
+  </div>
+  <div class="social-peek" id="socialPeek">
+    <a href="https://www.facebook.com/profile.php?id=61565584784878" target="_blank" rel="noopener" class="social-peek-btn social-peek-fb" aria-label="Facebook"><span class="social-peek-tooltip">Auf Facebook folgen<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/daniel.eck.versicherungsmakler/" target="_blank" rel="noopener" class="social-peek-btn social-peek-ig" aria-label="Instagram"><span class="social-peek-tooltip">Auf Instagram folgen<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/491743225885" target="_blank" rel="noopener" class="social-peek-btn social-peek-wa" aria-label="WhatsApp"><span class="social-peek-tooltip">WhatsApp schreiben<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-whatsapp"></i></a>
+  </div>
+</body>
+</html>
