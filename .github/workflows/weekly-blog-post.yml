@@ -118,10 +118,9 @@ jobs:
           WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           WA_TO:       ${{ secrets.WHATSAPP_TO_NUMBER }}
-          SITE_URL:    ${{ secrets.SITE_URL }}
         run: |
-          IMAGE_URL="${SITE_URL}/social/latest-ig.png"
-          # 1) Bild mit Instagram-Caption schicken (direkt als WhatsApp-Status verwendbar)
+          RAW_BASE="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/master/social"
+          # 1) Daniel-Bild
           curl -s -X POST "https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages" \
             -H "Authorization: Bearer $WA_TOKEN" \
             -H "Content-Type: application/json" \
@@ -130,7 +129,7 @@ jobs:
               \"to\": \"$WA_TO\",
               \"type\": \"image\",
               \"image\": {
-                \"link\": \"$IMAGE_URL\",
+                \"link\": \"${RAW_BASE}/latest-ig.png\",
                 \"caption\": \"$POST_INSTA\"
               }
             }"
@@ -143,7 +142,7 @@ jobs:
               \"to\": \"$WA_TO\",
               \"type\": \"image\",
               \"image\": {
-                \"link\": \"${SITE_URL}/social/latest-ig-heiko.png\",
+                \"link\": \"${RAW_BASE}/latest-ig-heiko.png\",
                 \"caption\": \"$POST_INSTA\"
               }
             }"
