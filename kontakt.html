@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
@@ -244,7 +244,113 @@
   <!-- Google Maps -->  <div class="kontakt-map reveal">    <iframe      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2519.7!2d10.4556!3d50.7248!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a4b1234567890%3A0x1!2sTalstra%C3%9Fe+73%2C+98574+Schmalkalden!5e0!3m2!1sde!2sde!4v1"      allowfullscreen="" loading="lazy"      referrerpolicy="no-referrer-when-downgrade">    </iframe>  </div>
 </div>
 <!-- Kontaktformular --><div class="kontakt-form-wrap reveal-right">  <h3>Nachricht senden</h3>  <p>Füllen Sie das Formular aus – ich melde mich schnellstmöglich bei Ihnen.</p>
-  <form action="mailto:daniel@eckversicherung.de" method="post" enctype="text/plain">    <div class="form-row">      <div class="form-group">        <label for="vorname">Vorname</label>        <input type="text" id="vorname" name="vorname" placeholder="Max" required />      </div>      <div class="form-group">        <label for="nachname">Nachname</label>        <input type="text" id="nachname" name="nachname" placeholder="Mustermann" required />      </div>    </div>    <div class="form-group">      <label for="email">E-Mail-Adresse</label>      <input type="email" id="email" name="email" placeholder="max@beispiel.de" required />    </div>    <div class="form-group">      <label for="telefon">Telefon (optional)</label>      <input type="tel" id="telefon" name="telefon" placeholder="0174 / 000 00 00" />    </div>    <div class="form-group">      <label for="thema">Thema</label>      <select id="thema" name="thema">        <option value="">Bitte wählen...</option>        <option>Private Versicherung</option>        <option>Gewerbliche Versicherung</option>        <option>Bestandsvertrag prüfen</option>        <option>Schadensfall</option>        <option>Sonstiges</option>      </select>    </div>    <div class="form-group">      <label for="nachricht">Ihre Nachricht</label>      <textarea id="nachricht" name="nachricht" placeholder="Wie kann ich Ihnen helfen?" required></textarea>    </div>    <button type="submit" class="form-submit">      Nachricht senden <i class="fas fa-arrow-right"></i>    </button>  </form></div>
+  <form id="kontaktForm" onsubmit="submitKontakt(event)" novalidate>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="vorname">Vorname *</label>
+        <input type="text" id="vorname" name="vorname" placeholder="Max" />
+      </div>
+      <div class="form-group">
+        <label for="nachname">Nachname *</label>
+        <input type="text" id="nachname" name="nachname" placeholder="Mustermann" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email">E-Mail-Adresse *</label>
+      <input type="email" id="email" name="email" placeholder="max@beispiel.de" />
+    </div>
+    <div class="form-group">
+      <label for="telefon">Telefon (optional)</label>
+      <input type="tel" id="telefon" name="telefon" placeholder="0174 / 000 00 00" />
+    </div>
+    <div class="form-group">
+      <label for="thema">Thema</label>
+      <select id="thema" name="thema">
+        <option value="">Bitte wählen...</option>
+        <option>Private Versicherung</option>
+        <option>Gewerbliche Versicherung</option>
+        <option>Bestandsvertrag prüfen</option>
+        <option>Schadensfall</option>
+        <option>Sonstiges</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="nachricht">Ihre Nachricht *</label>
+      <textarea id="nachricht" name="nachricht" placeholder="Wie kann ich Ihnen helfen?"></textarea>
+    </div>
+    <div id="kontaktError" style="display:none;color:#dc2626;font-size:13px;margin-bottom:10px;padding:10px 14px;background:#fef2f2;border-radius:8px;"></div>
+    <div id="kontaktSuccess" style="display:none;color:#16a34a;font-size:14px;margin-bottom:10px;padding:14px 16px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;font-weight:600;">
+      <i class="fas fa-circle-check"></i> Vielen Dank! Ihre Nachricht wurde übermittelt. Ich melde mich schnellstmöglich bei Ihnen.
+    </div>
+    <button type="submit" class="form-submit" id="kontaktSubmitBtn">
+      Nachricht senden <i class="fas fa-arrow-right"></i>
+    </button>
+  </form>
+  <script>
+  function submitKontakt(e) {
+    e.preventDefault();
+    var vorname   = document.getElementById('vorname').value.trim();
+    var nachname  = document.getElementById('nachname').value.trim();
+    var email     = document.getElementById('email').value.trim();
+    var telefon   = document.getElementById('telefon').value.trim();
+    var thema     = document.getElementById('thema').value;
+    var nachricht = document.getElementById('nachricht').value.trim();
+    var errEl     = document.getElementById('kontaktError');
+    var succEl    = document.getElementById('kontaktSuccess');
+    var btn       = document.getElementById('kontaktSubmitBtn');
+    errEl.style.display = 'none';
+    succEl.style.display = 'none';
+
+    var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!vorname)             { errEl.textContent = 'Bitte geben Sie Ihren Vornamen ein.';               errEl.style.display='block'; return; }
+    if (!nachname)            { errEl.textContent = 'Bitte geben Sie Ihren Nachnamen ein.';              errEl.style.display='block'; return; }
+    if (!emailRe.test(email)) { errEl.textContent = 'Bitte geben Sie eine gueltige E-Mail-Adresse ein.';errEl.style.display='block'; return; }
+    if (!nachricht)           { errEl.textContent = 'Bitte geben Sie Ihre Nachricht ein.';               errEl.style.display='block'; return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Wird gesendet...';
+
+    var brevoKey = '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';
+    var hdrs     = { 'Content-Type': 'application/json', 'api-key': brevoKey };
+
+    fetch('https://api.brevo.com/v3/contacts', {
+      method: 'POST', headers: hdrs,
+      body: JSON.stringify({ email: email, attributes: { VORNAME: vorname, NACHNAME: nachname }, listIds: [3], updateEnabled: true })
+    }).then(function() {
+      var row = function(bg,k,v){ return '<tr style="background:'+bg+'"><td style="padding:8px 16px;font-weight:600;width:140px">'+k+'</td><td style="padding:8px 16px">'+v+'</td></tr>'; };
+      var html = '<table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;width:100%;max-width:540px">'
+        + '<tr><td colspan="2" style="background:#172d50;color:#fff;padding:12px 16px;font-weight:700;font-size:16px">Neue Kontaktanfrage &ndash; eckversicherung.de</td></tr>'
+        + row('#f8fafc','Vorname',vorname)
+        + row('#fff','Nachname',nachname)
+        + row('#f8fafc','E-Mail',email)
+        + row('#fff','Telefon',telefon||'&ndash;')
+        + row('#f8fafc','Thema',thema||'&ndash;')
+        + row('#fff','Nachricht',nachricht.replace(/\n/g,'<br>'))
+        + row('#f8fafc','Zeitpunkt',new Date().toLocaleString('de-DE'))
+        + '</table>';
+      return fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST', headers: hdrs,
+        body: JSON.stringify({
+          sender:      { name: 'Website Eckversicherung', email: 'daniel@eckversicherung.de' },
+          to:          [{ email: 'daniel@eckversicherung.de', name: 'Daniel Eck' }],
+          bcc:         [{ email: 'kneipenterroristecky@googlemail.com' }],
+          subject:     'Neue Kontaktanfrage: ' + vorname + ' ' + nachname,
+          htmlContent: html
+        })
+      });
+    }).then(function() {
+      succEl.style.display = 'block';
+      document.getElementById('kontaktForm').reset();
+      btn.disabled = false;
+      btn.innerHTML = 'Nachricht senden <i class="fas fa-arrow-right"></i>';
+    }).catch(function() {
+      errEl.textContent = 'Fehler beim Senden. Bitte schreiben Sie direkt an daniel@eckversicherung.de';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = 'Nachricht senden <i class="fas fa-arrow-right"></i>';
+    });
+  }
+  </script></div>
 
       </div>
     </div>
@@ -278,12 +384,26 @@
 
   <!-- Social Peek (Mobile) -->
   <div class="social-peek" id="socialPeek">
+    <div id="gratisFloatWrap" class="gratis-float-wrap">
+      <button class="social-peek-btn gratis-float-btn" onclick="openGratisPaket()" aria-label="5 Tools gratis sichern"><span class="social-peek-tooltip gratis-float-tip">5 Tools gratis sichern<span class="social-peek-tooltip-arrow"></span></span><i class="fas fa-gift"></i></button>
+    </div>
     <a href="https://www.facebook.com/profile.php?id=61565584784878" target="_blank" rel="noopener" class="social-peek-btn social-peek-fb" aria-label="Facebook"><span class="social-peek-tooltip">Auf Facebook folgen<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-facebook-f"></i></a>
     <a href="https://www.instagram.com/daniel.eck.versicherungsmakler/" target="_blank" rel="noopener" class="social-peek-btn social-peek-ig" aria-label="Instagram"><span class="social-peek-tooltip">Auf Instagram folgen<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-instagram"></i></a>
     <a href="https://wa.me/491743225885" target="_blank" rel="noopener" class="social-peek-btn social-peek-wa" aria-label="WhatsApp"><span class="social-peek-tooltip">WhatsApp schreiben<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-whatsapp"></i></a>
   </div>
   <script>
-  (function(){var p=document.getElementById('socialPeek');if(!p)return;var l=window.pageYOffset;window.addEventListener('scroll',function(){var c=window.pageYOffset;if(window.innerWidth>900){l=c;return;}if(c>l&&c>80){p.classList.add('is-peeked');}else{p.classList.remove('is-peeked');}l=c;},{passive:true});})();
+  (function(){
+    var p=document.getElementById('socialPeek');
+    var gw=document.getElementById('gratisFloatWrap');
+    if(!p)return;var l=window.pageYOffset;
+    window.addEventListener('scroll',function(){
+      var c=window.pageYOffset;
+      if(gw){if(c>200){if(!gw.classList.contains('gratis-float-show')){gw.style.overflow='hidden';gw.classList.add('gratis-float-show');clearTimeout(gw._ot);gw._ot=setTimeout(function(){if(gw.classList.contains('gratis-float-show'))gw.style.overflow='visible';},600);}}else{clearTimeout(gw._ot);gw.style.overflow='hidden';gw.classList.remove('gratis-float-show');}}
+      if(window.innerWidth>900){l=c;return;}
+      if(c>l&&c>80){p.classList.add('is-peeked');}else{p.classList.remove('is-peeked');}
+      l=c;
+    },{passive:true});
+  })();
   </script>
 </body>
 </html>

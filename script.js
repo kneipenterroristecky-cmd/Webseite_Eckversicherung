@@ -9,13 +9,42 @@ window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 12);
 }, { passive: true });
 
-/* ---- Social Peek: bei Scroll-Down verstecken ---- */
+/* ---- Gratis-Paket: Fallback auf Unterseiten → Weiterleitung zu start.html?gratis=1 ---- */
+window.openGratisPaket = function() {
+  var path = window.location.pathname.replace(/\\/g, '/');
+  var parts = path.split('/').filter(Boolean);
+  if (parts.length > 0 && parts[parts.length - 1].indexOf('.html') > -1) parts.pop();
+  var base = '';
+  for (var i = 0; i < parts.length; i++) base += '../';
+  window.location.href = base + 'start.html?gratis=1';
+};
+
+/* ---- Social Peek: bei Scroll-Down verstecken + Gratis-Button einblenden ---- */
 (function() {
   var lastScrollY = window.scrollY;
+  var gw = null;
+  document.addEventListener('DOMContentLoaded', function() { gw = document.getElementById('gratisFloatWrap'); });
   window.addEventListener('scroll', function() {
     var sp = document.getElementById('socialPeek');
     if (!sp) return;
     var y = window.scrollY;
+    /* Gratis-Button: ab 200px einblenden */
+    if (!gw) gw = document.getElementById('gratisFloatWrap');
+    if (gw) {
+      if (y > 200) {
+        if (!gw.classList.contains('gratis-float-show')) {
+          gw.style.overflow = 'hidden';
+          gw.classList.add('gratis-float-show');
+          clearTimeout(gw._ot);
+          gw._ot = setTimeout(function() { if (gw.classList.contains('gratis-float-show')) gw.style.overflow = 'visible'; }, 600);
+        }
+      } else {
+        clearTimeout(gw._ot);
+        gw.style.overflow = 'hidden';
+        gw.classList.remove('gratis-float-show');
+      }
+    }
+    /* Social Peek panel: bei Scroll-Down ausblenden */
     if (y > lastScrollY && y > 80) {
       sp.classList.add('peek-hidden');
     } else {
@@ -485,7 +514,40 @@ function funnelSubmit() {
       Zeitraum:   funnelSteps[3].options[funnelAnswers[3]] ? funnelSteps[3].options[funnelAnswers[3]].label : '–',
       _template:  'table'
     })
-  }).catch(function() {}); // silent fail — booking still proceeds
+  }).catch(function() {});
+
+  // Brevo: Kontakt in "Terminanfragen" (Liste 4) speichern + Daniel benachrichtigen
+  var nameParts = name.split(' ');
+  var firstName = nameParts[0];
+  var lastName  = nameParts.slice(1).join(' ') || '';
+  var thema     = funnelAnswers[2] === 'custom' ? funnelCustomSparte : (funnelSteps[2].options[funnelAnswers[2]] ? funnelSteps[2].options[funnelAnswers[2]].label : '–');
+  var zeitraum  = funnelSteps[3].options[funnelAnswers[3]] ? funnelSteps[3].options[funnelAnswers[3]].label : '–';
+
+  var brevoKey = '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';
+  var brevoHeaders = { 'Content-Type': 'application/json', 'api-key': brevoKey };
+
+  fetch('https://api.brevo.com/v3/contacts', {
+    method: 'POST',
+    headers: brevoHeaders,
+    body: JSON.stringify({
+      email: email,
+      attributes: { VORNAME: firstName, NACHNAME: lastName, SMS: phone },
+      listIds: [4],
+      updateEnabled: true
+    })
+  }).catch(function() {});
+
+  fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: brevoHeaders,
+    body: JSON.stringify({
+      sender:      { name: 'Website Eckversicherung', email: 'daniel@eckversicherung.de' },
+      to:          [{ email: 'daniel@eckversicherung.de', name: 'Daniel Eck' }],
+      bcc:         [{ email: 'kneipenterroristecky@googlemail.com' }],
+      subject:     'Neue Terminanfrage: ' + name,
+      htmlContent: '<table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;width:100%;max-width:500px"><tr><td colspan="2" style="background:#172d50;color:#fff;padding:12px 16px;font-weight:700;font-size:16px">Neue Terminanfrage über den Funnel</td></tr><tr style="background:#f8fafc"><td style="padding:8px 16px;font-weight:600;width:140px">Name</td><td style="padding:8px 16px">' + name + '</td></tr><tr><td style="padding:8px 16px;font-weight:600">Telefon</td><td style="padding:8px 16px">' + phone + '</td></tr><tr style="background:#f8fafc"><td style="padding:8px 16px;font-weight:600">E-Mail</td><td style="padding:8px 16px">' + email + '</td></tr><tr><td style="padding:8px 16px;font-weight:600">Thema</td><td style="padding:8px 16px">' + thema + '</td></tr><tr style="background:#f8fafc"><td style="padding:8px 16px;font-weight:600">Zeitraum</td><td style="padding:8px 16px">' + zeitraum + '</td></tr><tr><td style="padding:8px 16px;font-weight:600">Zeitpunkt</td><td style="padding:8px 16px">' + new Date().toLocaleString('de-DE') + '</td></tr></table>'
+    })
+  }).catch(function() {});
 
   showCalendlyInline();
 }

@@ -1,0 +1,636 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Versicherungs-Check – Nach Lebensphase</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --navy:    #172d50;
+  --blue:    #1a50c8;
+  --blue-lt: #2e68de;
+  --sky:     #60a5fa;
+  --gray-50: #f8fafc;
+  --gray-100:#f1f5f9;
+  --gray-200:#e2e8f0;
+  --gray-400:#94a3b8;
+  --gray-500:#64748b;
+  --white:   #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 8pt;
+  color: var(--navy);
+  background: #e5e7eb;
+  line-height: 1.4;
+}
+
+.page {
+  margin: 6mm auto;
+  background: var(--white);
+  page-break-after: always;
+}
+.page:last-child { page-break-after: avoid; }
+
+/* Page 1: Landscape */
+.page-landscape {
+  width: 297mm;
+  min-height: 210mm;
+  padding: 8mm 12mm 7mm;
+}
+
+/* Page 2: Portrait */
+.page-portrait {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 9mm 11mm 8mm;
+}
+
+/* ── HEADER ── */
+.doc-header {
+  background: var(--navy);
+  border-radius: 9px 9px 0 0;
+  padding: 10px 16px 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.doc-header .left .eyebrow {
+  font-size: 6pt;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sky);
+  margin-bottom: 2px;
+}
+.doc-header h1 {
+  font-size: 12pt;
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.2;
+}
+.doc-header .subtitle {
+  font-size: 7pt;
+  color: rgba(255,255,255,.55);
+  margin-top: 2px;
+}
+.doc-header .branding {
+  text-align: right;
+  font-size: 7pt;
+  color: rgba(255,255,255,.5);
+  line-height: 1.65;
+  flex-shrink: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+.doc-header .branding strong {
+  display: block;
+  color: var(--sky);
+  font-size: 7.5pt;
+  font-weight: 700;
+}
+
+/* ── LEGEND ── */
+.legend-bar {
+  background: var(--blue);
+  padding: 4px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+.legend-bar .lbl {
+  font-size: 6pt;
+  color: rgba(255,255,255,.55);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.legend-bar .sep { color: rgba(255,255,255,.25); flex-shrink: 0; }
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.legend-item .desc {
+  font-size: 6pt;
+  color: rgba(255,255,255,.8);
+  font-weight: 400;
+}
+.status-hint {
+  margin-left: auto;
+  font-size: 6pt;
+  color: rgba(255,255,255,.65);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── BADGES ── */
+.badge {
+  display: inline-block;
+  font-size: 6.5pt;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: .02em;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+/* Gesetzlich vorgeschrieben */
+.b-law  { background: #991b1b; color: #fff; }
+/* Dringend empfohlen */
+.b-must { background: #b45309; color: #fff; }
+/* Empfohlen */
+.b-good { background: #166534; color: #fff; }
+/* Optional */
+.b-opt  { background: #4b5563; color: #fff; }
+
+/* ── TABLE ── */
+.table-wrap {
+  border: 1px solid var(--gray-200);
+  border-top: none;
+  border-radius: 0 0 9px 9px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* Fixed column widths — optimiert für Querformat */
+col.c-name   { width: 26%; }
+col.c-phase  { width: 13%; }
+col.c-status { width: 9%;  }
+
+thead th {
+  background: var(--gray-100);
+  padding: 5px 3px;
+  font-size: 6.5pt;
+  font-weight: 700;
+  text-align: center;
+  color: var(--navy);
+  border-bottom: 1.5px solid var(--gray-200);
+  border-right: 1px solid var(--gray-200);
+  line-height: 1.3;
+  vertical-align: bottom;
+  overflow: hidden;
+}
+thead th:first-child {
+  text-align: left;
+  padding-left: 10px;
+}
+thead th:last-child { border-right: none; }
+thead th .sub {
+  display: block;
+  font-weight: 400;
+  color: var(--gray-500);
+  font-size: 5.5pt;
+}
+
+tbody tr:nth-child(even) td { background: var(--white); }
+
+tbody td {
+  padding: 4px 3px;
+  border-bottom: 1px solid var(--gray-200);
+  border-right: 1px solid var(--gray-200);
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+}
+tbody td:first-child {
+  text-align: left;
+  padding-left: 10px;
+  font-size: 7pt;
+  font-weight: 500;
+}
+tbody td:last-child { border-right: none; }
+
+.cat-row td {
+  background: var(--navy) !important;
+  color: var(--white);
+  font-size: 6pt;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  text-align: left !important;
+}
+
+.cb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--gray-400);
+  border-radius: 3px;
+  vertical-align: middle;
+  cursor: pointer;
+  font-size: 10pt;
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+  background: var(--white);
+  transition: background .1s, border-color .1s;
+}
+.cb[data-state="1"] { background: #dcfce7; border-color: #16a34a; color: #16a34a; }
+.cb[data-state="2"] { background: #fee2e2; border-color: #dc2626; color: #dc2626; }
+.cb[data-state="3"] { background: #fef9c3; border-color: #ca8a04; color: #ca8a04; }
+
+.table-foot {
+  background: var(--gray-50);
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--gray-200);
+  font-size: 6pt;
+  color: var(--gray-500);
+}
+
+/* ── PAGE 2 ── */
+.p2-header {
+  background: var(--navy);
+  border-radius: 9px 9px 0 0;
+  padding: 10px 16px 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.p2-header .eyebrow { font-size: 6pt; font-weight: 700; letter-spacing:.14em; text-transform:uppercase; color:var(--sky); margin-bottom:2px; }
+.p2-header h2 { font-size: 12pt; font-weight: 900; color: var(--white); }
+.p2-header .branding { text-align:right; font-size:7pt; color:rgba(255,255,255,.5); line-height:1.65; flex-shrink:0; white-space:nowrap; }
+.p2-header .branding strong { display:block; color:var(--sky); font-size:7.5pt; font-weight:700; }
+
+.blue-line { background: var(--blue); height: 3px; margin-bottom: 10px; }
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.info-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-top: 2.5px solid var(--blue);
+  border-radius: 7px;
+  padding: 8px 10px;
+}
+.info-card .tag {
+  display: inline-block;
+  background: rgba(26,80,200,.08);
+  color: var(--blue-lt);
+  font-size: 5.5pt;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 20px;
+  margin-bottom: 4px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.info-card h3 { font-size: 7.5pt; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+.info-card p  { font-size: 6.5pt; color: var(--gray-500); line-height: 1.5; }
+
+.cta-box {
+  background: var(--navy);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 9px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.cta-box .cta-text { font-size: 7.5pt; font-weight: 600; color: var(--white); }
+.cta-box .cta-sub  { font-size: 6pt; color: rgba(255,255,255,.55); margin-top: 2px; }
+.cta-box .cta-url  { font-size: 8pt; color: var(--sky); font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+
+.page-num { text-align: center; margin-top: 7px; font-size: 6pt; color: var(--gray-400); }
+
+@media print {
+  body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { margin: 0; padding: 0; min-height: 0; page-break-after: always; }
+  .page:last-child { page-break-after: avoid; }
+  .page-landscape { page: p-land; width: 100%; }
+  .page-portrait  { page: p-port; width: 100%; }
+  @page p-land { size: A4 landscape; margin: 8mm 12mm; }
+  @page p-port { size: A4 portrait;  margin: 9mm 11mm; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════ PAGE 1 — QUERFORMAT ════════════ -->
+<div class="page page-landscape">
+
+  <div class="doc-header">
+    <div class="left">
+      <div class="eyebrow">Versicherungscheck nach Lebensphase</div>
+      <h1>Welche Versicherungen brauche ich wirklich?</h1>
+      <div class="subtitle">Checkliste zum Ankreuzen &amp; Abhaken</div>
+    </div>
+    <div class="branding">
+      <strong>Daniel Eck – Versicherungsmakler</strong>
+      0174 / 322 58 85 · daniel@eckversicherung.de
+    </div>
+  </div>
+
+
+  <div class="table-wrap">
+    <table>
+      <colgroup>
+        <col class="c-name">
+        <col class="c-phase">
+        <col class="c-phase">
+        <col class="c-phase">
+        <col class="c-phase">
+        <col class="c-phase">
+        <col class="c-status">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Versicherungsart</th>
+          <th>Single<span class="sub">18–30 J.</span></th>
+          <th>Paar<span class="sub">ohne Kinder</span></th>
+          <th>Familie<span class="sub">mit Kindern</span></th>
+          <th>50+<span class="sub">Kinder ausgezogen</span></th>
+          <th>Rente<span class="sub">ab 65</span></th>
+          <th>Status<span class="sub">✓ / ✗ / ?</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="cat-row"><td colspan="7">Haftpflicht &amp; Schutz vor Dritten</td></tr>
+        <tr>
+          <td>Private Haftpflicht</td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Kfz-Haftpflicht</td>
+          <td><span class="badge b-law">Pflicht</span></td>
+          <td><span class="badge b-law">Pflicht</span></td>
+          <td><span class="badge b-law">Pflicht</span></td>
+          <td><span class="badge b-law">Pflicht</span></td>
+          <td><span class="badge b-law">Pflicht</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Tierhalterhaftpflicht *</td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr class="cat-row"><td colspan="7">Gesundheit &amp; Arbeitskraft</td></tr>
+        <tr>
+          <td>Krankenversicherung (GKV/PKV)</td>
+          <td><span class="badge b-law">Pflicht</span></td>
+          <td><span class="badge b-law">Pflicht</span></td>
+          <td><span class="badge b-law">Pflicht</span></td>
+          <td><span class="badge b-law">Pflicht</span></td>
+          <td><span class="badge b-law">Pflicht</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Zahnzusatzversicherung</td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Berufsunfähigkeit (BU)</td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Krankentagegeld</td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Pflegezusatzversicherung</td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr class="cat-row"><td colspan="7">Eigentum &amp; Hausstand</td></tr>
+        <tr>
+          <td>Hausratversicherung</td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Wohngebäudeversicherung **</td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Kfz-Vollkasko / Teilkasko</td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr class="cat-row"><td colspan="7">Vorsorge &amp; Familie</td></tr>
+        <tr>
+          <td>Risikolebensversicherung</td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Private Rentenversicherung</td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Kinderunfallversicherung</td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr class="cat-row"><td colspan="7">Recht &amp; Reise</td></tr>
+        <tr>
+          <td>Rechtsschutzversicherung</td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Auslandskrankenversicherung</td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="badge b-must">Wichtig</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+        <tr>
+          <td>Reiserücktrittsversicherung</td>
+          <td><span class="badge b-opt">Optional</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="badge b-good">Empfohlen</span></td>
+          <td><span class="cb" data-state="0"></span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="table-foot">
+      <span>* Tierhalterhaftpflicht: In mehreren Bundesländern (u.a. TH, BY, HH, NI) für Hunde gesetzlich vorgeschrieben – bitte Landesrecht prüfen. &nbsp;&nbsp;** Wohngebäudeversicherung: Nur relevant für Wohneigentümer. Bei eigenem Haus oder Wohnung praktisch unverzichtbar – Banken fordern sie bei Finanzierung.</span>
+      <span>Seite 1 / 2</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════ PAGE 2 — HOCHFORMAT ════════════ -->
+<div class="page page-portrait">
+
+  <div class="p2-header">
+    <div>
+      <div class="eyebrow">Kurzinfo zu den Versicherungsarten</div>
+      <h2>Was steckt hinter den Versicherungen?</h2>
+    </div>
+    <div class="branding">
+      <strong>Daniel Eck – Versicherungsmakler</strong>
+      0174 / 322 58 85 · daniel@eckversicherung.de
+    </div>
+  </div>
+  <div class="blue-line"></div>
+
+  <div class="cards-grid">
+    <div class="info-card">
+      <span class="tag">Gesetzlich vorgeschrieben</span>
+      <h3>Kfz-Haftpflicht</h3>
+      <p>Pflicht für jeden Fahrzeughalter (§1 PflVG). Deckt Schäden am anderen Fahrzeug und Personenschäden. Kasko schützt zusätzlich das eigene Fahrzeug.</p>
+    </div>
+    <div class="info-card">
+      <span class="tag">Gesetzlich vorgeschrieben</span>
+      <h3>Krankenversicherung (GKV / PKV)</h3>
+      <p>Seit 2009 in Deutschland gesetzlich vorgeschrieben. Wer nicht versichert ist, riskiert Bußgelder und hohe Nachzahlungen. Wahl zwischen GKV und PKV je nach Einkommen.</p>
+    </div>
+    <div class="info-card">
+      <span class="tag">Je nach Bundesland Pflicht</span>
+      <h3>Tierhalterhaftpflicht</h3>
+      <p>In mehreren Bundesländern (u.a. Thüringen, Bayern, Hamburg, Niedersachsen) ist die Haftpflicht für Hunde gesetzlich vorgeschrieben. Für alle Tierhalter generell dringend empfohlen.</p>
+    </div>
+    <div class="info-card">
+      <span class="tag">Dringend empfohlen</span>
+      <h3>Private Haftpflicht</h3>
+      <p>Zwar nicht gesetzlich Pflicht, aber unverzichtbar: Wer anderen einen Schaden zufügt, haftet unbegrenzt mit dem Privatvermögen. Ab ca. 50 €/Jahr.</p>
+    </div>
+    <div class="info-card">
+      <span class="tag">Dringend empfohlen</span>
+      <h3>Berufsunfähigkeit (BU)</h3>
+      <p>Jeder 4. wird vor der Rente berufsunfähig. Die staatliche Absicherung reicht kaum aus. Je früher der Abschluss, desto günstiger und leichter zu bekommen.</p>
+    </div>
+    <div class="info-card">
+      <span class="tag">Dringend empfohlen</span>
+      <h3>Risikolebensversicherung</h3>
+      <p>Zahlt im Todesfall an Hinterbliebene. Bei Familien mit Kindern oder laufenden Krediten ein Muss. Ab ca. 10 €/Monat – günstig und lebenswichtig.</p>
+    </div>
+    <div class="info-card">
+      <span class="tag">Empfehlung</span>
+      <h3>Hausratversicherung</h3>
+      <p>Schützt den Hausstand gegen Feuer, Einbruch, Wasser und Sturm. Wiederbeschaffungswert schnell 40.000–80.000 €. Grobe Fahrlässigkeit einschließen lassen!</p>
+    </div>
+    <div class="info-card">
+      <span class="tag">Ab 50+ wichtig</span>
+      <h3>Pflegezusatzversicherung</h3>
+      <p>Eigenanteil im Pflegeheim: oft 2.000–3.000 €/Monat. Die gesetzliche Pflegeversicherung deckt nur einen Bruchteil. Früh abschließen = günstige Beiträge.</p>
+    </div>
+    <div class="info-card">
+      <span class="tag">Reisetipp</span>
+      <h3>Auslandskrankenversicherung</h3>
+      <p>GKV zahlt außerhalb der EU kaum etwas. Krankentransport aus den USA: bis 60.000 €. Jahrespolice für die ganze Familie oft unter 50 €.</p>
+    </div>
+    <div class="info-card">
+      <span class="tag">Empfehlung</span>
+      <h3>Zahnzusatzversicherung</h3>
+      <p>GKV zahlt nur Basisversorgung. Implantate und Kronen kosten schnell mehrere Tausend Euro. Vor geplanter Behandlung abschließen ist zu spät – früh handeln!</p>
+    </div>
+  </div>
+
+  <div class="cta-box">
+    <div>
+      <div class="cta-text">Kostenlose Beratung – ich prüfe Ihre Absicherung persönlich für Sie</div>
+      <div class="cta-sub">Unverbindlich · Ohne Verkaufsdruck · Als unabhängiger Makler</div>
+    </div>
+    <div style="text-align:right;">
+      <div class="cta-url">0174 / 322 58 85</div>
+      <div style="font-size:6.5pt;color:rgba(255,255,255,.6);margin-top:3px;">daniel@eckversicherung.de &nbsp;·&nbsp; Talstraße 73, 98574 Schmalkalden</div>
+    </div>
+  </div>
+
+  <div class="page-num">Seite 2 / 2 · Daniel Eck – Versicherungsmakler · 0174 / 322 58 85</div>
+
+</div>
+
+<script>
+var labels = ['', '✓', '✗', '?'];
+document.querySelectorAll('.cb').forEach(function(cb) {
+  cb.title = 'Klicken: leer → ✓ Habe ich → ✗ Fehlt → ? Prüfen';
+  cb.addEventListener('click', function() {
+    var s = ((parseInt(this.dataset.state) || 0) + 1) % 4;
+    this.dataset.state = s;
+    this.textContent = labels[s];
+  });
+});
+</script>
+</body>
+</html>

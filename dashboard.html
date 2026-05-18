@@ -127,6 +127,50 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e
 .funnel-conv.mid{background:#fef9c3;color:#b45309}
 .funnel-conv.bad{background:#fee2e2;color:#dc2626}
 
+/* ── Brevo Leads ── */
+.leads-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
+.leads-card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+.leads-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.lead-list-card{border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px}
+.lead-list-card.c-purple{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1.5px solid #ddd6fe}
+.lead-list-card.c-amber{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1.5px solid #fde68a}
+.lead-list-card.c-rose{background:linear-gradient(135deg,#fff1f2,#ffe4e6);border:1.5px solid #fecdd3}
+.lead-list-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.lead-list-card.c-purple .lead-list-icon{background:#7c3aed;color:#fff}
+.lead-list-card.c-amber  .lead-list-icon{background:#d97706;color:#fff}
+.lead-list-card.c-rose   .lead-list-icon{background:#e11d48;color:#fff}
+.lead-list-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.lead-list-card.c-purple .lead-list-name{color:#6d28d9}
+.lead-list-card.c-amber  .lead-list-name{color:#92400e}
+.lead-list-card.c-rose   .lead-list-name{color:#be123c}
+.lead-list-count{font-size:30px;font-weight:900;line-height:1;color:#172d50}
+.lead-list-sub{font-size:11px;color:#94a3b8;margin-top:3px}
+.leads-tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.leads-tag-gp{background:#ede9fe;color:#7c3aed}
+.leads-tag-kk{background:#fef3c7;color:#92400e}
+.leads-tag-ta{background:#ffe4e6;color:#be123c}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.status-aktiv{background:#dcfce7;color:#15803d}
+.status-off{background:#fee2e2;color:#b91c1c}
+.btn-action{border:none;border-radius:7px;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;transition:opacity .15s}
+.btn-action:hover{opacity:.75}
+.btn-edit{background:#e0e7ff;color:#4338ca}
+.btn-del{background:#fee2e2;color:#b91c1c;margin-left:4px}
+/* Edit Modal */
+#brevoEditModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center}
+#brevoEditModal.open{display:flex}
+.brevo-edit-box{background:#fff;border-radius:16px;padding:28px 28px 24px;width:380px;max-width:92vw;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.brevo-edit-box h4{margin:0 0 6px;font-size:16px;color:#172d50}
+.brevo-edit-email{font-size:12px;color:#64748b;margin-bottom:20px;word-break:break-all}
+.brevo-edit-row{margin-bottom:12px}
+.brevo-edit-row label{display:block;font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.brevo-edit-row input{width:100%;box-sizing:border-box;border:1.5px solid #e2e8f0;border-radius:8px;padding:8px 10px;font-size:14px;outline:none}
+.brevo-edit-row input:focus{border-color:#6366f1}
+.brevo-edit-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+.brevo-edit-footer .btn-save{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer}
+.brevo-edit-footer .btn-cancel{background:#f1f5f9;color:#475569;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer}
+@media(max-width:768px){.leads-grid{grid-template-columns:1fr}}
+
 /* ── Tageszeit-Heatmap ── */
 .heatmap-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
 .heatmap-card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
@@ -247,6 +291,7 @@ function doLogin() {
       EP = url; PW = pw;
       localStorage.setItem('_eckEP', EP);
       localStorage.setItem('_eckPW', PW);
+      localStorage.setItem('_eckTS', Date.now());
       startDash(d.rows || []);
     })
     .catch(function (err) {
@@ -267,22 +312,37 @@ document.getElementById('loginPw').addEventListener('keydown', function (e) {
   if (e.key === 'Enter') doLogin();
 });
 
-// Auto-Login aus localStorage
+// Auto-Login aus localStorage (gültig 5 Minuten)
 (function () {
   var ep = localStorage.getItem('_eckEP');
   var pw = localStorage.getItem('_eckPW');
+  var ts = parseInt(localStorage.getItem('_eckTS') || '0', 10);
   if (!ep || !pw) return;
   document.getElementById('loginUrl').value = ep;
   document.getElementById('loginPw').value  = pw;
+  if (Date.now() - ts > 5 * 60 * 1000) return; // älter als 5 Min → manuell einloggen
+  // Login-Form ausblenden, Lade-Ansicht zeigen
+  document.getElementById('loginWrap').style.display = 'none';
+  document.getElementById('dashWrap').style.display  = 'flex';
+  window.scrollTo(0, 0);
+  EP = ep; PW = pw;
+  // Daten laden, dann Dashboard rendern
   fetch(ep + '?action=data&pw=' + encodeURIComponent(pw))
-    .then(function (r) { return r.json(); })
-    .then(function (d) { if (d.ok) { EP = ep; PW = pw; startDash(d.rows || []); } })
-    .catch(function () { /* Auto-Login still shows form with pre-filled values */ });
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) { startDash(d.rows || []); }
+      else { location.reload(); } // Session ungültig → neu einloggen
+    })
+    .catch(function() {
+      // Netzwerkfehler: trotzdem Dashboard zeigen (leere Daten)
+      startDash([]);
+    });
 })();
 
 function doLogout() {
   localStorage.removeItem('_eckEP');
   localStorage.removeItem('_eckPW');
+  localStorage.removeItem('_eckTS');
   location.reload();
 }
 
@@ -293,18 +353,28 @@ function startDash(rows) {
   document.getElementById('loginWrap').style.display = 'none';
   var dw = document.getElementById('dashWrap');
   dw.style.display = 'flex';
+  window.scrollTo(0, 0);
 
   allRows = rows;
   renderDash();
 
   // Alle 60 s neu laden
-  setInterval(function () { reload(); }, 60000);
+  setInterval(function () { reload(); loadBrevoData(); }, 60000);
 }
 
 function reload() {
   fetch(EP + '?action=data&pw=' + encodeURIComponent(PW))
     .then(function (r) { return r.json(); })
-    .then(function (d) { if (d.ok) { allRows = d.rows || []; applyFilters(); } })
+    .then(function (d) {
+      if (d.ok) {
+        allRows = d.rows || [];
+        localStorage.setItem('_eckTS', Date.now()); // Session verlängern
+        applyFilters();
+        refreshStats();
+        renderLogRows();
+        updateCharts();
+      }
+    })
     .catch(function () {});
 }
 
@@ -319,6 +389,7 @@ function renderDash() {
     renderFilterBar() +
     renderStats() +
     renderFunnel() +
+    renderBrevoSection() +
     renderCharts() +
     renderHeatmap() +
     renderTables() +
@@ -327,6 +398,7 @@ function renderDash() {
   initCharts();
   bindFilters();
   renderLogRows();
+  loadBrevoData();
 }
 
 // ================================================================
@@ -886,12 +958,232 @@ function exportCSV() {
 }
 
 // ================================================================
+//  Brevo Leads
+// ================================================================
+var BREVO_KEY = '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';
+
+var brevoLists = [
+  { id: 2, name: 'Gratis-Paket',    icon: 'fa-gift',          cls: 'c-purple', tag: 'leads-tag-gp', count: null, contacts: [] },
+  { id: 3, name: 'Kontaktanfragen', icon: 'fa-envelope',      cls: 'c-amber',  tag: 'leads-tag-kk', count: null, contacts: [] },
+  { id: 4, name: 'Terminanfragen',  icon: 'fa-calendar-check',cls: 'c-rose',   tag: 'leads-tag-ta', count: null, contacts: [] }
+];
+
+function loadBrevoData() {
+  var hdrs = { 'api-key': BREVO_KEY, 'Content-Type': 'application/json' };
+
+  brevoLists.forEach(function(list) {
+    // Listeninfo (Anzahl)
+    fetch('https://api.brevo.com/v3/contacts/lists/' + list.id, { headers: hdrs })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        list.count = d.uniqueSubscribers || 0;
+        updateBrevoSection();
+      }).catch(function() { list.count = '–'; updateBrevoSection(); });
+
+    // Kontakte der Liste (letzte 50)
+    fetch('https://api.brevo.com/v3/contacts?listId=' + list.id + '&limit=50&sort=desc', { headers: hdrs })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        list.contacts = (d.contacts || []).filter(function(c) {
+          return Array.isArray(c.listIds) && c.listIds.indexOf(list.id) > -1;
+        }).map(function(c) {
+          return {
+            email:        c.email || '',
+            firstname:    (c.attributes && c.attributes.VORNAME)  || '',
+            lastname:     (c.attributes && c.attributes.NACHNAME) || '',
+            phone:        (c.attributes && c.attributes.SMS)      || '',
+            unsubscribed: c.emailBlacklisted === true,
+            createdAt:    c.modifiedAt || c.createdAt || '',
+            list:         list
+          };
+        });
+        updateBrevoSection();
+      }).catch(function() {});
+  });
+}
+
+function renderBrevoSection() {
+  return '<div class="leads-card" id="brevoSection">' +
+    '<h3><i class="fas fa-address-book"></i> Kontakte &amp; Leads (Brevo)</h3>' +
+    '<div class="leads-grid" id="brevoListCards">' +
+      brevoLists.map(function(l) {
+        return '<div class="lead-list-card ' + l.cls + '">' +
+          '<div class="lead-list-icon"><i class="fas ' + l.icon + '"></i></div>' +
+          '<div>' +
+            '<div class="lead-list-name">' + l.name + '</div>' +
+            '<div class="lead-list-count" id="brevo-count-' + l.id + '">' +
+              (l.count === null ? '<div class="spinner" style="width:18px;height:18px;border-width:2px;margin:4px 0"></div>' : l.count) +
+            '</div>' +
+            '<div class="lead-list-sub">Kontakte gesamt</div>' +
+          '</div>' +
+        '</div>';
+      }).join('') +
+    '</div>' +
+    buildBrevoTable() +
+  '</div>';
+}
+
+function buildBrevoTable() {
+  // Alle Kontakte zusammenführen + nach createdAt sortieren
+  var all = [];
+  brevoLists.forEach(function(l) {
+    l.contacts.forEach(function(c) { all.push(c); });
+  });
+  all.sort(function(a, b) { return b.createdAt.localeCompare(a.createdAt); });
+
+  if (!all.length) {
+    return '<div style="text-align:center;padding:32px;color:#94a3b8"><i class="fas fa-user-plus" style="font-size:28px;display:block;margin-bottom:10px"></i>Noch keine Kontakte vorhanden</div>';
+  }
+
+  return '<div style="overflow-x:auto"><table class="log-table" style="min-width:760px">' +
+    '<thead><tr>' +
+      '<th>Name</th>' +
+      '<th>E-Mail</th>' +
+      '<th>Telefon</th>' +
+      '<th>Status</th>' +
+      '<th>Quelle</th>' +
+      '<th>Datum / Uhrzeit</th>' +
+      '<th></th>' +
+    '</tr></thead>' +
+    '<tbody>' +
+    all.slice(0, 100).map(function(c) {
+      var nameStr  = [c.firstname, c.lastname].filter(Boolean).join(' ');
+      var nameHtml = nameStr ? '<strong>' + esc(nameStr) + '</strong>' : '<span class="dim">–</span>';
+      var date = c.createdAt ? formatBrevoDate(c.createdAt) : '<span class="dim">–</span>';
+      var phone = c.phone ? esc(c.phone) : '<span class="dim">–</span>';
+      var statusHtml = c.unsubscribed
+        ? '<span class="status-badge status-off"><i class="fas fa-ban"></i> Abgemeldet</span>'
+        : '<span class="status-badge status-aktiv"><i class="fas fa-check"></i> Aktiv</span>';
+      var em = esc(c.email).replace(/'/g, "\\'");
+      return '<tr>' +
+        '<td>' + nameHtml + '</td>' +
+        '<td><a href="mailto:' + esc(c.email) + '" style="color:#6366f1">' + esc(c.email) + '</a></td>' +
+        '<td class="dim">' + phone + '</td>' +
+        '<td>' + statusHtml + '</td>' +
+        '<td><span class="leads-tag ' + c.list.tag + '"><i class="fas ' + c.list.icon + '" style="margin-right:4px"></i>' + c.list.name + '</span></td>' +
+        '<td class="dim">' + date + '</td>' +
+        '<td style="white-space:nowrap">' +
+          '<button class="btn-action btn-edit" onclick="editBrevoContact(\'' + em + '\')" title="Bearbeiten"><i class="fas fa-pen"></i></button>' +
+          '<button class="btn-action btn-del"  onclick="deleteBrevoContact(\'' + em + '\')" title="Löschen"><i class="fas fa-trash"></i></button>' +
+        '</td>' +
+      '</tr>';
+    }).join('') +
+    '</tbody></table></div>';
+}
+
+function formatBrevoDate(iso) {
+  try {
+    var d = new Date(iso);
+    return ('0'+d.getDate()).slice(-2) + '.' + ('0'+(d.getMonth()+1)).slice(-2) + '.' + d.getFullYear() +
+           ' ' + ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2);
+  } catch(e) { return iso; }
+}
+
+function updateBrevoSection() {
+  // Zähler aktualisieren
+  brevoLists.forEach(function(l) {
+    var el = document.getElementById('brevo-count-' + l.id);
+    if (el && l.count !== null) el.innerHTML = l.count;
+  });
+  // Tabelle neu bauen
+  var section = document.getElementById('brevoSection');
+  if (!section) return;
+  // Tabelle ist alles nach dem leads-grid
+  var grid = document.getElementById('brevoListCards');
+  if (!grid) return;
+  // Alles nach dem Grid entfernen und neu rendern
+  var tmp = document.createElement('div');
+  tmp.innerHTML = buildBrevoTable();
+  // Remove old table if exists
+  while (grid.nextSibling) section.removeChild(grid.nextSibling);
+  section.appendChild(tmp.firstChild);
+}
+
+// ================================================================
+//  Kontakt löschen
+// ================================================================
+function deleteBrevoContact(email) {
+  if (!confirm('Kontakt "' + email + '" wirklich löschen?\nDiese Aktion kann nicht rückgängig gemacht werden.')) return;
+  var hdrs = { 'api-key': BREVO_KEY, 'Content-Type': 'application/json' };
+  fetch('https://api.brevo.com/v3/contacts/' + encodeURIComponent(email), { method: 'DELETE', headers: hdrs })
+    .then(function() {
+      brevoLists.forEach(function(l) {
+        l.contacts = l.contacts.filter(function(c) { return c.email !== email; });
+        if (l.count > 0) l.count--;
+      });
+      updateBrevoSection();
+    })
+    .catch(function() { alert('Fehler beim Löschen. Bitte erneut versuchen.'); });
+}
+
+// ================================================================
+//  Kontakt bearbeiten
+// ================================================================
+var _editEmail = '';
+
+function editBrevoContact(email) {
+  _editEmail = email;
+  var contact = null;
+  brevoLists.forEach(function(l) { l.contacts.forEach(function(c) { if (c.email === email) contact = c; }); });
+  if (!contact) return;
+  document.getElementById('editVorname').value  = contact.firstname || '';
+  document.getElementById('editNachname').value = contact.lastname  || '';
+  document.getElementById('editPhone').value    = contact.phone     || '';
+  document.getElementById('editEmailDisplay').textContent = email;
+  document.getElementById('brevoEditModal').classList.add('open');
+}
+
+function closeEditModal() {
+  document.getElementById('brevoEditModal').classList.remove('open');
+}
+
+function saveBrevoContact() {
+  var vorname  = document.getElementById('editVorname').value.trim();
+  var nachname = document.getElementById('editNachname').value.trim();
+  var phone    = document.getElementById('editPhone').value.trim();
+  var btn      = document.getElementById('editSaveBtn');
+  btn.disabled = true; btn.textContent = 'Speichern…';
+  var hdrs = { 'api-key': BREVO_KEY, 'Content-Type': 'application/json' };
+  fetch('https://api.brevo.com/v3/contacts/' + encodeURIComponent(_editEmail), {
+    method: 'PUT', headers: hdrs,
+    body: JSON.stringify({ attributes: { VORNAME: vorname, NACHNAME: nachname, SMS: phone }, updateEnabled: true })
+  }).then(function() {
+    brevoLists.forEach(function(l) {
+      l.contacts.forEach(function(c) {
+        if (c.email === _editEmail) { c.firstname = vorname; c.lastname = nachname; c.phone = phone; }
+      });
+    });
+    updateBrevoSection();
+    closeEditModal();
+  }).catch(function() {
+    alert('Fehler beim Speichern.');
+  }).finally(function() {
+    btn.disabled = false; btn.textContent = 'Speichern';
+  });
+}
+
+// ================================================================
 //  Helfer
 // ================================================================
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 </script>
+
+  <!-- Brevo Kontakt bearbeiten Modal -->
+  <div id="brevoEditModal">
+    <div class="brevo-edit-box">
+      <h4><i class="fas fa-pen" style="color:#6366f1;margin-right:6px"></i>Kontakt bearbeiten</h4>
+      <div class="brevo-edit-email" id="editEmailDisplay"></div>
+      <div class="brevo-edit-row"><label>Vorname</label><input id="editVorname" type="text" placeholder="Vorname" /></div>
+      <div class="brevo-edit-row"><label>Nachname</label><input id="editNachname" type="text" placeholder="Nachname" /></div>
+      <div class="brevo-edit-row"><label>Telefon</label><input id="editPhone" type="tel" placeholder="+49 …" /></div>
+      <div class="brevo-edit-footer">
+        <button class="btn-cancel" onclick="closeEditModal()">Abbrechen</button>
+        <button class="btn-save" id="editSaveBtn" onclick="saveBrevoContact()">Speichern</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Social Peek (Mobile) -->
   <div class="social-peek" id="socialPeek">

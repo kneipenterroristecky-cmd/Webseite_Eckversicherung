@@ -1,0 +1,1007 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eBook – Die 7 teuersten Versicherungsfehler</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --navy:    #172d50;
+  --blue:    #1a50c8;
+  --blue-lt: #2e68de;
+  --sky:     #60a5fa;
+  --gray-50: #f8fafc;
+  --gray-100:#f1f5f9;
+  --gray-200:#e2e8f0;
+  --gray-400:#94a3b8;
+  --gray-500:#64748b;
+  --white:   #ffffff;
+  --danger:  #dc2626;
+  --success: #16a34a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 10pt;
+  color: #334155;
+  background: #e5e7eb;
+  line-height: 1.6;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 8mm;
+  background: var(--white);
+  page-break-after: always;
+  position: relative;
+  overflow: hidden;
+}
+.page:last-child { page-break-after: avoid; margin-bottom: 0; }
+
+/* ── COVER PAGE ── */
+.cover {
+  background: var(--navy);
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+.cover-top {
+  background: linear-gradient(155deg, rgba(15,30,56,.95) 0%, rgba(26,80,200,.3) 100%);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px 42px 40px;
+}
+.cover-eyebrow {
+  font-size: 9pt;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--sky);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cover-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1.5px;
+  background: var(--sky);
+}
+.cover-number {
+  font-size: 110pt;
+  font-weight: 900;
+  color: rgba(255,255,255,.06);
+  line-height: 1;
+  position: absolute;
+  right: 28px;
+  top: 30px;
+  letter-spacing: -5px;
+}
+.cover h1 {
+  font-size: 34pt;
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.cover h1 em {
+  color: var(--sky);
+  font-style: normal;
+}
+.cover .cover-sub {
+  font-size: 12pt;
+  color: rgba(255,255,255,.7);
+  max-width: 320px;
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+.cover-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 30px;
+  padding: 7px 16px;
+  font-size: 8.5pt;
+  color: rgba(255,255,255,.85);
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+}
+.cover-bottom {
+  background: var(--blue);
+  padding: 18px 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cover-author {
+  color: var(--white);
+}
+.cover-author .name {
+  font-size: 11pt;
+  font-weight: 700;
+}
+.cover-author .title {
+  font-size: 8pt;
+  color: rgba(255,255,255,.7);
+}
+.cover-logo {
+  text-align: right;
+  color: rgba(255,255,255,.8);
+  font-size: 9pt;
+  font-weight: 700;
+}
+
+/* ── CONTENT PAGES ── */
+.content-page {
+  padding: 22mm 22mm 18mm;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid var(--gray-200);
+  margin-bottom: 28px;
+}
+.page-header .book-title {
+  font-size: 7.5pt;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+.page-header .chapter {
+  font-size: 7.5pt;
+  font-weight: 600;
+  color: var(--blue);
+}
+
+.fehler-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--blue);
+  color: var(--white);
+  font-size: 18pt;
+  font-weight: 900;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.fehler-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.fehler-header .title-block {}
+.fehler-label {
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--danger);
+  margin-bottom: 4px;
+}
+.fehler-title {
+  font-size: 19pt;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1.15;
+}
+
+.scenario-box {
+  background: var(--gray-50);
+  border: 1.5px solid var(--gray-200);
+  border-left: 4px solid var(--danger);
+  border-radius: 0 10px 10px 0;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+.scenario-box .scenario-label {
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--danger);
+  margin-bottom: 8px;
+}
+.scenario-box p {
+  font-size: 11pt;
+  color: #475569;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.body-text {
+  font-size: 11pt;
+  color: #475569;
+  line-height: 1.85;
+  margin-bottom: 24px;
+}
+
+.warn-box {
+  background: #fef2f2;
+  border: 1.5px solid #fecaca;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.warn-box .warn-icon {
+  font-size: 18pt;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.warn-box .warn-text {
+  font-size: 10pt;
+  color: #991b1b;
+  font-weight: 500;
+  line-height: 1.6;
+}
+.warn-box .warn-title {
+  font-weight: 700;
+  font-size: 10.5pt;
+  margin-bottom: 5px;
+}
+
+.tipp-box {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1.5px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 20px 24px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.tipp-box .tipp-icon {
+  font-size: 20pt;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.tipp-box .tipp-content {}
+.tipp-box .tipp-label {
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+.tipp-box p {
+  font-size: 10.5pt;
+  color: #1e3a8a;
+  line-height: 1.65;
+}
+
+.page-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-200);
+  margin-top: 24px;
+}
+.page-footer .brand {
+  font-size: 7pt;
+  color: var(--gray-400);
+}
+.page-footer .pgnum {
+  font-size: 7pt;
+  color: var(--gray-400);
+}
+
+/* ── ABOUT PAGE ── */
+.about-page {
+  padding: 22mm 22mm 18mm;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+}
+.about-hero {
+  background: var(--navy);
+  border-radius: 16px;
+  padding: 28px 30px;
+  color: var(--white);
+  margin-bottom: 20px;
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
+.about-avatar {
+  width: 70px;
+  height: 70px;
+  background: var(--blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28pt;
+  flex-shrink: 0;
+}
+.about-hero h2 {
+  font-size: 16pt;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.about-hero .role {
+  font-size: 9pt;
+  color: var(--sky);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.about-hero p {
+  font-size: 9pt;
+  color: rgba(255,255,255,.75);
+  line-height: 1.6;
+}
+
+.facts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.fact-card {
+  background: var(--gray-50);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+.fact-card .fact-value {
+  font-size: 22pt;
+  font-weight: 900;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.fact-card .fact-label {
+  font-size: 8pt;
+  color: var(--gray-500);
+  font-weight: 500;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.contact-item {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.contact-item .c-icon {
+  font-size: 16pt;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.contact-item .c-label {
+  font-size: 7.5pt;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 2px;
+}
+.contact-item .c-value {
+  font-size: 9pt;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.disclaimer {
+  margin-top: auto;
+  font-size: 7pt;
+  color: var(--gray-400);
+  line-height: 1.5;
+  border-top: 1px solid var(--gray-200);
+  padding-top: 10px;
+}
+
+/* ── FACTS STRIP ── */
+.facts-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.fact-pill {
+  background: var(--gray-50);
+  border: 1.5px solid var(--gray-200);
+  border-top: 3px solid var(--blue);
+  border-radius: 8px;
+  padding: 16px 14px;
+  text-align: center;
+}
+.fact-pill .fp-value {
+  font-size: 20pt;
+  font-weight: 900;
+  color: var(--blue);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.fact-pill .fp-label {
+  font-size: 7.5pt;
+  color: var(--gray-500);
+  line-height: 1.4;
+}
+
+/* ── FEHLER OVERVIEW LIST ── */
+.fehler-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+.fehler-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--gray-50);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 10px;
+}
+.fli-num {
+  min-width: 28px;
+  height: 28px;
+  background: var(--blue);
+  color: white;
+  font-size: 10.5pt;
+  font-weight: 900;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fli-body {}
+.fli-text {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.3;
+}
+.fli-sub {
+  font-size: 7.5pt;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+
+@media print {
+  @page { size: A4 portrait; margin: 0; }
+  body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 100%; margin: 0; page-break-after: always; }
+  .page:last-child { page-break-after: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═════════════ PAGE 1: COVER ═════════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-top" style="position:relative;">
+      <div class="cover-number">7</div>
+      <div class="cover-eyebrow">Ratgeber Versicherungen</div>
+      <h1>Die <em>7 teuersten</em><br>Versicherungs-<br>fehler</h1>
+      <div class="cover-sub">Was Sie unbedingt wissen müssen – bevor Sie den nächsten Fehler machen.</div>
+      <div style="display:flex;"><div class="cover-badge">&#128214; Kostenloser Ratgeber · 10 Seiten · Sofort anwendbar</div></div>
+    </div>
+    <div class="cover-bottom">
+      <div class="cover-author">
+        <div class="name">Daniel Eck</div>
+        <div class="title">Versicherungsmakler · Schmalkalden</div>
+      </div>
+      <div class="cover-logo">Daniel Eck – Versicherungsmakler<br><span style="font-size:7pt;font-weight:400;opacity:.7;">0174 / 322 58 85 · daniel@eckversicherung.de</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ PAGE 2: INTRO ═════════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <span class="book-title">Die 7 teuersten Versicherungsfehler</span>
+      <span class="chapter">Einleitung</span>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="font-size:8pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-lt);margin-bottom:6px;">Warum dieser Ratgeber?</div>
+      <div style="font-size:22pt;font-weight:900;color:var(--navy);line-height:1.15;margin-bottom:16px;">Viele zahlen zu viel –<br>und sind trotzdem<br>schlecht geschützt.</div>
+    </div>
+
+    <p class="body-text">Als Versicherungsmakler spreche ich jeden Tag mit Menschen, die jahrelang brav ihre Beiträge gezahlt haben – und im Schadensfall trotzdem leer ausgegangen sind. Oder die für Versicherungen bezahlen, die sie gar nicht brauchen, während sie echte Risiken völlig ungesichert lassen.</p>
+
+    <p class="body-text">Das ist nicht Pech. Das sind vermeidbare Fehler. Und in diesem Ratgeber erkläre ich Ihnen die 7 häufigsten – damit Sie sie nicht auch machen.</p>
+
+    <div style="background:var(--navy);border-radius:12px;padding:18px 20px;color:var(--white);margin:16px 0;">
+      <div style="font-size:8pt;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sky);margin-bottom:10px;">Was Sie in diesem Ratgeber lernen:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="font-size:8.5pt;color:rgba(255,255,255,.8);display:flex;gap:6px;"><span style="color:var(--sky);">✓</span> Welcher Fehler Sie am meisten Geld kostet</div>
+        <div style="font-size:8.5pt;color:rgba(255,255,255,.8);display:flex;gap:6px;"><span style="color:var(--sky);">✓</span> Warum günstig und billig nicht das Gleiche ist</div>
+        <div style="font-size:8.5pt;color:rgba(255,255,255,.8);display:flex;gap:6px;"><span style="color:var(--sky);">✓</span> Wann Sie sofort handeln sollten</div>
+        <div style="font-size:8.5pt;color:rgba(255,255,255,.8);display:flex;gap:6px;"><span style="color:var(--sky);">✓</span> Was im Schadenfall wirklich zählt</div>
+        <div style="font-size:8.5pt;color:rgba(255,255,255,.8);display:flex;gap:6px;"><span style="color:var(--sky);">✓</span> Wie Sie Ihren Schutz sofort verbessern</div>
+        <div style="font-size:8.5pt;color:rgba(255,255,255,.8);display:flex;gap:6px;"><span style="color:var(--sky);">✓</span> Der eine Schritt, den fast alle vergessen</div>
+      </div>
+    </div>
+
+    <p class="body-text">Jeder der 7 Fehler ist mir in meiner täglichen Arbeit begegnet – oft mit schmerzhaften Folgen für die Betroffenen. Manchmal waren es Kleinigkeiten, die alles verändert hätten.</p>
+
+    <div style="font-size:8pt;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-400);margin-top:18px;margin-bottom:10px;">Die 7 Fehler im Überblick</div>
+    <div class="fehler-list">
+      <div class="fehler-list-item">
+        <div class="fli-num">1</div>
+        <div class="fli-body">
+          <div class="fli-text">Keine oder zu geringe Haftpflicht-Deckungssumme</div>
+          <div class="fli-sub">Haftpflicht · Seite 3</div>
+        </div>
+      </div>
+      <div class="fehler-list-item">
+        <div class="fli-num">2</div>
+        <div class="fli-body">
+          <div class="fli-text">Kein BU-Schutz – bis es zu spät ist</div>
+          <div class="fli-sub">Berufsunfähigkeit · Seite 4</div>
+        </div>
+      </div>
+      <div class="fehler-list-item">
+        <div class="fli-num">3</div>
+        <div class="fli-body">
+          <div class="fli-text">Verträge nie aktualisiert – Lebenssituation längst geändert</div>
+          <div class="fli-sub">Vertragscheck · Seite 5</div>
+        </div>
+      </div>
+      <div class="fehler-list-item">
+        <div class="fli-num">4</div>
+        <div class="fli-body">
+          <div class="fli-text">Nur auf den Preis geschaut – nicht auf den Inhalt</div>
+          <div class="fli-sub">Preisvergleich · Seite 6</div>
+        </div>
+      </div>
+      <div class="fehler-list-item">
+        <div class="fli-num">5</div>
+        <div class="fli-body">
+          <div class="fli-text">Im Ausland krank – GKV zahlt fast nichts</div>
+          <div class="fli-sub">Reise · Seite 7</div>
+        </div>
+      </div>
+      <div class="fehler-list-item">
+        <div class="fli-num">6</div>
+        <div class="fli-body">
+          <div class="fli-text">Schaden zu spät oder falsch gemeldet</div>
+          <div class="fli-sub">Schadensmeldung · Seite 8</div>
+        </div>
+      </div>
+      <div class="fehler-list-item">
+        <div class="fli-num">7</div>
+        <div class="fli-body">
+          <div class="fli-text">Auf die gesetzliche Rente allein vertraut</div>
+          <div class="fli-sub">Altersvorsorge · Seite 9</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span class="brand">Daniel Eck – Versicherungsmakler · 0174 / 322 58 85</span>
+      <span class="pgnum">Seite 2</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ FEHLER 1 ═════════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <span class="book-title">Die 7 teuersten Versicherungsfehler</span>
+      <span class="chapter">Fehler 1 von 7</span>
+    </div>
+    <div class="fehler-header">
+      <div class="fehler-number">1</div>
+      <div class="title-block">
+        <div class="fehler-label">Fehler #1 · Haftpflicht</div>
+        <div class="fehler-title">Keine oder zu<br>geringe Versicherungssumme</div>
+      </div>
+    </div>
+    <div class="scenario-box">
+      <div class="scenario-label">&#127908; Reale Situation</div>
+      <p>Herr M. radelt zur Arbeit, übersieht eine rote Ampel und fährt in ein Auto. Der Fahrer erleidet eine schwere Rückenverletzung und wird dauerhaft arbeitsunfähig. Schadensersatz und Schmerzengeld: 1,2 Millionen Euro. Herr M. hatte keine private Haftpflicht.</p>
+    </div>
+    <p class="body-text">Die private Haftpflichtversicherung ist die wichtigste Versicherung überhaupt – und gleichzeitig die günstigste. Für rund 50–80 Euro im Jahr schützen Sie sich vor Schadensersatzforderungen, die Ihren gesamten Lebensstandard ruinieren können. Ohne sie haften Sie unbegrenzt mit Ihrem gesamten Vermögen – auch dem zukünftigen.</p>
+    <div class="warn-box">
+      <div class="warn-icon">⚠️</div>
+      <div class="warn-text">
+        <div class="warn-title">Veraltete Summen sind gefährlich</div>
+        Viele haben noch alte Policen mit 1–2 Millionen Euro Deckung. Heute sind mindestens 10 Millionen Euro Standard. Bei Personenschäden mit dauerhafter Behinderung reichen 2 Millionen schnell nicht aus.
+      </div>
+    </div>
+    <div class="facts-strip">
+      <div class="fact-pill"><div class="fp-value">10 Mio. €</div><div class="fp-label">empfohlene Mindest-Deckungssumme heute</div></div>
+      <div class="fact-pill"><div class="fp-value">50–80 €</div><div class="fp-label">typischer Jahresbeitrag für guten Schutz</div></div>
+      <div class="fact-pill"><div class="fp-value">unbegrenzt</div><div class="fp-label">persönliche Haftung ohne Police</div></div>
+    </div>
+    <div class="tipp-box">
+      <div class="tipp-icon">&#128161;</div>
+      <div class="tipp-content">
+        <div class="tipp-label">Mein Tipp für Sie</div>
+        <p>Prüfen Sie jetzt Ihre Versicherungssumme. Liegt sie unter 10 Millionen Euro? Dann lassen Sie den Vertrag aktualisieren. Kostenpunkt: oft nur wenige Euro mehr im Jahr – bei einem enormen Sicherheitsgewinn.</p>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span class="brand">Daniel Eck – Versicherungsmakler · 0174 / 322 58 85</span>
+      <span class="pgnum">Seite 3</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ FEHLER 2 ═════════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <span class="book-title">Die 7 teuersten Versicherungsfehler</span>
+      <span class="chapter">Fehler 2 von 7</span>
+    </div>
+    <div class="fehler-header">
+      <div class="fehler-number">2</div>
+      <div class="title-block">
+        <div class="fehler-label">Fehler #2 · Berufsunfähigkeit</div>
+        <div class="fehler-title">BU-Schutz fehlt –<br>bis es zu spät ist</div>
+      </div>
+    </div>
+    <div class="scenario-box">
+      <div class="scenario-label">&#127908; Reale Situation</div>
+      <p>Frau K., 34, Lehrerin, erkrankt an Burnout und ist dauerhaft nicht mehr arbeitsfähig. Staatliche Erwerbsminderungsrente: 820 €/Monat. Ihr bisheriges Nettoeinkommen: 2.800 €. Keine BU-Versicherung. Konsequenz: Vermögen aufgebraucht, Haus verkauft.</p>
+    </div>
+    <p class="body-text">Jeder vierte Erwerbstätige in Deutschland wird vor der Rente berufsunfähig – die häufigsten Ursachen sind psychische Erkrankungen, Rückenprobleme und Krebs. Doch nur ein Bruchteil hat eine Berufsunfähigkeitsversicherung. Die staatliche Absicherung ist minimal.</p>
+    <div class="warn-box">
+      <div class="warn-icon">⚠️</div>
+      <div class="warn-text">
+        <div class="warn-title">Je früher, desto günstiger</div>
+        Wer mit 25 Jahren eine BU abschließt, zahlt oft weniger als die Hälfte im Vergleich zu jemandem, der mit 40 Jahren beginnt. Und: Vorerkrankungen können zum Ausschluss führen. Wer wartet, riskiert gar keinen Schutz zu bekommen.
+      </div>
+    </div>
+    <div class="facts-strip">
+      <div class="fact-pill"><div class="fp-value">25 %</div><div class="fp-label">der Erwerbstätigen werden vor der Rente berufsunfähig</div></div>
+      <div class="fact-pill"><div class="fp-value">820 €</div><div class="fp-label">durchschnittliche staatliche Erwerbsminderungsrente/Monat</div></div>
+      <div class="fact-pill"><div class="fp-value">–50 %</div><div class="fp-label">weniger Beitrag bei Abschluss mit 25 statt 40 Jahren</div></div>
+    </div>
+    <div class="tipp-box">
+      <div class="tipp-icon">&#128161;</div>
+      <div class="tipp-content">
+        <div class="tipp-label">Mein Tipp für Sie</div>
+        <p>Berechnen Sie Ihre Versorgungslücke: Aktuelles Nettoeinkommen minus staatliche Erwerbsminderungsrente = Lücke. Diese Lücke sollte Ihre BU-Rente mindestens decken. Ich helfe Ihnen, das richtige Angebot zu finden.</p>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span class="brand">Daniel Eck – Versicherungsmakler · 0174 / 322 58 85</span>
+      <span class="pgnum">Seite 4</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ FEHLER 3 ═════════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <span class="book-title">Die 7 teuersten Versicherungsfehler</span>
+      <span class="chapter">Fehler 3 von 7</span>
+    </div>
+    <div class="fehler-header">
+      <div class="fehler-number">3</div>
+      <div class="title-block">
+        <div class="fehler-label">Fehler #3 · Vertragscheck</div>
+        <div class="fehler-title">Verträge nie aktualisiert –<br>Lebenssituation längst geändert</div>
+      </div>
+    </div>
+    <div class="scenario-box">
+      <div class="scenario-label">&#127908; Reale Situation</div>
+      <p>Familie S. hat Zwillinge bekommen. Ihr Hausratvertrag gilt noch für ein 60 m²-Apartment – jetzt wohnen sie in 130 m². Im Einbruchsfall zahlt die Versicherung nur anteilig aus. Unterversicherung: fast 50 %. Der Schaden: 28.000 €, gezahlt wurde: 15.000 €.</p>
+    </div>
+    <p class="body-text">Heirat, Scheidung, Kinder, neues Haus, Umzug, Jobwechsel, Selbstständigkeit – das Leben ändert sich, aber die Verträge bleiben oft jahrelang unverändert. Das ist gefährlich: Was früher gepasst hat, kann heute eine massive Schutzlücke sein.</p>
+    <div class="warn-box">
+      <div class="warn-icon">⚠️</div>
+      <div class="warn-text">
+        <div class="warn-title">Lebensereignisse = Überprüfungspflicht</div>
+        Nach jedem wichtigen Lebensereignis sollten Sie Ihre Versicherungen anpassen: Geburt, Heirat, Scheidung, Immobilienkauf, Selbstständigkeit. Viele Versicherer verlangen sogar eine aktive Meldung innerhalb einer Frist.
+      </div>
+    </div>
+    <div class="facts-strip">
+      <div class="fact-pill"><div class="fp-value">alle 2 J.</div><div class="fp-label">empfohlener Überprüfungs-Rhythmus</div></div>
+      <div class="fact-pill"><div class="fp-value">–50 %</div><div class="fp-label">Unterversicherung möglich bei unverändertem Altvertrag</div></div>
+      <div class="fact-pill"><div class="fp-value">5+</div><div class="fp-label">Lebensereignisse, die eine Anpassungspflicht auslösen</div></div>
+    </div>
+    <div class="tipp-box">
+      <div class="tipp-icon">&#128161;</div>
+      <div class="tipp-content">
+        <div class="tipp-label">Mein Tipp für Sie</div>
+        <p>Planen Sie alle 2 Jahre einen "Versicherungs-TÜV" ein. Ich mache das kostenlos für Sie – als unabhängiger Makler gehöre ich keinem Anbieter und empfehle nur, was wirklich zu Ihrer Situation passt.</p>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span class="brand">Daniel Eck – Versicherungsmakler · 0174 / 322 58 85</span>
+      <span class="pgnum">Seite 5</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ FEHLER 4 ═════════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <span class="book-title">Die 7 teuersten Versicherungsfehler</span>
+      <span class="chapter">Fehler 4 von 7</span>
+    </div>
+    <div class="fehler-header">
+      <div class="fehler-number">4</div>
+      <div class="title-block">
+        <div class="fehler-label">Fehler #4 · Preisvergleich</div>
+        <div class="fehler-title">Nur auf den Preis geschaut –<br>nicht auf den Inhalt</div>
+      </div>
+    </div>
+    <div class="scenario-box">
+      <div class="scenario-label">&#127908; Reale Situation</div>
+      <p>Herr T. wechselte seine Hausratversicherung auf den günstigsten Tarif eines Vergleichsportals. Nach einem Leitungswasserschaden stellte er fest: Grobe Fahrlässigkeit war ausgeschlossen. Er hatte den Wasserhahn aufgedreht gelassen. Schaden: 14.000 €. Zahlung: 0 €.</p>
+    </div>
+    <p class="body-text">Günstig ist nicht gleich gut. Viele Billigtarife haben entscheidende Ausschlüsse im Kleingedruckten: Grobe Fahrlässigkeit, bestimmte Schadenursachen, oder zu niedrige Entschädigungsgrenzen. Der günstigste Tarif ist der teuerste – wenn er im Ernstfall nicht zahlt.</p>
+    <div class="warn-box">
+      <div class="warn-icon">⚠️</div>
+      <div class="warn-text">
+        <div class="warn-title">Vergleichsportale zeigen nicht alles</div>
+        Automatisierte Vergleiche filtern meist nur nach Preis und wenigen Basiskriterien. Wichtige Klauseln – wie grobe Fahrlässigkeit, Unterversicherungsverzicht, oder Neuwertentschädigung – werden oft nicht angezeigt.
+      </div>
+    </div>
+    <div class="facts-strip">
+      <div class="fact-pill"><div class="fp-value">3</div><div class="fp-label">Pflicht-Klauseln, die jede Police enthalten muss</div></div>
+      <div class="fact-pill"><div class="fp-value">14.000 €</div><div class="fp-label">Schaden im Beispiel – Zahlung durch Billigtarif: 0 €</div></div>
+      <div class="fact-pill"><div class="fp-value">0 €</div><div class="fp-label">Entschädigung bei ausgeschlossener grober Fahrlässigkeit</div></div>
+    </div>
+    <div class="tipp-box">
+      <div class="tipp-icon">&#128161;</div>
+      <div class="tipp-content">
+        <div class="tipp-label">Mein Tipp für Sie</div>
+        <p>Achten Sie auf diese 3 Klauseln: (1) Grobe Fahrlässigkeit eingeschlossen, (2) Unterversicherungsverzicht, (3) Neuwertentschädigung statt Zeitwert. Diese Klauseln retten Sie im Ernstfall.</p>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span class="brand">Daniel Eck – Versicherungsmakler · 0174 / 322 58 85</span>
+      <span class="pgnum">Seite 6</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ FEHLER 5 ═════════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <span class="book-title">Die 7 teuersten Versicherungsfehler</span>
+      <span class="chapter">Fehler 5 von 7</span>
+    </div>
+    <div class="fehler-header">
+      <div class="fehler-number">5</div>
+      <div class="title-block">
+        <div class="fehler-label">Fehler #5 · Reise</div>
+        <div class="fehler-title">Im Ausland krank –<br>GKV zahlt fast nichts</div>
+      </div>
+    </div>
+    <div class="scenario-box">
+      <div class="scenario-label">&#127908; Reale Situation</div>
+      <p>Familie W. urlaubt in den USA. Tochter (8) bricht sich den Arm. Krankenhausaufenthalt 3 Tage, Operation, Rücktransport. Rechnung: 47.000 US-Dollar. Die GKV übernahm: 320 Euro. Restkosten: selbst zu tragen.</p>
+    </div>
+    <p class="body-text">Die gesetzliche Krankenversicherung zahlt im Nicht-EU-Ausland in der Regel gar nichts. Selbst innerhalb der EU gibt es massive Lücken. Krankentransporte, die medizinisch notwendig sind, aber nicht von der GKV anerkannt werden, können Familien finanziell ruinieren.</p>
+    <div class="warn-box">
+      <div class="warn-icon">⚠️</div>
+      <div class="warn-text">
+        <div class="warn-title">Kreditkarten-Schutz reicht nicht</div>
+        Viele glauben, ihre Kreditkarte biete ausreichend Reiseschutz. Tatsächlich sind die Limits oft niedrig (meist 30.000 €) und Bedingungen eng. Eine eigene Auslandskrankenversicherung kostet ab 30 €/Jahr für eine ganze Familie.
+      </div>
+    </div>
+    <div class="facts-strip">
+      <div class="fact-pill"><div class="fp-value">0 €</div><div class="fp-label">GKV-Erstattung im Nicht-EU-Ausland</div></div>
+      <div class="fact-pill"><div class="fp-value">47.000 $</div><div class="fp-label">Krankenhausrechnung im Beispiel (USA)</div></div>
+      <div class="fact-pill"><div class="fp-value">ab 30 €</div><div class="fp-label">Jahrespolice für die gesamte Familie</div></div>
+    </div>
+    <div class="tipp-box">
+      <div class="tipp-icon">&#128161;</div>
+      <div class="tipp-content">
+        <div class="tipp-label">Mein Tipp für Sie</div>
+        <p>Eine Jahres-Auslandskrankenversicherung für die gesamte Familie kostet zwischen 30 und 80 Euro – und ist eine der besten Investitionen, die Sie machen können, wenn Sie öfter verreisen. Inkl. medizinisch notwendigem Rücktransport.</p>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span class="brand">Daniel Eck – Versicherungsmakler · 0174 / 322 58 85</span>
+      <span class="pgnum">Seite 7</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ FEHLER 6 ═════════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <span class="book-title">Die 7 teuersten Versicherungsfehler</span>
+      <span class="chapter">Fehler 6 von 7</span>
+    </div>
+    <div class="fehler-header">
+      <div class="fehler-number">6</div>
+      <div class="title-block">
+        <div class="fehler-label">Fehler #6 · Schaden melden</div>
+        <div class="fehler-title">Schaden zu spät oder<br>falsch gemeldet</div>
+      </div>
+    </div>
+    <div class="scenario-box">
+      <div class="scenario-label">&#127908; Reale Situation</div>
+      <p>Nach einem Einbruch wartet Herr B. 2 Wochen, bevor er seine Hausratversicherung informiert – er wollte erst alles "sortieren". Die Versicherung lehnte die Zahlung ab: Obliegenheitsverletzung durch zu späte Meldung. Schaden: 22.000 €. Zahlung: 0 €.</p>
+    </div>
+    <p class="body-text">Versicherungsverträge enthalten Meldepflichten. Schäden müssen oft innerhalb von 24–72 Stunden gemeldet werden. Wer zu lange wartet, riskiert seinen Anspruch. Auch falsche Angaben beim Schadensformular – selbst wenn gutgläubig – können zur vollständigen Ablehnung führen.</p>
+    <div class="warn-box">
+      <div class="warn-icon">⚠️</div>
+      <div class="warn-text">
+        <div class="warn-title">Nie selbst reparieren – erst melden!</div>
+        Viele lassen Schäden reparieren, bevor sie die Versicherung informieren. Das ist ein häufiger Fehler: Die Versicherung muss den Schaden dokumentieren. Reparieren Sie nichts ohne Freigabe – außer zur Schadensbegrenzung (z. B. Wasser abstellen).
+      </div>
+    </div>
+    <div class="facts-strip">
+      <div class="fact-pill"><div class="fp-value">24–72 h</div><div class="fp-label">typische Meldefrist nach Schadenseintritt</div></div>
+      <div class="fact-pill"><div class="fp-value">22.000 €</div><div class="fp-label">Schaden im Beispiel – nicht gezahlt wegen Verspätung</div></div>
+      <div class="fact-pill"><div class="fp-value">0 €</div><div class="fp-label">Zahlung bei Obliegenheitsverletzung</div></div>
+    </div>
+    <div class="tipp-box">
+      <div class="tipp-icon">&#128161;</div>
+      <div class="tipp-content">
+        <div class="tipp-label">Mein Tipp für Sie</div>
+        <p>Speichern Sie die Schadenshotline Ihres Versicherers in Ihrem Telefon. Im Schadensfall: (1) Schaden sichern/begrenzen, (2) Fotos machen, (3) sofort melden. Als Ihr Makler bin ich dabei – ich begleite Sie durch den Prozess.</p>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span class="brand">Daniel Eck – Versicherungsmakler · 0174 / 322 58 85</span>
+      <span class="pgnum">Seite 8</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ FEHLER 7 ═════════════ -->
+<div class="page">
+  <div class="content-page">
+    <div class="page-header">
+      <span class="book-title">Die 7 teuersten Versicherungsfehler</span>
+      <span class="chapter">Fehler 7 von 7</span>
+    </div>
+    <div class="fehler-header">
+      <div class="fehler-number">7</div>
+      <div class="title-block">
+        <div class="fehler-label">Fehler #7 · Altersvorsorge</div>
+        <div class="fehler-title">Auf die gesetzliche Rente<br>allein vertraut</div>
+      </div>
+    </div>
+    <div class="scenario-box">
+      <div class="scenario-label">&#127908; Reale Situation</div>
+      <p>Herr A., 67, geht in Rente. Er hat 40 Jahre gearbeitet und nie privat vorgesorgt. Gesetzliche Rente: 1.180 €/Monat. Miete: 780 €. Es bleiben 400 € für alles andere. Er hätte mit 25 Jahren eine private Rentenversicherung für 80 €/Monat abschließen können.</p>
+    </div>
+    <p class="body-text">Das gesetzliche Rentenniveau sinkt. Wer heute 40 ist, kann nicht damit rechnen, dass die gesetzliche Rente seinen Lebensstandard sichert. Die Rentenlücke – die Differenz zwischen letztem Nettoeinkommen und Rente – beträgt im Schnitt 40–50 %. Private Vorsorge ist keine Option mehr, sondern Pflicht.</p>
+    <div class="warn-box">
+      <div class="warn-icon">⚠️</div>
+      <div class="warn-text">
+        <div class="warn-title">Der Zinseszins-Effekt wird unterschätzt</div>
+        Wer mit 25 Jahren 100 €/Monat spart (6 % Rendite), hat mit 67 Jahren über 220.000 €. Wer mit 40 anfängt, spart ebenfalls 100 €/Monat – hat aber nur noch ca. 82.000 €. 15 Jahre Verzögerung kostet über 138.000 €.
+      </div>
+    </div>
+    <div class="facts-strip">
+      <div class="fact-pill"><div class="fp-value">40–50 %</div><div class="fp-label">durchschnittliche Rentenlücke zum letzten Nettoeinkommen</div></div>
+      <div class="fact-pill"><div class="fp-value">138.000 €</div><div class="fp-label">Verlust durch 15 Jahre späteren Vorsorge-Start</div></div>
+      <div class="fact-pill"><div class="fp-value">ab 80 €</div><div class="fp-label">hätte mit 25 Jahren monatlich gereicht</div></div>
+    </div>
+    <div class="tipp-box">
+      <div class="tipp-icon">&#128161;</div>
+      <div class="tipp-content">
+        <div class="tipp-label">Mein Tipp für Sie</div>
+        <p>Berechnen Sie Ihre persönliche Rentenlücke. Nutzen Sie staatliche Förderung (Riester, Rürup, betriebliche Altersvorsorge) – hier schenkt Ihnen der Staat Geld dazu. Ich zeige Ihnen, welche Lösung zu Ihnen passt.</p>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span class="brand">Daniel Eck – Versicherungsmakler · 0174 / 322 58 85</span>
+      <span class="pgnum">Seite 9</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ PAGE 10: ABOUT ═════════════ -->
+<div class="page">
+  <div class="about-page">
+    <div class="page-header">
+      <span class="book-title">Die 7 teuersten Versicherungsfehler</span>
+      <span class="chapter">Über den Autor</span>
+    </div>
+
+    <div class="about-hero">
+      <div class="about-avatar">&#128104;&#8205;&#128188;</div>
+      <div>
+        <h2>Daniel Eck</h2>
+        <div class="role">Versicherungsmakler · Schmalkalden</div>
+        <p>Als unabhängiger Makler arbeite ich nicht für einen Versicherer – ich arbeite für Sie. Der Betrieb besteht seit über 20 Jahren – gegründet von meinem Vater, heute von mir weitergeführt. Kein Verkaufsdruck, keine Provision als Anreiz für schlechte Empfehlungen.</p>
+      </div>
+    </div>
+
+    <div class="facts-grid">
+      <div class="fact-card">
+        <div class="fact-value">2002</div>
+        <div class="fact-label">Gründungsjahr des<br>Familienbetriebs</div>
+      </div>
+      <div class="fact-card">
+        <div class="fact-value">100%</div>
+        <div class="fact-label">Unabhängig – kein<br>Anbieter bevorzugt</div>
+      </div>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="c-icon">&#128222;</div>
+        <div>
+          <div class="c-label">Telefon / WhatsApp</div>
+          <div class="c-value">0174 / 322 58 85</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="c-icon">&#128205;</div>
+        <div>
+          <div class="c-label">Region</div>
+          <div class="c-value">Talstraße 73, 98574 Schmalkalden</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="c-icon">&#128197;</div>
+        <div>
+          <div class="c-label">Termin</div>
+          <div class="c-value">Online-Termin möglich</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--blue);border-radius:10px;padding:14px 18px;color:var(--white);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:9pt;font-weight:700;margin-bottom:3px;">Kostenlose Versicherungsanalyse anfordern</div>
+        <div style="font-size:8pt;color:rgba(255,255,255,.75);">Ich prüfe Ihre bestehenden Verträge und zeige Ihnen, wo Lücken sind.</div>
+      </div>
+      <div style="font-size:8.5pt;font-weight:700;color:var(--sky);white-space:nowrap;margin-left:16px;">0174 / 322 58 85</div>
+    </div>
+
+    <div class="disclaimer">
+      Dieser Ratgeber dient der allgemeinen Information und ersetzt keine individuelle Beratung. Alle genannten Fallbeispiele sind vereinfachte Illustrationen. Für eine auf Ihre persönliche Situation zugeschnittene Empfehlung sprechen Sie bitte mit einem Fachmann. · © Daniel Eck – Versicherungsmakler · Daniel Eck · Alle Rechte vorbehalten
+    </div>
+
+    <div class="page-footer" style="margin-top:auto;">
+      <span class="brand">Daniel Eck – Versicherungsmakler · 0174 / 322 58 85</span>
+      <span class="pgnum">Seite 10</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

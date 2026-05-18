@@ -1,0 +1,508 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Familienversicherungs-Übersicht</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --navy:    #172d50;
+  --blue:    #1a50c8;
+  --blue-lt: #2e68de;
+  --sky:     #60a5fa;
+  --gray-50: #f8fafc;
+  --gray-100:#f1f5f9;
+  --gray-200:#e2e8f0;
+  --gray-400:#94a3b8;
+  --gray-500:#64748b;
+  --white:   #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 8.5pt;
+  color: var(--navy);
+  background: var(--white);
+  line-height: 1.4;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 12mm 14mm 10mm;
+  background: var(--white);
+}
+
+/* ── HEADER ── */
+.doc-header {
+  background: var(--navy);
+  border-radius: 12px 12px 0 0;
+  padding: 14px 20px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.doc-header .eyebrow {
+  font-size: 7pt;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sky);
+  margin-bottom: 3px;
+}
+.doc-header h1 {
+  font-size: 16pt;
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.15;
+}
+.doc-header .subtitle {
+  font-size: 7.5pt;
+  color: rgba(255,255,255,.65);
+  margin-top: 3px;
+}
+.doc-header .right {
+  text-align: right;
+  font-size: 7.5pt;
+  color: rgba(255,255,255,.5);
+  line-height: 1.7;
+}
+.doc-header .right strong {
+  display: block;
+  color: var(--sky);
+  font-size: 8pt;
+  font-weight: 700;
+}
+
+/* ── META ROW ── */
+.meta-row {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-top: none;
+  padding: 10px 20px 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.meta-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 32px;
+}
+.meta-field label {
+  font-size: 6.5pt;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+}
+.meta-field input.field-line {
+  border: none;
+  border-bottom: 1.5px solid var(--gray-200);
+  background: transparent;
+  outline: none;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 8.5pt;
+  color: var(--navy);
+  width: 100%;
+  padding: 2px 0;
+  margin-top: auto;
+}
+.meta-field input.field-line:focus { border-bottom-color: var(--blue); }
+
+/* ── PERSON SECTIONS ── */
+.person-section {
+  border: 1.5px solid var(--gray-200);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.person-header {
+  background: var(--gray-100);
+  padding: 8px 14px 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  border-bottom: 1.5px solid var(--gray-200);
+  min-height: 42px;
+}
+.person-num {
+  width: 22px;
+  height: 22px;
+  background: var(--blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9pt;
+  font-weight: 700;
+  color: var(--white);
+  flex-shrink: 0;
+}
+.person-name-field {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  padding-bottom: 6px;
+}
+.person-name-field label {
+  font-size: 7pt;
+  font-weight: 600;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  white-space: nowrap;
+}
+.person-name-field input.name-line {
+  flex: 1;
+  border: none;
+  border-bottom: 1.5px solid var(--gray-400);
+  background: transparent;
+  outline: none;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 8pt;
+  font-weight: 600;
+  color: var(--navy);
+  padding: 1px 2px;
+  min-width: 0;
+}
+.person-name-field input.name-line:focus { border-bottom-color: var(--blue); }
+.person-role {
+  font-size: 7pt;
+  color: var(--gray-500);
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding-bottom: 6px;
+}
+.person-role input.role-line {
+  width: 90px;
+  border: none;
+  border-bottom: 1.5px solid var(--gray-400);
+  background: transparent;
+  outline: none;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 7.5pt;
+  color: var(--navy);
+  padding: 1px 2px;
+}
+.person-role input.role-line:focus { border-bottom-color: var(--blue); }
+.person-role select, .person-role .role-line-old {
+  width: 90px;
+  height: 1.5px;
+  background: var(--gray-400);
+}
+
+table.person-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table.person-table thead th {
+  background: rgba(26,80,200,.05);
+  padding: 5px 8px;
+  font-size: 7pt;
+  font-weight: 700;
+  color: var(--navy);
+  text-align: left;
+  border-bottom: 1px solid var(--gray-200);
+  border-right: 1px solid var(--gray-200);
+}
+table.person-table thead th:last-child { border-right: none; }
+
+table.person-table tbody td {
+  padding: 10px 8px 8px;
+  font-size: 7.5pt;
+  border-bottom: 1px solid var(--gray-200);
+  border-right: 1px solid var(--gray-200);
+  color: var(--gray-500);
+  vertical-align: bottom;
+  height: 34px;
+}
+table.person-table tbody tr:last-child td { border-bottom: none; }
+table.person-table tbody td:last-child { border-right: none; }
+
+table.person-table tbody tr:nth-child(even) td { background: var(--white); }
+
+.ins-name {
+  font-weight: 600;
+  color: var(--navy);
+  font-size: 7.5pt;
+  white-space: nowrap;
+}
+.write-line {
+  display: block;
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid var(--gray-300, #d1d5db);
+  background: transparent;
+  outline: none;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 7.5pt;
+  color: var(--navy);
+  padding: 1px 2px;
+  box-sizing: border-box;
+}
+.write-line:focus { border-bottom-color: var(--blue); }
+.status-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--gray-400);
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11pt;
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+  background: var(--white);
+  transition: background .1s, border-color .1s;
+}
+.status-dot[data-state="1"] { background: #dcfce7; border-color: #16a34a; color: #16a34a; }
+.status-dot[data-state="2"] { background: #fee2e2; border-color: #dc2626; color: #dc2626; }
+.status-dot[data-state="3"] { background: #fef9c3; border-color: #ca8a04; color: #ca8a04; }
+
+/* ── EMERGENCY BOX ── */
+.emergency-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.emerg-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-left: 3px solid var(--blue);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--navy);
+}
+.emerg-card h4 {
+  font-size: 7.5pt;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.emerg-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.emerg-field label {
+  font-size: 6.5pt;
+  color: var(--gray-400);
+  width: 60px;
+  flex-shrink: 0;
+}
+.emerg-field input.el {
+  flex: 1;
+  border: none;
+  border-bottom: 1.5px solid var(--gray-300, #d1d5db);
+  background: transparent;
+  outline: none;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 7.5pt;
+  color: var(--navy);
+  padding: 1px 3px;
+  min-width: 0;
+}
+.emerg-field input.el:focus { border-bottom-color: var(--blue); }
+
+/* ── FOOTER ── */
+.doc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid var(--gray-200);
+  font-size: 6.5pt;
+  color: var(--gray-400);
+}
+
+@media print {
+  @page { size: A4 portrait; margin: 8mm 10mm; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 100%; margin: 0; padding: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="doc-header">
+    <div>
+      <div class="eyebrow">Versicherungsübersicht Familie</div>
+      <h1>Meine Versicherungen –<br>Alle im Überblick</h1>
+      <div class="subtitle">Ausfüllbar · Für alle Familienmitglieder · Sicher aufbewahren</div>
+    </div>
+    <div class="right">
+      <strong>Daniel Eck – Versicherungsmakler</strong>
+      0174 / 322 58 85 · daniel@eckversicherung.de
+    </div>
+  </div>
+
+  <div class="meta-row">
+    <div class="meta-field">
+      <label>Familie / Name</label>
+      <input type="text" class="field-line">
+    </div>
+    <div class="meta-field">
+      <label>Stand (Datum)</label>
+      <input type="text" class="field-line">
+    </div>
+    <div class="meta-field">
+      <label>Nächste Prüfung</label>
+      <input type="text" class="field-line">
+    </div>
+  </div>
+
+  <!-- Person 1 -->
+  <div class="person-section">
+    <div class="person-header">
+      <div class="person-num">1</div>
+      <div class="person-name-field">
+        <label>Name:</label>
+        <input type="text" class="name-line">
+      </div>
+      <div class="person-role" style="margin-left:16px;">
+        <label style="font-size:7pt;color:var(--gray-500);font-weight:600;">Geb.:</label>
+        <input type="text" class="role-line">
+      </div>
+    </div>
+    <table class="person-table">
+      <thead>
+        <tr>
+          <th style="width:130px;">Versicherungsart</th>
+          <th>Anbieter</th>
+          <th>Vertragsnummer</th>
+          <th>Beitrag / Monat</th>
+          <th>Kündigung bis</th>
+          <th style="text-align:center;width:50px;">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="ins-name">Private Haftpflicht</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+        <tr><td><span class="ins-name">Krankenversicherung</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+        <tr><td><span class="ins-name">Berufsunfähigkeit</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+        <tr><td><span class="ins-name">Kfz-Versicherung</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+        <tr><td><span class="ins-name">Rentenversicherung</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Person 2 -->
+  <div class="person-section">
+    <div class="person-header">
+      <div class="person-num">2</div>
+      <div class="person-name-field">
+        <label>Name:</label>
+        <input type="text" class="name-line">
+      </div>
+      <div class="person-role" style="margin-left:16px;">
+        <label style="font-size:7pt;color:var(--gray-500);font-weight:600;">Geb.:</label>
+        <input type="text" class="role-line">
+      </div>
+    </div>
+    <table class="person-table">
+      <thead>
+        <tr>
+          <th style="width:130px;">Versicherungsart</th>
+          <th>Anbieter</th>
+          <th>Vertragsnummer</th>
+          <th>Beitrag / Monat</th>
+          <th>Kündigung bis</th>
+          <th style="text-align:center;width:50px;">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="ins-name">Krankenversicherung</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+        <tr><td><span class="ins-name">Berufsunfähigkeit</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+        <tr><td><span class="ins-name">Kfz-Versicherung</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+        <tr><td><span class="ins-name">Rentenversicherung</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Gemeinsam -->
+  <div class="person-section">
+    <div class="person-header">
+      <div class="person-num" style="background:var(--navy);">F</div>
+      <div class="person-name-field">
+        <label style="color:var(--navy);font-weight:700;">Gemeinsame Verträge (Haushalt / Familie)</label>
+        <input type="text" class="name-line">
+      </div>
+    </div>
+    <table class="person-table">
+      <thead>
+        <tr>
+          <th style="width:130px;">Versicherungsart</th>
+          <th>Anbieter</th>
+          <th>Vertragsnummer</th>
+          <th>Beitrag / Monat</th>
+          <th>Kündigung bis</th>
+          <th style="text-align:center;width:50px;">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="ins-name">Hausratversicherung</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+        <tr><td><span class="ins-name">Wohngebäude</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+        <tr><td><span class="ins-name">Rechtsschutz</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+        <tr><td><span class="ins-name">Risikolebens</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+        <tr><td><span class="ins-name">Reisekranken (Jahres)</span></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td><input type="text" class="write-line"></td><td style="text-align:center;"><span class="status-dot"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Emergency -->
+  <div class="emergency-grid">
+    <div class="emerg-card">
+      <h4>&#128680; Notfall-Nummern</h4>
+      <div class="emerg-field"><label>Makler:</label><span style="font-size:7pt;color:var(--navy);font-weight:600;">Daniel Eck · 0174 / 322 58 85 · daniel@eckversicherung.de</span></div>
+      <div class="emerg-field"><label>Kranken:</label><input type="text" class="el"></div>
+      <div class="emerg-field"><label>Hausrat:</label><input type="text" class="el"></div>
+      <div class="emerg-field"><label>Kfz:</label><input type="text" class="el"></div>
+    </div>
+    <div class="emerg-card">
+      <h4>&#128203; Wichtige Dokumente</h4>
+      <div class="emerg-field"><label>Ordner:</label><input type="text" class="el"></div>
+      <div class="emerg-field"><label>Digital:</label><input type="text" class="el"></div>
+      <div class="emerg-field"><label>Passwort:</label><input type="text" class="el"></div>
+      <div class="emerg-field"><label>Tresor:</label><input type="text" class="el"></div>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <span>&#9679; = Aktiv &nbsp; &#9675; = Gekündigt / Auslaufend &nbsp; &#9651; = Prüfen</span>
+    <span>Daniel Eck – Versicherungsmakler · 0174 / 322 58 85 · daniel@eckversicherung.de</span>
+  </div>
+
+</div>
+
+<script>
+var labels = ['', '✓', '✗', '?'];
+document.querySelectorAll('.status-dot').forEach(function(dot) {
+  dot.dataset.state = '0';
+  dot.title = 'Klicken: leer → ✓ Aktiv → ✗ Fehlt → ? Prüfen';
+  dot.addEventListener('click', function() {
+    var s = ((parseInt(this.dataset.state) || 0) + 1) % 4;
+    this.dataset.state = s;
+    this.textContent = labels[s];
+  });
+});
+</script>
+</body>
+</html>

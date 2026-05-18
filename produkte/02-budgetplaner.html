@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jahres-Budgetplaner Versicherungen</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --navy:    #172d50;
+  --blue:    #1a50c8;
+  --blue-lt: #2e68de;
+  --sky:     #60a5fa;
+  --gray-50: #f8fafc;
+  --gray-100:#f1f5f9;
+  --gray-200:#e2e8f0;
+  --gray-400:#94a3b8;
+  --gray-500:#64748b;
+  --white:   #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 8.5pt;
+  color: var(--navy);
+  background: var(--white);
+  line-height: 1.4;
+}
+
+.page {
+  width: 297mm;
+  min-height: 210mm;
+  margin: 0 auto;
+  padding: 12mm 14mm 10mm;
+  background: var(--white);
+  page-break-after: always;
+}
+.page:last-child { page-break-after: avoid; }
+
+/* ── HEADER ── */
+.doc-header {
+  background: var(--navy);
+  color: var(--white);
+  border-radius: 10px 10px 0 0;
+  padding: 12px 18px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.doc-header .left .eyebrow {
+  font-size: 7pt;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sky);
+  margin-bottom: 3px;
+}
+.doc-header h1 {
+  font-size: 15pt;
+  font-weight: 900;
+  color: var(--white);
+}
+.doc-header .subtitle {
+  font-size: 8pt;
+  color: rgba(255,255,255,.65);
+  margin-top: 2px;
+}
+.doc-header .right {
+  text-align: right;
+  font-size: 7.5pt;
+  color: rgba(255,255,255,.5);
+  line-height: 1.7;
+}
+.doc-header .right strong {
+  display: block;
+  color: var(--sky);
+  font-size: 8pt;
+  font-weight: 700;
+}
+
+/* ── YEAR INPUT ROW ── */
+.year-row {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-top: none;
+  padding: 6px 18px;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+.year-row .yr-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 7.5pt;
+  color: var(--navy);
+  font-weight: 500;
+}
+.yr-field input.yr-box {
+  display: inline-block;
+  width: 55px;
+  border: none;
+  border-bottom: 1px solid var(--gray-400);
+  background: transparent;
+  outline: none;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 7.5pt;
+  color: var(--navy);
+  padding: 1px 2px;
+  vertical-align: bottom;
+}
+.yr-field input.yr-box:focus { border-bottom-color: var(--blue); }
+td[contenteditable] { cursor: text; }
+td[contenteditable]:focus { outline: none !important; background: rgba(26,80,200,.04) !important; }
+
+/* ── MAIN TABLE ── */
+.table-wrap {
+  border: 1.5px solid var(--gray-200);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+thead th {
+  background: var(--gray-100);
+  padding: 6px 5px;
+  font-size: 7pt;
+  font-weight: 700;
+  text-align: center;
+  color: var(--navy);
+  border-bottom: 1.5px solid var(--gray-200);
+  border-right: 1px solid var(--gray-200);
+  line-height: 1.3;
+}
+thead th:first-child {
+  text-align: left;
+  padding-left: 12px;
+  width: 80px;
+  font-size: 7.5pt;
+}
+thead th:last-child { border-right: none; }
+
+thead .sub-header th {
+  background: rgba(26,80,200,.06);
+  font-size: 6.5pt;
+  font-weight: 600;
+  color: var(--blue-lt);
+  padding: 4px 5px;
+  border-bottom: 1.5px solid var(--gray-200);
+}
+thead .sub-header th:first-child {
+  text-align: left;
+  padding-left: 12px;
+}
+
+tbody tr:nth-child(even) td { background: var(--white); }
+
+tbody td {
+  padding: 5.5px 5px;
+  border-bottom: 1px solid var(--gray-200);
+  border-right: 1px solid var(--gray-200);
+  text-align: center;
+  font-size: 7.5pt;
+  vertical-align: middle;
+  min-width: 22px;
+}
+tbody td:first-child {
+  text-align: left;
+  padding-left: 12px;
+  font-weight: 600;
+  font-size: 8pt;
+  color: var(--navy);
+  min-width: 80px;
+}
+tbody td:last-child { border-right: none; }
+
+.input-field {
+  display: block;
+  width: 100%;
+  height: 12px;
+  border-bottom: 1px solid var(--gray-300);
+}
+
+tfoot tr td {
+  background: var(--navy) !important;
+  color: var(--white);
+  font-weight: 700;
+  font-size: 7.5pt;
+  padding: 6px 5px;
+  border-color: rgba(255,255,255,.15);
+}
+tfoot tr td:first-child {
+  text-align: left;
+  padding-left: 12px;
+  color: var(--sky);
+  font-size: 8pt;
+}
+
+.total-row td {
+  background: rgba(26,80,200,.08) !important;
+  font-weight: 700;
+  color: var(--blue) !important;
+  border-top: 1.5px solid var(--blue) !important;
+  font-size: 7.5pt;
+}
+.total-row td:first-child { color: var(--navy) !important; }
+
+.col-gesamt {
+  background: rgba(26,80,200,.05) !important;
+  font-weight: 600;
+  color: var(--blue-lt) !important;
+}
+
+/* ── TIP BOX ── */
+.tip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.tip-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-left: 3px solid var(--blue);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 7pt;
+  color: var(--gray-500);
+  line-height: 1.5;
+}
+.tip-card strong { display: block; color: var(--navy); font-size: 7.5pt; margin-bottom: 2px; }
+
+.footer-line {
+  text-align: center;
+  font-size: 6.5pt;
+  color: var(--gray-400);
+  margin-top: 8px;
+}
+
+@media print {
+  @page { size: A4 landscape; margin: 8mm 10mm; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 100%; margin: 0; padding: 0; page-break-after: always; }
+  .page:last-child { page-break-after: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ PAGE 1 ═══ -->
+<div class="page">
+
+  <div class="doc-header">
+    <div class="left">
+      <div class="eyebrow">Jahresübersicht Versicherungsbeiträge</div>
+      <h1>Mein Versicherungs-Budgetplaner</h1>
+      <div class="subtitle">Monatliche Beiträge im Überblick – ausfüllbar per Hand oder digital</div>
+    </div>
+    <div class="right">
+      <strong>Daniel Eck – Versicherungsmakler</strong>
+      0174 / 322 58 85 · daniel@eckversicherung.de<br>Talstraße 73, 98574 Schmalkalden
+    </div>
+  </div>
+
+  <div class="year-row">
+    <div class="yr-field">Jahr: <input type="text" class="yr-box"></div>
+    <div class="yr-field">Name / Familie: <input type="text" class="yr-box" style="width:90px;"></div>
+    <div class="yr-field">Stand: <input type="text" class="yr-box"></div>
+    <div class="yr-field" style="margin-left:auto;font-size:7pt;color:var(--gray-400);">Beiträge in Euro (€)</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2">Monat</th>
+          <th colspan="2">Haftpflicht</th>
+          <th colspan="3">Gesundheit</th>
+          <th colspan="2">Eigentum</th>
+          <th colspan="2">Kfz</th>
+          <th colspan="2">Vorsorge</th>
+          <th>Recht</th>
+          <th>Sonstiges</th>
+          <th>Monats-<br>gesamt</th>
+        </tr>
+        <tr class="sub-header">
+          <th>Privat-<br>haftpflicht</th>
+          <th>Tier-<br>haltung</th>
+          <th>Kranken<br>GKV/PKV</th>
+          <th>Zahnarzt-<br>zusatz</th>
+          <th style="min-width:52px;">BU</th>
+          <th>Hausrat</th>
+          <th>Wohn-<br>gebäude</th>
+          <th>Haft-<br>pflicht</th>
+          <th>Kasko</th>
+          <th>Risiko-<br>leben</th>
+          <th>Rente/<br>Altersv.</th>
+          <th>Rechts-<br>schutz</th>
+          <th>___</th>
+          <th>GESAMT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Januar</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr><td>Februar</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr><td>März</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr><td>April</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr><td>Mai</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr><td>Juni</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr><td>Juli</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr><td>August</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr><td>September</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr><td>Oktober</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr><td>November</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr><td>Dezember</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="col-gesamt"></td></tr>
+        <tr class="total-row">
+          <td>&#931; Jahrestotal</td>
+          <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          <td class="col-gesamt"></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>Jahresdurchschnitt / Monat:</td>
+          <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="tip-grid">
+    <div class="tip-card">
+      <strong>&#128161; Tipp: Jährlich zahlen</strong>
+      Viele Versicherer geben 3–8 % Rabatt bei jährlicher Zahlung. Lohnt sich oft, wenn man das Geld hat.
+    </div>
+    <div class="tip-card">
+      <strong>&#128269; Tipp: Vertrag prüfen</strong>
+      Mindestens alle 2 Jahre Vergleich machen. Tarife ändern sich – Sie könnten bis zu 40 % sparen.
+    </div>
+    <div class="tip-card">
+      <strong>&#128222; Beratung</strong>
+      Kostenlose Überprüfung Ihrer Verträge – als unabhängiger Makler arbeite ich für Sie, nicht für den Anbieter.<br><strong style="color:var(--navy);">0174 / 322 58 85</strong><br>daniel@eckversicherung.de · Talstraße 73, 98574 Schmalkalden
+    </div>
+  </div>
+
+  <div class="footer-line">
+    Seite 1 / 1 · Daniel Eck – Versicherungsmakler · 0174 / 322 58 85 · daniel@eckversicherung.de · Talstraße 73, 98574 Schmalkalden
+  </div>
+
+</div>
+
+<script>
+// Alle Datenzellen der Monatstabelle ausfüllbar machen
+document.querySelectorAll('tbody tr td:not(:first-child), tfoot tr td:not(:first-child)').forEach(function(td) {
+  td.contentEditable = 'true';
+  td.style.outline = 'none';
+});
+</script>
+</body>
+</html>

@@ -229,6 +229,152 @@
       .quiz-question { font-size: 16px; }
     }
 
+    /* ====== GRATIS-PAKET MODAL ====== */
+    .btn-gratis {
+      background-image: linear-gradient(90deg, rgb(88,28,135), rgb(255,33,120), rgb(88,28,135)) !important;
+      background-size: 200% 100% !important;
+      background-color: transparent !important;
+      animation: gradient-wipe 8s linear infinite !important;
+      box-shadow: 0 2px 10px rgba(255,33,120,.35) !important;
+      border: none !important; color: #fff !important;
+      transition: box-shadow .2s, transform .2s !important;
+    }
+    .btn-gratis:hover {
+      box-shadow: 0 4px 16px rgba(255,33,120,.5) !important;
+      transform: translateY(-1px);
+    }
+    .gp-overlay {
+      position: fixed; inset: 0; z-index: 9000;
+      background: rgba(10,18,40,.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center; padding: 16px;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .gp-overlay.open { opacity: 1; pointer-events: all; }
+    .gp-card {
+      display: grid; grid-template-columns: 1fr 1fr;
+      width: 100%; max-width: 740px;
+      box-shadow: 0 32px 100px rgba(0,0,0,.35);
+      border-radius: 24px; overflow: hidden;
+      position: relative; max-height: 96vh;
+      transform: translateY(28px) scale(.96);
+      transition: transform .38s cubic-bezier(.4,0,.2,1);
+    }
+    .gp-overlay.open .gp-card { transform: translateY(0) scale(1); }
+    /* ── Left panel ── */
+    .gp-left {
+      background: linear-gradient(160deg, #0c1c3e 0%, #172d50 55%, #1a3d6e 100%);
+      padding: 36px 32px 32px;
+      display: flex; flex-direction: column;
+      color: #fff; position: relative; overflow: hidden;
+    }
+    .gp-left::before {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(255,255,255,.04);
+    }
+    .gp-left-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.12); border-radius: 99px;
+      padding: 4px 12px; font-size: 11px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase; color: #93c5fd;
+      margin-bottom: 20px; width: fit-content;
+    }
+    .gp-left h2 {
+      font-size: 22px; font-weight: 900; line-height: 1.25;
+      color: #fff; margin: 0 0 10px;
+    }
+    .gp-left-sub {
+      font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.6;
+      margin: 0 0 24px;
+    }
+    .gp-products {
+      list-style: none; padding: 0; margin: 0 0 auto;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .gp-pill {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,.9);
+    }
+    .gp-pill i {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(74,222,128,.25); color: #4ade80;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; flex-shrink: 0;
+    }
+    .gp-left-author {
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 28px; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .gp-left-author img {
+      width: 40px; height: 40px; border-radius: 50%;
+      object-fit: cover; border: 2px solid rgba(255,255,255,.25);
+    }
+    .gp-left-author-name { font-size: 13px; font-weight: 700; color: #fff; }
+    .gp-left-author-role { font-size: 11px; color: rgba(255,255,255,.5); margin-top: 2px; }
+    /* ── Right panel ── */
+    .gp-right {
+      background: #fff; padding: 36px 32px 32px;
+      display: flex; flex-direction: column; overflow-y: auto;
+    }
+    .gp-right-title { font-size: 18px; font-weight: 900; color: #172d50; margin: 0 0 6px; }
+    .gp-right-sub { font-size: 13px; color: #64748b; margin: 0 0 22px; line-height: 1.5; }
+    .gp-close {
+      position: absolute; top: 14px; right: 14px; z-index: 10;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,.15); border: none; color: #fff;
+      cursor: pointer; font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .gp-close:hover { background: rgba(255,255,255,.28); }
+    .gp-form-row { margin-bottom: 14px; }
+    .gp-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .04em; }
+    .gp-input {
+      width: 100%; padding: 11px 14px;
+      border: 2px solid #e2e8f0; border-radius: 10px;
+      font-family: inherit; font-size: 14px; color: #172d50;
+      background: #f8fafc; outline: none;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+      box-sizing: border-box;
+    }
+    .gp-input:focus { border-color: #1a50c8; background: #fff; box-shadow: 0 0 0 3px rgba(26,80,200,.12); }
+    .gp-submit {
+      width: 100%; padding: 14px;
+      background: linear-gradient(90deg, rgb(88,28,135), rgb(255,33,120));
+      color: #fff; border: none; border-radius: 12px;
+      font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: opacity .15s, transform .1s; margin-bottom: 12px;
+      box-shadow: 0 4px 18px rgba(255,33,120,.35);
+    }
+    .gp-submit:hover { opacity: .9; transform: translateY(-1px); }
+    .gp-submit:disabled { background: #94a3b8; box-shadow: none; cursor: not-allowed; transform: none; }
+    .gp-trust {
+      text-align: center; font-size: 11px; color: #94a3b8;
+      display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
+    }
+    .gp-trust span { display: flex; align-items: center; gap: 4px; }
+    .gp-success { display: none; text-align: center; flex: 1; justify-content: center; align-items: center; flex-direction: column; }
+    .gp-success.show { display: flex; }
+    .gp-success-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: #dcfce7; color: #16a34a; font-size: 30px;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;
+    }
+    .gp-success h3 { font-size: 22px; font-weight: 900; color: #172d50; margin-bottom: 10px; }
+    .gp-success > p { font-size: 14px; color: #64748b; line-height: 1.65; margin: 0; }
+    .gp-error { display: block; font-size: 11.5px; color: #dc2626; margin-top: 4px; min-height: 16px; }
+    .gp-input.error { border-color: #dc2626; background: #fff5f5; }
+    @media(max-width: 600px) {
+      .gp-card { grid-template-columns: 1fr; max-height: 92vh; }
+      .gp-left { padding: 24px 22px 20px; border-radius: 0; }
+      .gp-left h2 { font-size: 17px; }
+      .gp-products { flex-direction: row; flex-wrap: wrap; gap: 8px; margin-bottom: 0; }
+      .gp-left-author { display: none; }
+      .gp-right { padding: 22px 22px 24px; }
+    }
+
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -268,7 +414,7 @@
     </video>
     <div class="hero-overlay"></div>
     <div class="hero-container">
-      <div class="hero-content"><p class="hero-eyebrow animate-hero" style="--delay:.1s">  <span class="eyebrow-line"></span>  <span>SEIT ÜBER 20 JAHREN</span></p><h1 class="hero-title animate-hero" style="--delay:.25s">  Unser Service –<br />  Ihre <span class="hero-highlight">Sicherheit.</span></h1><p class="hero-desc animate-hero" style="--delay:.4s">  Unabhängige Versicherungsberatung in 3. Generation – persönlich, transparent und immer in Ihrem Interesse.</p><div class="hero-btns animate-hero" style="--delay:.55s">  <button onclick="openFunnel();window._track&&_track('cta','Hero – Erstberatung')" class="btn btn-primary">    Kostenlose Erstberatung anfordern <i class="fas fa-arrow-right"></i>  </button></div><div class="hero-trust animate-hero" style="--delay:.7s">  <span><i class="far fa-circle"></i> 100% Unabhängig</span>  <span><i class="far fa-circle"></i> Gegründet 2002</span></div>
+      <div class="hero-content"><p class="hero-eyebrow animate-hero" style="--delay:.1s">  <span class="eyebrow-line"></span>  <span>SEIT ÜBER 20 JAHREN</span></p><h1 class="hero-title animate-hero" style="--delay:.25s">  Unser Service –<br />  Ihre <span class="hero-highlight">Sicherheit.</span></h1><p class="hero-desc animate-hero" style="--delay:.4s">  Unabhängige Versicherungsberatung in 3. Generation – persönlich, transparent und immer in Ihrem Interesse.</p><div class="hero-btns animate-hero" style="--delay:.55s">  <button onclick="openGratisPaket()" class="btn btn-gratis">    <i class="fas fa-gift"></i> 5 Tools gratis sichern  </button>  <button onclick="openFunnel();window._track&&_track('cta','Hero – Erstberatung')" class="btn btn-primary">    Kostenlose Erstberatung anfordern <i class="fas fa-arrow-right"></i>  </button></div><div class="hero-trust animate-hero" style="--delay:.7s">  <span><i class="far fa-circle"></i> 100% Unabhängig</span>  <span><i class="far fa-circle"></i> Gegründet 2002</span></div>
       </div>
 
       <div class="hero-visual animate-hero-img" style="--delay:.3s"><div class="hero-img-wrapper">  <div class="hero-img-deco top-left"></div>  <div class="hero-img-deco bottom-right"></div>  <img src="Dummybild 1.png" alt="Ihr Versicherungsexperte Daniel Eck" class="hero-img" /></div>
@@ -475,6 +621,8 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('NvkkoFUZ5N3GHIGaN');</script>
   <script src="script.js?v=8"></script>
   <script src="cookie.js"></script>
   <script src="analytics.js" defer></script>
@@ -646,14 +794,277 @@
 
   </script>
 
-  <!-- Social Peek (Mobile) -->
+  <!-- GRATIS-PAKET MODAL -->
+  <div class="gp-overlay" id="gpOverlay" onclick="if(event.target===this)closeGratisPaket()">
+    <div class="gp-card">
+      <button class="gp-close" onclick="closeGratisPaket()" aria-label="Schließen"><i class="fas fa-times"></i></button>
+
+      <!-- Linke Seite -->
+      <div class="gp-left">
+        <h2>5 Tools für Ihre Sicherheit</h2>
+        <p class="gp-left-sub">Sofort per E-Mail – komplett kostenlos und ohne Verpflichtung.</p>
+        <ul class="gp-products">
+          <li class="gp-pill"><i class="fas fa-check"></i> 7-Fehler eBook</li>
+          <li class="gp-pill"><i class="fas fa-check"></i> Versicherungscheck</li>
+          <li class="gp-pill"><i class="fas fa-check"></i> Budgetplaner</li>
+          <li class="gp-pill"><i class="fas fa-check"></i> Familien-Übersicht</li>
+          <li class="gp-pill"><i class="fas fa-check"></i> Umzug-Checkliste</li>
+        </ul>
+        <div class="gp-left-author">
+          <img src="Dummybild 3.png" alt="Daniel Eck" />
+          <div>
+            <div class="gp-left-author-name">Daniel Eck</div>
+            <div class="gp-left-author-role">Unabhängiger Versicherungsmakler</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rechte Seite -->
+      <div class="gp-right">
+        <p class="gp-right-title">Jetzt kostenlos erhalten</p>
+        <p class="gp-right-sub">Tragen Sie sich ein – ich schicke Ihnen alle 5 Tools sofort zu.</p>
+        <div id="gpFormWrap">
+          <form id="gpForm" onsubmit="submitGratisPaket(event)" novalidate>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+              <div>
+                <label class="gp-label" for="gpName">Vorname</label>
+                <input type="text" id="gpName" class="gp-input" placeholder="z. B. Maria" autocomplete="given-name">
+                <span class="gp-error" id="gpNameErr"></span>
+              </div>
+              <div>
+                <label class="gp-label" for="gpLastname">Nachname</label>
+                <input type="text" id="gpLastname" class="gp-input" placeholder="z. B. Müller" autocomplete="family-name">
+              </div>
+            </div>
+            <div class="gp-form-row">
+              <label class="gp-label" for="gpEmail">E-Mail-Adresse</label>
+              <input type="email" id="gpEmail" class="gp-input" placeholder="ihre@email.de" autocomplete="email">
+              <span class="gp-error" id="gpEmailErr"></span>
+            </div>
+            <div style="margin-bottom:16px;">
+              <label class="funnel-checkbox-label" style="font-size:12px;gap:8px;">
+                <input type="checkbox" id="gpConsent">
+                <span>Ich stimme der <a href="erstinformation.html" target="_blank">Erstinformation</a> &amp; <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a> zu.</span>
+              </label>
+              <span class="gp-error" id="gpConsentErr"></span>
+            </div>
+            <button type="submit" class="gp-submit" id="gpSubmitBtn">
+              <i class="fas fa-paper-plane"></i> Jetzt kostenlos sichern
+            </button>
+            <div class="gp-trust">
+              <span><i class="fas fa-shield-halved"></i> DSGVO-konform</span>
+              <span><i class="fas fa-lock"></i> Kein Spam</span>
+            </div>
+          </form>
+        </div>
+        <div class="gp-success" id="gpSuccess">
+          <div class="gp-success-icon"><i class="fas fa-check"></i></div>
+          <h3>E-Mail ist unterwegs!</h3>
+          <p>Ihre 5 kostenlosen Tools sind auf dem Weg – schauen Sie gleich in Ihr Postfach.<br><span style="font-size:12px;color:#94a3b8;">(Ggf. auch im Spam-Ordner.)</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  /* ── GRATIS-PAKET MODAL ──────────────────────────────────────────────────
+     SETUP-ANLEITUNG (einmalig, ~10 Minuten):
+     1. Kostenloses Konto bei brevo.com erstellen
+     2. Einstellungen > API-Schlüssel > neuen Key erstellen > unten eintragen
+     3. Kontakte > Listen > neue Liste erstellen > Listen-ID unten eintragen
+     4. Automatisierungen > neue Automation:
+        Trigger: "Kontakt zu Liste hinzugefügt"
+        Aktion:  E-Mail senden (Vorlage mit den 5 Download-Links erstellen)
+     ──────────────────────────────────────────────────────────────────────── */
+  var GP_BREVO_KEY = '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';
+  var GP_LIST_ID   = 2; /* Liste: "Ihre erste Liste" */
+
+  window.openGratisPaket = function() {
+    document.getElementById('gpOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('gpFormWrap').style.display = '';
+    document.getElementById('gpSuccess').classList.remove('show');
+    var f = document.getElementById('gpForm');
+    if (f) f.reset();
+    var btn = document.getElementById('gpSubmitBtn');
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-envelope"></i> Jetzt kostenlos anfordern'; }
+  };
+
+  window.closeGratisPaket = function() {
+    document.getElementById('gpOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  if (window.location.search.indexOf('gratis=1') > -1) { window.openGratisPaket(); }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeGratisPaket();
+  });
+
+  window.submitGratisPaket = function(e) {
+    e.preventDefault();
+    var name     = document.getElementById('gpName').value.trim();
+    var lastname = document.getElementById('gpLastname').value.trim();
+    var email    = document.getElementById('gpEmail').value.trim();
+    var nameInp     = document.getElementById('gpName');
+    var emailInp    = document.getElementById('gpEmail');
+    var consent     = document.getElementById('gpConsent');
+    var nameErr     = document.getElementById('gpNameErr');
+    var emailErr    = document.getElementById('gpEmailErr');
+    var consentErr  = document.getElementById('gpConsentErr');
+    var valid = true;
+    nameInp.classList.remove('error'); nameErr.textContent = '';
+    emailInp.classList.remove('error'); emailErr.textContent = '';
+    consentErr.textContent = '';
+    if (!name) { nameInp.classList.add('error'); nameErr.textContent = 'Bitte geben Sie Ihren Vornamen ein.'; valid = false; }
+    if (!lastname) { document.getElementById('gpLastname').classList.add('error'); valid = false; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { emailInp.classList.add('error'); emailErr.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'; valid = false; }
+    if (!consent.checked) { consentErr.textContent = 'Bitte stimmen Sie der Datenschutzerklärung zu.'; valid = false; }
+    if (!valid) return;
+    var btn   = document.getElementById('gpSubmitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird gesendet …';
+
+    if (GP_BREVO_KEY === 'DEIN_BREVO_API_KEY') {
+      showGPSuccess();
+      return;
+    }
+
+    var timestamp = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
+
+    var brevoHdrs = { 'Content-Type': 'application/json', 'api-key': GP_BREVO_KEY };
+
+    function sendEmail(subject, toEmail, toName, htmlContent) {
+      return emailjs.send('service_tmzzux9', 'template_0qne2r3', {
+        subject:      subject,
+        to_email:     toEmail,
+        to_name:      toName,
+        html_content: htmlContent
+      }).then(function(res) {
+        console.log('[EmailJS] to=' + toEmail + ' status=' + res.status);
+        return res;
+      });
+    }
+
+    // 1) Kontakt in Brevo speichern
+    fetch('https://api.brevo.com/v3/contacts', {
+      method: 'POST',
+      headers: brevoHdrs,
+      body: JSON.stringify({
+        email: email,
+        attributes: { VORNAME: name, NACHNAME: lastname },
+        listIds: [GP_LIST_ID],
+        updateEnabled: true
+      })
+    })
+    .then(function() {
+
+      // 2) Benachrichtigung an Daniel
+      var notifHtml = '<div style="font-family:Arial,sans-serif;max-width:480px;background:#f8fafc;border-radius:14px;overflow:hidden;">'
+        + '<div style="background:#0c1c3e;padding:24px 28px;"><h2 style="color:#fff;margin:0;font-size:18px;">&#127873; Neue Gratis-Paket-Anfrage</h2></div>'
+        + '<div style="background:#fff;padding:24px 28px;">'
+        + '<table style="width:100%;border-collapse:collapse;font-size:14px;">'
+        + '<tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;width:110px">Vorname</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-weight:700;color:#172d50;">' + name + '</td></tr>'
+        + '<tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">Nachname</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-weight:700;color:#172d50;">' + lastname + '</td></tr>'
+        + '<tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">E-Mail</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;"><a href="mailto:' + email + '" style="color:#1a50c8;font-weight:700;">' + email + '</a></td></tr>'
+        + '<tr><td style="padding:10px 0;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">Zeitpunkt</td><td style="padding:10px 0;color:#64748b;">' + timestamp + '</td></tr>'
+        + '</table>'
+        + '<div style="margin-top:16px;background:#f0fdf4;border-radius:8px;padding:12px 14px;border-left:3px solid #16a34a;font-size:13px;color:#15803d;font-weight:600;">&#10003; In Brevo gespeichert (Liste: Gratis-Paket)</div>'
+        + '</div></div>';
+      sendEmail('Neue Gratis-Paket-Anfrage: ' + name + ' ' + lastname, 'daniel@eckversicherung.de', 'Daniel Eck', notifHtml).catch(function(err) { console.error('[Brevo SMTP] Benachrichtigung fehlgeschlagen:', err); });
+
+      // 3) Willkommens-Email mit Tools an den Kunden
+      var tool = function(emoji, title, desc, url) {
+        return '<table width="100%" cellpadding="0" cellspacing="0" style="border:1.5px solid #e2e8f0;border-radius:12px;margin-bottom:10px;background:#fafbfc;"><tr>'
+          + '<td width="52" style="padding:16px 0 16px 16px;vertical-align:middle;"><div style="width:42px;height:42px;background:#dcfce7;border-radius:50%;text-align:center;font-size:19px;line-height:42px;">' + emoji + '</div></td>'
+          + '<td style="padding:14px 16px;vertical-align:middle;"><p style="margin:0 0 2px;font-size:14px;font-weight:800;color:#172d50;">' + title + '</p>'
+          + '<p style="margin:0 0 10px;font-size:12px;color:#64748b;">' + desc + '</p>'
+          + '<a href="' + url + '" style="display:inline-block;background:#1a50c8;color:#fff;text-decoration:none;font-size:12px;font-weight:700;padding:7px 16px;border-radius:7px;">Jetzt öffnen &#8594;</a></td></tr></table>';
+      };
+      var customerHtml = '<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;background:#f1f5f9;padding:20px 12px;">'
+        + '<div style="background:#0c1c3e;border-radius:14px 14px 0 0;padding:32px 32px 28px;">'
+        + '<h1 style="color:#fff;font-size:26px;font-weight:900;margin:0 0 10px;line-height:1.2;">Hallo ' + name + ',<br>hier sind Ihre Tools!</h1>'
+        + '<p style="color:rgba(255,255,255,.6);font-size:14px;margin:0;">Alles dabei – einfach draufklicken und loslegen.</p></div>'
+        + '<div style="height:4px;background:#1a50c8;"></div>'
+        + '<div style="background:#fff;padding:24px 32px 8px;">'
+        + '<p style="font-size:15px;color:#172d50;line-height:1.8;margin:0 0 20px;">Freut mich, dass Sie dabei sind. Schauen Sie die Tools in Ruhe durch – kein Druck, keine Verpflichtung.</p>'
+        + tool('&#128214;','eBook: Die 7 teuersten Fehler','Welche Irrtümer beim Versichern richtig teuer werden können.','https://www.eckversicherung.de/produkte/03-ebook-7-fehler.html')
+        + tool('&#10003;','Versicherungscheck','Was habe ich? Was fehlt? Was ist überflüssig?','https://www.eckversicherung.de/produkte/01-versicherungscheck.html')
+        + tool('&#128202;','Jahres-Budgetplaner','Alle Beiträge auf einen Blick – Monat für Monat.','https://www.eckversicherung.de/produkte/02-budgetplaner.html')
+        + tool('&#128106;','Familien-Übersicht','Alle Verträge auf einem Blatt – im Notfall griffbereit.','https://www.eckversicherung.de/produkte/04-familien-uebersicht.html')
+        + tool('&#128666;','Umzug-Checkliste','Was beim Umzug versicherungstechnisch zu beachten ist.','https://www.eckversicherung.de/produkte/05-umzugscheckliste.html')
+        + '</div>'
+        + '<div style="background:#fff;padding:0 32px 28px;"><div style="border-top:1.5px solid #e2e8f0;padding-top:20px;">'
+        + '<p style="font-size:14px;color:#172d50;line-height:1.8;margin:0 0 14px;">Haben Sie Fragen? Ich bin persönlich für Sie da.</p>'
+        + '<table cellpadding="0" cellspacing="0" style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;background:#fafbfc;"><tr><td>'
+        + '<p style="margin:0 0 2px;font-size:14px;font-weight:800;color:#172d50;">Daniel Eck</p>'
+        + '<p style="margin:0 0 12px;font-size:12px;color:#64748b;">Versicherungsmakler · Schmalkalden</p>'
+        + '<a href="tel:+491743225885" style="display:inline-block;background:rgba(22,163,74,.08);color:#16a34a;text-decoration:none;font-size:12px;font-weight:700;padding:7px 14px;border-radius:7px;margin-right:8px;">&#9742; 0174 / 322 58 85</a>'
+        + '<a href="mailto:daniel@eckversicherung.de" style="display:inline-block;background:rgba(26,80,200,.08);color:#1a50c8;text-decoration:none;font-size:12px;font-weight:700;padding:7px 14px;border-radius:7px;">&#9993; daniel@eckversicherung.de</a>'
+        + '</td></tr></table></div></div>'
+        + '<div style="padding:16px 32px;text-align:center;font-size:11px;color:#94a3b8;line-height:2;">'
+        + 'Sie erhalten diese E-Mail, weil Sie sich auf eckversicherung.de angemeldet haben.<br>'
+        + '<a href="https://www.eckversicherung.de/datenschutz.html" style="color:#94a3b8;">Datenschutz</a> &nbsp;·&nbsp; <a href="https://www.eckversicherung.de/impressum.html" style="color:#94a3b8;">Impressum</a>'
+        + '</div></div>';
+      sendEmail('Ihre 5 kostenlosen Tools – Daniel Eck Versicherungsmakler', email, name + ' ' + lastname, customerHtml).catch(function(err) { console.error('[Brevo SMTP] Kunden-Email fehlgeschlagen:', err); });
+
+      showGPSuccess();
+    })
+    .catch(function(err) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Fehler – bitte erneut versuchen';
+      console.error('Brevo contact error:', err);
+    });
+  };
+
+  function showGPSuccess() {
+    document.getElementById('gpFormWrap').style.display = 'none';
+    document.getElementById('gpSuccess').classList.add('show');
+  }
+  </script>
+
+  <!-- Social Peek -->
   <div class="social-peek" id="socialPeek">
+    <div id="gratisFloatWrap" class="gratis-float-wrap">
+      <button class="social-peek-btn gratis-float-btn" onclick="openGratisPaket()" aria-label="5 Tools gratis sichern"><span class="social-peek-tooltip gratis-float-tip">5 Tools gratis sichern<span class="social-peek-tooltip-arrow"></span></span><i class="fas fa-gift"></i></button>
+    </div>
     <a href="https://www.facebook.com/profile.php?id=61565584784878" target="_blank" rel="noopener" class="social-peek-btn social-peek-fb" aria-label="Facebook"><span class="social-peek-tooltip">Auf Facebook folgen<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-facebook-f"></i></a>
     <a href="https://www.instagram.com/daniel.eck.versicherungsmakler/" target="_blank" rel="noopener" class="social-peek-btn social-peek-ig" aria-label="Instagram"><span class="social-peek-tooltip">Auf Instagram folgen<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-instagram"></i></a>
     <a href="https://wa.me/491743225885" target="_blank" rel="noopener" class="social-peek-btn social-peek-wa" aria-label="WhatsApp"><span class="social-peek-tooltip">WhatsApp schreiben<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-whatsapp"></i></a>
   </div>
   <script>
-  (function(){var p=document.getElementById('socialPeek');if(!p)return;var l=window.pageYOffset;window.addEventListener('scroll',function(){var c=window.pageYOffset;if(window.innerWidth>900){l=c;return;}if(c>l&&c>80){p.classList.add('is-peeked');}else{p.classList.remove('is-peeked');}l=c;},{passive:true});})();
+  (function(){
+    var p=document.getElementById('socialPeek');
+    var gw=document.getElementById('gratisFloatWrap');
+    if(!p)return;
+    var l=window.pageYOffset;
+    var heroThreshold=0;
+    function getHeroThreshold(){var h=document.querySelector('.hero');return h?h.offsetHeight*0.7:350;}
+    window.addEventListener('load',function(){heroThreshold=getHeroThreshold();},false);
+    heroThreshold=getHeroThreshold();
+    window.addEventListener('scroll',function(){
+      var c=window.pageYOffset;
+      /* gratis float: show below hero, hide above */
+      if(gw){
+        if(c>heroThreshold){
+          if(!gw.classList.contains('gratis-float-show')){
+            gw.style.overflow='hidden';
+            gw.classList.add('gratis-float-show');
+            clearTimeout(gw._ot);
+            gw._ot=setTimeout(function(){if(gw.classList.contains('gratis-float-show'))gw.style.overflow='visible';},600);
+          }
+        } else {
+          clearTimeout(gw._ot);
+          gw.style.overflow='hidden';
+          gw.classList.remove('gratis-float-show');
+        }
+      }
+      /* social peek hide/show on mobile scroll direction */
+      if(window.innerWidth>900){l=c;return;}
+      if(c>l&&c>80){p.classList.add('is-peeked');}else{p.classList.remove('is-peeked');}
+      l=c;
+    },{passive:true});
+  })();
   </script>
 </body>
 </html>

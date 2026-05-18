@@ -1,0 +1,591 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Umzugs-Checkliste mit Versicherungshinweisen</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --navy:    #172d50;
+  --blue:    #1a50c8;
+  --blue-lt: #2e68de;
+  --sky:     #60a5fa;
+  --gray-50: #f8fafc;
+  --gray-100:#f1f5f9;
+  --gray-200:#e2e8f0;
+  --gray-400:#94a3b8;
+  --gray-500:#64748b;
+  --white:   #ffffff;
+  --warn:    #f59e0b;
+  --warn-bg: #fffbeb;
+  --warn-bdr:#fde68a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 8.5pt;
+  color: var(--navy);
+  background: var(--white);
+  line-height: 1.4;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 12mm 14mm 10mm;
+  background: var(--white);
+  page-break-after: always;
+}
+.page:last-child { page-break-after: avoid; }
+
+/* ── HEADER ── */
+.doc-header {
+  background: var(--navy);
+  border-radius: 12px 12px 0 0;
+  padding: 14px 20px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+}
+.doc-header .eyebrow {
+  font-size: 7pt;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sky);
+  margin-bottom: 3px;
+}
+.doc-header h1 {
+  font-size: 16pt;
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.15;
+}
+.doc-header .subtitle {
+  font-size: 7.5pt;
+  color: rgba(255,255,255,.65);
+  margin-top: 3px;
+}
+.doc-header .branding {
+  text-align: right;
+  font-size: 7.5pt;
+  color: rgba(255,255,255,.5);
+  line-height: 1.7;
+}
+.doc-header .branding strong {
+  display: block;
+  color: var(--sky);
+  font-size: 8pt;
+  font-weight: 700;
+}
+
+.blue-bar {
+  background: var(--blue);
+  height: 4px;
+  border-radius: 0 0 3px 3px;
+  margin-bottom: 12px;
+}
+
+/* ── PHASE HEADER ── */
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  margin-top: 12px;
+}
+.phase-header:first-of-type { margin-top: 0; }
+.phase-badge {
+  background: var(--blue);
+  color: var(--white);
+  font-size: 7pt;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.phase-title {
+  font-size: 10pt;
+  font-weight: 800;
+  color: var(--navy);
+}
+.phase-line {
+  flex: 1;
+  height: 1px;
+  background: var(--gray-200);
+}
+
+/* ── TASK LIST ── */
+.task-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-bottom: 4px;
+}
+.task-grid.single { grid-template-columns: 1fr; }
+
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 5px 10px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 7px;
+}
+.task-item .cb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--gray-400);
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  cursor: pointer;
+  position: relative;
+  background: var(--white);
+}
+.task-item .cb:checked {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+.task-item .cb:checked::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 1px;
+  width: 5px; height: 8px;
+  border: 2px solid white;
+  border-top: none; border-left: none;
+  transform: rotate(45deg);
+}
+.task-item .task-text {
+  font-size: 8pt;
+  color: #475569;
+  line-height: 1.4;
+  flex: 1;
+}
+.task-item .task-text strong {
+  display: block;
+  font-size: 8pt;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 1px;
+}
+.task-item.insurance {
+  border-color: rgba(26,80,200,.25);
+  background: rgba(26,80,200,.03);
+}
+.task-item.insurance .cb {
+  border-color: var(--blue);
+  background: rgba(26,80,200,.05);
+}
+.task-item.insurance .cb:checked {
+  background: var(--blue);
+}
+.task-item.insurance .task-text strong { color: var(--blue); }
+.task-item.urgent {
+  border-color: var(--warn-bdr);
+  background: var(--warn-bg);
+}
+.task-item.urgent .cb { border-color: var(--warn); }
+.task-item.urgent .cb:checked { background: var(--warn); border-color: var(--warn); }
+.task-item.urgent .task-text strong { color: #92400e; }
+
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 6px 12px;
+  background: var(--gray-100);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 7pt;
+  color: var(--gray-500);
+  font-weight: 500;
+}
+.leg-box {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  border: 1.5px solid;
+}
+
+/* ── INFO STRIP ── */
+.info-strip {
+  background: var(--gray-100);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 7.5pt;
+  color: var(--gray-500);
+  margin-bottom: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.info-strip .info-icon { font-size: 12pt; flex-shrink: 0; }
+
+/* ── PAGE FOOTER ── */
+.page-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--gray-200);
+  font-size: 6.5pt;
+  color: var(--gray-400);
+}
+
+/* ── PAGE 2 INSURANCE SECTION ── */
+.ins-section {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-top: 3px solid var(--blue);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+.ins-section h3 {
+  font-size: 9.5pt;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.ins-section h3 .badge {
+  font-size: 6.5pt;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.badge-pflicht { background: #fee2e2; color: #dc2626; }
+.badge-wichtig { background: #dbeafe; color: var(--blue); }
+.badge-check   { background: #dcfce7; color: #16a34a; }
+
+.ins-rows { display: flex; flex-direction: column; gap: 4px; }
+.ins-row {
+  display: grid;
+  grid-template-columns: 13px 1fr 90px 90px;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+}
+.ins-row .r-cb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--gray-400);
+  border-radius: 3px;
+  flex-shrink: 0;
+  cursor: pointer;
+  background: var(--white);
+  position: relative;
+}
+.ins-row .r-cb:checked {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+.ins-row .r-cb:checked::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 1px;
+  width: 5px; height: 8px;
+  border: 2px solid white;
+  border-top: none; border-left: none;
+  transform: rotate(45deg);
+}
+.ins-row .r-label { font-size: 8pt; font-weight: 600; color: var(--navy); }
+.ins-row .r-action { font-size: 7pt; color: var(--gray-500); }
+.ins-row .r-deadline { font-size: 7pt; color: var(--warn); font-weight: 600; }
+.ins-row.done-row { opacity: .7; }
+
+.warn-callout {
+  background: var(--warn-bg);
+  border: 1.5px solid var(--warn-bdr);
+  border-left: 4px solid var(--warn);
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 8pt;
+  color: #78350f;
+  line-height: 1.6;
+}
+.warn-callout strong { display: block; font-size: 8.5pt; margin-bottom: 3px; }
+
+.tip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.tip-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-top: 2px solid var(--blue);
+  border-radius: 8px;
+  padding: 9px 11px;
+}
+.tip-card strong {
+  display: block;
+  font-size: 7.5pt;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 3px;
+}
+.tip-card p {
+  font-size: 7pt;
+  color: var(--gray-500);
+  line-height: 1.5;
+}
+
+.cta-bar {
+  background: var(--navy);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+.cta-bar .cta-text {
+  font-size: 8.5pt;
+  font-weight: 600;
+  color: var(--white);
+}
+.cta-bar .cta-sub {
+  font-size: 7.5pt;
+  color: rgba(255,255,255,.6);
+  margin-top: 2px;
+}
+.cta-bar .cta-url {
+  font-size: 7.5pt;
+  font-weight: 600;
+  color: var(--sky);
+  text-align: right;
+  line-height: 1.8;
+  white-space: nowrap;
+}
+
+@media print {
+  @page { size: A4 portrait; margin: 8mm 10mm; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 100%; margin: 0; padding: 0; page-break-after: always; }
+  .page:last-child { page-break-after: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═════════════ PAGE 1: ALLGEMEINE CHECKLISTE ═════════════ -->
+<div class="page">
+
+  <div class="doc-header">
+    <div>
+      <div class="eyebrow">Umzugs-Checkliste</div>
+      <h1>Alles für einen<br>stressfreien Umzug</h1>
+      <div class="subtitle">8-Wochen-Plan · Mit Versicherungshinweisen · Ausfüllbar</div>
+    </div>
+    <div class="branding">
+      <strong>Daniel Eck – Versicherungsmakler</strong>
+      0174 / 322 58 85<br>daniel@eckversicherung.de<br>Talstraße 73, 98574 Schmalkalden
+    </div>
+  </div>
+  <div class="blue-bar"></div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="leg-box" style="border-color:var(--gray-400);"></div> Allgemeine Aufgabe</div>
+    <div class="legend-item"><div class="leg-box" style="border-color:var(--blue);background:rgba(26,80,200,.05);"></div> Versicherungsaufgabe</div>
+    <div class="legend-item"><div class="leg-box" style="border-color:var(--warn);background:var(--warn-bg);"></div> Dringend / Frist beachten</div>
+  </div>
+
+  <!-- 8 Wochen vorher -->
+  <div class="phase-header">
+    <div class="phase-badge">8 Wochen vorher</div>
+    <div class="phase-title">Planung &amp; Organisation</div>
+    <div class="phase-line"></div>
+  </div>
+  <div class="task-grid">
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Umzugstermin festlegen</strong>Datum mit Vermieter und Arbeitgeber abstimmen</div></div>
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Kündigung alte Wohnung</strong>Schriftlich mit Einschreiben (meist 3 Monate Frist!)</div></div>
+    <div class="task-item insurance"><input type="checkbox" class="cb"><div class="task-text"><strong>Hausratversicherung prüfen</strong>Gilt der Schutz auch während des Umzugs? Auf Deckung achten!</div></div>
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Umzugshelfer organisieren</strong>Spedition anfragen oder Freunde einplanen</div></div>
+  </div>
+
+  <!-- 6 Wochen vorher -->
+  <div class="phase-header">
+    <div class="phase-badge">6 Wochen vorher</div>
+    <div class="phase-title">Behörden &amp; Verträge</div>
+    <div class="phase-line"></div>
+  </div>
+  <div class="task-grid">
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Nachsendeauftrag Post</strong>Deutsche Post: Nachsendeauftrag für 6–12 Monate</div></div>
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Strom &amp; Gas ummelden</strong>Alten Anbieter kündigen oder Zähler übergeben</div></div>
+    <div class="task-item insurance"><input type="checkbox" class="cb"><div class="task-text"><strong>Alle Versicherer informieren</strong>Neue Adresse melden – sonst riskieren Sie Vertragsänderungen</div></div>
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Internet &amp; Telefon</strong>Umzug beim Anbieter melden (oft kostenlos ummelden)</div></div>
+  </div>
+
+  <!-- 4 Wochen vorher -->
+  <div class="phase-header">
+    <div class="phase-badge">4 Wochen vorher</div>
+    <div class="phase-title">Packen &amp; Vorbereiten</div>
+    <div class="phase-line"></div>
+  </div>
+  <div class="task-grid">
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Kartons &amp; Packmaterial</strong>Schätzung: 1 Zimmer ≈ 10 Kartons + Folie/Zeitungspapier</div></div>
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Wertsachen inventarisieren</strong>Fotos aller Gegenstände mit Wert &gt; 200 € machen</div></div>
+    <div class="task-item insurance"><input type="checkbox" class="cb"><div class="task-text"><strong>Hausrat-Versicherungssumme anpassen</strong>Neue Wohnfläche = neuer Beitrag. Unterversicherung vermeiden!</div></div>
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Möbel aussortieren / verkaufen</strong>Flohmärkte, Kleinanzeigen, Sperrmüll anmelden</div></div>
+  </div>
+
+  <!-- 2 Wochen vorher -->
+  <div class="phase-header">
+    <div class="phase-badge">2 Wochen vorher</div>
+    <div class="phase-title">Letzte Vorbereitungen</div>
+    <div class="phase-line"></div>
+  </div>
+  <div class="task-grid">
+    <div class="task-item urgent"><input type="checkbox" class="cb"><div class="task-text"><strong>Ummeldung beim Einwohnermeldeamt</strong>Pflicht innerhalb von 14 Tagen nach Einzug – Bußgeld droht!</div></div>
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Bank &amp; Arbeitgeber informieren</strong>Neue Adresse für Gehaltsabrechnung und Kontoauszüge</div></div>
+    <div class="task-item insurance"><input type="checkbox" class="cb"><div class="task-text"><strong>Kfz-Versicherung: Region prüfen</strong>Neuer Wohnort kann andere Regionalklasse bedeuten → Beitrag ändert sich</div></div>
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Schlüsselübergabe vorbereiten</strong>Protokoll mit Fotos – schützt vor ungerechtfertigten Forderungen</div></div>
+  </div>
+
+  <!-- Umzugstag -->
+  <div class="phase-header">
+    <div class="phase-badge">Umzugstag</div>
+    <div class="phase-title">Einzug &amp; Übergabe</div>
+    <div class="phase-line"></div>
+  </div>
+  <div class="task-grid">
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Wohnungsübergabe mit Protokoll</strong>Alle Mängel schriftlich und fotografisch dokumentieren</div></div>
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Zählerstände ablesen</strong>Strom, Gas, Wasser: Fotos mit Datum machen</div></div>
+    <div class="task-item insurance"><input type="checkbox" class="cb"><div class="task-text"><strong>Haftpflicht aktiv?</strong>Schäden beim Einzug (z. B. am Treppenhaus) sind durch Haftpflicht abgedeckt</div></div>
+    <div class="task-item"><input type="checkbox" class="cb"><div class="task-text"><strong>Schlösser tauschen</strong>Empfehlenswert – wer hat alles Schlüssel der Vormieter gehabt?</div></div>
+  </div>
+
+  <div class="page-footer">
+    <span>Seite 1 von 2 · Allgemeine Umzugs-Checkliste</span>
+    <span>Daniel Eck – Versicherungsmakler · 0174 / 322 58 85 · Talstraße 73, 98574 Schmalkalden</span>
+  </div>
+
+</div>
+
+<!-- ═════════════ PAGE 2: VERSICHERUNGS-SPEZIFISCH ═════════════ -->
+<div class="page">
+
+  <div class="doc-header">
+    <div>
+      <div class="eyebrow">Versicherungs-Checkliste Umzug</div>
+      <h1>Was sich bei Ihren<br>Versicherungen ändert</h1>
+      <div class="subtitle">Was kündigen · Was ummelden · Was neu abschließen</div>
+    </div>
+    <div class="branding">
+      <strong>Daniel Eck – Versicherungsmakler</strong>
+      0174 / 322 58 85<br>daniel@eckversicherung.de<br>Talstraße 73, 98574 Schmalkalden
+    </div>
+  </div>
+  <div class="blue-bar"></div>
+
+  <div class="warn-callout">
+    <strong>&#9888;&#65039; Wichtig: Adressänderung ist Pflicht!</strong>
+    Bei vielen Versicherungen müssen Sie eine Adressänderung aktiv melden – sonst riskieren Sie, dass Ihr Vertrag im Schadensfall nicht zahlt oder sogar nichtig wird. Setzen Sie sich noch vor dem Umzug mit Ihren Versicherern in Verbindung.
+  </div>
+
+  <!-- Hausrat -->
+  <div class="ins-section">
+    <h3>&#127968; Hausratversicherung <span class="badge badge-pflicht">Sofort handeln</span></h3>
+    <div class="ins-rows">
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Neue Adresse melden</div><div class="r-action">Anbieter kontaktieren</div><div class="r-deadline">Vor Umzugstag</div></div>
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Versicherungssumme anpassen</div><div class="r-action">Neue m²-Zahl angeben</div><div class="r-deadline">Bei Einzug</div></div>
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Einschluss Transportschäden prüfen</div><div class="r-action">Gilt Schutz auch beim Umzug?</div><div class="r-deadline">2 Wochen vorher</div></div>
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Schlossänderung einschließen lassen</div><div class="r-action">Neue Schlösser = neuer Schutz</div><div class="r-deadline">Bei Einzug</div></div>
+    </div>
+  </div>
+
+  <!-- Kfz -->
+  <div class="ins-section">
+    <h3>&#128664; Kfz-Versicherung <span class="badge badge-wichtig">Beitrag prüfen</span></h3>
+    <div class="ins-rows">
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Wohnort ummelden</div><div class="r-action">Zulassungsstelle + Versicherer</div><div class="r-deadline">14 Tage nach Umzug</div></div>
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Regionalklasse prüfen</div><div class="r-action">Neuer Ort = evtl. höherer/niedrigerer Beitrag</div><div class="r-deadline">Bei Ummeldung</div></div>
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Stellplatz-Situation melden</div><div class="r-action">Garage? Carport? Straße? → Beitragsrelevant</div><div class="r-deadline">Bei Einzug</div></div>
+    </div>
+  </div>
+
+  <!-- Haftpflicht -->
+  <div class="ins-section">
+    <h3>&#128274; Private Haftpflicht <span class="badge badge-check">Prüfen</span></h3>
+    <div class="ins-rows">
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Adresse melden</div><div class="r-action">Meist reine Formalität</div><div class="r-deadline">Nach Umzug</div></div>
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Mieter- oder Eigentümerhaftpflicht?</div><div class="r-action">Bei Haus-Kauf: Haus- und Grundbesitzerhaftpflicht nötig</div><div class="r-deadline">Bei Kauf</div></div>
+    </div>
+  </div>
+
+  <!-- Wohngebäude -->
+  <div class="ins-section">
+    <h3>&#127970; Wohngebäude <span class="badge badge-pflicht">Nur bei Eigentum</span></h3>
+    <div class="ins-rows">
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Neue Police abschließen</div><div class="r-action">Pflicht ab Eigentumsübergang</div><div class="r-deadline">Vor Eigentumsübergang</div></div>
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Ggf. alte Police kündigen</div><div class="r-action">Bei Verkauf der alten Immobilie</div><div class="r-deadline">Bei Verkauf</div></div>
+      <div class="ins-row"><input type="checkbox" class="r-cb"><div class="r-label">Elementarschadenschutz prüfen</div><div class="r-action">Überschwemmung, Erdrutsch – je nach Lage sinnvoll</div><div class="r-deadline">Bei Abschluss</div></div>
+    </div>
+  </div>
+
+  <div class="tip-grid">
+    <div class="tip-card">
+      <strong>&#128197; Timing ist alles</strong>
+      <p>Viele Verträge können zum nächsten Jahrestag gekündigt werden. Nutzen Sie den Umzug als Anlass für einen Vergleich – oft winken bessere Konditionen.</p>
+    </div>
+    <div class="tip-card">
+      <strong>&#128247; Dokumentieren</strong>
+      <p>Fotografieren Sie alle wertvollen Gegenstände vor dem Umzug. Im Schadensfall müssen Sie beweisen, was Sie hatten und was es wert war.</p>
+    </div>
+    <div class="tip-card">
+      <strong>&#128222; Beratung nutzen</strong>
+      <p>Ein Umzug ist der ideale Zeitpunkt für einen Versicherungs-TÜV. Ich prüfe kostenlos, was noch passt und was geändert werden sollte.</p>
+    </div>
+  </div>
+
+  <div class="cta-bar">
+    <div>
+      <div class="cta-text">Versicherungs-Check zum Umzug – kostenlos und unverbindlich</div>
+      <div class="cta-sub">Ich begleite Sie durch den Umzug und sorge dafür, dass kein Schutz verloren geht.</div>
+    </div>
+    <div class="cta-url">0174 / 322 58 85<br>daniel@eckversicherung.de<br>Talstraße 73, 98574 Schmalkalden</div>
+  </div>
+
+  <div class="page-footer">
+    <span>Seite 2 von 2 · Versicherungs-Checkliste Umzug</span>
+    <span>Daniel Eck – Versicherungsmakler · 0174 / 322 58 85 · Talstraße 73, 98574 Schmalkalden</span>
+  </div>
+
+</div>
+
+</body>
+</html>

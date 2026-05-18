@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Was Sie wirklich brauchen – und was nicht · Daniel Eck</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+:root {
+  --navy:#172d50; --blue:#1a50c8; --blue-lt:#2e68de; --sky:#60a5fa;
+  --gray-50:#f8fafc; --gray-100:#f1f5f9; --gray-200:#e2e8f0;
+  --gray-400:#94a3b8; --gray-500:#64748b; --white:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',system-ui,sans-serif;background:#e5e7eb;color:var(--navy);}
+.page{width:210mm;min-height:297mm;margin:6mm auto;background:var(--white);page-break-after:always;display:flex;flex-direction:column;overflow:hidden;}
+.page:last-child{page-break-after:avoid;}
+
+/* COVER */
+.cover{min-height:297mm;background:var(--navy);display:flex;flex-direction:column;position:relative;}
+.cover::before{content:'';position:absolute;top:-60px;right:-60px;width:280px;height:280px;border-radius:50%;background:rgba(96,165,250,.07);}
+.cover::after{content:'';position:absolute;bottom:100px;left:-40px;width:200px;height:200px;border-radius:50%;background:rgba(26,80,200,.1);}
+.cover-top{flex:1;padding:18mm 16mm 10mm;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1;}
+.cover-eyebrow{font-size:7.5pt;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--sky);margin-bottom:10px;}
+.cover h1{font-size:28pt;font-weight:900;color:var(--white);line-height:1.15;margin-bottom:6px;}
+.cover h1 em{color:var(--sky);font-style:normal;}
+.cover-sub{font-size:10.5pt;color:rgba(255,255,255,.65);line-height:1.55;max-width:135mm;margin-bottom:22px;}
+.cover-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:30px;padding:7px 16px;font-size:8pt;color:rgba(255,255,255,.85);font-weight:500;margin-bottom:8px;}
+.cover-bottom{background:var(--blue);padding:14px 16mm;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;}
+.cover-author .name{font-size:11pt;font-weight:800;color:var(--white);}
+.cover-author .title{font-size:7.5pt;color:rgba(255,255,255,.65);margin-top:2px;}
+.cover-logo{font-size:7.5pt;color:rgba(255,255,255,.65);text-align:right;line-height:1.8;}
+.cover-logo strong{display:block;color:var(--white);font-size:9pt;}
+
+/* STANDARD PAGE */
+.pg-inner{flex:1;display:flex;flex-direction:column;padding:10mm 13mm 6mm;}
+.pg-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid var(--gray-200);}
+.ch-badge{font-size:6pt;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:3px 9px;border-radius:20px;}
+.ch-must{background:#fef2f2;color:#991b1b;}
+.ch-emp{background:#fff7ed;color:#9a3412;}
+.ch-sit{background:#fefce8;color:#713f12;}
+.ch-un{background:#f1f5f9;color:#475569;}
+.ch-vor{background:#f0fdf4;color:#14532d;}
+.ch-scha{background:#eff6ff;color:#1e40af;}
+.ch-plan{background:rgba(26,80,200,.08);color:var(--blue);}
+.pg-meta{font-size:6.5pt;color:var(--gray-400);}
+.pg-title{font-size:17pt;font-weight:900;color:var(--navy);line-height:1.2;margin-bottom:4px;}
+.pg-sub{font-size:9pt;color:var(--gray-500);margin-bottom:9px;font-weight:400;}
+.body-text{font-size:9.5pt;line-height:1.6;color:var(--gray-500);margin-bottom:8px;}
+.body-text strong{color:var(--navy);}
+
+/* CONTENT BOXES */
+.scenario-box{background:var(--gray-50);border-left:3px solid var(--blue-lt);border-radius:8px;padding:10px 12px;margin-bottom:9px;font-size:9pt;line-height:1.55;color:var(--gray-500);}
+.scenario-box strong{color:var(--navy);display:block;margin-bottom:3px;}
+.warn-box{background:#fff7ed;border-left:3px solid #ea580c;border-radius:8px;padding:9px 12px;margin-bottom:9px;font-size:9pt;line-height:1.5;color:#9a3412;}
+.warn-box strong{color:#7c2d12;display:block;margin-bottom:2px;}
+.tipp-box{background:#f0fdf4;border-left:3px solid #16a34a;border-radius:8px;padding:9px 12px;margin-bottom:9px;font-size:9pt;line-height:1.5;color:#14532d;}
+.tipp-box strong{color:#14532d;display:block;margin-bottom:2px;}
+
+/* CHECK LIST */
+.check-list{list-style:none;margin-bottom:9px;}
+.check-list li{display:flex;gap:8px;align-items:flex-start;font-size:9pt;line-height:1.5;color:var(--gray-500);padding:5px 0;border-bottom:1px solid var(--gray-200);}
+.check-list li:last-child{border-bottom:none;}
+.cl-label{font-weight:700;color:var(--navy);font-size:8.5pt;min-width:80px;flex-shrink:0;margin-top:1px;}
+
+/* FACTS STRIP */
+.facts-strip{display:flex;gap:6px;margin-bottom:9px;}
+.fact-pill{flex:1;background:rgba(26,80,200,.06);border:1px solid rgba(26,80,200,.15);border-radius:8px;padding:8px;text-align:center;}
+.fp-val{font-size:16pt;font-weight:800;color:var(--blue);display:block;line-height:1.1;}
+.fp-lbl{font-size:6pt;color:var(--gray-500);line-height:1.3;margin-top:3px;}
+
+/* VERDICT */
+.verdict{display:flex;align-items:center;gap:12px;border-radius:10px;padding:10px 14px;margin-bottom:9px;border-left:4px solid;}
+.v-must{background:#fef2f2;border-color:#dc2626;}
+.v-emp{background:#fff7ed;border-color:#ea580c;}
+.v-sit{background:#fefce8;border-color:#ca8a04;}
+.v-un{background:#f1f5f9;border-color:#94a3b8;}
+.v-lbl{font-size:6pt;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;}
+.v-must .v-lbl{color:#991b1b;} .v-emp .v-lbl{color:#9a3412;} .v-sit .v-lbl{color:#713f12;} .v-un .v-lbl{color:#64748b;}
+.v-txt{font-size:13pt;font-weight:900;line-height:1.1;}
+.v-must .v-txt{color:#dc2626;} .v-emp .v-txt{color:#ea580c;} .v-sit .v-txt{color:#ca8a04;} .v-un .v-txt{color:#94a3b8;}
+.v-sub{font-size:8pt;color:var(--gray-500);margin-top:2px;}
+.v-emoji{font-size:20pt;flex-shrink:0;}
+
+/* MAKLER BOX */
+.makler-box{background:rgba(26,80,200,.06);border:1.5px solid rgba(26,80,200,.2);border-radius:10px;padding:9px 12px;display:flex;gap:10px;align-items:flex-start;font-size:8.5pt;color:var(--gray-500);line-height:1.5;}
+.makler-box strong{color:var(--navy);display:block;margin-bottom:2px;}
+.makler-icon{font-size:14pt;flex-shrink:0;margin-top:1px;}
+
+/* COMPARISON TABLE */
+.comp-table{width:100%;border-collapse:collapse;margin-bottom:9px;font-size:8.5pt;}
+.comp-table th{background:var(--navy);color:var(--white);padding:6px 10px;text-align:left;font-size:8pt;}
+.comp-table td{border:1px solid var(--gray-200);padding:6px 10px;vertical-align:top;line-height:1.4;}
+.comp-table tr:nth-child(even) td{background:var(--gray-50);}
+.comp-table .row-label{font-weight:600;color:var(--navy);background:var(--gray-50)!important;}
+
+/* TOC */
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+.toc-group{background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:10px;padding:9px 11px;}
+.toc-group h4{font-size:7pt;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--navy);margin-bottom:5px;padding-bottom:4px;border-bottom:1.5px solid var(--gray-200);}
+.toc-item{display:flex;justify-content:space-between;align-items:baseline;font-size:7.5pt;color:var(--gray-500);padding:2.5px 0;border-bottom:1px dotted var(--gray-200);}
+.toc-item:last-child{border-bottom:none;}
+.toc-item .pg{color:var(--blue);font-weight:600;font-size:7pt;}
+
+/* FILL TABLE (interactive) */
+.fill-table{width:100%;border-collapse:collapse;font-size:8.5pt;margin-bottom:9px;}
+.fill-table th{background:var(--navy);color:var(--white);padding:6px 8px;text-align:left;font-size:7.5pt;font-weight:700;}
+.fill-table td{border:1px solid var(--gray-200);padding:5px 8px;vertical-align:middle;}
+.fill-table tr:nth-child(even) td{background:var(--gray-50);}
+.fill-table input{width:100%;border:none;background:transparent;font-family:'Inter',system-ui,sans-serif;font-size:8pt;color:var(--navy);outline:none;}
+.status-btn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1.5px solid var(--gray-400);border-radius:3px;cursor:pointer;font-size:11pt;font-weight:700;user-select:none;background:var(--white);}
+.status-btn[data-state="1"]{background:#dcfce7;border-color:#16a34a;color:#16a34a;}
+.status-btn[data-state="2"]{background:#fee2e2;border-color:#dc2626;color:#dc2626;}
+.status-btn[data-state="3"]{background:#fef9c3;border-color:#ca8a04;color:#ca8a04;}
+
+/* ABOUT PAGE */
+.about-grid{display:grid;grid-template-columns:48mm 1fr;gap:14px;margin-bottom:12px;}
+.photo-box{background:var(--gray-100);border-radius:12px;min-height:52mm;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;font-size:7pt;color:var(--gray-400);text-align:center;padding:8px;}
+.photo-icon{font-size:26pt;}
+.about-facts{display:flex;flex-direction:column;gap:7px;}
+.about-fact{background:var(--gray-50);border:1px solid var(--gray-200);border-left:3px solid var(--blue);border-radius:6px;padding:6px 10px;font-size:8pt;line-height:1.4;color:var(--gray-500);}
+.about-fact strong{color:var(--navy);display:block;margin-bottom:1px;}
+.contact-bar{background:var(--navy);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;color:var(--white);margin-bottom:10px;}
+.contact-item strong{display:block;font-size:7.5pt;color:var(--sky);margin-bottom:3px;}
+.contact-item p{font-size:9pt;line-height:1.5;}
+.cta-bar{background:var(--blue);border-radius:10px;padding:12px;text-align:center;color:var(--white);}
+.cta-bar strong{display:block;font-size:11pt;margin-bottom:3px;}
+.cta-bar p{font-size:8.5pt;color:rgba(255,255,255,.8);}
+
+/* FOOTER */
+.pg-footer{border-top:1px solid var(--gray-200);padding:5px 13mm;display:flex;justify-content:space-between;align-items:center;font-size:6.5pt;color:var(--gray-400);background:var(--white);}
+
+/* VORWORT */
+.big-text{font-size:10.5pt;line-height:1.75;color:var(--gray-500);}
+.big-text p{margin-bottom:13px;}
+.big-text strong{color:var(--navy);}
+.big-text em{color:var(--blue);font-style:normal;font-weight:600;}
+
+/* HIGHLIGHT QUOTE */
+.pull-quote{border-left:4px solid var(--blue);padding:10px 14px;margin:10px 0;font-size:11pt;font-weight:700;color:var(--navy);line-height:1.4;background:rgba(26,80,200,.04);border-radius:0 8px 8px 0;}
+
+/* STEPS */
+.step-list{list-style:none;margin-bottom:9px;}
+.step-list li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--gray-200);font-size:9.5pt;line-height:1.5;color:var(--gray-500);}
+.step-list li:last-child{border-bottom:none;}
+.step-num{background:var(--blue);color:var(--white);font-weight:800;font-size:9pt;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+@media print{
+  @page{size:A4 portrait;margin:0;}
+  body{background:var(--white);-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .page{width:100%;margin:0;min-height:297mm;page-break-after:always;}
+  .page:last-child{page-break-after:avoid;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ SEITE 1: DECKBLATT ══ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-top">
+      <div class="cover-eyebrow">Premium-Ratgeber · Versicherungen in Deutschland</div>
+      <h1>Was Sie wirklich<br>brauchen –<br><em>und was nicht</em></h1>
+      <div class="cover-sub">Der ehrliche, vollständige Versicherungsführer für Familien in Deutschland. Vom unabhängigen Makler – ohne Produktempfehlung gegen Provision.</div>
+      <div><div class="cover-badge">&#128218; Premium-Ratgeber · 32 Seiten · Sofort anwendbar</div></div>
+      <div style="margin-top:6px;"><div class="cover-badge">&#9989; Inkl. ausfüllbarem Versicherungsplan &amp; Schaden-Checkliste</div></div>
+    </div>
+    <div class="cover-bottom">
+      <div class="cover-author">
+        <div class="name">Daniel Eck</div>
+        <div class="title">Versicherungsmakler · Schmalkalden · Familienbetrieb seit 2002</div>
+      </div>
+      <div class="cover-logo">
+        <strong>Daniel Eck – Versicherungsmakler</strong>
+        0174 / 322 58 85 · daniel@eckversicherung.de
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SEITE 2: VORWORT ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-plan">Vorwort</span>
+      <span class="pg-meta">Seite 2 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Warum dieser Ratgeber anders ist</div>
+    <div class="pg-sub">Ein Wort vorab – bevor wir anfangen</div>
+    <div class="big-text">
+      <p>Die meisten Versicherungsratgeber haben ein Problem: Sie werden von Menschen geschrieben, die ein Interesse daran haben, Ihnen möglichst viele Versicherungen zu verkaufen. Als Vertreter eines einzelnen Unternehmens verdient man mehr, je mehr Policen man vermittelt. Das führt zwangsläufig zu einer Schieflage in der Beratung.</p>
+      <p><strong>Ich bin Versicherungsmakler</strong> – und das ist ein entscheidender Unterschied. Als Makler bin ich rechtlich Ihrem Interesse verpflichtet, nicht dem eines Versicherers. Ich arbeite mit Dutzenden von Anbietern und erhalte <em>unabhängig vom Produkt</em> eine marktübliche Vergütung. Das bedeutet: Ich habe keinen Anreiz, Ihnen teure Produkte zu empfehlen, die Sie nicht brauchen.</p>
+      <p>Deshalb kann ich in diesem Ratgeber auch ehrlich sagen, <strong>welche Versicherungen oft unnötig sind</strong> – und trotzdem täglich verkauft werden. Dieses Kapitel allein könnte Ihnen mehrere Hundert Euro im Jahr sparen.</p>
+      <div class="pull-quote">"Gut versichert bedeutet nicht: möglichst viele Policen. Gut versichert bedeutet: die richtigen."</div>
+      <p>Dieser Ratgeber ist in sieben Teile gegliedert: von den absoluten Must-haves über situationsabhängige Entscheidungen bis hin zu dem, was Sie für Ihre Altersvorsorge wissen müssen. Am Ende finden Sie einen ausfüllbaren persönlichen Versicherungsplan sowie eine Schaden-Checkliste für den Ernstfall.</p>
+      <p>Lesen Sie diesen Ratgeber in Ihrem Tempo – und wenden Sie sich jederzeit an mich, wenn Sie Fragen haben oder Ihre eigene Situation prüfen lassen möchten. Die erste Analyse ist kostenlos und unverbindlich.</p>
+    </div>
+    <div class="makler-box" style="margin-top:auto;">
+      <span class="makler-icon">&#128222;</span>
+      <div><strong>Direkt Kontakt aufnehmen</strong>Daniel Eck · 0174 / 322 58 85 · daniel@eckversicherung.de · Talstraße 73, 98574 Schmalkalden</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 2 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 3: INHALTSÜBERSICHT ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-plan">Inhaltsübersicht</span>
+      <span class="pg-meta">Seite 3 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Inhaltsübersicht</div>
+    <div class="pg-sub">32 Seiten – sieben Teile – alles, was Sie wirklich wissen müssen</div>
+    <div class="toc-grid">
+      <div class="toc-group">
+        <h4>&#128308; Teil 1 – Die Must-haves (S. 4–7)</h4>
+        <div class="toc-item"><span>Privathaftpflichtversicherung</span><span class="pg">S. 4</span></div>
+        <div class="toc-item"><span>Berufsunfähigkeitsversicherung</span><span class="pg">S. 5</span></div>
+        <div class="toc-item"><span>Krankenversicherung: GKV</span><span class="pg">S. 6</span></div>
+        <div class="toc-item"><span>Krankenversicherung: PKV</span><span class="pg">S. 7</span></div>
+      </div>
+      <div class="toc-group">
+        <h4>&#128992; Teil 2 – Für die meisten wichtig (S. 8–13)</h4>
+        <div class="toc-item"><span>Hausratversicherung</span><span class="pg">S. 8</span></div>
+        <div class="toc-item"><span>Wohngebäudeversicherung</span><span class="pg">S. 9</span></div>
+        <div class="toc-item"><span>Kfz-Versicherung</span><span class="pg">S. 10</span></div>
+        <div class="toc-item"><span>Risikolebensversicherung</span><span class="pg">S. 11</span></div>
+        <div class="toc-item"><span>Pflegezusatzversicherung</span><span class="pg">S. 12</span></div>
+        <div class="toc-item"><span>Zahnzusatzversicherung</span><span class="pg">S. 13</span></div>
+      </div>
+      <div class="toc-group">
+        <h4>&#128993; Teil 3 – Situationsabhängig (S. 14–17)</h4>
+        <div class="toc-item"><span>Rechtsschutzversicherung</span><span class="pg">S. 14</span></div>
+        <div class="toc-item"><span>Auslandskrankenversicherung</span><span class="pg">S. 15</span></div>
+        <div class="toc-item"><span>BU für Selbständige &amp; Handwerker</span><span class="pg">S. 16</span></div>
+        <div class="toc-item"><span>Unfallversicherung</span><span class="pg">S. 17</span></div>
+      </div>
+      <div class="toc-group">
+        <h4>&#10060; Teil 4 – Meist unnötig (S. 18–20)</h4>
+        <div class="toc-item"><span>Restschuldversicherung</span><span class="pg">S. 18</span></div>
+        <div class="toc-item"><span>Handyvers. &amp; Kleinversicherungen</span><span class="pg">S. 19</span></div>
+        <div class="toc-item"><span>Kapitalbildende Lebensversicherung</span><span class="pg">S. 20</span></div>
+      </div>
+      <div class="toc-group">
+        <h4>&#127807; Teil 5 – Altersvorsorge (S. 21–25)</h4>
+        <div class="toc-item"><span>Die Rentenlücke verstehen</span><span class="pg">S. 21</span></div>
+        <div class="toc-item"><span>Riester-Rente</span><span class="pg">S. 22</span></div>
+        <div class="toc-item"><span>Rürup / Basisrente</span><span class="pg">S. 23</span></div>
+        <div class="toc-item"><span>Betriebliche Altersvorsorge (bAV)</span><span class="pg">S. 24</span></div>
+        <div class="toc-item"><span>ETF-Sparplan als Ergänzung</span><span class="pg">S. 25</span></div>
+      </div>
+      <div class="toc-group">
+        <h4>&#128312; Teil 6 – Im Schadensfall (S. 26–28)</h4>
+        <div class="toc-item"><span>Die ersten 48 Stunden</span><span class="pg">S. 26</span></div>
+        <div class="toc-item"><span>Wenn die Versicherung nicht zahlt</span><span class="pg">S. 27</span></div>
+        <div class="toc-item"><span>Schaden-Checkliste (ausfüllbar)</span><span class="pg">S. 28</span></div>
+      </div>
+      <div class="toc-group">
+        <h4>&#128313; Teil 7 – Ihr persönlicher Plan (S. 29–30)</h4>
+        <div class="toc-item"><span>Die Prioritäten-Matrix</span><span class="pg">S. 29</span></div>
+        <div class="toc-item"><span>Ihre nächsten Schritte</span><span class="pg">S. 30</span></div>
+      </div>
+      <div class="toc-group">
+        <h4>&#128101; Über Daniel Eck &amp; Impressum</h4>
+        <div class="toc-item"><span>Über den Autor</span><span class="pg">S. 31</span></div>
+        <div class="toc-item"><span>Rechtlicher Hinweis &amp; Impressum</span><span class="pg">S. 32</span></div>
+      </div>
+    </div>
+    <div class="scenario-box" style="margin-top:10px;">
+      <strong>&#128161; So lesen Sie diesen Ratgeber am besten</strong>
+      Lesen Sie zunächst Teil 1 (Must-haves) vollständig. Füllen Sie dann die Prioritäten-Matrix auf Seite 29 aus – das zeigt Ihnen, wo Sie persönlich Handlungsbedarf haben. Für Fragen zu Ihrem individuellen Schutz stehe ich Ihnen gerne persönlich zur Verfügung.
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 3 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 4: PRIVATHAFTPFLICHT ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-must">Teil 1 – Must-haves</span>
+      <span class="pg-meta">Seite 4 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Privathaftpflicht­versicherung</div>
+    <div class="pg-sub">Die wichtigste Versicherung überhaupt – für jeden Menschen, ausnahmslos</div>
+    <div class="scenario-box">
+      <strong>&#9888; Was passiert ohne sie?</strong>
+      Sie stoßen auf dem Radweg versehentlich eine ältere Dame um. Oberschenkelhalsfraktur, 3 Monate Krankenhausaufenthalt, Reha, dauerhafter Pflegebedarf. Der Schadensersatzanspruch – Behandlungskosten, Verdienstausfall, Schmerzengeld, Pflegekosten auf Lebenszeit – kann leicht <strong>500.000 € und mehr</strong> betragen. Ohne Versicherung haften Sie mit Ihrem gesamten Privatvermögen. Für immer.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Mindestschutz</span><span>Deckungssumme mind. <strong>10 Mio. €</strong> (pauschal für Personen- und Sachschäden). Viele alte Policen haben noch 1–3 Mio. € – das reicht bei schweren Personenschäden heute nicht mehr.</span></li>
+      <li><span class="cl-label">Grobe Fahr­lässigkeit</span><span>Muss eingeschlossen sein! Wer im Affekt handelt oder unachtsam ist, soll trotzdem geschützt sein. Billigtarife schließen grobe Fahrlässigkeit oft aus.</span></li>
+      <li><span class="cl-label">Mietsach­schäden</span><span>Schäden an der Mietwohnung (Brandloch im Parkett, Wasserschaden) sind nicht automatisch enthalten – explizit prüfen.</span></li>
+      <li><span class="cl-label">Schlüssel­verlust</span><span>Wenn Sie den Haustürschlüssel verlieren und alle Schlösser ausgetauscht werden müssen, kann das schnell 3.000–10.000 € kosten. Sollte enthalten sein.</span></li>
+      <li><span class="cl-label">Kosten</span><span>Familie oder Single: ca. <strong>50–100 € pro Jahr</strong>. Eine der günstigsten und wichtigsten Versicherungen überhaupt.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">10 Mio.</span><span class="fp-lbl">empfohlene Mindest-Deckungssumme</span></div>
+      <div class="fact-pill"><span class="fp-val">50–100 €</span><span class="fp-lbl">typischer Jahresbeitrag Familie</span></div>
+      <div class="fact-pill"><span class="fp-val">unbegrenzt</span><span class="fp-lbl">persönliche Haftung ohne Police</span></div>
+    </div>
+    <div class="verdict v-must">
+      <span class="v-emoji">&#128308;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">MUST-HAVE</div><div class="v-sub">Keine Ausnahme – für jeden Menschen, egal ob Mieter, Rentner oder Student</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich prüfe Ihren bestehenden Vertrag auf Deckungssumme, Ausschlüsse und ob grobe Fahrlässigkeit wirklich enthalten ist – kostenlos und unverbindlich.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 4 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 5: BU ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-must">Teil 1 – Must-haves</span>
+      <span class="pg-meta">Seite 5 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Berufsunfähigkeits­versicherung (BU)</div>
+    <div class="pg-sub">Ihr wichtigstes Einkommensschutz-Instrument – je früher, desto günstiger</div>
+    <div class="scenario-box">
+      <strong>&#9888; Was passiert ohne sie?</strong>
+      Eine Krankheit oder ein Unfall macht Sie dauerhaft berufsunfähig. Die staatliche Erwerbsminderungsrente beträgt im Durchschnitt <strong>820 € brutto pro Monat</strong> – und wird nur gezahlt, wenn Sie weniger als 3 Stunden täglich <em>irgendeinen</em> Beruf ausüben können. Den gelernten Beruf schützt der Staat nicht. Für die meisten Menschen ist das keine Absicherung, sondern ein Absturz.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Abstrakte Verweisung</span><span>Muss ausgeschlossen sein! Ohne diesen Ausschluss darf die Versicherung Sie auf einen beliebigen anderen Beruf verweisen, auch wenn Sie ihn nie ausgeübt haben.</span></li>
+      <li><span class="cl-label">BU-Rente</span><span>Sollte <strong>60–80 % Ihres Nettoeinkommens</strong> abdecken. Kalkulieren Sie Ihre realen Fixkosten (Miete, Kredite, Lebenshaltung).</span></li>
+      <li><span class="cl-label">Laufzeit</span><span>Bis zum Renteneintrittsalter (67 Jahre) – nicht kürzer! Günstigere Kurzlaufzeiten sparen beim Beitrag, lassen aber genau die kritischste Phase ungeschützt.</span></li>
+      <li><span class="cl-label">Einstiegsalter</span><span>Mit 25 Jahren zahlen Sie für dieselbe Leistung ca. <strong>50 % weniger</strong> als mit 40 Jahren. Jedes Jahr Wartezeit kostet – und verschlechtert den Gesundheitszustand.</span></li>
+      <li><span class="cl-label">Vorerkrankungen</span><span>Werden beim Abschluss abgefragt. Wer wartet, riskiert Ausschlüsse oder Ablehnung. Frühzeitig handeln!</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">25 %</span><span class="fp-lbl">der Erwerbstätigen werden vor der Rente BU</span></div>
+      <div class="fact-pill"><span class="fp-val">820 €</span><span class="fp-lbl">durchschn. staatl. Erwerbsminderungsrente/Monat</span></div>
+      <div class="fact-pill"><span class="fp-val">–50 %</span><span class="fp-lbl">Beitragsersparnis bei Abschluss mit 25 statt 40 J.</span></div>
+    </div>
+    <div class="verdict v-must">
+      <span class="v-emoji">&#128308;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">MUST-HAVE</div><div class="v-sub">Je früher abgeschlossen, desto günstiger und besser – nicht warten!</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich vergleiche für Sie aus über 30 BU-Anbietern, prüfe welcher Anbieter Ihren Beruf fair bewertet und begleite Sie durch den Antragsprozess – auch bei Vorerkrankungen.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 5 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 6: GKV ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-must">Teil 1 – Must-haves</span>
+      <span class="pg-meta">Seite 6 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Krankenversicherung: GKV</div>
+    <div class="pg-sub">Gesetzliche Krankenversicherung – wann sie ausreicht und wo die Lücken sind</div>
+    <div class="body-text">Die GKV ist das Fundament der deutschen Gesundheitsversorgung. Für die Mehrheit der Bevölkerung ist sie die richtige Wahl – wenn man ihre Grenzen kennt und gezielt ergänzt.</div>
+    <ul class="check-list">
+      <li><span class="cl-label">Stärken</span><span>Familienversicherung für nicht berufstätige Partner und Kinder kostenlos. Keine Gesundheitsprüfung beim Eintritt. Leistungen unabhängig vom Beitrag – wer viel zahlt, bekommt dasselbe wie wer wenig zahlt.</span></li>
+      <li><span class="cl-label">Kassenwahlrecht</span><span>Alle gesetzlichen Kassen bieten Grundleistungen identisch an. Unterschiede gibt es bei Zusatzleistungen (Zahnersatz, Naturheilkunde, Vorsorge) und Zusatzbeitrag. Jährlich vergleichen lohnt sich.</span></li>
+      <li><span class="cl-label">Typische Lücken</span><span>Zahnersatz (nur Festzuschuss), Sehhilfen (nur bei Kindern), Einbettzimmer, Chefarztbehandlung, Heilpraktiker. Diese Lücken lassen sich gezielt mit Zusatzversicherungen schließen.</span></li>
+      <li><span class="cl-label">Krankentagegeld</span><span>Ab dem 43. Krankheitstag zahlt die GKV 70 % des Bruttoeinkommens, maximal 90 % des Nettos. Für Selbständige in der GKV: unbedingt freiwillig versichern und Krankengeld absichern!</span></li>
+      <li><span class="cl-label">Beitrag 2025</span><span>Allgemeiner Beitragssatz: 14,6 % + kassenindividueller Zusatzbeitrag (ca. 1,5–2,5 %). Bei einem Brutto von 3.500 € zahlen Sie inkl. Arbeitgeberanteil ca. 550–600 €/Monat gesamt.</span></li>
+    </ul>
+    <div class="tipp-box">
+      <strong>&#128161; Mein Tipp: GKV gezielt ergänzen statt in PKV wechseln</strong>
+      Wer in der GKV bleibt, kann mit einer Zahnzusatz- und einer stationären Zusatzversicherung für 30–60 €/Monat nahezu PKV-Niveau erreichen – ohne das Rückkehrrisiko in die GKV.
+    </div>
+    <div class="verdict v-must">
+      <span class="v-emoji">&#128308;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">MUST-HAVE (eine von beiden)</div><div class="v-sub">GKV ist für die meisten Arbeitnehmer und Familien die sichere, planbare Wahl</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich prüfe Ihre aktuelle Kasse auf Leistungen und Zusatzbeitrag und zeige Ihnen, welche Zusatzversicherungen Ihre persönlichen Lücken sinnvoll schließen.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 6 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 7: PKV ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-must">Teil 1 – Must-haves</span>
+      <span class="pg-meta">Seite 7 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Krankenversicherung: PKV</div>
+    <div class="pg-sub">Private Krankenversicherung – wann sie wirklich sinnvoll ist und wann nicht</div>
+    <div class="warn-box">
+      <strong>&#9888; Einkommensgrenze 2025: 69.300 € Jahresbrutto</strong>
+      Nur wer als Arbeitnehmer dauerhaft über dieser Grenze verdient, darf in die PKV wechseln. Beamte und Selbständige sind von Anfang an privat versicherbar.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Vorteile PKV</span><span>Bessere Leistungen (Chefarzt, Einbettzimmer, schnellere Termine, umfangreicherer Zahnersatz). Beitrag richtet sich nach Alter und Gesundheit beim Eintritt – junge Gesunde zahlen anfangs deutlich weniger als in der GKV.</span></li>
+      <li><span class="cl-label">Risiken PKV</span><span>Beiträge steigen im Alter erheblich. Im Rentenalter, wenn das Einkommen sinkt, ist die PKV oft sehr teuer. Die Rückkehr in die GKV ist nach dem 55. Lebensjahr fast unmöglich.</span></li>
+      <li><span class="cl-label">Familie</span><span>Kinder und nicht berufstätige Partner müssen separat versichert werden – jede Person zahlt einen eigenen Beitrag. Für Familien kann die PKV schnell teurer als die GKV werden.</span></li>
+      <li><span class="cl-label">Altersrückstellungen</span><span>Die PKV bildet Altersrückstellungen, um Beitragsanstiege abzufedern. Dennoch: Wer später in eine günstigere PKV wechseln will, verliert diese Rückstellungen (teilweise).</span></li>
+      <li><span class="cl-label">Für wen?</span><span>Sinnvoll für: gut verdienende Singles oder Paare ohne Kinder, Beamte (mit Beihilfe), Selbständige mit stabilem Einkommen. Weniger sinnvoll bei: Familienwunsch, unsicherem Einkommen, geplanter Teilzeit.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">69.300 €</span><span class="fp-lbl">Jahresbrutto-Grenze 2025 für AN</span></div>
+      <div class="fact-pill"><span class="fp-val">+2–3 %</span><span class="fp-lbl">jährliche Beitragssteigerung PKV historisch</span></div>
+      <div class="fact-pill"><span class="fp-val">55 J.</span><span class="fp-lbl">danach Rückkehr in GKV kaum möglich</span></div>
+    </div>
+    <div class="verdict v-sit">
+      <span class="v-emoji">&#128993;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">SORGFÄLTIG ABWÄGEN</div><div class="v-sub">PKV kann besser sein – muss es aber nicht. Entscheidung fürs Leben treffen.</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich erstelle Ihnen einen ehrlichen GKV-/PKV-Vergleich für Ihre konkrete Lebenssituation – inklusive Langfristprojektion der Beiträge bis zur Rente.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 7 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 8: HAUSRAT ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-emp">Teil 2 – Für die meisten wichtig</span>
+      <span class="pg-meta">Seite 8 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Hausratversicherung</div>
+    <div class="pg-sub">Schützt alles, was in Ihrer Wohnung ist – bei Einbruch, Feuer, Wasser und Sturm</div>
+    <div class="scenario-box">
+      <strong>&#128293; Einbruch, Brand oder Rohrbruch – was ist versichert?</strong>
+      Die Hausratversicherung deckt den gesamten Inhalt Ihrer Wohnung: Möbel, Elektronik, Kleidung, Schmuck, Fahrräder. Bei einem Wohnungsbrand mit Totalschaden können schnell 30.000–80.000 € Schaden entstehen – je nach Ausstattung. Entschädigungsbasis: Neuwert, nicht Zeitwert.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Was ist versichert</span><span>Einbruchdiebstahl, Feuer, Blitzschlag, Explosion, Leitungswasser, Sturm/Hagel – die klassischen Gefahren. Optional: Fahrräder, Elementarschäden, Glasbruch.</span></li>
+      <li><span class="cl-label">Unter­versicherung</span><span>Wer zu wenig versichert, bekommt im Schadensfall nur anteilig erstattet. Faustregel: <strong>650–800 € Versicherungssumme pro m² Wohnfläche</strong>. Oder: Unterversicherungsverzicht vereinbaren.</span></li>
+      <li><span class="cl-label">Fahrräder</span><span>Fahrraddiebstahl ist nur versichert, wenn explizit eingeschlossen. Bei teuren E-Bikes (2.000–5.000 €) unbedingt prüfen!</span></li>
+      <li><span class="cl-label">Grobe Fahr­lässigkeit</span><span>Wie bei der Haftpflicht: muss eingeschlossen sein. Wer vergisst, den Herd auszumachen, soll trotzdem entschädigt werden.</span></li>
+      <li><span class="cl-label">Kosten</span><span>Für eine 80-m²-Wohnung: ca. <strong>80–180 €/Jahr</strong>. Für größere Häuser entsprechend mehr.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">750 €</span><span class="fp-lbl">empfohlene Versicherungssumme je m² Wohnfläche</span></div>
+      <div class="fact-pill"><span class="fp-val">80–180 €</span><span class="fp-lbl">typischer Jahresbeitrag (80 m² Wohnung)</span></div>
+      <div class="fact-pill"><span class="fp-val">Neuwert</span><span class="fp-lbl">Entschädigungsbasis – nicht Zeitwert!</span></div>
+    </div>
+    <div class="verdict v-emp">
+      <span class="v-emoji">&#128992;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">EMPFOHLEN</div><div class="v-sub">Für nahezu jeden Haushalt sinnvoll – Kosten gering, Schutz hoch</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich prüfe Ihre Versicherungssumme, ob Unterversicherungsverzicht gilt und ob Fahrräder und Wertsachen korrekt eingeschlossen sind.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 8 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 9: WOHNGEBÄUDE ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-emp">Teil 2 – Für die meisten wichtig</span>
+      <span class="pg-meta">Seite 9 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Wohngebäude­versicherung</div>
+    <div class="pg-sub">Nur für Wohneigentümer – aber dann unverzichtbar</div>
+    <div class="warn-box">
+      <strong>&#9888; Nur für Eigentümer – Mieter brauchen diese Police nicht!</strong>
+      Als Mieter ist das Gebäude das Problem Ihres Vermieters. Als Eigentümer von Haus oder Wohnung sind Sie selbst verantwortlich – und bei Feuer, Sturm oder Leitungswasserschaden können die Kosten existenzbedrohend sein.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Was ist versichert</span><span>Das Gebäude selbst: Struktur, Dach, Wände, fest eingebaute Einrichtungen (Küche, Bad). Bei Feuer, Blitzschlag, Sturm/Hagel, Leitungswasser.</span></li>
+      <li><span class="cl-label">Elementar­schäden</span><span><strong>Flut, Erdrutsch, Rückstau sind NICHT automatisch enthalten</strong> – müssen als Klausel eingeschlossen werden. Nach den Fluten 2021 hat das zehntausende Hauseigentümer unversichert getroffen. Unbedingt prüfen!</span></li>
+      <li><span class="cl-label">Gleitender Neuwert</span><span>Die Versicherungssumme muss mit dem Baupreisindex steigen. Fixer Wert aus 1990 deckt heute oft nur 30 % der Wiederherstellungskosten. Auf <strong>Wert 1914</strong> oder dynamischen Index achten.</span></li>
+      <li><span class="cl-label">Banken</span><span>Bei Immobilienfinanzierung ist die Wohngebäudeversicherung von der Bank <strong>vorgeschrieben</strong>. Keine Bank finanziert ohne sie.</span></li>
+      <li><span class="cl-label">Kosten</span><span>Je nach Baujahr, Region und Größe: ca. <strong>300–800 €/Jahr</strong> für ein durchschnittliches Einfamilienhaus.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">Elementar</span><span class="fp-lbl">nicht automatisch enthalten – extra einschließen!</span></div>
+      <div class="fact-pill"><span class="fp-val">300–800 €</span><span class="fp-lbl">typischer Jahresbeitrag Einfamilienhaus</span></div>
+      <div class="fact-pill"><span class="fp-val">Pflicht</span><span class="fp-lbl">bei Bankfinanzierung vorgeschrieben</span></div>
+    </div>
+    <div class="verdict v-must">
+      <span class="v-emoji">&#128308;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">MUST-HAVE für Eigentümer</div><div class="v-sub">Elementarschutz immer mitversichern – auch in vermeintlich sicheren Lagen</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich prüfe ob Elementarschutz enthalten ist, ob der gleitende Neuwert korrekt angepasst wird und ob Sie unter- oder überversichert sind.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 9 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 10: KFZ ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-emp">Teil 2 – Für die meisten wichtig</span>
+      <span class="pg-meta">Seite 10 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Kfz-Versicherung</div>
+    <div class="pg-sub">Haftpflicht ist Pflicht – aber was ist bei Kasko wirklich sinnvoll?</div>
+    <div class="body-text">Die Kfz-Haftpflicht ist gesetzlich vorgeschrieben – ohne sie dürfen Sie kein Auto zulassen. Die Entscheidung für Teil- oder Vollkasko ist eine wirtschaftliche Abwägung, keine Frage der Absicherungsmentalität.</div>
+    <ul class="check-list">
+      <li><span class="cl-label">Haftpflicht (Pflicht)</span><span>Deckt Schäden, die Sie anderen zufügen. Mindestdeckung gesetzlich vorgeschrieben (1 Mio. € für Personen), in der Praxis sollten es <strong>100 Mio. €</strong> sein – top Policen bieten das pauschal.</span></li>
+      <li><span class="cl-label">Teilkasko</span><span>Deckt Schäden am eigenen Auto durch: Diebstahl, Brand, Wildunfälle, Glasbruch, Sturm/Hagel, Überschwemmung. Lohnt sich für fast alle Fahrzeuge außer sehr alte Autos mit geringem Zeitwert.</span></li>
+      <li><span class="cl-label">Vollkasko</span><span>Deckt zusätzlich selbst verursachte Schäden und Vandalismus. Empfohlen bei: Neuwagen, finanzierten Fahrzeugen, Fahrzeugen über ca. 15.000 € Wert. Bei alten Gebrauchtwagen oft unwirtschaftlich.</span></li>
+      <li><span class="cl-label">Rabattretter</span><span>Ein Schadensfreiheitsrabatt (SFR) von SF 25 kann durch einen Unfall auf SF 10 fallen. Rabattretter kostet wenig und schützt den aufgebauten Rabatt – besonders bei hohem SFR sinnvoll.</span></li>
+      <li><span class="cl-label">Jährlich prüfen</span><span>Kfz-Versicherungen lassen sich zum 30. November kündigen. Ein Jahreswechsel spart oft <strong>20–40 %</strong>. Ich übernehme den Wechsel für Sie – inkl. Kündigung beim alten Anbieter.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">Pflicht</span><span class="fp-lbl">Kfz-Haftpflicht gesetzlich vorgeschrieben</span></div>
+      <div class="fact-pill"><span class="fp-val">30. Nov.</span><span class="fp-lbl">Kündigungsfrist für Jahreswechsel</span></div>
+      <div class="fact-pill"><span class="fp-val">–40 %</span><span class="fp-lbl">mögliche Ersparnis durch jährl. Vergleich</span></div>
+    </div>
+    <div class="verdict v-emp">
+      <span class="v-emoji">&#128992;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">EMPFOHLEN</div><div class="v-sub">Haftpflicht Pflicht. Kasko: situationsabhängig – Fahrzeugwert entscheidet.</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich vergleiche jährlich Ihren Kfz-Tarif und wechsle bei Bedarf – inklusive Kündigung beim Vorversicherer. Kein Aufwand für Sie.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 10 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 11: RISIKOLEBEN ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-emp">Teil 2 – Für die meisten wichtig</span>
+      <span class="pg-meta">Seite 11 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Risikolebens­versicherung</div>
+    <div class="pg-sub">Finanzieller Schutz für die Menschen, die von Ihnen abhängig sind</div>
+    <div class="scenario-box">
+      <strong>&#9888; Was passiert, wenn der Hauptverdiener stirbt?</strong>
+      Familie mit zwei Kindern, Immobilienkredit über 300.000 €, Partner in Teilzeit. Verstirbt der Hauptverdiener, kann die Familie das Haus nicht halten. Ohne Risikoleben droht Zwangsversteigerung. Eine Police über 300.000 € kostet einen gesunden 35-Jährigen ca. 15–20 €/Monat.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Für wen sinnvoll</span><span>Familien mit Kindern, Paare mit gemeinsamem Kredit, Alleinverdiener-Haushalte. Auch Selbständige, deren Betrieb von ihrer Arbeitskraft abhängt.</span></li>
+      <li><span class="cl-label">Versicherungs­summe</span><span>Faustregel: Mindestens das <strong>3–5-fache des Jahresbruttoeinkommens</strong>, oder: offene Kreditschuld + Unterhaltsverpflichtungen für mind. 5 Jahre.</span></li>
+      <li><span class="cl-label">Laufzeit</span><span>Bis zur Schuldenfreiheit oder bis die Kinder wirtschaftlich selbständig sind. Nicht zu kurz wählen – im Schadenfall ist jedes Jahr Unterdeckung zu viel.</span></li>
+      <li><span class="cl-label">Abgrenzung</span><span><strong>Nicht zu verwechseln mit der kapitalbildenden Lebensversicherung!</strong> Die Risikoleben ist reine Absicherung ohne Sparanteil – und deshalb günstig und klar. Mehr dazu auf Seite 20.</span></li>
+      <li><span class="cl-label">Kosten</span><span>35-Jähriger, 300.000 € Versicherungssumme, 20 Jahre Laufzeit, Nichtraucher: ca. <strong>15–25 €/Monat</strong>.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">15–25 €</span><span class="fp-lbl">Monatsbeitrag (35 J., 300.000 €, 20 J. Laufzeit)</span></div>
+      <div class="fact-pill"><span class="fp-val">3–5×</span><span class="fp-lbl">Jahresbrutto als Mindest-Versicherungssumme</span></div>
+      <div class="fact-pill"><span class="fp-val">bis 67</span><span class="fp-lbl">Laufzeit min. bis Schuldenfreiheit</span></div>
+    </div>
+    <div class="verdict v-emp">
+      <span class="v-emoji">&#128992;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">EMPFOHLEN</div><div class="v-sub">Für Familien mit Kindern oder Kredit: praktisch unverzichtbar</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich berechne die richtige Versicherungssumme für Ihre Situation und vergleiche Tarife aus dem gesamten Markt – auch bei Vorerkrankungen oder risikoreichen Berufen.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 11 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 12: PFLEGEZUSATZ ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-emp">Teil 2 – Für die meisten wichtig</span>
+      <span class="pg-meta">Seite 12 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Pflegezusatz­versicherung</div>
+    <div class="pg-sub">Die gesetzliche Pflege deckt nur einen Bruchteil der tatsächlichen Kosten</div>
+    <div class="warn-box">
+      <strong>&#9888; Das unterschätzte Risiko: Die Pflegelücke</strong>
+      Ein Heimplatz kostet heute durchschnittlich 3.500–5.000 € pro Monat. Die gesetzliche Pflegeversicherung zahlt je nach Pflegegrad einen Festbetrag – der Eigenanteil der Bewohner beträgt laut offizieller Statistik im Schnitt über 2.200 € pro Monat. Diesen Betrag müssen Sie selbst aufbringen – oder Ihre Kinder werden herangezogen.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Das Problem</span><span>Die gesetzliche Pflegeversicherung ist als <strong>Teilkaskoversicherung</strong> konzipiert – sie übernimmt bewusst nicht alle Kosten. Der Eigenanteil ist politisch gewollt und wird in Zukunft eher steigen als sinken.</span></li>
+      <li><span class="cl-label">Formen der Zusatzversicherung</span><span>Pflegetagegeld (fester Betrag je Pflegetag), Pflegekostenversicherung (Erstattung tatsächlicher Kosten), Pflegerente (monatliche Rente ab Pflegebedürftigkeit). Je nach Situation unterschiedlich sinnvoll.</span></li>
+      <li><span class="cl-label">Wann abschließen</span><span>Je früher, desto günstiger – und die Gesundheitsprüfung ist einfacher zu bestehen. Ab 45–50 Jahren steigen Beiträge und Risiko deutlich. Wer wartet, zahlt mehr oder wird abgelehnt.</span></li>
+      <li><span class="cl-label">Staatliche Förderung</span><span>Pflegezusatzversicherungen mit staatlicher Förderung (sog. "Pflege-Bahr") werden seit 2013 mit 5 €/Monat Zuschuss gefördert – ohne Gesundheitsfragen bei Abschluss.</span></li>
+      <li><span class="cl-label">Kosten</span><span>Je nach Alter und Leistung: ca. <strong>20–80 €/Monat</strong>. Mit 40 Jahren deutlich günstiger als mit 60.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">&gt;2.200 €</span><span class="fp-lbl">durchschn. Eigenanteil im Pflegeheim/Monat</span></div>
+      <div class="fact-pill"><span class="fp-val">20–80 €</span><span class="fp-lbl">Monatsbeitrag je nach Alter und Leistung</span></div>
+      <div class="fact-pill"><span class="fp-val">5 €</span><span class="fp-lbl">staatl. Förderung (Pflege-Bahr) pro Monat</span></div>
+    </div>
+    <div class="verdict v-emp">
+      <span class="v-emoji">&#128992;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">EMPFOHLEN</div><div class="v-sub">Besonders ab 45 Jahren – wer wartet, zahlt deutlich mehr oder wird abgelehnt</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich vergleiche die verschiedenen Pflegeprodukte und zeige Ihnen, welches Modell (Tagegeld, Kosten oder Rente) zu Ihrer Lebenssituation passt.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 12 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 13: ZAHNZUSATZ ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-emp">Teil 2 – Für die meisten wichtig</span>
+      <span class="pg-meta">Seite 13 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Zahnzusatz­versicherung</div>
+    <div class="pg-sub">Die GKV zahlt nur Basisversorgung – hochwertige Versorgung bleibt weitgehend privat</div>
+    <div class="scenario-box">
+      <strong>&#128141; Was die GKV beim Zahnarzt wirklich leistet</strong>
+      Implantate: 0 € (GKV zahlt nicht). Keramik-Krone statt Metallkrone: Eigenanteil ca. 400–600 €. Professionelle Zahnreinigung: 0 €. Kieferorthopädie für Erwachsene: 0 €. Bei einer umfangreicheren Zahnbehandlung entstehen schnell <strong>2.000–8.000 € Eigenkosten</strong>.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Was zahlt die GKV</span><span>Den "Festzuschuss" – ca. 60 % der Regelversorgung. Wer eine hochwertigere Versorgung wählt, zahlt den Rest selbst. Implantate und Zahnersatz der gehobenen Qualität sind fast komplett privat.</span></li>
+      <li><span class="cl-label">Was leistet eine gute Zusatzversicherung</span><span>80–100 % der Zahnersatzkosten inkl. Implantate, 80–100 % professionelle Zahnreinigung (2× jährlich), Kieferorthopädie für Kinder und Erwachsene.</span></li>
+      <li><span class="cl-label">Wartezeiten</span><span>Die meisten Policen haben 3–8 Monate Wartezeit. <strong>Wer bereits eine Behandlung plant, ist zu spät</strong>. Frühzeitig abschließen – auch wenn der Zahn noch nicht weh tut.</span></li>
+      <li><span class="cl-label">Leistungsobergrenze</span><span>In den ersten Jahren begrenzen viele Policen die Erstattung (z. B. max. 1.000 € im 1. Jahr). Diese Staffelung beim Vergleich unbedingt beachten.</span></li>
+      <li><span class="cl-label">Kosten</span><span>Gute Tarife für Erwachsene: ca. <strong>15–35 €/Monat</strong>. Für Familien mit Kindern besonders empfohlen – Kieferorthopädie kann teuer werden.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">0 €</span><span class="fp-lbl">GKV-Anteil bei Implantaten</span></div>
+      <div class="fact-pill"><span class="fp-val">15–35 €</span><span class="fp-lbl">Monatsbeitrag gute Zahnzusatz</span></div>
+      <div class="fact-pill"><span class="fp-val">3–8 Mo.</span><span class="fp-lbl">typische Wartezeit nach Abschluss</span></div>
+    </div>
+    <div class="verdict v-emp">
+      <span class="v-emoji">&#128992;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">EMPFOHLEN</div><div class="v-sub">Besonders für Familien mit Kindern und alle ab 35 Jahren</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich vergleiche Tarife auf Erstattungshöhe, Wartezeiten und Leistungsobergrenzen – und empfehle den Tarif, der zu Ihrem Gebissbefund und Budget passt.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 13 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 14: RECHTSSCHUTZ ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-sit">Teil 3 – Situationsabhängig</span>
+      <span class="pg-meta">Seite 14 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Rechtsschutz­versicherung</div>
+    <div class="pg-sub">Sinnvoll für Mieter, Autofahrer und Arbeitnehmer – aber nicht für jeden</div>
+    <div class="scenario-box">
+      <strong>&#9878; Wann brauchen Sie einen Anwalt?</strong>
+      Ihr Vermieter kündigt zu Unrecht. Ihr Chef entlässt Sie ohne Grund. Ein Unfallgegner streitet die Schuldfrage ab. Ein Anwalt kostet 200–400 €/Stunde, ein Gerichtsverfahren schnell 3.000–20.000 €. Die Rechtsschutzversicherung übernimmt Anwalts-, Gerichts- und Gutachterkosten.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Bereiche</span><span>Privatrechtsschutz (allgemeine Streitigkeiten), Verkehrsrechtsschutz (Unfälle, Bußgelder), Berufsrechtsschutz (Arbeitsstreitigkeiten), Mietrechtsschutz. Nicht jeder braucht alle Bereiche.</span></li>
+      <li><span class="cl-label">Wartezeit</span><span>Meist <strong>3 Monate Wartezeit</strong> nach Vertragsabschluss. Ausnahme: Streitigkeiten aus Unfällen. Deshalb abschließen, bevor ein Konflikt entsteht – nicht danach.</span></li>
+      <li><span class="cl-label">Selbstbeteiligung</span><span>Typisch: 150–300 € Selbstbeteiligung pro Streitfall. Mit höherer SB sinkt der Beitrag. Für Bagatellstreitigkeiten lieber selbst zahlen, die SB schützt vor Kleinstreitigkeiten.</span></li>
+      <li><span class="cl-label">Was ist nicht versichert</span><span>Vorsätzliche Straftaten, Erbstreitigkeiten (oft), Bausachen (oft), Streitigkeiten vor dem Abschluss (Wartezeit). Genau lesen!</span></li>
+      <li><span class="cl-label">Kosten</span><span>Für Singles ca. <strong>150–250 €/Jahr</strong>, Familien 200–350 €/Jahr je nach Leistungsumfang.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">3 Mo.</span><span class="fp-lbl">typische Wartezeit nach Abschluss</span></div>
+      <div class="fact-pill"><span class="fp-val">150–350 €</span><span class="fp-lbl">Jahresbeitrag je nach Umfang</span></div>
+      <div class="fact-pill"><span class="fp-val">300.000 €</span><span class="fp-lbl">empfohlene Mindest-Deckungssumme</span></div>
+    </div>
+    <div class="verdict v-sit">
+      <span class="v-emoji">&#128993;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">SITUATIONSABHÄNGIG</div><div class="v-sub">Besonders sinnvoll für Mieter, Pendler und Arbeitnehmer – weniger für Beamte oder Rentner</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich prüfe welche Rechtsbereiche für Sie relevant sind und empfehle den Tarif mit dem besten Preis-Leistungs-Verhältnis für Ihre Lebenssituation.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 14 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 15: AUSLANDSKRANKEN ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-sit">Teil 3 – Situationsabhängig</span>
+      <span class="pg-meta">Seite 15 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Auslandskranken­versicherung</div>
+    <div class="pg-sub">GKV zahlt außerhalb der EU nahezu nichts – das Risiko ist real</div>
+    <div class="warn-box">
+      <strong>&#9992; Krankenhausrechnung in den USA: 47.000 $</strong>
+      Appendix-OP in Florida, 4 Tage Aufenthalt. GKV-Erstattung: 320 €. Eigenanteil: über 46.000 $. Ohne Auslandskrankenversicherung ist dies ein finanzielles Desaster. Für Urlauber mit Jahrespolice für die ganze Familie: ab 30 €/Jahr.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">GKV im Ausland</span><span>Innerhalb der EU: GKV leistet, aber nur in Höhe des Landes-Standards. Außerhalb EU: <strong>0 €</strong>. Krankentransport zurück nach Deutschland: nie versichert durch GKV.</span></li>
+      <li><span class="cl-label">Jahrespolice</span><span>Für Urlauber: Jahrespolice für die gesamte Familie kostet <strong>30–60 €/Jahr</strong>. Begrenzt auf max. 56–90 Tage pro Reise – für Urlauber mehr als ausreichend.</span></li>
+      <li><span class="cl-label">Rücktransport</span><span>Ein medizinisch notwendiger Rücktransport aus den USA oder Asien kostet 30.000–80.000 €. Die Auslandskrankenversicherung übernimmt das vollständig.</span></li>
+      <li><span class="cl-label">Langzeitaufenthalt</span><span>Für Auswanderer, Expats oder Langzeitreisende (mehr als 6 Monate) gilt ein eigener Versicherungsmarkt. Normale GKV endet nach mehrmonatigem Auslandsaufenthalt.</span></li>
+      <li><span class="cl-label">PKV-Versicherte</span><span>Viele PKV-Tarife haben nur begrenzte Auslandsleistungen. Auch als PKV-Versicherter lohnt sich eine günstige Auslandskrankenversicherung als Ergänzung bei Fernreisen.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">0 €</span><span class="fp-lbl">GKV-Leistung außerhalb der EU</span></div>
+      <div class="fact-pill"><span class="fp-val">ab 30 €</span><span class="fp-lbl">Jahrespolice Familie (bis 90 Tage pro Reise)</span></div>
+      <div class="fact-pill"><span class="fp-val">80.000 €</span><span class="fp-lbl">Kosten Rücktransport aus USA/Asien</span></div>
+    </div>
+    <div class="verdict v-sit">
+      <span class="v-emoji">&#128993;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">SITUATIONSABHÄNGIG</div><div class="v-sub">Bei Reisen außerhalb der EU: immer empfohlen. Kosten-Nutzen-Verhältnis hervorragend.</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich empfehle die passende Jahres- oder Einzelreisepolice und prüfe ob Ihre bestehende PKV Auslandsleistungen bereits enthält.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 15 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 16: BU SELBSTÄNDIGE ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-sit">Teil 3 – Situationsabhängig</span>
+      <span class="pg-meta">Seite 16 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">BU für Selbständige &amp; Handwerker</div>
+    <div class="pg-sub">Besondere Herausforderungen – aber kein Grund, auf Einkommensschutz zu verzichten</div>
+    <div class="body-text">Selbständige und Handwerker haben für die BU-Versicherung einen schwierigeren Stand: strengere Gesundheitsprüfung, höhere Beiträge und manchmal Ausschlüsse für berufsbedingte Risiken. Trotzdem gibt es gute Lösungen.</div>
+    <ul class="check-list">
+      <li><span class="cl-label">Das Problem</span><span>Klassische BU-Versicherungen bewerten körperlich belastende Berufe (Handwerker, Bauarbeiter, Pfleger) mit deutlich höheren Beiträgen. Manchmal werden Anträge ganz abgelehnt.</span></li>
+      <li><span class="cl-label">Alternative: Grundfähigkeitsversicherung</span><span>Leistet, wenn bestimmte Grundfähigkeiten verloren gehen (Gehen, Heben, Sprechen, Greifen). Kein Arztgutachten über Berufsunfähigkeit nötig – einfachere Leistungsauslösung, günstigere Beiträge.</span></li>
+      <li><span class="cl-label">Alternative: Erwerbsunfähigkeitsversicherung</span><span>Zahlt, wenn jemand weniger als 3 Stunden täglich irgendeiner Tätigkeit nachgehen kann. Leistungsschwelle höher als BU, aber deutlich günstiger.</span></li>
+      <li><span class="cl-label">Selbständige ohne GRV</span><span>Wer nicht in der gesetzlichen Rentenversicherung ist, hat keine Erwerbsminderungsrente als Rückhalt. Der Bedarf nach privatem Einkommensschutz ist deshalb <strong>noch größer</strong> als bei Angestellten.</span></li>
+      <li><span class="cl-label">Krankentagegeld</span><span>Selbständige in der GKV erhalten ab dem 43. Krankheitstag Krankengeld nur, wenn sie freiwillig das Krankengeld-Modell gewählt haben. Wer das nicht aktiv wählt, hat ab dem 43. Tag gar keine Absicherung!</span></li>
+    </ul>
+    <div class="tipp-box">
+      <strong>&#128161; Mein Tipp für Selbständige und Handwerker</strong>
+      Lassen Sie sich nicht von einem ersten Ablehnungsbescheid entmutigen. Als Makler kenne ich die Risikoprüfungspraxis der verschiedenen Anbieter und weiß, welcher Anbieter welchen Beruf fair bewertet – und wer besonders streng ist.
+    </div>
+    <div class="verdict v-sit">
+      <span class="v-emoji">&#128993;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">INDIVIDUELL PRÜFEN</div><div class="v-sub">BU, Grundfähigkeit oder EU – es gibt immer eine sinnvolle Lösung. Beratung nötig.</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich führe eine anonyme Voranfrage bei mehreren Anbietern durch – so sehen wir vor Antragstellung, wer Sie zu welchen Konditionen versichert.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 16 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 17: UNFALL ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-sit">Teil 3 – Situationsabhängig</span>
+      <span class="pg-meta">Seite 17 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Unfallversicherung</div>
+    <div class="pg-sub">Ergänzung zur BU – kein Ersatz dafür</div>
+    <div class="warn-box">
+      <strong>&#9888; Wichtiger Hinweis vorab: Unfallversicherung ≠ BU-Ersatz</strong>
+      Die Unfallversicherung leistet nur bei Unfällen – nicht bei Krankheiten. Da rund 80 % aller Berufsunfähigkeiten durch Krankheiten entstehen (Rücken, Psyche, Krebs), deckt die Unfallversicherung den bei Weitem größten Teil des BU-Risikos NICHT ab. Wer BU-fähig und gesund ist, sollte zuerst eine BU abschließen.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Was sie leistet</span><span>Einmalzahlung oder Rente bei dauerhafter Invalidität durch Unfall. Höhe abhängig vom Invaliditätsgrad und der vereinbarten Versicherungssumme (ggf. mit Progression).</span></li>
+      <li><span class="cl-label">Progression</span><span>Bei 350 % Progression bedeutet 100 % Invalidität eine Auszahlung der 3,5-fachen Versicherungssumme. Bei 500.000 € Grundsumme wären das 1,75 Mio. € – für schwere Unfälle eine starke Leistung.</span></li>
+      <li><span class="cl-label">Für wen sinnvoll</span><span><strong>Kinder:</strong> günstig versicherbar, da Krankheiten im Kindesalter bereits anderweitig gesichert sind. <strong>Menschen, die keine BU bekommen</strong> (Vorerkrankungen, gefährliche Berufe): als Alternative. <strong>Ergänzung zur BU</strong> für unfallgefährdete Berufe.</span></li>
+      <li><span class="cl-label">Unfallbegriff</span><span>Nur "plötzlich von außen auf den Körper einwirkende Ereignisse". Bandscheibenvorfall durch Heben gilt nicht als Unfall. Genau lesen!</span></li>
+      <li><span class="cl-label">Kosten</span><span>Für Erwachsene: ca. <strong>80–200 €/Jahr</strong> je nach Summe und Beruf. Für Kinder sehr günstig: 30–80 €/Jahr.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">~20 %</span><span class="fp-lbl">aller BUs entstehen durch Unfälle</span></div>
+      <div class="fact-pill"><span class="fp-val">~80 %</span><span class="fp-lbl">aller BUs durch Krankheiten – nicht abgedeckt</span></div>
+      <div class="fact-pill"><span class="fp-val">350–500 %</span><span class="fp-lbl">Progression – Auszahlung bei Vollinvalidität</span></div>
+    </div>
+    <div class="verdict v-sit">
+      <span class="v-emoji">&#128993;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">SITUATIONSABHÄNGIG</div><div class="v-sub">Sinnvoll für Kinder und als Ergänzung – kein Ersatz für eine BU-Versicherung</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich prüfe, ob eine Unfallversicherung in Ihrer Situation eine sinnvolle Ergänzung oder ein vollständiger Ersatz für BU ist – und zu welchen Konditionen.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 17 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 18: RESTSCHULD ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-un">Teil 4 – Meist unnötig</span>
+      <span class="pg-meta">Seite 18 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Restschuld­versicherung</div>
+    <div class="pg-sub">Wird oft beim Kredit "dazugebucht" – selten im Interesse des Kunden</div>
+    <div class="warn-box">
+      <strong>&#10060; Eine der häufigsten Fehlverkäufe im Versicherungsbereich</strong>
+      Die Restschuldversicherung (auch Ratenschutzversicherung) wird von Banken und Händlern beim Abschluss eines Kredits oder Ratenkaufs standardmäßig angeboten. Sie wirkt seriös – ist aber in der Regel teuer, voller Ausschlüsse und schlechter als alternative Lösungen.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Was sie kostet</span><span>Typisch: 5–10 % der gesamten Kreditsumme als Einmalbetrag – der dann selbst auf den Kredit aufgeschlagen wird. Bei 20.000 € Kredit zahlen Sie 1.000–2.000 € mehr Zinsen auf eine Police, die Sie vielleicht nie brauchen.</span></li>
+      <li><span class="cl-label">Typische Ausschlüsse</span><span>Keine Leistung bei: Kündigung durch Arbeitnehmer, Erkrankungen, die beim Abschluss bereits bekannt waren, Selbständigkeit, Vorerkrankungen, bestimmten Berufen. Der scheinbare Schutz ist oft löchrig.</span></li>
+      <li><span class="cl-label">Wartezeiten</span><span>Viele Policen leisten erst nach 3–6 Monaten. Wer direkt nach Abschluss arbeitslos wird, geht leer aus.</span></li>
+      <li><span class="cl-label">Die bessere Alternative</span><span>Eine <strong>Risikolebensversicherung</strong> schützt Hinterbliebene bei Tod deutlich günstiger. Eine <strong>BU-Versicherung</strong> schützt bei Berufsunfähigkeit umfassend – ohne die Ausschlüsse der Restschuldversicherung.</span></li>
+      <li><span class="cl-label">Rechtliches</span><span>Sie dürfen eine Restschuldversicherung beim Kreditabschluss ablehnen – der Kredit darf davon nicht abhängig gemacht werden. Das ist gesetzlich so geregelt.</span></li>
+    </ul>
+    <div class="verdict v-un">
+      <span class="v-emoji">&#10060;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">MEIST UNNÖTIG</div><div class="v-sub">Teuer, voller Ausschlüsse. Besser: Risikoleben + BU separat abschließen.</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Wenn Sie einen Kredit aufnehmen, zeige ich Ihnen, wie Sie Ihren Kredit und Ihre Familie wirklich sinnvoll absichern können – ohne teure Bankprodukte.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 18 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 19: KLEINVERSICHERUNGEN ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-un">Teil 4 – Meist unnötig</span>
+      <span class="pg-meta">Seite 19 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Kleinversicherungen: Handy, Gepäck, Glasbruch &amp; Co.</div>
+    <div class="pg-sub">Die Psychologie der Kleinstrisiken – und warum wir sie überschätzen</div>
+    <div class="body-text">Menschen versichern das Falsche. Kleine, überschaubare Risiken werden versichert (Handyschutz, Reisegepäck, Brillenversicherung), während große existenzbedrohende Risiken ohne Schutz bleiben. Das liegt an unserer Psychologie: konkrete, greifbare Schäden fühlen sich bedrohlicher an als abstrakte Großrisiken.</div>
+    <ul class="check-list">
+      <li><span class="cl-label">Handyversicherung</span><span>Kostet 5–15 €/Monat, also 60–180 €/Jahr. Enthält meist hohe Selbstbeteiligung und schließt Wasserschäden oder Diebstahl oft aus. Ein neues Mittelklasse-Smartphone kostet 300–500 €. Selbst tragen ist günstiger.</span></li>
+      <li><span class="cl-label">Reisegepäckversicherung</span><span>Entschädigungen oft gering, Selbstbeteiligung hoch, Nachweis schwierig. Wertvolles Gepäck oft bereits über die Hausratversicherung mitversichert (prüfen!) – und wenn nicht, selten lohnend.</span></li>
+      <li><span class="cl-label">Glasbruchversicherung</span><span>Kann in manchen Fällen sinnvoll sein (z. B. wenn viele große Fensterscheiben vorhanden), ist aber häufig in der Hausrat oder Wohngebäude bereits enthalten. Doppelversicherung vermeiden.</span></li>
+      <li><span class="cl-label">Kreditkartenversicherungen</span><span>Viele Premium-Kreditkarten enthalten Reiseversicherungen (Gepäck, Reiserücktritt, Mietwagenkasko). Lohnt sich zu prüfen – oft ausreichend, ohne separate Police.</span></li>
+      <li><span class="cl-label">Die Regel</span><span>Versicherungen schützen gegen Risiken, die Sie sich <strong>nicht selbst leisten könnten</strong>. Können Sie einen kaputten Bildschirm aus eigener Tasche zahlen? Dann brauchen Sie keine Versicherung dafür.</span></li>
+    </ul>
+    <div class="tipp-box">
+      <strong>&#128161; Ausnahme: Brillenversicherung</strong>
+      Bei hohen Sehstärken und teuren Gläsern (ab 500 € Eigenbeteiligung) kann eine Brillenversicherung tatsächlich sinnvoll sein – besonders wenn die GKV keine Sehhilfen mehr erstattet und eine neue Brille alle 2–3 Jahre nötig ist.
+    </div>
+    <div class="verdict v-un">
+      <span class="v-emoji">&#10060;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">MEIST UNNÖTIG</div><div class="v-sub">Lieber kleine Risiken selbst tragen und das Geld in echten Schutz investieren</div></div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 19 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 20: KAPITALBILDENDE LEBENSVERSICHERUNG ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-un">Teil 4 – Meist unnötig</span>
+      <span class="pg-meta">Seite 20 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Kapitalbildende Lebensversicherung</div>
+    <div class="pg-sub">War mal attraktiv – für Neuabschlüsse heute kaum noch empfehlenswert</div>
+    <div class="body-text">Die kapitalbildende Lebensversicherung (KLV) kombiniert Todesfallschutz mit einem Sparanteil. Sie war in den 1980ern und 90ern ein attraktives Steuersparmodell mit Garantiezinsen von 3–4 %. Diese Zeiten sind vorbei.</div>
+    <ul class="check-list">
+      <li><span class="cl-label">Garantiezins heute</span><span>Der Garantiezins für Neuverträge beträgt aktuell <strong>1,0 %</strong> (ab 2025). Nach Abzug der Verwaltungskosten (oft 1,5–2,5 % p.a.) ist die Rendite negativ – Sie verlieren reale Kaufkraft.</span></li>
+      <li><span class="cl-label">Kosten</span><span>Abschlusskosten (Provision), Verwaltungskosten, Risikokosten – diese werden in den ersten Jahren fast vollständig vom Sparbetrag abgezogen. Wer früh kündigt, bekommt oft weniger zurück, als er eingezahlt hat.</span></li>
+      <li><span class="cl-label">Bestandspolicen</span><span>Alte Policen mit Garantiezinsen über 3 % können sinnvoll weitergeführt werden – prüfen, ob Kündigung besser oder schlechter ist als Fortführung. <strong>Nicht automatisch kündigen!</strong></span></li>
+      <li><span class="cl-label">Die Alternative</span><span>Trennen Sie Sparen und Versichern: <strong>Risikolebensversicherung</strong> für den Todesfallschutz (günstig und klar), <strong>ETF-Sparplan</strong> für den Vermögensaufbau (transparent und renditestark). Beide zusammen kosten meist weniger und bringen mehr.</span></li>
+      <li><span class="cl-label">Ausnahme: Fondsgebundene RV</span><span>Fondsgebundene Rentenversicherungen in ETF-Mantel können steuerlich attraktiv sein (Halbeinkünfteverfahren). Aber nur wenn Kosten niedrig sind – hier kommt es sehr auf den Anbieter an.</span></li>
+    </ul>
+    <div class="verdict v-un">
+      <span class="v-emoji">&#10060;</span>
+      <div><div class="v-lbl">Makler-Urteil</div><div class="v-txt">FÜR NEUABSCHLÜSSE NICHT EMPFOHLEN</div><div class="v-sub">Bestehende Altverträge prüfen – nicht automatisch kündigen</div></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich analysiere Ihren bestehenden KLV-Vertrag ehrlich: lohnt sich Weiterzahlen, Beitragsfreistellung oder Kündigung? Ohne Interessenkonflikt.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 20 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 21: RENTENLÜCKE ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-vor">Teil 5 – Altersvorsorge</span>
+      <span class="pg-meta">Seite 21 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Die Rentenlücke verstehen</div>
+    <div class="pg-sub">Der erste Schritt zur richtigen Vorsorge: wissen, wo man steht</div>
+    <div class="scenario-box">
+      <strong>&#128200; Ein konkretes Beispiel</strong>
+      Monatliches Nettoeinkommen heute: 2.800 €. Laut Renteninformation: voraussichtliche gesetzliche Rente 1.450 € brutto, nach Steuer und Krankenversicherungsbeitrag ca. 1.150 € netto. Rentenlücke: <strong>1.650 €/Monat</strong>. Über 25 Rentenjahre: fast 500.000 €. Diese Lücke muss privat geschlossen werden.
+    </div>
+    <ul class="check-list">
+      <li><span class="cl-label">Rentenniveau</span><span>Das gesetzliche Rentenniveau liegt heute bei ca. 48 % des Durchschnittslohns. 2040 könnte es auf 43 % sinken. Wer heute nicht vorsorgt, wird morgen mit deutlich weniger leben.</span></li>
+      <li><span class="cl-label">Eigene Lücke berechnen</span><span>Formel: Gewünschtes Renteneinkommen (ca. 80 % des heutigen Nettos) minus voraussichtliche gesetzliche Rente (aus dem gelben Renteninformationsschreiben) = Rentenlücke pro Monat.</span></li>
+      <li><span class="cl-label">Inflationseffekt</span><span>Mit 2 % Inflation halbiert sich die Kaufkraft in ca. 35 Jahren. Eine Rente von 1.500 € heute entspricht in 35 Jahren nur noch ca. 750 € Kaufkraft. Vorsorge muss inflationsbereinigt gedacht werden.</span></li>
+      <li><span class="cl-label">Zinseszinseffekt</span><span>Wer mit 25 Jahren 100 €/Monat anlegt, hat mit 67 bei 5 % Rendite ca. 160.000 €. Wer mit 40 anfängt, hat nur ca. 65.000 €. Der Unterschied: 28 Jahre Einzahlung – aber das Dreifache am Ende.</span></li>
+      <li><span class="cl-label">Renteninformation</span><span>Jährlich erhalten Sie einen Rentenauskunft von der DRV. Lesen Sie sie! Darauf steht Ihre voraussichtliche Rente bei heutigem Beitragsverlauf.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">40–50 %</span><span class="fp-lbl">typische Rentenlücke zum letzten Nettoeinkommen</span></div>
+      <div class="fact-pill"><span class="fp-val">35 J.</span><span class="fp-lbl">in denen 2 % Inflation die Kaufkraft halbiert</span></div>
+      <div class="fact-pill"><span class="fp-val">3×</span><span class="fp-lbl">mehr Kapital bei 15 Jahren früherem Start</span></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich berechne Ihre persönliche Rentenlücke und zeige Ihnen, welche Kombination aus staatlich geförderten und privaten Produkten sie am effizientesten schließt.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 21 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 22: RIESTER ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-vor">Teil 5 – Altersvorsorge</span>
+      <span class="pg-meta">Seite 22 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Riester-Rente</div>
+    <div class="pg-sub">Staatliche Förderung nutzen – aber nur wenn die Voraussetzungen stimmen</div>
+    <div class="body-text">Die Riester-Rente ist eines der meistdiskutierten Vorsorgeprodukte Deutschlands. Zu Recht: Für manche ist sie sehr attraktiv – für andere eine schlechte Wahl. Der Schlüssel liegt in der richtigen Einschätzung der persönlichen Situation.</div>
+    <ul class="check-list">
+      <li><span class="cl-label">Staatliche Zulagen</span><span>Grundzulage: <strong>175 €/Jahr</strong>. Kinderzulage: <strong>300 €/Kind/Jahr</strong> (185 € für vor 2008 geborene Kinder). Um die volle Förderung zu erhalten, müssen Sie mind. 4 % des Vorjahresbruttos einzahlen (maximal 2.100 €/Jahr).</span></li>
+      <li><span class="cl-label">Für wen attraktiv</span><span>Familien mit 2+ Kindern profitieren massiv: 175 + 2×300 = 775 € staatliche Zulage. Bei Eigenleistung von 1.325 € entspricht das einer Förderquote von ca. 37 %. Auch Geringverdiener profitieren.</span></li>
+      <li><span class="cl-label">Für wen weniger geeignet</span><span>Singles ohne Kinder mit hohem Einkommen: Die Zulage macht nur einen kleinen Teil des Beitrags aus. Hier oft besser: ETF-Sparplan ohne Bindung und Verrentungspflicht.</span></li>
+      <li><span class="cl-label">Verrentungspflicht</span><span>Mind. 70 % des angesparten Kapitals müssen verrentet werden – Sie können nicht einfach auszahlen. Das schützt vor sich selbst, schränkt aber die Flexibilität ein.</span></li>
+      <li><span class="cl-label">Nachgelagerte Besteuerung</span><span>Rentenzahlungen werden im Alter versteuert. Bei niedrigem Rentensteuer­satz (oft 0–15 %) ist das vorteilhaft. Bei sehr hohem Renteneinkommen kann die Förderung teilweise durch Steuern aufgefressen werden.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">175 €</span><span class="fp-lbl">Grundzulage pro Jahr</span></div>
+      <div class="fact-pill"><span class="fp-val">300 €</span><span class="fp-lbl">Kinderzulage pro Kind und Jahr</span></div>
+      <div class="fact-pill"><span class="fp-val">4 %</span><span class="fp-lbl">Pflichtbeitrag vom Vorjahresbrutto</span></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich berechne Ihre persönliche Riester-Förderquote und vergleiche, ob Riester, Rürup oder ETF-Sparplan für Sie die beste Kombination ergibt.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 22 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 23: RÜRUP ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-vor">Teil 5 – Altersvorsorge</span>
+      <span class="pg-meta">Seite 23 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Rürup- / Basisrente</div>
+    <div class="pg-sub">Das stärkste Steuersparmodell für Selbständige und Besserverdiener</div>
+    <div class="body-text">Die Rürup-Rente (offiziell: Basisrente) ist das Pendant zur gesetzlichen Rente für Selbständige – mit erheblichen Steuervorteilen. Für Gutverdiener ist sie eines der effektivsten legalen Steuersparinstrumente.</div>
+    <ul class="check-list">
+      <li><span class="cl-label">Steuerlicher Vorteil</span><span>Einzahlungen sind <strong>zu 100 % als Sonderausgaben absetzbar</strong> (seit 2023). Maximalbetrag 2025: <strong>27.566 €/Jahr</strong> (Einzelperson), 55.132 € für Ehepaare. Bei 42 % Grenzsteuersatz spart man so bis zu 11.577 €/Jahr an Steuern.</span></li>
+      <li><span class="cl-label">Für wen geeignet</span><span>Selbständige ohne gesetzliche Rentenversicherung, Freiberufler, Unternehmer. Auch Angestellte mit hohem Einkommen können profitieren – besonders wenn alle anderen Vorsorgeoptionen ausgeschöpft sind.</span></li>
+      <li><span class="cl-label">Einschränkungen</span><span>Keine Kündigung, keine Beleihung, kein Kapitalwahlrecht – das Kapital ist bis zur Rente gebunden. Das schützt vor frühzeitigem Zugriff, schränkt aber die Flexibilität dauerhaft ein.</span></li>
+      <li><span class="cl-label">Produktformen</span><span>Klassische Rentenversicherung (Garantiezins, sicher aber renditeschwach) oder fondsgebundene Variante (mit ETFs, renditestärker, aber ohne Kapitalgarantie). Letztere empfehle ich für jüngere Sparer.</span></li>
+      <li><span class="cl-label">Nachgelagerte Besteuerung</span><span>Rentenzahlungen werden im Alter voll versteuert. Da der Steuersatz im Alter meist deutlich niedriger ist als in der Ansparphase, entsteht durch die Steuerdifferenz ein erheblicher Vorteil.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">100 %</span><span class="fp-lbl">der Einzahlungen steuerlich absetzbar</span></div>
+      <div class="fact-pill"><span class="fp-val">27.566 €</span><span class="fp-lbl">max. Absetzbarkeit 2025 (Einzelperson)</span></div>
+      <div class="fact-pill"><span class="fp-val">bis 42 %</span><span class="fp-lbl">Steuerersparnis je nach Grenzsteuersatz</span></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich vergleiche Rürup-Anbieter auf Kosten, Fondsauswahl und Flexibilität – und zeige Ihnen Ihren persönlichen Steuervorteil in konkreten Euros.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 23 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 24: BAV ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-vor">Teil 5 – Altersvorsorge</span>
+      <span class="pg-meta">Seite 24 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Betriebliche Altersvorsorge (bAV)</div>
+    <div class="pg-sub">Vorsorge über den Arbeitgeber – mit erheblichem Steuervorteil</div>
+    <div class="body-text">Die betriebliche Altersvorsorge ermöglicht es, Teile des Bruttogehalts direkt in die Altersvorsorge umzuleiten – steuerfrei und sozialabgabenfrei bis zu bestimmten Grenzen. Seit 2019 ist der Arbeitgeber zur Beteiligung verpflichtet.</div>
+    <ul class="check-list">
+      <li><span class="cl-label">Steuerfreie Einzahlung</span><span>Bis zu <strong>4 % der Beitragsbemessungsgrenze</strong> (BBG West 2025: 96.600 €) sind steuer- und sozialabgabenfrei einzahlbar: 3.864 €/Jahr bzw. ca. 322 €/Monat. Zusätzlich weitere 4 % nur steuerfrei möglich.</span></li>
+      <li><span class="cl-label">Arbeitgeberzuschuss (Pflicht)</span><span>Seit 2019: Schließt ein Arbeitnehmer eine Entgeltumwandlung ab, muss der Arbeitgeber mindestens <strong>15 %</strong> des umgewandelten Betrags dazugeben. Das ist gratis Kapital – nutzen!</span></li>
+      <li><span class="cl-label">Fünf Durchführungswege</span><span>Direktversicherung (häufigste Form), Pensionskasse, Pensionsfonds, Direktzusage, Unterstützungskasse. Welchen der Arbeitgeber anbietet, ist meist vorgegeben.</span></li>
+      <li><span class="cl-label">Jobwechsel</span><span>Beim Jobwechsel kann die bAV mitgenommen oder beitragsfrei gestellt werden. Auf keinen Fall kündigen! Die Abfindung ist steuerpflichtig und verliert alle Fördervorteile.</span></li>
+      <li><span class="cl-label">Nachteile</span><span>Rentenzahlungen werden voll versteuert und sind krankenversicherungspflichtig. Auch reduziert die Entgeltumwandlung leicht die gesetzliche Rente (da weniger Beitrag zur DRV geht). Trotzdem in der Regel vorteilhaft.</span></li>
+    </ul>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">322 €</span><span class="fp-lbl">max. steuer+SV-freie Einzahlung/Monat (2025)</span></div>
+      <div class="fact-pill"><span class="fp-val">15 %</span><span class="fp-lbl">Pflicht-Arbeitgeberzuschuss seit 2019</span></div>
+      <div class="fact-pill"><span class="fp-val">gratis</span><span class="fp-lbl">AG-Zuschuss: kostenloses Kapital nutzen!</span></div>
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich erkläre Ihnen Ihre bAV-Optionen beim aktuellen Arbeitgeber und prüfe beim Jobwechsel, wie Sie Ihre bestehende bAV optimal weiterführen.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 24 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 25: ETF ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-vor">Teil 5 – Altersvorsorge</span>
+      <span class="pg-meta">Seite 25 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">ETF-Sparplan als Ergänzung</div>
+    <div class="pg-sub">Kein Versicherungsprodukt – aber ein wichtiger Baustein in der Gesamtstrategie</div>
+    <div class="body-text">Als unabhängiger Makler verdiene ich nichts daran, wenn Sie einen ETF-Sparplan anlegen. Trotzdem sage ich Ihnen: <strong>Der ETF-Sparplan gehört für die meisten Menschen in den Vorsorge-Mix.</strong> Weil er flexibel, transparent und langfristig renditestark ist.</div>
+    <ul class="check-list">
+      <li><span class="cl-label">Was ist ein ETF?</span><span>Exchange Traded Fund – ein börsengehandelter Indexfonds. Ein ETF auf den MSCI World bildet ca. 1.500 Unternehmen aus 23 Ländern ab. Breite Diversifikation, niedrige Kosten (0,1–0,3 % p.a.).</span></li>
+      <li><span class="cl-label">Historische Rendite</span><span>Der MSCI World hat historisch ca. 7–9 % p.a. erzielt (vor Inflation, nach Kosten). Kein Garantiezins, aber langfristig deutlich besser als klassische Versicherungsprodukte.</span></li>
+      <li><span class="cl-label">Flexibilität</span><span>Kein Vertrag, keine Kündigung, keine Laufzeit. Sparrate jederzeit anpassbar. Kapital verfügbar wann Sie es brauchen. Keine Provision, keine Abschlusskosten.</span></li>
+      <li><span class="cl-label">Steuern</span><span>Wertzuwächse werden mit 25 % Abgeltungssteuer besteuert. Ab 1.000 € Sparerpauschbetrag/Jahr steuerfrei. Vorteil: Besteuerung erst bei Verkauf (Steuerstundungseffekt).</span></li>
+      <li><span class="cl-label">Die optimale Kombination</span><span>ETF-Sparplan + Risikolebensversicherung + BU + staatliche Förderung (Riester/Rürup/bAV je nach Situation) = <strong>das optimale Vorsorgeportfolio</strong> für die meisten Haushalte.</span></li>
+    </ul>
+    <div class="tipp-box">
+      <strong>&#128161; Mein ehrlicher Tipp – auch ohne Eigeninteresse</strong>
+      Nutzen Sie staatliche Förderung zuerst (bAV mit AG-Zuschuss, Riester wenn Kinder vorhanden, Rürup wenn Selbständig) und ergänzen Sie mit einem ETF-Sparplan. Das schlägt nahezu jedes klassische Versicherungs-Sparprodukt.
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich zeige Ihnen die optimale Kombination aus geförderter Vorsorge und freiem ETF-Sparen – abgestimmt auf Ihre steuerliche Situation, Ihr Alter und Ihre Ziele.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 25 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 26: SCHADENSFALL 48H ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-scha">Teil 6 – Im Schadensfall</span>
+      <span class="pg-meta">Seite 26 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Im Schadensfall: Die ersten 48 Stunden</div>
+    <div class="pg-sub">Was Sie sofort tun müssen – und was Sie auf keinen Fall tun sollten</div>
+    <div class="warn-box">
+      <strong>&#9888; Der häufigste Fehler: zu spät melden</strong>
+      Die meisten Versicherungsverträge verlangen eine Schadensmeldung innerhalb von 24–72 Stunden. Wer zu spät meldet, riskiert die vollständige Ablehnung der Schadenszahlung – selbst wenn er eindeutig im Recht ist. Das nennt sich Obliegenheitsverletzung.
+    </div>
+    <ul class="step-list">
+      <li><span class="step-num">1</span><span><strong>Schaden dokumentieren – sofort.</strong> Fotos und Videos vom Schadensort, bevor irgendetwas berührt oder verändert wird. Datum und Uhrzeit im Dateinamen oder in einer Notiz festhalten.</span></li>
+      <li><span class="step-num">2</span><span><strong>Notfall abwenden – aber nicht mehr.</strong> Wenn nötig: Leitungswasser absperren, Feuerwehr/Polizei rufen. Größere Reparaturen erst nach Gutachter-Besichtigung!</span></li>
+      <li><span class="step-num">3</span><span><strong>Versicherung informieren – noch heute.</strong> Rufen Sie die Schadenhotline an, notieren Sie Schadennummer und Name des Sachbearbeiters. Folgen Sie den Anweisungen der Versicherung.</span></li>
+      <li><span class="step-num">4</span><span><strong>Zeugen sichern.</strong> Namen und Kontaktdaten von Zeugen aufschreiben. Bei Kfz-Unfällen: Europäischen Unfallbericht ausfüllen, Fotos vom Fahrzeug und Kennzeichen des Unfallgegners.</span></li>
+      <li><span class="step-num">5</span><span><strong>Schriftlich bestätigen lassen.</strong> Jede Meldung schriftlich (E-Mail oder Fax) an die Versicherung – so haben Sie einen Nachweis über den Meldezeitpunkt.</span></li>
+    </ul>
+    <div class="tipp-box">
+      <strong>&#128161; Als Ihr Makler bin ich Ihr erster Ansprechpartner im Schadensfall</strong>
+      Rufen Sie mich an, bevor Sie den Schaden selbst melden. Ich begleite Sie durch den Prozess, stelle sicher, dass alles korrekt gemeldet wird, und verhandle mit der Versicherung, wenn es zu Problemen kommt.
+    </div>
+    <div class="facts-strip">
+      <div class="fact-pill"><span class="fp-val">24–72 h</span><span class="fp-lbl">typische Meldefrist nach Schadenseintritt</span></div>
+      <div class="fact-pill"><span class="fp-val">sofort</span><span class="fp-lbl">Fotos machen – vor jeder Reparatur</span></div>
+      <div class="fact-pill"><span class="fp-val">schriftlich</span><span class="fp-lbl">immer per E-Mail bestätigen lassen</span></div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 26 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 27: VERSICHERUNG ZAHLT NICHT ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-scha">Teil 6 – Im Schadensfall</span>
+      <span class="pg-meta">Seite 27 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Was tun, wenn die Versicherung nicht zahlt?</div>
+    <div class="pg-sub">Sie haben Rechte – und ich stehe auf Ihrer Seite</div>
+    <div class="body-text">Eine Ablehnung der Versicherung ist kein Endurteil. In vielen Fällen lässt sich durch konsequentes Vorgehen doch noch eine Zahlung durchsetzen.</div>
+    <ul class="step-list">
+      <li><span class="step-num">1</span><span><strong>Ablehnungsschreiben genau lesen.</strong> Auf welchen Paragraph oder welche Klausel beruft sich die Versicherung? Ist die Begründung korrekt und im Vertrag so tatsächlich vereinbart?</span></li>
+      <li><span class="step-num">2</span><span><strong>Mich als Ihren Makler einschalten.</strong> Als Ihr Makler bin ich rechtlich verpflichtet, Ihre Interessen gegenüber der Versicherung zu vertreten. Ich nehme den Kontakt auf und formuliere eine fachkundige Gegendarstellung.</span></li>
+      <li><span class="step-num">3</span><span><strong>Schriftlich widersprechen.</strong> Formloser Widerspruch reicht – wichtig ist, dass er schriftlich und fristgerecht (meist 1 Monat) eingeht. Die Frist steht im Ablehnungsschreiben.</span></li>
+      <li><span class="step-num">4</span><span><strong>Versicherungsombudsmann einschalten.</strong> Kostenlos und unabhängig: Der Ombudsmann vermittelt bei Streitigkeiten zwischen Versicherungskunde und -unternehmen. Bis 10.000 € Streitwert ist die Entscheidung für die Versicherung bindend. <br><em>Web: versicherungsombudsmann.de · Tel: 0800 3696000 (kostenfrei)</em></span></li>
+      <li><span class="step-num">5</span><span><strong>Rechtschutzversicherung prüfen.</strong> Wenn Sie eine Rechtsschutzversicherung haben: Anwalt einschalten. Ohne Rechtsschutz: erst prüfen ob Streitwert die Anwaltskosten rechtfertigt.</span></li>
+    </ul>
+    <div class="tipp-box">
+      <strong>&#128161; Häufig schreibt die Versicherung bewusst knapp</strong>
+      Viele Ablehnungen sind nicht die letzte Antwort, sondern ein erster Versuch. Wer widerspricht und fachkundig vorgeht, bekommt in erstaunlich vielen Fällen doch noch Recht. Geben Sie nicht nach dem ersten Nein auf.
+    </div>
+    <div class="makler-box">
+      <span class="makler-icon">&#129489;</span>
+      <div><strong>Was ich als Makler für Sie tue:</strong>Ich führe für Sie die Korrespondenz mit der Versicherung, formuliere den Widerspruch und begleite den Ombudsmann-Prozess – das ist Teil meiner Leistung als Ihr Makler.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 27 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 28: SCHADEN-CHECKLISTE (interaktiv) ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-scha">Teil 6 – Im Schadensfall</span>
+      <span class="pg-meta">Seite 28 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Schaden-Checkliste</div>
+    <div class="pg-sub">Ausfüllbar – zum Ausdrucken oder digital nutzen</div>
+    <table class="fill-table">
+      <tr><th colspan="2">Grunddaten des Schadens</th></tr>
+      <tr><td style="width:38%;font-weight:600;color:var(--navy);">Datum des Schadens</td><td><input placeholder="TT.MM.JJJJ"></td></tr>
+      <tr><td style="font-weight:600;color:var(--navy);">Uhrzeit (ca.)</td><td><input placeholder="z. B. 14:30 Uhr"></td></tr>
+      <tr><td style="font-weight:600;color:var(--navy);">Ort des Schadens</td><td><input placeholder="Adresse / Beschreibung"></td></tr>
+      <tr><td style="font-weight:600;color:var(--navy);">Art des Schadens</td><td><input placeholder="z. B. Einbruch, Wasserschaden, Unfall …"></td></tr>
+      <tr><td style="font-weight:600;color:var(--navy);">Geschätzter Schaden</td><td><input placeholder="ca. ___ €"></td></tr>
+    </table>
+    <table class="fill-table">
+      <tr><th colspan="2">Maßnahmen &amp; Meldung</th></tr>
+      <tr><td style="width:38%;font-weight:600;color:var(--navy);">Fotos gemacht?</td><td><input placeholder="Ja / Nein – Anzahl Fotos: ___"></td></tr>
+      <tr><td style="font-weight:600;color:var(--navy);">Polizei informiert?</td><td><input placeholder="Ja / Nein – Aktenzeichen: ___"></td></tr>
+      <tr><td style="font-weight:600;color:var(--navy);">Versicherung informiert am</td><td><input placeholder="TT.MM.JJJJ um ___ Uhr"></td></tr>
+      <tr><td style="font-weight:600;color:var(--navy);">Sachbearbeiter / Hotline</td><td><input placeholder="Name und Tel. notieren"></td></tr>
+      <tr><td style="font-weight:600;color:var(--navy);">Schadennummer</td><td><input placeholder="Von Versicherung mitgeteilt"></td></tr>
+      <tr><td style="font-weight:600;color:var(--navy);">Zeugen (Name / Tel.)</td><td><input placeholder="Falls vorhanden"></td></tr>
+      <tr><td style="font-weight:600;color:var(--navy);">Makler informiert am</td><td><input placeholder="TT.MM.JJJJ – Daniel Eck: 0174 / 322 58 85"></td></tr>
+    </table>
+    <div class="makler-box">
+      <span class="makler-icon">&#128222;</span>
+      <div><strong>Daniel Eck – Ihr Makler im Schadensfall</strong>Rufen Sie mich an, bevor Sie mit der Versicherung verhandeln: 0174 / 322 58 85 · daniel@eckversicherung.de · Talstraße 73, 98574 Schmalkalden</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 28 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 29: PRIORITÄTEN-MATRIX (interaktiv) ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-plan">Teil 7 – Ihr persönlicher Plan</span>
+      <span class="pg-meta">Seite 29 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Ihre Prioritäten-Matrix</div>
+    <div class="pg-sub">Klicken Sie auf den Status – er wechselt durch ✓ / ✗ / ? – oder füllen Sie die Felder aus</div>
+    <table class="fill-table" style="font-size:7.5pt;">
+      <tr>
+        <th style="width:28%;">Versicherung</th>
+        <th style="width:16%;">Wichtigkeit</th>
+        <th style="width:22%;">Mein Anbieter / Vertrag</th>
+        <th style="width:20%;">Beitrag / Monat</th>
+        <th style="width:14%;text-align:center;">Status</th>
+      </tr>
+      <tr><td style="font-weight:600;">Privathaftpflicht</td><td><span style="background:#fef2f2;color:#991b1b;padding:2px 6px;border-radius:10px;font-size:6.5pt;font-weight:700;">MUST-HAVE</span></td><td><input class="tdinput" placeholder="Anbieter …"></td><td><input class="tdinput" placeholder="___ €"></td><td style="text-align:center;"><span class="status-btn" data-state="0"></span></td></tr>
+      <tr><td style="font-weight:600;">Berufsunfähigkeit</td><td><span style="background:#fef2f2;color:#991b1b;padding:2px 6px;border-radius:10px;font-size:6.5pt;font-weight:700;">MUST-HAVE</span></td><td><input class="tdinput" placeholder="Anbieter …"></td><td><input class="tdinput" placeholder="___ €"></td><td style="text-align:center;"><span class="status-btn" data-state="0"></span></td></tr>
+      <tr><td style="font-weight:600;">Krankenversicherung</td><td><span style="background:#fef2f2;color:#991b1b;padding:2px 6px;border-radius:10px;font-size:6.5pt;font-weight:700;">MUST-HAVE</span></td><td><input class="tdinput" placeholder="GKV / PKV …"></td><td><input class="tdinput" placeholder="___ €"></td><td style="text-align:center;"><span class="status-btn" data-state="0"></span></td></tr>
+      <tr><td style="font-weight:600;">Hausratversicherung</td><td><span style="background:#fff7ed;color:#9a3412;padding:2px 6px;border-radius:10px;font-size:6.5pt;font-weight:700;">EMPFOHLEN</span></td><td><input class="tdinput" placeholder="Anbieter …"></td><td><input class="tdinput" placeholder="___ €"></td><td style="text-align:center;"><span class="status-btn" data-state="0"></span></td></tr>
+      <tr><td style="font-weight:600;">Wohngebäude *</td><td><span style="background:#fef2f2;color:#991b1b;padding:2px 6px;border-radius:10px;font-size:6.5pt;font-weight:700;">MUST-HAVE</span></td><td><input class="tdinput" placeholder="Anbieter …"></td><td><input class="tdinput" placeholder="___ €"></td><td style="text-align:center;"><span class="status-btn" data-state="0"></span></td></tr>
+      <tr><td style="font-weight:600;">Kfz-Versicherung</td><td><span style="background:#fff7ed;color:#9a3412;padding:2px 6px;border-radius:10px;font-size:6.5pt;font-weight:700;">EMPFOHLEN</span></td><td><input class="tdinput" placeholder="Anbieter …"></td><td><input class="tdinput" placeholder="___ €"></td><td style="text-align:center;"><span class="status-btn" data-state="0"></span></td></tr>
+      <tr><td style="font-weight:600;">Risikolebensvers. *</td><td><span style="background:#fff7ed;color:#9a3412;padding:2px 6px;border-radius:10px;font-size:6.5pt;font-weight:700;">EMPFOHLEN</span></td><td><input class="tdinput" placeholder="Anbieter …"></td><td><input class="tdinput" placeholder="___ €"></td><td style="text-align:center;"><span class="status-btn" data-state="0"></span></td></tr>
+      <tr><td style="font-weight:600;">Pflegezusatz</td><td><span style="background:#fff7ed;color:#9a3412;padding:2px 6px;border-radius:10px;font-size:6.5pt;font-weight:700;">EMPFOHLEN</span></td><td><input class="tdinput" placeholder="Anbieter …"></td><td><input class="tdinput" placeholder="___ €"></td><td style="text-align:center;"><span class="status-btn" data-state="0"></span></td></tr>
+      <tr><td style="font-weight:600;">Zahnzusatz</td><td><span style="background:#fff7ed;color:#9a3412;padding:2px 6px;border-radius:10px;font-size:6.5pt;font-weight:700;">EMPFOHLEN</span></td><td><input class="tdinput" placeholder="Anbieter …"></td><td><input class="tdinput" placeholder="___ €"></td><td style="text-align:center;"><span class="status-btn" data-state="0"></span></td></tr>
+      <tr><td style="font-weight:600;">Rechtsschutz</td><td><span style="background:#fefce8;color:#713f12;padding:2px 6px;border-radius:10px;font-size:6.5pt;font-weight:700;">SITUATIV</span></td><td><input class="tdinput" placeholder="Anbieter …"></td><td><input class="tdinput" placeholder="___ €"></td><td style="text-align:center;"><span class="status-btn" data-state="0"></span></td></tr>
+      <tr><td style="font-weight:600;">Altersvorsorge</td><td><span style="background:#f0fdf4;color:#14532d;padding:2px 6px;border-radius:10px;font-size:6.5pt;font-weight:700;">WICHTIG</span></td><td><input class="tdinput" placeholder="Riester / Rürup / bAV …"></td><td><input class="tdinput" placeholder="___ €"></td><td style="text-align:center;"><span class="status-btn" data-state="0"></span></td></tr>
+    </table>
+    <div style="font-size:6.5pt;color:var(--gray-400);margin-top:4px;">* Wohngebäude nur für Eigentümer · Risikoleben nur wenn Kinder/Kredit vorhanden · Status: ✓ = vorhanden &nbsp; ✗ = fehlt &nbsp; ? = prüfen</div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 29 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 30: NÄCHSTE SCHRITTE ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-plan">Teil 7 – Ihr persönlicher Plan</span>
+      <span class="pg-meta">Seite 30 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Ihre nächsten Schritte</div>
+    <div class="pg-sub">Schritt für Schritt zur optimalen Absicherung – ohne Stress, ohne Druck</div>
+    <ul class="step-list">
+      <li><span class="step-num">1</span><div><strong>Bestehende Verträge zusammenstellen.</strong><br>Suchen Sie alle Versicherungsunterlagen heraus. Nutzen Sie die Familienversicherungs-Übersicht (Produkt 4 aus unserem kostenlosen Paket) als Ablagestruktur. Was haben Sie? Was fehlt?</div></li>
+      <li><span class="step-num">2</span><div><strong>Must-haves zuerst prüfen.</strong><br>Haben Sie eine Privathaftpflicht mit 10 Mio. € Deckung? Haben Sie eine BU? Sind Sie krankenversichert mit geprüften Leistungen? Diese drei Punkte haben höchste Priorität.</div></li>
+      <li><span class="step-num">3</span><div><strong>Prioritäten-Matrix ausfüllen (Seite 29).</strong><br>Tragen Sie Ihre bestehenden Verträge ein. Markieren Sie mit ✗ was fehlt und mit ? was Sie prüfen möchten. Damit haben Sie sofort Klarheit über Ihren Handlungsbedarf.</div></li>
+      <li><span class="step-num">4</span><div><strong>Kostenlose persönliche Analyse bei mir buchen.</strong><br>Bringen Sie Ihre Unterlagen (oder schicken Sie mir Fotos davon vorab). Ich prüfe: Deckungssummen, Ausschlüsse, Preise, Lücken – und erstelle Ihnen eine ehrliche Empfehlung.</div></li>
+      <li><span class="step-num">5</span><div><strong>Schrittweise umsetzen – kein Stress.</strong><br>Sie müssen nicht alles auf einmal ändern. Priorisieren Sie Must-haves, schließen Sie Lücken Schritt für Schritt. Ich begleite Sie dabei so lang, wie Sie möchten.</div></li>
+    </ul>
+    <div class="pull-quote">"Das beste Versicherungspaket ist das, das zu Ihrem Leben passt – nicht das teuerste und nicht das billigste."</div>
+    <div class="makler-box" style="margin-top:10px;">
+      <span class="makler-icon">&#128222;</span>
+      <div><strong>Jetzt Termin vereinbaren – kostenlos und unverbindlich</strong>Ich freue mich auf Ihre Kontaktaufnahme: <br>Daniel Eck · 0174 / 322 58 85 · daniel@eckversicherung.de · Talstraße 73, 98574 Schmalkalden<br>Persönlich, telefonisch oder per Video – wie es für Sie am besten passt.</div>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 30 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 31: ÜBER DANIEL ECK ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-plan">Über den Autor</span>
+      <span class="pg-meta">Seite 31 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Über Daniel Eck</div>
+    <div class="pg-sub">Unabhängiger Versicherungsmakler in Schmalkalden</div>
+    <div class="about-grid">
+      <div class="photo-box">
+        <div class="photo-icon">&#129489;</div>
+        <div>Daniel Eck<br>Versicherungsmakler</div>
+      </div>
+      <div class="about-facts">
+        <div class="about-fact"><strong>Familienbetrieb seit 2002</strong>Der Betrieb wurde 2002 von meinem Vater gegründet. Heute führe ich ihn weiter – mit dem gleichen Anspruch: persönliche, ehrliche Beratung für jeden Kunden.</div>
+        <div class="about-fact"><strong>100 % unabhängig</strong>Als Makler bin ich keinem Versicherer verpflichtet. Ich vergleiche aus dem gesamten Markt und empfehle, was zu Ihnen passt – nicht was am meisten Provision bringt.</div>
+        <div class="about-fact"><strong>Ihr Anwalt gegenüber der Versicherung</strong>Im Schadensfall stehe ich auf Ihrer Seite – nicht auf der der Versicherung. Das ist der entscheidende Unterschied zum Vertreter eines einzelnen Unternehmens.</div>
+        <div class="about-fact"><strong>Persönliche Beratung vor Ort</strong>Ich bin in Schmalkalden und Umgebung persönlich verfügbar – oder per Telefon und Video für ganz Deutschland.</div>
+      </div>
+    </div>
+    <div class="contact-bar">
+      <div class="contact-item">
+        <strong>Telefon / WhatsApp</strong>
+        <p>0174 / 322 58 85</p>
+      </div>
+      <div class="contact-item">
+        <strong>E-Mail</strong>
+        <p>daniel@eckversicherung.de</p>
+      </div>
+      <div class="contact-item">
+        <strong>Adresse</strong>
+        <p>Talstraße 73<br>98574 Schmalkalden</p>
+      </div>
+      <div class="contact-item">
+        <strong>Meine Leistung</strong>
+        <p>Beratung, Vergleich,<br>Schadensbegleitung</p>
+      </div>
+    </div>
+    <div class="cta-bar">
+      <strong>Kostenlose Versicherungsanalyse vereinbaren</strong>
+      <p>Unverbindlich · Ohne Verkaufsdruck · Als unabhängiger Makler für Sie</p>
+    </div>
+  </div>
+  <div class="pg-footer"><span>Was Sie wirklich brauchen – und was nicht · Daniel Eck</span><span>Seite 31 / 32</span></div>
+</div>
+
+<!-- ══ SEITE 32: IMPRESSUM ══ -->
+<div class="page">
+  <div class="pg-inner">
+    <div class="pg-topbar">
+      <span class="ch-badge ch-plan">Rechtliches &amp; Impressum</span>
+      <span class="pg-meta">Seite 32 · Daniel Eck – Versicherungsmakler</span>
+    </div>
+    <div class="pg-title">Rechtlicher Hinweis &amp; Impressum</div>
+    <div style="margin-top:10px;" class="impressum-text">
+      <p><strong>Angaben gemäß § 5 TMG</strong><br>Daniel Eck – Versicherungsmakler<br>Talstraße 73 · 98574 Schmalkalden<br>Telefon: 0174 / 322 58 85 · E-Mail: daniel@eckversicherung.de</p>
+      <p><strong>Berufsbezeichnung und berufsrechtliche Regelungen</strong><br>Daniel Eck ist als Versicherungsmakler gemäß § 34d Abs. 1 GewO tätig und bei der zuständigen Industrie- und Handelskammer (IHK) registriert. Die Berufszulassung gilt für das Gebiet der Bundesrepublik Deutschland.</p>
+      <p><strong>Haftungsausschluss / Disclaimer</strong><br>Dieser Ratgeber dient ausschließlich zu allgemeinen Informationszwecken und stellt keine individuelle Versicherungsberatung oder Rechtsberatung dar. Die enthaltenen Informationen geben den Stand zum Zeitpunkt der Erstellung wieder; Änderungen in Gesetzgebung, Rechtsprechung oder Produktbedingungen können eintreten. Alle angegebenen Beiträge, Leistungen und Zahlen sind beispielhafter Natur und können im Einzelfall erheblich abweichen.</p>
+      <p><strong>Keine Haftung für Vollständigkeit und Aktualität</strong><br>Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Vollständigkeit, Richtigkeit und Aktualität der enthaltenen Informationen. Die individuelle Beratung durch einen zugelassenen Versicherungsmakler kann und soll durch diesen Ratgeber nicht ersetzt werden.</p>
+      <p><strong>Urheberrecht</strong><br>Die in diesem Ratgeber enthaltenen Inhalte und Werke sind urheberrechtlich geschützt. Eine Vervielfältigung, Verbreitung, öffentliche Zugänglichmachung oder sonstige Nutzung bedarf der vorherigen schriftlichen Zustimmung von Daniel Eck – Versicherungsmakler.</p>
+      <p><strong>Kontakt bei Fragen</strong><br>Für alle Fragen zu diesem Ratgeber oder zu Ihrer persönlichen Versicherungssituation steht Ihnen Daniel Eck gerne zur Verfügung:<br>0174 / 322 58 85 · daniel@eckversicherung.de · Talstraße 73, 98574 Schmalkalden</p>
+    </div>
+    <div class="pg-footer" style="margin-top:auto;border-top:2px solid var(--navy);padding:8px 0 0;">
+      <span style="color:var(--navy);font-weight:600;">Daniel Eck – Versicherungsmakler · Schmalkalden · 2025</span>
+      <span>Was Sie wirklich brauchen – und was nicht</span>
+    </div>
+  </div>
+</div>
+
+<script>
+var labels = ['', '✓', '✗', '?'];
+document.querySelectorAll('.status-btn').forEach(function(btn) {
+  btn.title = 'Klicken: leer → ✓ vorhanden → ✗ fehlt → ? prüfen';
+  btn.addEventListener('click', function() {
+    var s = ((parseInt(this.dataset.state) || 0) + 1) % 4;
+    this.dataset.state = s;
+    this.textContent = labels[s];
+  });
+});
+document.querySelectorAll('.fill-table input').forEach(function(inp) {
+  inp.addEventListener('focus', function(){ this.closest('td').style.background='rgba(26,80,200,.04)'; });
+  inp.addEventListener('blur',  function(){ this.closest('td').style.background=''; });
+});
+</script>
+</body>
+</html>
