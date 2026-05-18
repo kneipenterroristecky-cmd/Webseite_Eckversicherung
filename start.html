@@ -961,7 +961,7 @@
       headers: brevoHdrs,
       body: JSON.stringify({
         email: email,
-        attributes: { VORNAME: name, NACHNAME: lastname },
+        attributes: { VORNAME: name, NACHNAME: lastname, ANMELDEDATUM: new Date().toISOString().slice(0,10) },
         listIds: [GP_LIST_ID],
         updateEnabled: true
       })
