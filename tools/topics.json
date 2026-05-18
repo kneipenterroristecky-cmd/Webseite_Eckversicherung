@@ -29,8 +29,8 @@
       "label": "Vorsorge",
       "unsplash_query": "pension savings future",
       "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format",
-      "ig_fp_x": 0.5,
-      "ig_fp_y": 0.35
+      "ig_fp_x": 0.35,
+      "ig_fp_y": 0.65
     }
   ],
   "2": [
@@ -115,8 +115,8 @@
       "label": "Vorsorge",
       "unsplash_query": "business savings pension",
       "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format",
-      "ig_fp_x": 0.5,
-      "ig_fp_y": 0.35
+      "ig_fp_x": 0.35,
+      "ig_fp_y": 0.65
     },
     {
       "title": "Krankenzusatzversicherung: Was die gesetzliche Kasse nicht zahlt",
@@ -149,8 +149,8 @@
       "label": "Vorsorge",
       "unsplash_query": "self employed retirement savings",
       "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format",
-      "ig_fp_x": 0.5,
-      "ig_fp_y": 0.35
+      "ig_fp_x": 0.35,
+      "ig_fp_y": 0.65
     },
     {
       "title": "Heilpraktikerversicherung: Naturheilkunde auf Kosten der Versicherung",
@@ -311,8 +311,8 @@
       "label": "Vorsorge",
       "unsplash_query": "workplace pension employer",
       "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format",
-      "ig_fp_x": 0.5,
-      "ig_fp_y": 0.35
+      "ig_fp_x": 0.35,
+      "ig_fp_y": 0.65
     },
     {
       "title": "Krankenhausaufenthalt: Mit Zusatzversicherung besser versorgt",
