@@ -76,7 +76,7 @@ jobs:
           ")
           APPROVE_URL="https://github.com/${GITHUB_REPOSITORY}/actions/workflows/publish-blog-post.yml"
 
-          gh issue create \
+          ISSUE_URL=$(gh issue create \
             --assignee "${{ github.repository_owner }}" \
             --title "📝 Blog-Entwurf $DATE: $TITLE" \
             --body "## 📰 Neuer Beitrag zur Freigabe: $TITLE
@@ -104,4 +104,22 @@ jobs:
           👉 **[$TITLE freigeben und veröffentlichen]($APPROVE_URL)**
 
           Seite öffnet sich → **Run workflow** klicken → fertig.
-          Beitrag erscheint dann automatisch auf Webseite, Facebook & Instagram."
+          Beitrag erscheint dann automatisch auf Webseite, Facebook & Instagram.")
+          echo "ISSUE_URL=$ISSUE_URL" >> $GITHUB_ENV
+          echo "POST_TITLE=$TITLE" >> $GITHUB_ENV
+          echo "POST_DATE=$DATE" >> $GITHUB_ENV
+          echo "APPROVE_URL=$APPROVE_URL" >> $GITHUB_ENV
+
+      - name: Freigabe-E-Mail an Daniel senden
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: $BREVO_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": {\"name\": \"Daniel Eck Webseite\", \"email\": \"kneipenterroristecky@googlemail.com\"},
+              \"to\": [{\"email\": \"daniel@eckversicherung.de\", \"name\": \"Daniel Eck\"}],
+              \"subject\": \"📝 Neuer Blog-Entwurf zur Freigabe: $POST_TITLE\",
+              \"htmlContent\": \"<div style='font-family:Arial,sans-serif;max-width:560px;margin:0 auto'><div style='background:#172d50;padding:24px 28px;border-radius:12px 12px 0 0'><h2 style='color:#fff;margin:0;font-size:18px'>📝 Neuer Blog-Entwurf</h2></div><div style='background:#fff;padding:28px;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px'><p style='margin:0 0 12px;font-size:15px;color:#172d50'><strong>$POST_TITLE</strong></p><p style='margin:0 0 20px;font-size:14px;color:#64748b'>Datum: $POST_DATE</p><a href='$APPROVE_URL' style='display:inline-block;background:#1a50c8;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:700;font-size:14px'>▶ Workflow 2 starten &amp; veröffentlichen</a><p style='margin:16px 0 0;font-size:12px;color:#94a3b8'>Issue mit Vorschau: $ISSUE_URL</p></div></div>\"
+            }"
