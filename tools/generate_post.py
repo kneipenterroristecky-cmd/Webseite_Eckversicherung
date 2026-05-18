@@ -142,8 +142,8 @@ social_html = f"""<!DOCTYPE html>
   .cta {{ display: inline-flex; align-items: center; gap: 20px; background: #1a50c8; color: #fff; font-size: 38px; font-weight: 700; padding: 20px 44px; border-radius: 16px; margin-bottom: 64px; align-self: flex-start; }}
   .cta-arrow {{ display: inline-block; width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 26px solid #fff; margin-top: 4px; flex-shrink: 0; }}
   .divider {{ height: 1px; background: rgba(255,255,255,.18); margin-bottom: 48px; }}
-  .brand-text strong {{ display: block; font-size: 38px; font-weight: 800; color: #fff; margin-bottom: 4px; }}
-  .brand-text span {{ font-size: 30px; color: rgba(255,255,255,.55); font-weight: 400; }}
+  .brand-text strong {{ display: block; font-size: 52px; font-weight: 800; color: #fff; margin-bottom: 6px; }}
+  .brand-text span {{ font-size: 42px; color: rgba(255,255,255,.55); font-weight: 400; }}
 </style>
 </head>
 <body>
