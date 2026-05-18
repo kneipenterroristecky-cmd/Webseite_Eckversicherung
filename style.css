@@ -159,11 +159,6 @@ p   { line-height: 1.7; }
   outline: none !important;
   transition: box-shadow .2s, transform .2s, background .2s !important;
 }
-.btn-online-abschluss:hover {
-  background: rgb(26,80,200) !important;
-  box-shadow: 0 4px 16px rgba(33,103,204,.5) !important;
-  transform: translateY(-1px);
-}
 
 
 /* Hamburger */
