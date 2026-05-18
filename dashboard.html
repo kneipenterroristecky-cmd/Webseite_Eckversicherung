@@ -985,7 +985,6 @@ function loadBrevoData() {
     fetch('https://api.brevo.com/v3/contacts?listId=' + list.id + '&limit=50&sort=desc', { headers: hdrs })
       .then(function(r) { return r.json(); })
       .then(function(d) {
-        if (d.contacts && d.contacts[0]) console.log('[Brevo] Kontakt-Attribute:', d.contacts[0].attributes);
         list.contacts = (d.contacts || []).map(function(c) {
           return {
             email:        c.email || '',
@@ -1027,10 +1026,17 @@ function renderBrevoSection() {
 }
 
 function buildBrevoTable() {
-  // Alle Kontakte zusammenführen + nach createdAt sortieren
+  // Kontakte zusammenführen, nach E-Mail deduplizieren (Quelle: Liste mit count > 0 bevorzugen)
+  var seen = {};
   var all = [];
+  // Zuerst Listen mit Kontakten durchgehen
   brevoLists.forEach(function(l) {
-    l.contacts.forEach(function(c) { all.push(c); });
+    l.contacts.forEach(function(c) {
+      if (!seen[c.email]) {
+        seen[c.email] = true;
+        all.push(c);
+      }
+    });
   });
   all.sort(function(a, b) { return b.createdAt.localeCompare(a.createdAt); });
 
@@ -1042,10 +1048,9 @@ function buildBrevoTable() {
     '<thead><tr>' +
       '<th>Name</th>' +
       '<th>E-Mail</th>' +
-      '<th>Telefon</th>' +
       '<th>Status</th>' +
       '<th>Quelle</th>' +
-      '<th>Datum / Uhrzeit</th>' +
+      '<th>Datum</th>' +
       '<th></th>' +
     '</tr></thead>' +
     '<tbody>' +
@@ -1053,7 +1058,6 @@ function buildBrevoTable() {
       var nameStr  = [c.firstname, c.lastname].filter(Boolean).join(' ');
       var nameHtml = nameStr ? '<strong>' + esc(nameStr) + '</strong>' : '<span class="dim">–</span>';
       var date = c.createdAt ? formatBrevoDate(c.createdAt) : '<span class="dim">–</span>';
-      var phone = c.phone ? esc(c.phone) : '<span class="dim">–</span>';
       var statusHtml = c.unsubscribed
         ? '<span class="status-badge status-off"><i class="fas fa-ban"></i> Abgemeldet</span>'
         : '<span class="status-badge status-aktiv"><i class="fas fa-check"></i> Aktiv</span>';
@@ -1061,7 +1065,6 @@ function buildBrevoTable() {
       return '<tr>' +
         '<td>' + nameHtml + '</td>' +
         '<td><a href="mailto:' + esc(c.email) + '" style="color:#6366f1">' + esc(c.email) + '</a></td>' +
-        '<td class="dim">' + phone + '</td>' +
         '<td>' + statusHtml + '</td>' +
         '<td><span class="leads-tag ' + c.list.tag + '"><i class="fas ' + c.list.icon + '" style="margin-right:4px"></i>' + c.list.name + '</span></td>' +
         '<td class="dim">' + date + '</td>' +
