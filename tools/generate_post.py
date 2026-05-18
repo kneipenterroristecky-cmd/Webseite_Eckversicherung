@@ -2,7 +2,7 @@
 """
 Erstellt einen wöchentlichen Blog-Beitrag mit Claude (KI) im Stil von Daniel Eck.
 """
-import os, json, re, datetime, anthropic
+import os, json, re, datetime, base64, requests, anthropic
 
 SITE_URL = os.environ.get("SITE_URL", "https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung")
 
@@ -24,17 +24,49 @@ og_image = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6
 _og_base = og_image.split("?")[0]
 og_image = f"{_og_base}?w=1200&h=630&fit=crop&auto=format"
 
-# Portrait-Crop: Fokuspunkt aus topics.json nehmen wenn vorhanden, sonst entropy (inhaltsbasiert)
+# Portrait-Crop: Fokuspunkt aus topics.json nehmen wenn vorhanden, sonst KI-Analyse
 _fp_x = topic.get("ig_fp_x")
 _fp_y = topic.get("ig_fp_y")
 if _fp_x is not None or _fp_y is not None:
     fp_x = _fp_x if _fp_x is not None else 0.5
     fp_y = _fp_y if _fp_y is not None else 0.5
     _ig_crop = f"crop=focalpoint&fp-x={fp_x}&fp-y={fp_y}"
+    print(f"   📸 Bild: {_og_base} (crop: topics.json fp-x={fp_x}, fp-y={fp_y})")
 else:
-    _ig_crop = "crop=entropy"
+    # KI analysiert das Bild und bestimmt den optimalen Fokuspunkt für Hochformat
+    try:
+        _preview_url = f"{_og_base}?w=800&h=600&fit=crop&crop=center&auto=format"
+        _r = requests.get(_preview_url, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
+        _r.raise_for_status()
+        _b64 = base64.b64encode(_r.content).decode()
+        _mime = _r.headers.get("content-type", "image/jpeg").split(";")[0]
+        _fp_resp = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=100,
+            messages=[{
+                "role": "user",
+                "content": [
+                    {"type": "image", "source": {"type": "base64", "media_type": _mime, "data": _b64}},
+                    {"type": "text", "text": (
+                        "Dieses Bild wird für einen WhatsApp-Status im Hochformat (1080×1920) zugeschnitten. "
+                        "Das Overlay bedeckt die untere Hälfte mit Text. Der wichtige Teil des Motivs "
+                        "muss oben gut sichtbar sein.\n\n"
+                        "Wo liegt das Hauptmotiv (z.B. Münzen, Gesicht, Gebäude)? "
+                        "Antworte NUR mit JSON: {\"fp_x\": 0.0-1.0, \"fp_y\": 0.0-1.0} "
+                        "(0=links/oben, 1=rechts/unten). Kein weiterer Text."
+                    )}
+                ]
+            }]
+        )
+        _fp_data = json.loads(re.search(r'\{.*\}', _fp_resp.content[0].text, re.DOTALL).group())
+        fp_x = round(float(_fp_data.get("fp_x", 0.5)), 2)
+        fp_y = round(float(_fp_data.get("fp_y", 0.5)), 2)
+        _ig_crop = f"crop=focalpoint&fp-x={fp_x}&fp-y={fp_y}"
+        print(f"   📸 Bild: {_og_base} (KI-Fokuspunkt: fp-x={fp_x}, fp-y={fp_y})")
+    except Exception as e:
+        _ig_crop = "crop=entropy"
+        print(f"   📸 Bild: {_og_base} (Fallback: entropy – {e})")
 ig_img_url_global = f"{_og_base}?w=1080&h=1920&fit=crop&{_ig_crop}&auto=format"
-print(f"   📸 Bild: {_og_base} (crop: {_ig_crop})")
 
 # ── Blog-Beitrag schreiben ────────────────────────────────────────────────────
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
