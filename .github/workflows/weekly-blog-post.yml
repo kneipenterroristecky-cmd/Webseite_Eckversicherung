@@ -134,45 +134,26 @@ jobs:
                 \"caption\": \"$POST_INSTA\"
               }
             }"
-          # 2) Freigabe-Link als Text
+          # 2) Heiko-Bild
           curl -s -X POST "https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages" \
             -H "Authorization: Bearer $WA_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{
               \"messaging_product\": \"whatsapp\",
               \"to\": \"$WA_TO\",
-              \"type\": \"text\",
-              \"text\": {
-                \"body\": \"✅ *Freigabe:* $APPROVE_URL\n\nIssue: $ISSUE_URL\"
-              }
-            }"
-
-      - name: WhatsApp-Status-Vorlage an Heiko senden
-        env:
-          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
-          WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
-          WA_TO_HEIKO: ${{ secrets.WHATSAPP_TO_NUMBER_HEIKO }}
-          SITE_URL:    ${{ secrets.SITE_URL }}
-        run: |
-          IMAGE_URL="${SITE_URL}/social/latest-ig-heiko.png"
-          curl -s -X POST "https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages" \
-            -H "Authorization: Bearer $WA_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"messaging_product\": \"whatsapp\",
-              \"to\": \"$WA_TO_HEIKO\",
               \"type\": \"image\",
               \"image\": {
-                \"link\": \"$IMAGE_URL\",
+                \"link\": \"${SITE_URL}/social/latest-ig-heiko.png\",
                 \"caption\": \"$POST_INSTA\"
               }
             }"
+          # 3) Freigabe-Link als Text
           curl -s -X POST "https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages" \
             -H "Authorization: Bearer $WA_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{
               \"messaging_product\": \"whatsapp\",
-              \"to\": \"$WA_TO_HEIKO\",
+              \"to\": \"$WA_TO\",
               \"type\": \"text\",
               \"text\": {
                 \"body\": \"✅ *Freigabe:* $APPROVE_URL\n\nIssue: $ISSUE_URL\"
