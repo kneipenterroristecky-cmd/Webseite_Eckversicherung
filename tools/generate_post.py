@@ -24,6 +24,9 @@ og_image = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6
 _og_base = og_image.split("?")[0]
 og_image = f"{_og_base}?w=1200&h=630&fit=crop&auto=format"
 
+# ── Anthropic-Client initialisieren (wird auch für Bildanalyse gebraucht) ────────
+client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+
 # Portrait-Crop: Fokuspunkt aus topics.json nehmen wenn vorhanden, sonst KI-Analyse
 _fp_x = topic.get("ig_fp_x")
 _fp_y = topic.get("ig_fp_y")
@@ -69,8 +72,6 @@ else:
 ig_img_url_global = f"{_og_base}?w=1080&h=1920&fit=crop&{_ig_crop}&auto=format"
 
 # ── Blog-Beitrag schreiben ────────────────────────────────────────────────────
-client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-
 beitrag = client.messages.create(
     model="claude-opus-4-5",
     max_tokens=4000,
