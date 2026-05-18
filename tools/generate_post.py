@@ -139,7 +139,7 @@ social_html = f"""<!DOCTYPE html>
   h1 span {{ color: #4d9fff; }}
   .sub {{ font-size: 44px; color: rgba(255,255,255,.85); font-weight: 500; line-height: 1.5; margin-bottom: 28px; }}
   .body {{ font-size: 36px; color: rgba(255,255,255,.65); font-weight: 400; line-height: 1.65; margin-bottom: 52px; }}
-  .cta {{ display: inline-flex; align-items: center; gap: 16px; background: #1a50c8; color: #fff; font-size: 38px; font-weight: 700; padding: 20px 40px; border-radius: 16px; margin-bottom: 64px; }}
+  .cta {{ display: inline-flex; align-items: center; gap: 16px; background: #1a50c8; color: #fff; font-size: 38px; font-weight: 700; padding: 20px 40px; border-radius: 16px; margin-bottom: 64px; align-self: flex-start; }}
   .divider {{ height: 1px; background: rgba(255,255,255,.18); margin-bottom: 48px; }}
   .brand-text strong {{ display: block; font-size: 38px; font-weight: 800; color: #fff; margin-bottom: 4px; }}
   .brand-text span {{ font-size: 30px; color: rgba(255,255,255,.55); font-weight: 400; }}
@@ -153,7 +153,7 @@ social_html = f"""<!DOCTYPE html>
     <h1>{h1_content}</h1>
     <p class="sub">{ig_sub}</p>
     <p class="body">{ig_body}</p>
-    <div class="cta">💬 Schreiben Sie mir</div>
+    <div class="cta">→ Schreiben Sie mir</div>
     <div class="divider"></div>
     <div class="branding">
       <div class="brand-text">
