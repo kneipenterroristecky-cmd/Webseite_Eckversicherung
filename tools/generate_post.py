@@ -89,6 +89,7 @@ Ausgabe als JSON (keine weiteren Erklärungen):
   "ig_highlight": "Ein markantes Wort oder kurze Phrase die blau hervorgehoben wird, max 15 Zeichen",
   "ig_after": "Optionaler Text nach dem Highlight, max 20 Zeichen, kann leer sein",
   "ig_sub": "Kurzer Untertitel für das Bild, max 80 Zeichen, Ich-Form, IMMER Sie/Ihnen/Ihre (niemals du/dich)",
+  "ig_body": "2-3 Sätze Fließtext für das Bild – konkret, leicht lesbar, kein Fachchinesisch. Weckt Neugier auf den Artikel. Max 180 Zeichen. IMMER Sie/Ihnen/Ihre.",
   "ig_cta": "CTA-Button Text, max 28 Zeichen, mit Pfeil am Ende z.B. →"
 }}"""
     }]
@@ -108,6 +109,7 @@ ig_before   = meta.get("ig_before", "").strip()
 ig_highlight = meta.get("ig_highlight", "").strip()
 ig_after    = meta.get("ig_after", "").strip()
 ig_sub      = meta.get("ig_sub", meta.get("social_summary", "")[:80]).strip()
+ig_body     = meta.get("ig_body", "").strip()
 ig_cta      = meta.get("ig_cta", "Jetzt beraten lassen →").strip()
 
 h1_lines = []
@@ -128,15 +130,21 @@ social_html = f"""<!DOCTYPE html>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet" />
 <style>
   * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-  body {{ width: 1080px; height: 1080px; overflow: hidden; font-family: 'Inter', Arial, sans-serif; }}
-  .wrap {{ width: 1080px; height: 1080px; position: relative; }}
+  body {{ width: 1080px; height: 1920px; overflow: hidden; font-family: 'Inter', Arial, sans-serif; }}
+  .wrap {{ width: 1080px; height: 1920px; position: relative; }}
   .bg-img {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
-  .overlay {{ position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,25,50,.08) 0%, rgba(10,25,50,.45) 45%, rgba(10,25,50,.93) 100%); }}
-  .content {{ position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 64px; }}
-  .tag {{ display: inline-flex; align-items: center; gap: 10px; background: rgba(33,103,204,.4); border: 1px solid rgba(100,160,255,.5); color: #a8d0ff; font-size: 28px; font-weight: 700; padding: 10px 28px; border-radius: 100px; letter-spacing: .06em; text-transform: uppercase; width: fit-content; margin-bottom: 36px; }}
-  h1 {{ font-size: 108px; font-weight: 900; color: #fff; line-height: 1.04; margin-bottom: 30px; letter-spacing: -.025em; }}
+  .overlay {{ position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,25,50,.05) 0%, rgba(10,25,50,.25) 45%, rgba(10,25,50,.90) 65%, rgba(10,25,50,.97) 100%); }}
+  .content {{ position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 80px 76px; }}
+  .tag {{ display: inline-flex; align-items: center; gap: 12px; background: rgba(33,103,204,.4); border: 1px solid rgba(100,160,255,.5); color: #a8d0ff; font-size: 30px; font-weight: 700; padding: 12px 32px; border-radius: 100px; letter-spacing: .07em; text-transform: uppercase; width: fit-content; margin-bottom: 44px; }}
+  h1 {{ font-size: 94px; font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 36px; letter-spacing: -.02em; }}
   h1 span {{ color: #4d9fff; }}
-  .sub {{ font-size: 40px; color: rgba(255,255,255,.78); font-weight: 500; line-height: 1.5; max-width: 920px; }}
+  .sub {{ font-size: 44px; color: rgba(255,255,255,.85); font-weight: 500; line-height: 1.5; margin-bottom: 28px; }}
+  .body {{ font-size: 36px; color: rgba(255,255,255,.65); font-weight: 400; line-height: 1.65; margin-bottom: 64px; }}
+  .divider {{ height: 1px; background: rgba(255,255,255,.18); margin-bottom: 48px; }}
+  .branding {{ display: flex; align-items: center; gap: 24px; }}
+  .brand-icon {{ width: 72px; height: 72px; background: #1a50c8; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0; }}
+  .brand-text strong {{ display: block; font-size: 38px; font-weight: 800; color: #fff; margin-bottom: 4px; }}
+  .brand-text span {{ font-size: 30px; color: rgba(255,255,255,.6); font-weight: 400; }}
 </style>
 </head>
 <body>
@@ -147,6 +155,15 @@ social_html = f"""<!DOCTYPE html>
     <div class="tag">{emoji} {topic['label']}</div>
     <h1>{h1_content}</h1>
     <p class="sub">{ig_sub}</p>
+    <p class="body">{ig_body}</p>
+    <div class="divider"></div>
+    <div class="branding">
+      <div class="brand-icon">🛡️</div>
+      <div class="brand-text">
+        <strong>Daniel Eck</strong>
+        <span>Unabhängiger Versicherungsmakler · Schmalkalden</span>
+      </div>
+    </div>
   </div>
 </div>
 </body>

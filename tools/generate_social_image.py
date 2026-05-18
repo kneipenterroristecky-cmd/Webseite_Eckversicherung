@@ -37,12 +37,12 @@ with open(tmp_path, "w", encoding="utf-8") as f:
 
 with sync_playwright() as p:
     browser = p.chromium.launch()
-    page = browser.new_page(viewport={"width": 1080, "height": 1080})
+    page = browser.new_page(viewport={"width": 1080, "height": 1920})
     page.goto(f"file://{tmp_path}", wait_until="networkidle", timeout=30000)
     page.wait_for_timeout(1500)
     page.screenshot(
         path=output_path,
-        clip={"x": 0, "y": 0, "width": 1080, "height": 1080}
+        clip={"x": 0, "y": 0, "width": 1080, "height": 1920}
     )
     browser.close()
 
