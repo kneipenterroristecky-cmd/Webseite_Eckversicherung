@@ -89,7 +89,7 @@ Ausgabe als JSON (keine weiteren Erklärungen):
   "ig_highlight": "Ein markantes Wort oder kurze Phrase die blau hervorgehoben wird, max 15 Zeichen",
   "ig_after": "Optionaler Text nach dem Highlight, max 20 Zeichen, kann leer sein",
   "ig_sub": "Kurzer Untertitel für das Bild, max 80 Zeichen, Ich-Form, IMMER Sie/Ihnen/Ihre (niemals du/dich)",
-  "ig_body": "2 Sätze für das Bild: Zeige konkret was gespart oder gewonnen werden kann – mit einer echten Zahl oder einem greifbaren Vorteil (z.B. '€ sparen', 'besser abgesichert', 'günstiger'). Kein Fachchinesisch. Max 160 Zeichen. IMMER Sie/Ihnen/Ihre.",
+  "ig_body": "2 Sätze für das Bild: Zeige konkret was gespart oder gewonnen werden kann. WICHTIG: Verwende NUR Zahlen und Fakten die exakt so auch im Blogbeitrag stehen – niemals eigene Zahlen erfinden. Kein Fachchinesisch. Max 160 Zeichen. IMMER Sie/Ihnen/Ihre.",
   "ig_cta": "CTA-Button Text, max 28 Zeichen, mit Pfeil am Ende z.B. →"
 }}"""
     }]
