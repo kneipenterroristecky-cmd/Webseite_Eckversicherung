@@ -9,17 +9,17 @@
   .wrap { width: 1080px; height: 1920px; position: relative; }
   .bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,25,50,.05) 0%, rgba(10,25,50,.25) 45%, rgba(10,25,50,.90) 65%, rgba(10,25,50,.97) 100%); }
-  .content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 80px 76px; }
-  .tag { display: inline-flex; align-items: center; gap: 12px; background: rgba(33,103,204,.4); border: 1px solid rgba(100,160,255,.5); color: #a8d0ff; font-size: 30px; font-weight: 700; padding: 12px 32px; border-radius: 100px; letter-spacing: .07em; text-transform: uppercase; width: fit-content; margin-bottom: 44px; }
-  h1 { font-size: 94px; font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 36px; letter-spacing: -.02em; }
+  .content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 80px 76px 200px; }
+  h1 { font-size: 100px; font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 36px; letter-spacing: -.02em; }
   h1 span { color: #4d9fff; }
   .sub { font-size: 44px; color: rgba(255,255,255,.85); font-weight: 500; line-height: 1.5; margin-bottom: 28px; }
-  .body { font-size: 36px; color: rgba(255,255,255,.65); font-weight: 400; line-height: 1.65; margin-bottom: 64px; }
+  .body { font-size: 36px; color: rgba(255,255,255,.65); font-weight: 400; line-height: 1.65; margin-bottom: 52px; }
+  .cta { display: inline-flex; align-items: center; gap: 16px; background: #1a50c8; color: #fff; font-size: 38px; font-weight: 700; padding: 20px 40px; border-radius: 16px; margin-bottom: 64px; }
   .divider { height: 1px; background: rgba(255,255,255,.18); margin-bottom: 48px; }
   .branding { display: flex; align-items: center; gap: 24px; }
-  .brand-icon { width: 72px; height: 72px; background: #1a50c8; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0; }
+  .brand-icon { width: 72px; height: 72px; background: rgba(255,255,255,.12); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0; }
   .brand-text strong { display: block; font-size: 38px; font-weight: 800; color: #fff; margin-bottom: 4px; }
-  .brand-text span { font-size: 30px; color: rgba(255,255,255,.6); font-weight: 400; }
+  .brand-text span { font-size: 30px; color: rgba(255,255,255,.55); font-weight: 400; }
 </style>
 </head>
 <body>
@@ -27,16 +27,16 @@
   <img class="bg-img" src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1080&h=1920&fit=crop&auto=format" />
   <div class="overlay"></div>
   <div class="content">
-    <div class="tag">🛡️ Vorsorge</div>
     <h1>Selbstständig?<br><span>Rürup</span><br>erklärt</h1>
     <p class="sub">Ich zeige Ihnen, wann sich Rürup wirklich für Sie lohnt.</p>
     <p class="body">Bis zu 27.566 € pro Jahr steuerfrei einzahlen – und trotzdem flexibel bleiben. Was viele nicht wissen: Rürup lohnt sich nicht für jeden. Ich erkläre ehrlich wann es sinnvoll ist.</p>
+    <div class="cta">💬 Schreib mir einfach</div>
     <div class="divider"></div>
     <div class="branding">
       <div class="brand-icon">🛡️</div>
       <div class="brand-text">
         <strong>Daniel Eck</strong>
-        <span>Unabhängiger Versicherungsmakler · Schmalkalden</span>
+        <span>Versicherungsmakler</span>
       </div>
     </div>
   </div>
