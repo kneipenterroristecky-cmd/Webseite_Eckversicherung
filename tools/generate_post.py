@@ -131,7 +131,6 @@ Ausgabe als JSON (keine weiteren Erklärungen):
   "ig_highlight": "Ein markantes Wort oder kurze Phrase die blau hervorgehoben wird, max 15 Zeichen",
   "ig_after": "Optionaler Text nach dem Highlight, max 20 Zeichen, kann leer sein",
   "ig_sub": "Kurzer Untertitel für das Bild, max 80 Zeichen, Ich-Form, IMMER Sie/Ihnen/Ihre (niemals du/dich)",
-  "ig_body": "2 Sätze für das Bild: Zeige konkret was gespart oder gewonnen werden kann. WICHTIG: Verwende NUR Zahlen und Fakten die exakt so auch im Blogbeitrag stehen – niemals eigene Zahlen erfinden. Kein Fachchinesisch. Max 160 Zeichen. IMMER Sie/Ihnen/Ihre.",
   "ig_cta": "CTA-Button Text, max 28 Zeichen, mit Pfeil am Ende z.B. →"
 }}"""
     }]
@@ -151,7 +150,7 @@ ig_before   = meta.get("ig_before", "").strip()
 ig_highlight = meta.get("ig_highlight", "").strip()
 ig_after    = meta.get("ig_after", "").strip()
 ig_sub      = meta.get("ig_sub", meta.get("social_summary", "")[:80]).strip()
-ig_body     = meta.get("ig_body", "").strip()
+ig_body     = meta.get("social_summary", "").strip()  # immer der FB-Text, kein neuer Text
 ig_cta      = meta.get("ig_cta", "Jetzt beraten lassen →").strip()
 
 h1_lines = []
