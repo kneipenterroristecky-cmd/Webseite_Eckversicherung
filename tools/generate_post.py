@@ -85,6 +85,7 @@ Hintergrund (nur intern, nicht explizit erwähnen):
 - Mein eigenes Einsteigsjahr NICHT erwähnen – einfach selbstbewusst als Makler schreiben
 
 Schreibe einen kompakten, praxisnahen Blog-Beitrag in der Ich-Perspektive über: **{topic['title']}**
+{f"PFLICHT: Verwende genau diese Zahlen/Fakten – nicht abweichen: {topic['key_facts']}" if topic.get('key_facts') else ""}
 
 Wichtig: Schreibe immer aus der Ich-Perspektive. Nicht "Daniel Eck empfiehlt" sondern "Ich empfehle".
 Der Leser wird mit „Sie" angesprochen – IMMER großgeschrieben: „Sie", „Ihr", „Ihnen", „Ihre". Niemals kleinschreiben.
