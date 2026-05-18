@@ -1,0 +1,34 @@
+name: Social Images neu rendern
+
+on:
+  workflow_dispatch:
+
+jobs:
+  render:
+    name: PNGs aus HTML-Vorlagen rendern
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Abhängigkeiten installieren
+        run: pip install requests playwright
+
+      - name: Playwright Chromium installieren
+        run: playwright install chromium --with-deps
+
+      - name: Social Images rendern
+        run: python tools/generate_social_image.py
+
+      - name: Änderungen committen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add social/latest-ig.png social/latest-ig-heiko.png
+          git diff --cached --quiet && echo "Keine Änderungen" || git commit -m "Social Images neu gerendert"
+          git push || echo "Nichts zu pushen"
