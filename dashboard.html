@@ -996,7 +996,7 @@ function loadBrevoData() {
             lastname:     (c.attributes && c.attributes.NACHNAME) || '',
             phone:        (c.attributes && c.attributes.SMS)      || '',
             unsubscribed: c.emailBlacklisted === true,
-            createdAt:    (c.attributes && c.attributes.ANMELDEDATUM) || c.modifiedAt || c.createdAt || '',
+            createdAt:    c.createdAt || c.modifiedAt || (c.attributes && c.attributes.ANMELDEDATUM) || '',
             list:         list
           };
         });
