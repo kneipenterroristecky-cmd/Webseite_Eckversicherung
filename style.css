@@ -137,7 +137,7 @@ p   { line-height: 1.7; }
   padding: 9px 22px;
   border-radius: 8px;
   margin-left: 8px;
-  min-width: 160px;
+  min-width: 185px;
   justify-content: center;
   transition: background .2s var(--ease), transform .15s var(--ease), box-shadow .2s var(--ease);
 }
