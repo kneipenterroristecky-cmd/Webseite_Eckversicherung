@@ -629,6 +629,7 @@
     </div>
   </div>
 
+  <script src="dashboard-config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>emailjs.init('NvkkoFUZ5N3GHIGaN');</script>
   <script src="script.js?v=8"></script>
@@ -885,7 +886,7 @@
         Trigger: "Kontakt zu Liste hinzugefügt"
         Aktion:  E-Mail senden (Vorlage mit den 5 Download-Links erstellen)
      ──────────────────────────────────────────────────────────────────────── */
-  var GP_BREVO_KEY = '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';
+  var GP_BREVO_KEY = (typeof DASHBOARD_BREVO_KEY !== 'undefined') ? DASHBOARD_BREVO_KEY : '';
   var GP_LIST_ID   = 2; /* Liste: "Ihre erste Liste" */
 
   window.openGratisPaket = function() {
