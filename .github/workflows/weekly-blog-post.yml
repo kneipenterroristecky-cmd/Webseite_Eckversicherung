@@ -115,55 +115,43 @@ jobs:
 
       - name: WhatsApp-Status-Vorlage an Daniel senden
         env:
-          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
-          WA_APP_ID:   ${{ secrets.WHATSAPP_APP_ID }}
+          WA_PHONE_ID:   ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WA_APP_ID:     ${{ secrets.WHATSAPP_APP_ID }}
           WA_APP_SECRET: ${{ secrets.WHATSAPP_APP_SECRET }}
-          WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
-          WA_TO:       ${{ secrets.WHATSAPP_TO_NUMBER }}
+          WA_TOKEN:      ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WA_TO:         ${{ secrets.WHATSAPP_TO_NUMBER }}
         run: |
-          # App-Token (läuft nie ab) hat Vorrang vor Access-Token
-          if [ -n "$WA_APP_ID" ] && [ -n "$WA_APP_SECRET" ]; then
-            WA_TOKEN="${WA_APP_ID}|${WA_APP_SECRET}"
+          # Token via fb_exchange_token zu einem 60-Tage-Token verlängern
+          ACTIVE_TOKEN="$WA_TOKEN"
+          if [ -n "$WA_TOKEN" ] && [ -n "$WA_APP_ID" ] && [ -n "$WA_APP_SECRET" ]; then
+            FRESH=$(curl -s "https://graph.facebook.com/v19.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${WA_APP_ID}&client_secret=${WA_APP_SECRET}&fb_exchange_token=${WA_TOKEN}" \
+              | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('access_token',''))" 2>/dev/null || echo "")
+            if [ -n "$FRESH" ]; then
+              ACTIVE_TOKEN="$FRESH"
+              echo "✅ Token auf 60 Tage verlängert"
+            else
+              echo "⚠️  Token-Verlängerung fehlgeschlagen – originalen Token verwenden"
+            fi
           fi
+
           RAW_BASE="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/master/social"
+          send_wa() {
+            RESP=$(curl -s -X POST "https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages" \
+              -H "Authorization: Bearer $ACTIVE_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "$1")
+            echo "$RESP"
+            if echo "$RESP" | grep -q '"error"'; then
+              echo "⚠️  WhatsApp-Fehler (kein Abbruch): $RESP"
+            fi
+          }
+
           # 1) Daniel-Bild
-          curl -s -X POST "https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages" \
-            -H "Authorization: Bearer $WA_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"messaging_product\": \"whatsapp\",
-              \"to\": \"$WA_TO\",
-              \"type\": \"image\",
-              \"image\": {
-                \"link\": \"${RAW_BASE}/latest-ig.png\",
-                \"caption\": \"$POST_INSTA\"
-              }
-            }"
+          send_wa "{\"messaging_product\":\"whatsapp\",\"to\":\"$WA_TO\",\"type\":\"image\",\"image\":{\"link\":\"${RAW_BASE}/latest-ig.png\",\"caption\":\"$POST_INSTA\"}}"
           # 2) Heiko-Bild
-          curl -s -X POST "https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages" \
-            -H "Authorization: Bearer $WA_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"messaging_product\": \"whatsapp\",
-              \"to\": \"$WA_TO\",
-              \"type\": \"image\",
-              \"image\": {
-                \"link\": \"${RAW_BASE}/latest-ig-heiko.png\",
-                \"caption\": \"$POST_INSTA\"
-              }
-            }"
-          # 3) Freigabe-Link als Text
-          curl -s -X POST "https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages" \
-            -H "Authorization: Bearer $WA_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"messaging_product\": \"whatsapp\",
-              \"to\": \"$WA_TO\",
-              \"type\": \"text\",
-              \"text\": {
-                \"body\": \"✅ *Freigabe:* $APPROVE_URL\n\nIssue: $ISSUE_URL\"
-              }
-            }"
+          send_wa "{\"messaging_product\":\"whatsapp\",\"to\":\"$WA_TO\",\"type\":\"image\",\"image\":{\"link\":\"${RAW_BASE}/latest-ig-heiko.png\",\"caption\":\"$POST_INSTA\"}}"
+          # 3) Freigabe-Link
+          send_wa "{\"messaging_product\":\"whatsapp\",\"to\":\"$WA_TO\",\"type\":\"text\",\"text\":{\"body\":\"✅ *Freigabe:* $APPROVE_URL\n\nIssue: $ISSUE_URL\"}}"
 
       - name: Freigabe-E-Mail an Daniel senden
         env:
