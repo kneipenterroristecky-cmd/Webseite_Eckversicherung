@@ -23,7 +23,7 @@ print(f"📌 Thema diese Woche: {topic['title']}")
 og_image = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format")
 _og_base = og_image.split("?")[0]
 og_image = f"{_og_base}?w=1200&h=630&fit=crop&auto=format"
-ig_img_url_global = f"{_og_base}?w=1080&h=1080&fit=crop&auto=format"
+ig_img_url_global = f"{_og_base}?w=1080&h=1920&fit=crop&crop=center&auto=format"
 print(f"   📸 Bild: {_og_base}")
 
 # ── Blog-Beitrag schreiben ────────────────────────────────────────────────────
@@ -141,8 +141,6 @@ social_html = f"""<!DOCTYPE html>
   .body {{ font-size: 36px; color: rgba(255,255,255,.65); font-weight: 400; line-height: 1.65; margin-bottom: 52px; }}
   .cta {{ display: inline-flex; align-items: center; gap: 16px; background: #1a50c8; color: #fff; font-size: 38px; font-weight: 700; padding: 20px 40px; border-radius: 16px; margin-bottom: 64px; }}
   .divider {{ height: 1px; background: rgba(255,255,255,.18); margin-bottom: 48px; }}
-  .branding {{ display: flex; align-items: center; gap: 24px; }}
-  .brand-icon {{ width: 72px; height: 72px; background: rgba(255,255,255,.12); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0; }}
   .brand-text strong {{ display: block; font-size: 38px; font-weight: 800; color: #fff; margin-bottom: 4px; }}
   .brand-text span {{ font-size: 30px; color: rgba(255,255,255,.55); font-weight: 400; }}
 </style>
@@ -155,10 +153,9 @@ social_html = f"""<!DOCTYPE html>
     <h1>{h1_content}</h1>
     <p class="sub">{ig_sub}</p>
     <p class="body">{ig_body}</p>
-    <div class="cta">💬 Schreib mir einfach</div>
+    <div class="cta">💬 Schreiben Sie mir</div>
     <div class="divider"></div>
     <div class="branding">
-      <div class="brand-icon">🛡️</div>
       <div class="brand-text">
         <strong>Daniel Eck</strong>
         <span>Versicherungsmakler</span>
