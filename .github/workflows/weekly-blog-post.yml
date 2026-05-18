@@ -116,9 +116,15 @@ jobs:
       - name: WhatsApp-Status-Vorlage an Daniel senden
         env:
           WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WA_APP_ID:   ${{ secrets.WHATSAPP_APP_ID }}
+          WA_APP_SECRET: ${{ secrets.WHATSAPP_APP_SECRET }}
           WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           WA_TO:       ${{ secrets.WHATSAPP_TO_NUMBER }}
         run: |
+          # App-Token (läuft nie ab) hat Vorrang vor Access-Token
+          if [ -n "$WA_APP_ID" ] && [ -n "$WA_APP_SECRET" ]; then
+            WA_TOKEN="${WA_APP_ID}|${WA_APP_SECRET}"
+          fi
           RAW_BASE="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/master/social"
           # 1) Daniel-Bild
           curl -s -X POST "https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages" \
