@@ -984,6 +984,7 @@ function loadBrevoData() {
     fetch('https://api.brevo.com/v3/contacts?listId=' + list.id + '&limit=50&sort=desc', { headers: hdrs })
       .then(function(r) { return r.json(); })
       .then(function(d) {
+        if (d.contacts && d.contacts[0]) console.log('[Brevo] Kontakt-Attribute:', d.contacts[0].attributes);
         list.contacts = (d.contacts || []).map(function(c) {
           return {
             email:        c.email || '',
