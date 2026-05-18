@@ -1003,22 +1003,25 @@ function loadBrevoData() {
 }
 
 function renderBrevoSection() {
+  // Gesamtzahl aller Kontakte
+  var total = brevoLists.reduce(function(s, l) { return s + (typeof l.count === 'number' ? l.count : 0); }, 0);
+  var allLoaded = brevoLists.every(function(l) { return l.count !== null; });
+  var totalHtml = allLoaded
+    ? '<span style="font-size:13px;font-weight:600;color:#64748b;margin-left:10px;">' + total + ' Kontakt' + (total !== 1 ? 'e' : '') + '</span>'
+    : '';
   return '<div class="leads-card" id="brevoSection">' +
-    '<h3><i class="fas fa-address-book"></i> Kontakte &amp; Leads (Brevo)</h3>' +
-    '<div class="leads-grid" id="brevoListCards">' +
-      brevoLists.map(function(l) {
-        return '<div class="lead-list-card ' + l.cls + '">' +
-          '<div class="lead-list-icon"><i class="fas ' + l.icon + '"></i></div>' +
-          '<div>' +
-            '<div class="lead-list-name">' + l.name + '</div>' +
-            '<div class="lead-list-count" id="brevo-count-' + l.id + '">' +
-              (l.count === null ? '<div class="spinner" style="width:18px;height:18px;border-width:2px;margin:4px 0"></div>' : l.count) +
-            '</div>' +
-            '<div class="lead-list-sub">Kontakte gesamt</div>' +
-          '</div>' +
-        '</div>';
-      }).join('') +
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">' +
+      '<h3 style="margin:0"><i class="fas fa-envelope"></i> E-Mail Kontakte' + totalHtml + '</h3>' +
+      '<div style="display:flex;gap:8px;">' +
+        brevoLists.map(function(l) {
+          return '<span class="leads-tag ' + l.tag + '" style="font-size:11px;padding:4px 10px;">' +
+            '<i class="fas ' + l.icon + '" style="margin-right:4px"></i>' + l.name +
+            ' <strong id="brevo-count-' + l.id + '">' +
+            (l.count === null ? '…' : l.count) + '</strong></span>';
+        }).join('') +
+      '</div>' +
     '</div>' +
+    '<div id="brevoListCards"></div>' +
     buildBrevoTable() +
   '</div>';
 }
@@ -1088,13 +1091,10 @@ function updateBrevoSection() {
   // Tabelle neu bauen
   var section = document.getElementById('brevoSection');
   if (!section) return;
-  // Tabelle ist alles nach dem leads-grid
   var grid = document.getElementById('brevoListCards');
   if (!grid) return;
-  // Alles nach dem Grid entfernen und neu rendern
   var tmp = document.createElement('div');
   tmp.innerHTML = buildBrevoTable();
-  // Remove old table if exists
   while (grid.nextSibling) section.removeChild(grid.nextSibling);
   section.appendChild(tmp.firstChild);
 }
