@@ -355,8 +355,17 @@
       display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
     }
     .gp-trust span { display: flex; align-items: center; gap: 4px; }
-    .gp-success { display: none; text-align: center; flex: 1; justify-content: center; align-items: center; flex-direction: column; }
+    .gp-success { display: none; text-align: center; flex: 1; justify-content: center; align-items: center; flex-direction: column; position: relative; }
     .gp-success.show { display: flex; }
+    .gp-success-close {
+      position: absolute; top: 0; right: 0;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #f1f5f9; border: none; color: #64748b;
+      cursor: pointer; font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .gp-success-close:hover { background: #e2e8f0; color: #172d50; }
     .gp-success-icon {
       width: 72px; height: 72px; border-radius: 50%;
       background: #dcfce7; color: #16a34a; font-size: 30px;
@@ -858,9 +867,10 @@
           </form>
         </div>
         <div class="gp-success" id="gpSuccess">
+          <button class="gp-success-close" onclick="closeGratisPaket()" aria-label="Schließen"><i class="fas fa-times"></i></button>
           <div class="gp-success-icon"><i class="fas fa-check"></i></div>
           <h3>E-Mail ist unterwegs!</h3>
-          <p>Ihre 5 kostenlosen Tools sind auf dem Weg – schauen Sie gleich in Ihr Postfach.<br><span style="font-size:12px;color:#94a3b8;">(Ggf. auch im Spam-Ordner.)</span></p>
+          <p>Ihre 5 kostenlosen Tools sind auf dem Weg – schauen Sie gleich in Ihr Postfach.<br><span style="font-size:12px;color:#94a3b8;">(Kann auch im Spam-Ordner landen.)</span></p>
         </div>
       </div>
     </div>
