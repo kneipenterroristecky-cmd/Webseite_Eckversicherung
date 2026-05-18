@@ -28,7 +28,9 @@
       "title": "Riester-Rente 2026: Für wen lohnt sie sich noch?",
       "label": "Vorsorge",
       "unsplash_query": "pension savings future",
-      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format"
+      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format",
+      "ig_fp_x": 0.5,
+      "ig_fp_y": 0.35
     }
   ],
   "2": [
@@ -112,7 +114,9 @@
       "title": "Betriebliche Altersvorsorge: Steuern sparen und gleichzeitig vorsorgen",
       "label": "Vorsorge",
       "unsplash_query": "business savings pension",
-      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format"
+      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format",
+      "ig_fp_x": 0.5,
+      "ig_fp_y": 0.35
     },
     {
       "title": "Krankenzusatzversicherung: Was die gesetzliche Kasse nicht zahlt",
@@ -144,7 +148,9 @@
       "title": "Rürup-Rente: Die Altersvorsorge für Selbstständige mit Steuerbonus",
       "label": "Vorsorge",
       "unsplash_query": "self employed retirement savings",
-      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format"
+      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format",
+      "ig_fp_x": 0.5,
+      "ig_fp_y": 0.35
     },
     {
       "title": "Heilpraktikerversicherung: Naturheilkunde auf Kosten der Versicherung",
@@ -304,7 +310,9 @@
       "title": "Betriebliche Altersvorsorge: Warum Arbeitgeber hier mitsparen müssen",
       "label": "Vorsorge",
       "unsplash_query": "workplace pension employer",
-      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format"
+      "og_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=630&fit=crop&auto=format",
+      "ig_fp_x": 0.5,
+      "ig_fp_y": 0.35
     },
     {
       "title": "Krankenhausaufenthalt: Mit Zusatzversicherung besser versorgt",

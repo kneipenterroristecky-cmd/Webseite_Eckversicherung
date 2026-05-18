@@ -23,8 +23,18 @@ print(f"📌 Thema diese Woche: {topic['title']}")
 og_image = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format")
 _og_base = og_image.split("?")[0]
 og_image = f"{_og_base}?w=1200&h=630&fit=crop&auto=format"
-ig_img_url_global = f"{_og_base}?w=1080&h=1920&fit=crop&crop=center&auto=format"
-print(f"   📸 Bild: {_og_base}")
+
+# Portrait-Crop: Fokuspunkt aus topics.json nehmen wenn vorhanden, sonst entropy (inhaltsbasiert)
+_fp_x = topic.get("ig_fp_x")
+_fp_y = topic.get("ig_fp_y")
+if _fp_x is not None or _fp_y is not None:
+    fp_x = _fp_x if _fp_x is not None else 0.5
+    fp_y = _fp_y if _fp_y is not None else 0.5
+    _ig_crop = f"crop=focalpoint&fp-x={fp_x}&fp-y={fp_y}"
+else:
+    _ig_crop = "crop=entropy"
+ig_img_url_global = f"{_og_base}?w=1080&h=1920&fit=crop&{_ig_crop}&auto=format"
+print(f"   📸 Bild: {_og_base} (crop: {_ig_crop})")
 
 # ── Blog-Beitrag schreiben ────────────────────────────────────────────────────
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
