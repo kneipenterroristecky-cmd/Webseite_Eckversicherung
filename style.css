@@ -1548,7 +1548,7 @@ body.nav-open .social-peek { display: none !important; }
   transition: max-height .55s cubic-bezier(.4,0,.2,1);
 }
 .gratis-float-wrap.gratis-float-show {
-  max-height: 60px;
+  max-height: 52px;
 }
 .gratis-float-btn {
   background: linear-gradient(90deg, rgb(88,28,135), rgb(255,33,120), rgb(88,28,135));
@@ -1566,7 +1566,6 @@ body.nav-open .social-peek { display: none !important; }
   color: #fff;
   opacity: 0.92;
   position: relative;
-  margin-bottom: 4px;
 }
 .gratis-float-btn:hover { opacity: 1; width: 58px; }
 .gratis-float-btn:hover { opacity: 1; }
