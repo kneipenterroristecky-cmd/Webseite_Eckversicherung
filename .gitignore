@@ -8,7 +8,7 @@ desktop.ini
 *.code-workspace
 
 # Claude Code (lokale Einstellungen, nicht ins Repo)
-.claude/
+.claude/settings.local.json
 
 # Temporäre Uploads & Screenshots
 uploads/
