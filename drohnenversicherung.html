@@ -294,7 +294,27 @@
     document.querySelectorAll('.reveal').forEach(el=>{
       new IntersectionObserver(([e])=>e.isIntersecting&&e.target.classList.add('visible'),{threshold:.1}).observe(el);
     });
-    function openCalendlyDirect(){Calendly.initPopupWidget({url:'https://calendly.com/daniel-eckversicherung/beratung'});return false}
   </script>
+  <!-- Funnel Modal -->
+  <div class="funnel-overlay" id="funnelOverlay" onclick="closeFunnelOutside(event)">
+    <div class="funnel-modal" role="dialog" aria-modal="true">
+      <button class="funnel-close" onclick="closeFunnel()" aria-label="Schließen"><i class="fas fa-times"></i>
+      </button>
+      <div class="funnel-progress-wrap"><div class="funnel-progress-bar" id="funnelBar"></div>
+      </div>
+      <p class="funnel-step-label" id="funnelStepLabel">Schritt 1 von 4</p>
+      <div class="funnel-body" id="funnelBody"></div>
+    </div>
+  </div>
+
+  <script src="script.js?v=8"></script>
+  <script src="cookie.js"></script>
+  <script src="analytics.js" defer></script>
+  <div class="mobile-cta-bar">
+    <a href="tel:+491743225885" class="mobile-cta-call"><i class="fas fa-phone"></i><span>Anrufen</span></a>
+    <a href="kontakt.html" class="mobile-cta-termin"><i class="fas fa-calendar-check"></i><span>Termin buchen</span></a>
+  </div>
 </body>
 </html>
+
+
