@@ -164,6 +164,14 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: ${{ github.event.inputs.goal }}
 
+      # ── Fallback: uncommitted Änderungen direkt pushen ────────────────
+      - name: Push any unpushed changes
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git add -A
+          git diff --cached --quiet || git commit -m "goal: ${{ github.event.inputs.goal }}"
+          git push origin HEAD:master || true
+
       # ── Erfolg: Tracking-Issue schließen ──────────────────────────────
       - name: Close tracking issue (success)
         if: |
