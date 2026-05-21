@@ -144,7 +144,7 @@ def build_html(d: dict) -> str:
     .cov-check{{width:22px;height:22px;border-radius:6px;background:rgba(26,80,200,.1);display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:11px;flex-shrink:0;margin-top:1px}}
     .kfz-section-title{{font-size:24px;font-weight:900;color:var(--navy);margin-bottom:8px}}
     .kfz-section-sub{{font-size:15px;color:var(--gray-500);margin-bottom:36px}}
-    .kachel-grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:72px}}
+    .kachel-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:72px}}
     .kachel-card{{background:var(--navy);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:0;box-shadow:0 8px 32px rgba(23,45,80,.18)}}
     .kachel-icon{{width:52px;height:52px;background:rgba(255,255,255,.12);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#60a5fa;margin-bottom:20px;flex-shrink:0}}
     .kachel-card h3{{font-size:18px;font-weight:800;color:#fff;margin:0 0 8px;line-height:1.25}}
