@@ -326,16 +326,18 @@ def generate_page_data(client, goal: str, filename: str) -> dict | None:
     )
     cost = estimate_cost(resp.usage, f"{filename} – ")
     text = resp.content[0].text.strip()
+    print(f"  Antwort-Anfang: {text[:120]}")
+    print(f"  Antwort-Ende:   {text[-80:]}")
 
-    # JSON extrahieren (manchmal kommt es in ```json ... ```)
     json_match = re.search(r'\{.*\}', text, re.DOTALL)
     if not json_match:
-        print(f"  Kein JSON in Response: {text[:200]}")
+        print(f"  Kein JSON in Response")
         return None
     try:
         return json.loads(json_match.group())
     except json.JSONDecodeError as e:
         print(f"  JSON-Fehler: {e}")
+        print(f"  JSON-Länge: {len(json_match.group())} Zeichen")
         return None
 
 
