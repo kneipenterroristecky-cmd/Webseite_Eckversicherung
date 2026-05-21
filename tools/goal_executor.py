@@ -173,10 +173,14 @@ def main():
 
     print(f"\nFertig: {len(files_written)} Datei(en) erstellt/geändert.")
 
-    # Bild-Review wenn Bilder vorhanden
-    if re.search(r'<img\s', output, re.IGNORECASE):
+    # Bild-Review wenn Bilder in erstellten Dateien vorhanden
+    has_images = any(
+        re.search(r'<img\s', read_file(f) or "", re.IGNORECASE)
+        for f in files_written
+    )
+    if has_images:
         print("\n── Bild-Review-Agent ────────────────────────────────")
-        image_review(client, files_written, response.usage)
+        image_review(client, files_written, None)
 
 
 def image_review(client, files_written: list, prev_usage):
