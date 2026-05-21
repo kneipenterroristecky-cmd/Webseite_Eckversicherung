@@ -116,14 +116,23 @@ def generate_single_file(client, goal: str, filename: str, context: str) -> str 
     cost = (response.usage.input_tokens * 0.8 + response.usage.output_tokens * 4) / 1_000_000
     print(f"  Tokens: {response.usage.input_tokens} in / {response.usage.output_tokens} out (~${cost:.4f})")
 
-    pattern = re.compile(r'<file path="([^"]+)">(.*?)</file>', re.DOTALL)
+    # Vollständiger Block mit schließendem Tag
+    pattern = re.compile(r'<file path="[^"]+">[\r\n]*(.*?)</file>', re.DOTALL)
     match = pattern.search(output)
     if match:
-        return match.group(2).strip()
+        return match.group(1).strip()
 
-    # Fallback: Response enthält direkt HTML (ohne file-Tag)
-    if output.strip().startswith("<!DOCTYPE") or output.strip().startswith("<html"):
-        return output.strip()
+    # Abgeschnittener Block (kein schließendes </file>) – trotzdem den HTML-Inhalt nehmen
+    truncated = re.compile(r'<file path="[^"]+">[\r\n]*(<!DOCTYPE.*)', re.DOTALL)
+    match = truncated.search(output)
+    if match:
+        print("  Hinweis: Response abgeschnitten – HTML trotzdem gespeichert.")
+        return match.group(1).strip()
+
+    # Direktes HTML ohne file-Tag
+    stripped = output.strip()
+    if stripped.startswith("<!DOCTYPE") or stripped.startswith("<html"):
+        return stripped
 
     print(f"  Kein HTML gefunden. Response-Anfang: {output[:200]}")
     return None
