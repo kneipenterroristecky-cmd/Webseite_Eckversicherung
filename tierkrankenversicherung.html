@@ -279,8 +279,6 @@
         if(!expanded){btn.setAttribute('aria-expanded','true');btn.nextElementSibling.style.maxHeight=btn.nextElementSibling.scrollHeight+'px'}
       });
     });
-    const navbar=document.getElementById('navbar');
-    window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',window.scrollY>10));
     document.querySelectorAll('.reveal').forEach(el=>{
       new IntersectionObserver(([e])=>e.isIntersecting&&e.target.classList.add('visible'),{threshold:.1}).observe(el);
     });
@@ -288,3 +286,4 @@
   </script>
 </body>
 </html>
+
