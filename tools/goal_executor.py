@@ -356,7 +356,7 @@ Regeln:
 def generate_page_data(client, goal: str, filename: str) -> dict | None:
     resp = client.messages.create(
         model=MODEL_CONTENT,
-        max_tokens=2000,
+        max_tokens=4000,
         system=CONTENT_SCHEMA,
         messages=[{"role": "user", "content": f"Erstelle Seiten-Inhalt für: {filename}\nAuftrag: {goal}"}],
     )
