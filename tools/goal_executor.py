@@ -70,19 +70,23 @@ def build_context(goal: str) -> str:
 
 SYSTEM_PROMPT = """Du bist Webentwickler für die Webseite von Daniel Eck (Versicherungsmakler, Nürnberg/Schmalkalden).
 
-Antworte NUR mit Datei-Blöcken in diesem Format – keine Erklärungen, kein Fließtext:
+WICHTIG: Stelle NIEMALS Rückfragen. Interpretiere das Goal bestmöglich und erstelle sofort die Dateien.
+
+Antworte NUR mit Datei-Blöcken in diesem Format – keine Erklärungen, kein Fließtext, keine Fragen:
 
 <file path="dateiname.html">
 vollständiger Dateiinhalt
 </file>
 
 Regeln:
-- Neues Design exakt wie das Template übernehmen (gleiche CSS-Klassen, gleiche Struktur)
-- Vollständige HTML-Dateien – keine Platzhalter, kein "..."
+- Dateiname: kleinbuchstaben, bindestrich statt leerzeichen, z.B. "tier-op-versicherung.html"
+- Design exakt wie das Template (gleiche CSS-Klassen, gleiche Struktur, gleiche Sektionen)
+- Vollständige HTML-Dateien – keine Platzhalter, kein "...", kein Abkürzen
 - Bilder: Pexels-URLs (https://images.pexels.com/photos/ID/pexels-photo-ID.jpeg?auto=compress&cs=tinysrgb&w=800), thematisch passend, hell und lebendig
 - Sprache: Deutsch, professionell, Ich-Perspektive ("ich prüfe für Sie", "ich vergleiche")
 - Titel-Format: "Versicherungsname – Daniel Eck – Versicherungsmakler"
-- Navbar, Topbar, Footer identisch zum Template kopieren"""
+- Navbar, Topbar, Footer identisch zum Template kopieren
+- Bei mehreren Seiten: alle in separaten <file> Blöcken ausgeben"""
 
 
 def main():
