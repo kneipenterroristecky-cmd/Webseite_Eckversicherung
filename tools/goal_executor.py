@@ -89,6 +89,46 @@ Regeln:
 - Bei mehreren Seiten: alle in separaten <file> Blöcken ausgeben"""
 
 
+def get_filenames(client, goal: str) -> list[str]:
+    """Kleiner Planungs-Call: welche Dateien sollen erstellt/geändert werden?"""
+    response = client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=100,
+        system="Antworte nur mit HTML-Dateinamen (eine pro Zeile), keine Erklärungen. Dateinamen: kleinbuchstaben, bindestrich statt leerzeichen, .html Endung.",
+        messages=[{"role": "user", "content": f"Welche HTML-Dateien müssen erstellt oder geändert werden?\nAuftrag: {goal}"}],
+    )
+    text = response.content[0].text
+    files = re.findall(r'[\w-]+\.html', text)
+    print(f"Geplante Dateien: {files}")
+    return files
+
+
+def generate_single_file(client, goal: str, filename: str, context: str) -> str | None:
+    """Generiert genau eine HTML-Datei."""
+    user_message = f"Erstelle NUR die Datei '{filename}'.\n\nAuftrag: {goal}\n\n{context}"
+    response = client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=8192,
+        system=SYSTEM_PROMPT,
+        messages=[{"role": "user", "content": user_message}],
+    )
+    output = response.content[0].text
+    cost = (response.usage.input_tokens * 0.8 + response.usage.output_tokens * 4) / 1_000_000
+    print(f"  Tokens: {response.usage.input_tokens} in / {response.usage.output_tokens} out (~${cost:.4f})")
+
+    pattern = re.compile(r'<file path="([^"]+)">(.*?)</file>', re.DOTALL)
+    match = pattern.search(output)
+    if match:
+        return match.group(2).strip()
+
+    # Fallback: Response enthält direkt HTML (ohne file-Tag)
+    if output.strip().startswith("<!DOCTYPE") or output.strip().startswith("<html"):
+        return output.strip()
+
+    print(f"  Kein HTML gefunden. Response-Anfang: {output[:200]}")
+    return None
+
+
 def main():
     goal = os.environ.get("GOAL", "").strip()
     if not goal:
@@ -97,42 +137,29 @@ def main():
 
     print(f"Goal: {goal}")
 
-    context = build_context(goal)
-    user_message = f"Goal: {goal}\n\n{context}"
-
-    print(f"Kontext: {len(user_message):,} Zeichen (~{len(user_message)//4:,} Tokens)")
-
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    context = build_context(goal)
+    total_cost = 0.0
 
-    response = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=8192,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user_message}],
-    )
+    # Schritt 1: Dateiliste ermitteln
+    filenames = get_filenames(client, goal)
+    if not filenames:
+        print("Keine Dateinamen erkannt – versuche direkte Generierung.")
+        filenames = ["output.html"]
 
-    output = response.content[0].text
-    print(f"Response: {len(output):,} Zeichen")
-    print(f"Tokens: {response.usage.input_tokens} input / {response.usage.output_tokens} output")
-
-    # Kosten schätzen (Haiku: $0.80/MTok input, $4/MTok output)
-    cost_usd = (response.usage.input_tokens * 0.8 + response.usage.output_tokens * 4) / 1_000_000
-    print(f"Geschätzte Kosten: ${cost_usd:.4f} (~{cost_usd * 0.92:.4f} EUR)")
-
-    # Datei-Blöcke parsen
-    pattern = re.compile(r'<file path="([^"]+)">(.*?)</file>', re.DOTALL)
+    # Schritt 2: Jede Datei einzeln generieren
     files_written = []
-
-    for match in pattern.finditer(output):
-        file_path = match.group(1).strip()
-        file_content = match.group(2).strip()
-        if write_file(file_path, file_content):
-            files_written.append(file_path)
-            print(f"✓ Geschrieben: {file_path}")
+    for fname in filenames:
+        print(f"\n── Generiere: {fname}")
+        content = generate_single_file(client, goal, fname, context)
+        if content and write_file(fname, content):
+            files_written.append(fname)
+            print(f"  ✓ Geschrieben: {fname}")
+        else:
+            print(f"  ✗ Fehlgeschlagen: {fname}")
 
     if not files_written:
-        print("\nKeine Dateien erstellt. Response-Anfang:")
-        print(output[:800])
+        print("\nKeine Dateien erstellt.")
         sys.exit(1)
 
     print(f"\nFertig: {len(files_written)} Datei(en) erstellt/geändert.")
