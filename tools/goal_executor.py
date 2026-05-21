@@ -144,16 +144,15 @@ def build_html(d: dict) -> str:
     .cov-check{{width:22px;height:22px;border-radius:6px;background:rgba(26,80,200,.1);display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:11px;flex-shrink:0;margin-top:1px}}
     .kfz-section-title{{font-size:24px;font-weight:900;color:var(--navy);margin-bottom:8px}}
     .kfz-section-sub{{font-size:15px;color:var(--gray-500);margin-bottom:36px}}
-    .gew-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;margin-bottom:72px}}
-    .gew-card{{background:#fff;border:1.5px solid var(--gray-100);border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.06)}}
-    .gew-card-header{{background:var(--navy);padding:20px 22px;display:flex;align-items:flex-start;gap:14px;height:130px;overflow:hidden}}
-    .gew-card-header-icon{{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0}}
-    .gew-card-header h3{{font-size:15px;font-weight:800;color:#fff;margin:0;overflow-wrap:break-word;hyphens:auto}}
-    .gew-card-header p{{font-size:12px;color:rgba(255,255,255,.6);margin:3px 0 0}}
-    .gew-card-body{{padding:18px 22px 22px}}
-    .gew-list{{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}}
-    .gew-list li{{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--gray-500);padding:7px 10px;border-radius:8px;margin:0 -10px}}
-    .gew-icon{{width:26px;height:26px;border-radius:7px;background:rgba(26,80,200,.08);display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:12px;flex-shrink:0}}
+    .kachel-grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:72px}}
+    .kachel-card{{background:var(--navy);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:0;box-shadow:0 8px 32px rgba(23,45,80,.18)}}
+    .kachel-icon{{width:52px;height:52px;background:rgba(255,255,255,.12);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#60a5fa;margin-bottom:20px;flex-shrink:0}}
+    .kachel-card h3{{font-size:18px;font-weight:800;color:#fff;margin:0 0 8px;line-height:1.25}}
+    .kachel-card>p{{font-size:13px;color:rgba(255,255,255,.55);margin:0 0 22px;line-height:1.6}}
+    .kachel-list{{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px}}
+    .kachel-list li{{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:rgba(255,255,255,.85);line-height:1.45}}
+    .kachel-check{{width:22px;height:22px;border-radius:6px;background:rgba(96,165,250,.25);display:flex;align-items:center;justify-content:center;color:#60a5fa;font-size:10px;flex-shrink:0;margin-top:1px}}
+    @media(max-width:860px){{.kachel-grid{{grid-template-columns:1fr}}}}
     .kfz-makler{{background:var(--navy);border-radius:20px;padding:0 52px 0 0;margin-bottom:56px;display:grid;grid-template-columns:220px 1fr 1fr;gap:48px;align-items:stretch;overflow:hidden}}
     .kfz-makler-photo{{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;min-height:320px}}
     .kfz-makler-left{{padding:48px 0}}
