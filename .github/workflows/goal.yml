@@ -164,6 +164,54 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: ${{ github.event.inputs.goal }}
 
+      # ── Bilderkennung: Prüfen ob Agent Bilder bearbeitet hat ─────────
+      - name: Detect image changes
+        if: |
+          (github.event_name == 'workflow_dispatch' && steps.claude_dispatch.outcome == 'success') ||
+          (github.event_name == 'issue_comment' && steps.claude_comment.outcome == 'success')
+        id: detect_images
+        run: |
+          GOAL="${{ github.event.inputs.goal }}"
+          # Prüfe Goal-Text auf Bild-Keywords
+          if echo "$GOAL" | grep -iE 'bild|foto|image|img|photo|pexels|pixabay|unsplash|visuell|grafik|picture' > /dev/null 2>&1; then
+            echo "needs_review=true" >> $GITHUB_OUTPUT
+            echo "Bild-Keyword im Goal gefunden."
+            exit 0
+          fi
+          # Prüfe ob img-Tags in geänderten HTML-Dateien
+          if git diff HEAD -- '*.html' 2>/dev/null | grep -iE '^\+.*<img|^\+.*src=.*\.(jpg|jpeg|png|webp)' > /dev/null 2>&1; then
+            echo "needs_review=true" >> $GITHUB_OUTPUT
+            echo "Bild-Änderungen in HTML gefunden."
+          else
+            echo "needs_review=false" >> $GITHUB_OUTPUT
+            echo "Keine Bild-Änderungen – Review übersprungen."
+          fi
+
+      # ── Bild-Review-Agent (nur bei Bild-Änderungen) ───────────────────
+      - name: Image Review Agent
+        if: steps.detect_images.outputs.needs_review == 'true'
+        id: image_review
+        uses: anthropics/claude-code-action@v1
+        continue-on-error: true
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Du bist ein spezialisierter Bildprüfer für eine Versicherungswebseite (Eckversicherungen, Nürnberg).
+
+            DEINE EINZIGE AUFGABE: Prüfe die Bilder die der vorherige Agent eingefügt hat.
+
+            1. Führe aus: `git diff HEAD~1 -- '*.html'` und suche alle neuen <img> Tags und src-Attribute
+            2. Für jedes gefundene Bild prüfe:
+               - Passt es thematisch EXAKT zum Seiteninhalt?
+               - Ist es hell, lebendig, zeigt echte Situationen (keine abstrakten Stock-Fotos)?
+               - Wirkt es professionell und seriös für eine Versicherungswebseite?
+            3. Falls ein Bild NICHT passt: Ersetze es sofort mit einem besseren Pexels-Bild
+            4. Falls ALLE Bilder passen: Keine Änderung nötig
+
+            Sei extrem kurz und effizient. Lies nur die geänderten HTML-Stellen, handle nur wenn nötig.
+            Verwende immer das vorhandene Bildformat und den bestehenden CSS-Stil der Seite.
+
       # ── Fallback: uncommitted Änderungen direkt pushen ────────────────
       - name: Push any unpushed changes
         if: github.event_name == 'workflow_dispatch'
