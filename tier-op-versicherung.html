@@ -268,22 +268,7 @@
   <script src="analytics.js" defer></script>
   <script src="cookie.js" defer></script>
   <script src="chatbot.js" defer></script>
-  <script>
-    const hamburger=document.getElementById('hamburger');
-    const navLinks=document.getElementById('navLinks');
-    if(hamburger)hamburger.addEventListener('click',()=>{hamburger.classList.toggle('open');navLinks.classList.toggle('open')});
-    document.querySelectorAll('.faq-q').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const expanded=btn.getAttribute('aria-expanded')==='true';
-        document.querySelectorAll('.faq-q').forEach(b=>{b.setAttribute('aria-expanded','false');b.nextElementSibling.style.maxHeight=null});
-        if(!expanded){btn.setAttribute('aria-expanded','true');btn.nextElementSibling.style.maxHeight=btn.nextElementSibling.scrollHeight+'px'}
-      });
-    });
-    document.querySelectorAll('.reveal').forEach(el=>{
-      new IntersectionObserver(([e])=>e.isIntersecting&&e.target.classList.add('visible'),{threshold:.1}).observe(el);
-    });
-    function openCalendlyDirect(){Calendly.initPopupWidget({url:'https://calendly.com/eckversicherung/30min'});return false}
-  </script>
 </body>
 </html>
+
 
