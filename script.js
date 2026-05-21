@@ -23,14 +23,23 @@ window.openGratisPaket = function() {
 (function() {
   var lastScrollY = window.scrollY;
   var gw = null;
-  document.addEventListener('DOMContentLoaded', function() { gw = document.getElementById('gratisFloatWrap'); });
+  var isStartPage = /\/(start\.html)?$/.test(window.location.pathname.replace(/\\/g, '/'));
+
+  document.addEventListener('DOMContentLoaded', function() {
+    gw = document.getElementById('gratisFloatWrap');
+    /* Auf allen Seiten außer start.html: Geschenk-Button sofort dauerhaft anzeigen */
+    if (!isStartPage && gw) {
+      gw.style.overflow = 'visible';
+      gw.classList.add('gratis-float-show');
+    }
+  });
   window.addEventListener('scroll', function() {
     var sp = document.getElementById('socialPeek');
     if (!sp) return;
     var y = window.scrollY;
-    /* Gratis-Button: ab 200px einblenden */
     if (!gw) gw = document.getElementById('gratisFloatWrap');
-    if (gw) {
+    /* Gratis-Button: auf start.html ab 200px einblenden, sonst immer sichtbar */
+    if (gw && isStartPage) {
       if (y > 200) {
         if (!gw.classList.contains('gratis-float-show')) {
           gw.style.overflow = 'hidden';
