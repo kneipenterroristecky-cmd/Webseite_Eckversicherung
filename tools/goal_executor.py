@@ -347,10 +347,12 @@ Regeln: Exakt diese Struktur. Behalte die vorgegebenen Pexels-IDs. Deutsch. Kein
 
 
 def generate_page_data(client, goal: str, filename: str) -> dict | None:
+    ids = get_pexels_ids(filename)
+    schema = CONTENT_SCHEMA.format(p0=ids[0], p1=ids[1], p2=ids[2])
     resp = client.messages.create(
         model=MODEL_CONTENT,
         max_tokens=4000,
-        system=CONTENT_SCHEMA,
+        system=schema,
         messages=[{"role": "user", "content": f"Erstelle Seiten-Inhalt für: {filename}\nAuftrag: {goal}"}],
     )
     cost = estimate_cost(resp.usage, f"{filename} – ")
