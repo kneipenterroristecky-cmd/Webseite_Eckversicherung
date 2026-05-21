@@ -65,6 +65,37 @@ jobs:
               });
             } catch(e) {}
 
+      # ── workflow_dispatch: Tracking-Issue automatisch erstellen ────────
+      - name: Create tracking issue
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.issue_number == '0'
+        id: create_issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const source = '${{ github.event.inputs.source }}';
+            const goal = `${{ github.event.inputs.goal }}`;
+            const emoji = source === 'whatsapp' ? '📱' : '🖥️';
+
+            const { data: issue } = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `${emoji} Goal: ${goal.substring(0, 80)}`,
+              body: [
+                `**Quelle:** ${source}`,
+                `**Gestartet:** ${new Date().toISOString()}`,
+                '',
+                '**Goal:**',
+                '```',
+                goal,
+                '```',
+                '',
+                '_Dieses Issue wird automatisch geschlossen wenn das Goal erledigt ist._'
+              ].join('\n')
+            });
+
+            console.log(`Issue #${issue.number} erstellt.`);
+            core.setOutput('issue_number', issue.number.toString());
+
       # ── WhatsApp: Eingangsbestätigung senden ───────────────────────────
       - name: WhatsApp – Eingangsbestätigung
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.source == 'whatsapp'
@@ -126,6 +157,30 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: ${{ github.event.inputs.goal }}
 
+      # ── Erfolg: Tracking-Issue schließen ──────────────────────────────
+      - name: Close tracking issue (success)
+        if: |
+          github.event_name == 'workflow_dispatch' &&
+          steps.claude_dispatch.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNr = parseInt('${{ steps.create_issue.outputs.issue_number || github.event.inputs.issue_number }}');
+            if (!issueNr || issueNr === 0) return;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNr,
+              body: '✅ **Goal erledigt!** Änderungen wurden in die Webseite committed.'
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNr,
+              state: 'closed'
+            });
+
       # ── WhatsApp: Erfolgs-Benachrichtigung ────────────────────────────
       - name: WhatsApp – Erfolg
         if: |
@@ -152,7 +207,7 @@ jobs:
         env:
           SOURCE: ${{ github.event.inputs.source || 'issue' }}
           GOAL_TEXT: ${{ github.event.inputs.goal || '' }}
-          ISSUE_NR: ${{ github.event.inputs.issue_number || '0' }}
+          ISSUE_NR: ${{ steps.create_issue.outputs.issue_number || github.event.inputs.issue_number || '0' }}
           WA_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           WA_TO: ${{ secrets.WHATSAPP_TO_NUMBER }}
@@ -180,10 +235,9 @@ jobs:
                   })
                 }
               );
-              return;
             }
 
-            // Issue-Fehler-Behandlung
+            // Issue-Fehler-Behandlung (jetzt auch für workflow_dispatch)
             const issue_number = context.eventName === 'issue_comment'
               ? context.issue.number
               : issueNr;
