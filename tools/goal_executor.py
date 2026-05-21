@@ -152,7 +152,8 @@ def build_html(d: dict) -> str:
     .kachel-list{{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px}}
     .kachel-list li{{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:rgba(255,255,255,.85);line-height:1.45}}
     .kachel-check{{width:22px;height:22px;border-radius:6px;background:rgba(96,165,250,.25);display:flex;align-items:center;justify-content:center;color:#60a5fa;font-size:10px;flex-shrink:0;margin-top:1px}}
-    @media(max-width:860px){{.kachel-grid{{grid-template-columns:1fr}}}}
+    @media(max-width:1100px){{.kachel-grid{{grid-template-columns:repeat(2,1fr)}}}}
+    @media(max-width:600px){{.kachel-grid{{grid-template-columns:1fr}}}}
     .kfz-makler{{background:var(--navy);border-radius:20px;padding:0 52px 0 0;margin-bottom:56px;display:grid;grid-template-columns:220px 1fr 1fr;gap:48px;align-items:stretch;overflow:hidden}}
     .kfz-makler-photo{{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;min-height:320px}}
     .kfz-makler-left{{padding:48px 0}}
