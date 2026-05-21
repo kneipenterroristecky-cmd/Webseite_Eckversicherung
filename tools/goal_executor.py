@@ -314,10 +314,36 @@ def get_filenames(client, goal: str) -> list[str]:
 
 # ── Schritt 2: Inhalt als JSON generieren ─────────────────────────────────
 
-CONTENT_SCHEMA = """Antworte NUR mit einem JSON-Objekt, kein Text davor/danach, kein Markdown:
-{"title":"Versicherungsname – Daniel Eck – Versicherungsmakler","short_title":"Versicherungsname","meta_desc":"SEO max 155 Zeichen","category":"KATEGORIE","hero_title":"Titel","hero_sub":"1-2 Sätze","trust":["Punkt1","Punkt2","Punkt3"],"intro":"2 Sätze Einleitung","cards":[{"icon":"fa-shield","badge":"Badge","title":"Titel","desc":"Kurz","items":["Punkt1","Punkt2","Punkt3"],"alt":"Alt-Text","pexels":"FOTO_ID"},{"icon":"fa-heart","badge":"Badge","title":"Titel","desc":"Kurz","items":["Punkt1","Punkt2","Punkt3"],"alt":"Alt-Text","pexels":"FOTO_ID"},{"icon":"fa-star","badge":"Badge","title":"Titel","desc":"Kurz","items":["Punkt1","Punkt2","Punkt3"],"alt":"Alt-Text","pexels":"FOTO_ID"}],"compare":[{"icon":"fa-list-check","title":"Titel","sub":"Sub","items":["P1","P2","P3"]},{"icon":"fa-euro-sign","title":"Titel","sub":"Sub","items":["P1","P2","P3"]},{"icon":"fa-shield","title":"Titel","sub":"Sub","items":["P1","P2","P3"]}],"faq":[{"q":"Frage?","a":"Antwort 1-2 Sätze."},{"q":"Frage?","a":"Antwort."},{"q":"Frage?","a":"Antwort."}],"cta_title":"Warum X über mich?"}
+# Geprüfte Pexels-IDs pro Thema (Farbfotos, thematisch passend)
+PEXELS_BY_TOPIC = {
+    "rente":      ["8441854", "7477711", "7477703", "8439698", "8441866"],  # ältere Paare, Finanzplanung
+    "altersvorsorge": ["8441854", "7477703", "8439698", "7477698", "12645002"],
+    "leben":      ["8441854", "7477711", "3182812", "8439679", "7477698"],
+    "unfall":     ["6153392", "5699456", "4386464", "5699514", "4386371"],  # Erste Hilfe, Arzt
+    "haftpflicht":["8867232", "5669619", "3771836", "5669612", "4342498"],  # Beratung, Handschlag
+    "kranken":    ["7469231", "6235119", "6234616", "6235049", "6235106"],  # Arzt, Gesundheit
+    "tier":       ["7469231", "6235119", "6235114", "6235658", "6235023"],  # Tierarzt
+    "kfz":        ["1545743", "3802664", "210019",  "2116469",  "244206"],  # Autos
+    "haus":       ["1396122", "259588",  "271816",  "1571460",  "462235"],  # Häuser
+    "reise":      ["1051268", "346885",  "1285625", "1008155",  "1285629"], # Reise
+    "cyber":      ["5380642", "3861958", "4974035", "5380651",  "1181244"], # Computer, IT
+    "elektronik": ["5380642", "1181244", "3861958", "4974035",  "325153"],  # Technik
+    "gewerbe":    ["3183150", "3182812", "1181396", "3182781",  "3182759"], # Business
+    "default":    ["8441854", "3182812", "6235119", "7477711",  "5380642"], # Fallback
+}
 
-Regeln: Exakt diese Struktur (3 cards, 3 compare, 3 faq). Pexels-IDs passend zum Thema. Deutsch. Keine weiteren HTML-Tags."""
+def get_pexels_ids(filename: str) -> list[str]:
+    fn = filename.lower()
+    for key, ids in PEXELS_BY_TOPIC.items():
+        if key in fn:
+            return ids
+    return PEXELS_BY_TOPIC["default"]
+
+
+CONTENT_SCHEMA = """Antworte NUR mit einem JSON-Objekt, kein Text davor/danach, kein Markdown:
+{{"title":"Versicherungsname – Daniel Eck – Versicherungsmakler","short_title":"Versicherungsname","meta_desc":"SEO max 155 Zeichen","category":"KATEGORIE","hero_title":"Titel","hero_sub":"1-2 Sätze","trust":["Punkt1","Punkt2","Punkt3"],"intro":"2 Sätze Einleitung","cards":[{{"icon":"fa-shield","badge":"Badge","title":"Titel","desc":"Kurz","items":["Punkt1","Punkt2","Punkt3"],"alt":"Alt-Text","pexels":"{p0}"}},{{"icon":"fa-heart","badge":"Badge","title":"Titel","desc":"Kurz","items":["Punkt1","Punkt2","Punkt3"],"alt":"Alt-Text","pexels":"{p1}"}},{{"icon":"fa-star","badge":"Badge","title":"Titel","desc":"Kurz","items":["Punkt1","Punkt2","Punkt3"],"alt":"Alt-Text","pexels":"{p2}"}}],"compare":[{{"icon":"fa-list-check","title":"Titel","sub":"Sub","items":["P1","P2","P3"]}},{{"icon":"fa-euro-sign","title":"Titel","sub":"Sub","items":["P1","P2","P3"]}},{{"icon":"fa-shield","title":"Titel","sub":"Sub","items":["P1","P2","P3"]}}],"faq":[{{"q":"Frage?","a":"Antwort 1-2 Sätze."}},{{"q":"Frage?","a":"Antwort."}},{{"q":"Frage?","a":"Antwort."}}],"cta_title":"Warum X über mich?"}}
+
+Regeln: Exakt diese Struktur. Behalte die vorgegebenen Pexels-IDs. Deutsch. Keine weiteren HTML-Tags."""
 
 
 def generate_page_data(client, goal: str, filename: str) -> dict | None:
