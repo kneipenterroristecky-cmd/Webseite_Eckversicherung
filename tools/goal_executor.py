@@ -205,7 +205,7 @@ def build_html(d: dict) -> str:
       <div class="kfz-section-title">Worauf ich beim Vergleich achte</div>
       <div class="kfz-section-sub">Diese Punkte entscheiden, welchen Schutz Sie wirklich erhalten.</div>
     </div>
-    <div class="gew-grid">{compare_html()}</div>
+    <div class="kachel-grid">{compare_html()}</div>
 
     <div style="padding-top:120px;padding-bottom:120px;border-top:1px solid #e2e8f0;">
       <div class="section-label reveal" style="justify-content:center;margin-bottom:12px;"><span class="label-bar"></span><span>FAQ</span><span class="label-bar"></span></div>
