@@ -1,0 +1,151 @@
+name: 🤖 /goal – Claude Code Runner
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue-Nummer für Resume'
+        required: true
+        type: number
+      goal:
+        description: 'Goal-Text (wird erneut ausgeführt)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  goal:
+    # Nur bei /goal in Issue-Kommentaren (nicht in PR-Kommentaren) ODER bei manuellem Trigger
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event_name == 'issue_comment' &&
+        github.event.issue.state == 'open' &&
+        github.event.issue.pull_request == null &&
+        contains(github.event.comment.body, '/goal')
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      # Emoji-Reaktion auf den Kommentar (nur bei issue_comment)
+      - name: Acknowledge
+        if: github.event_name == 'issue_comment'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: context.payload.comment.id,
+              content: 'rocket'
+            });
+            // goal:retry Label entfernen falls vorhanden
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                name: 'goal:retry'
+              });
+            } catch(e) {}
+
+      # Status-Kommentar bei workflow_dispatch Resume
+      - name: Post resume notice
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.inputs.issue_number }},
+              body: '🔄 **Auto-Retry gestartet** – Claude Code versucht das Goal erneut auszuführen...'
+            });
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: ${{ github.event.inputs.issue_number }},
+                name: 'goal:retry'
+              });
+            } catch(e) {}
+
+      # Claude Code ausführen – via issue_comment Event
+      - name: Run Claude Code (Issue Comment)
+        if: github.event_name == 'issue_comment'
+        id: claude_comment
+        uses: anthropics/claude-code-action@v1
+        continue-on-error: true
+        with:
+          trigger_phrase: "/goal"
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Claude Code ausführen – via workflow_dispatch (Resume)
+      - name: Run Claude Code (Resume)
+        if: github.event_name == 'workflow_dispatch'
+        id: claude_dispatch
+        uses: anthropics/claude-code-action@v1
+        continue-on-error: true
+        with:
+          trigger_phrase: "/goal"
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: ${{ github.event.inputs.goal }}
+
+      # Bei Fehler: Label setzen + Retry-Kommentar posten
+      - name: Handle failure
+        if: |
+          (github.event_name == 'issue_comment' && steps.claude_comment.outcome == 'failure') ||
+          (github.event_name == 'workflow_dispatch' && steps.claude_dispatch.outcome == 'failure')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue_number = context.eventName === 'issue_comment'
+              ? context.issue.number
+              : ${{ github.event.inputs.issue_number || 0 }};
+
+            const goal = context.eventName === 'issue_comment'
+              ? context.payload.comment.body
+              : `/goal ${{ github.event.inputs.goal || '' }}`;
+
+            // Label hinzufügen
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue_number,
+                labels: ['goal:retry']
+              });
+            } catch(e) {}
+
+            // Retry-Kommentar posten
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: [
+                '⏸️ **Goal pausiert** – Limit erreicht oder Fehler aufgetreten.',
+                '',
+                'Der **Auto-Retry** läuft stündlich und startet automatisch neu.',
+                '',
+                '_Oder manuell neu starten:_ Einfach diesen Kommentar kopieren und neu posten:',
+                '```',
+                goal,
+                '```',
+                '',
+                `_Workflow-Log: [${context.runId}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})_`
+              ].join('\n')
+            });
