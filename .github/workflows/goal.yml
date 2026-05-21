@@ -1,21 +1,19 @@
 name: 🤖 /goal – Claude Code Runner
 
 on:
-  issue_comment:
-    types: [created]
   workflow_dispatch:
     inputs:
       goal:
-        description: 'Goal-Text'
+        description: 'Goal-Text (z.B. "Erstelle Seite Tierkrankenversicherung")'
         required: true
         type: string
       issue_number:
-        description: 'Issue-Nummer (0 = kein Issue, z.B. bei WhatsApp)'
+        description: 'Issue-Nummer (0 = neu erstellen)'
         required: false
         type: string
         default: '0'
       source:
-        description: 'Auslöser (whatsapp / issue / manual)'
+        description: 'Auslöser (whatsapp / manual)'
         required: false
         type: string
         default: 'manual'
@@ -23,313 +21,117 @@ on:
 permissions:
   contents: write
   issues: write
-  pull-requests: write
 
 jobs:
   goal:
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      (
-        github.event_name == 'issue_comment' &&
-        github.event.issue.state == 'open' &&
-        github.event.issue.pull_request == null &&
-        contains(github.event.comment.body, '/goal')
-      )
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
 
-      # ── Git für automatische Commits konfigurieren ─────────────────────
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
 
-      # ── Issue Comment: Reaktion + Label entfernen ──────────────────────
-      - name: Acknowledge (Issue)
-        if: github.event_name == 'issue_comment'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.reactions.createForIssueComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: context.payload.comment.id,
-              content: 'rocket'
-            });
-            try {
-              await github.rest.issues.removeLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                name: 'goal:retry'
-              });
-            } catch(e) {}
-
-      # ── workflow_dispatch: Tracking-Issue automatisch erstellen ────────
       - name: Create tracking issue
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.issue_number == '0'
+        if: github.event.inputs.issue_number == '0'
         id: create_issue
         uses: actions/github-script@v7
         with:
           script: |
-            const source = '${{ github.event.inputs.source }}';
             const goal = `${{ github.event.inputs.goal }}`;
-            const emoji = source === 'whatsapp' ? '📱' : '🖥️';
-
             const { data: issue } = await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `${emoji} Goal: ${goal.substring(0, 80)}`,
-              body: [
-                `**Quelle:** ${source}`,
-                `**Gestartet:** ${new Date().toISOString()}`,
-                '',
-                '**Goal:**',
-                '```',
-                goal,
-                '```',
-                '',
-                '_Dieses Issue wird automatisch geschlossen wenn das Goal erledigt ist._'
-              ].join('\n')
+              title: `🖥️ Goal: ${goal.substring(0, 75)}`,
+              body: `**Goal:** ${goal}\n\n**Gestartet:** ${new Date().toISOString()}\n\n_Wird automatisch geschlossen wenn fertig._`
             });
-
             console.log(`Issue #${issue.number} erstellt.`);
             core.setOutput('issue_number', issue.number.toString());
 
-      # ── WhatsApp: Eingangsbestätigung senden ───────────────────────────
-      - name: WhatsApp – Eingangsbestätigung
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.source == 'whatsapp'
-        run: |
-          curl -s -X POST "https://graph.facebook.com/v19.0/${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}/messages" \
-            -H "Authorization: Bearer ${{ secrets.WHATSAPP_ACCESS_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"messaging_product\": \"whatsapp\",
-              \"to\": \"${{ secrets.WHATSAPP_TO_NUMBER }}\",
-              \"type\": \"text\",
-              \"text\": {\"body\": \"🚀 *Goal gestartet:*\\n\\n_${{ github.event.inputs.goal }}_\\n\\nClaude Code arbeitet daran...\"}
-            }"
-
-      # ── workflow_dispatch (Issue-Resume): Status-Kommentar ──────────────
-      - name: Resume notice (Issue)
-        if: |
-          github.event_name == 'workflow_dispatch' &&
-          github.event.inputs.source != 'whatsapp' &&
-          github.event.inputs.issue_number != '0'
+      - name: Resume notice
+        if: github.event.inputs.issue_number != '0'
         uses: actions/github-script@v7
         with:
           script: |
+            const nr = parseInt('${{ github.event.inputs.issue_number }}');
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: parseInt('${{ github.event.inputs.issue_number }}'),
-              body: '🔄 **Auto-Retry gestartet** – Claude Code versucht das Goal erneut...'
+              issue_number: nr,
+              body: '🔄 **Auto-Retry gestartet** – wird erneut versucht...'
             });
             try {
               await github.rest.issues.removeLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: parseInt('${{ github.event.inputs.issue_number }}'),
-                name: 'goal:retry'
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: nr, name: 'goal:retry'
               });
             } catch(e) {}
 
-      # ── Claude Code ausführen (Issue Comment) ─────────────────────────
-      - name: Run Claude Code (Issue Comment)
-        if: github.event_name == 'issue_comment'
-        id: claude_comment
-        uses: anthropics/claude-code-action@v1
-        continue-on-error: true
+      - uses: actions/setup-python@v5
         with:
-          trigger_phrase: "/goal"
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          python-version: '3.12'
 
-      # ── Claude Code ausführen (workflow_dispatch) ──────────────────────
-      - name: Run Claude Code (Dispatch / WhatsApp)
-        if: github.event_name == 'workflow_dispatch'
-        id: claude_dispatch
-        uses: anthropics/claude-code-action@v1
-        continue-on-error: true
-        with:
-          trigger_phrase: "/goal"
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          prompt: ${{ github.event.inputs.goal }}
+      - name: Install dependencies
+        run: pip install anthropic --quiet
 
-      # ── Bilderkennung: Prüfen ob Agent Bilder bearbeitet hat ─────────
-      - name: Detect image changes
-        if: |
-          (github.event_name == 'workflow_dispatch' && steps.claude_dispatch.outcome == 'success') ||
-          (github.event_name == 'issue_comment' && steps.claude_comment.outcome == 'success')
-        id: detect_images
-        run: |
-          GOAL="${{ github.event.inputs.goal }}"
-          # Prüfe Goal-Text auf Bild-Keywords
-          if echo "$GOAL" | grep -iE 'bild|foto|image|img|photo|pexels|pixabay|unsplash|visuell|grafik|picture' > /dev/null 2>&1; then
-            echo "needs_review=true" >> $GITHUB_OUTPUT
-            echo "Bild-Keyword im Goal gefunden."
-            exit 0
-          fi
-          # Prüfe ob img-Tags in geänderten HTML-Dateien
-          if git diff HEAD -- '*.html' 2>/dev/null | grep -iE '^\+.*<img|^\+.*src=.*\.(jpg|jpeg|png|webp)' > /dev/null 2>&1; then
-            echo "needs_review=true" >> $GITHUB_OUTPUT
-            echo "Bild-Änderungen in HTML gefunden."
-          else
-            echo "needs_review=false" >> $GITHUB_OUTPUT
-            echo "Keine Bild-Änderungen – Review übersprungen."
-          fi
+      - name: Execute goal
+        id: execute
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GOAL: ${{ github.event.inputs.goal }}
+        run: python tools/goal_executor.py
 
-      # ── Bild-Review-Agent (nur bei Bild-Änderungen) ───────────────────
-      - name: Image Review Agent
-        if: steps.detect_images.outputs.needs_review == 'true'
-        id: image_review
-        uses: anthropics/claude-code-action@v1
-        continue-on-error: true
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          prompt: |
-            Du bist ein spezialisierter Bildprüfer für eine Versicherungswebseite (Eckversicherungen, Nürnberg).
-
-            DEINE EINZIGE AUFGABE: Prüfe die Bilder die der vorherige Agent eingefügt hat.
-
-            1. Führe aus: `git diff HEAD~1 -- '*.html'` und suche alle neuen <img> Tags und src-Attribute
-            2. Für jedes gefundene Bild prüfe:
-               - Passt es thematisch EXAKT zum Seiteninhalt?
-               - Ist es hell, lebendig, zeigt echte Situationen (keine abstrakten Stock-Fotos)?
-               - Wirkt es professionell und seriös für eine Versicherungswebseite?
-            3. Falls ein Bild NICHT passt: Ersetze es sofort mit einem besseren Pexels-Bild
-            4. Falls ALLE Bilder passen: Keine Änderung nötig
-
-            Sei extrem kurz und effizient. Lies nur die geänderten HTML-Stellen, handle nur wenn nötig.
-            Verwende immer das vorhandene Bildformat und den bestehenden CSS-Stil der Seite.
-
-      # ── Fallback: uncommitted Änderungen direkt pushen ────────────────
-      - name: Push any unpushed changes
-        if: github.event_name == 'workflow_dispatch'
+      - name: Commit and push
         run: |
           git add -A
           git diff --cached --quiet || git commit -m "goal: ${{ github.event.inputs.goal }}"
-          git push origin HEAD:master || true
+          git push origin master
 
-      # ── Erfolg: Tracking-Issue schließen ──────────────────────────────
       - name: Close tracking issue (success)
-        if: |
-          github.event_name == 'workflow_dispatch' &&
-          steps.claude_dispatch.outcome == 'success'
+        if: success()
         uses: actions/github-script@v7
         with:
           script: |
-            const issueNr = parseInt('${{ steps.create_issue.outputs.issue_number || github.event.inputs.issue_number }}');
-            if (!issueNr || issueNr === 0) return;
-
+            const nr = parseInt('${{ steps.create_issue.outputs.issue_number || github.event.inputs.issue_number }}');
+            if (!nr || nr === 0) return;
             await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNr,
-              body: '✅ **Goal erledigt!** Änderungen wurden in die Webseite committed.'
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: nr,
+              body: '✅ **Fertig!** Änderungen wurden direkt auf master committed.'
             });
             await github.rest.issues.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNr,
-              state: 'closed'
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: nr, state: 'closed'
             });
 
-      # ── WhatsApp: Erfolgs-Benachrichtigung ────────────────────────────
-      - name: WhatsApp – Erfolg
-        if: |
-          github.event_name == 'workflow_dispatch' &&
-          github.event.inputs.source == 'whatsapp' &&
-          steps.claude_dispatch.outcome == 'success'
-        run: |
-          curl -s -X POST "https://graph.facebook.com/v19.0/${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}/messages" \
-            -H "Authorization: Bearer ${{ secrets.WHATSAPP_ACCESS_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"messaging_product\": \"whatsapp\",
-              \"to\": \"${{ secrets.WHATSAPP_TO_NUMBER }}\",
-              \"type\": \"text\",
-              \"text\": {\"body\": \"✅ *Fertig!*\\n\\n_${{ github.event.inputs.goal }}_\\n\\nÄnderungen wurden in die Webseite committed.\"}
-            }"
-
-      # ── Fehlerbehandlung ───────────────────────────────────────────────
       - name: Handle failure
-        if: |
-          (github.event_name == 'issue_comment' && steps.claude_comment.outcome == 'failure') ||
-          (github.event_name == 'workflow_dispatch' && steps.claude_dispatch.outcome == 'failure')
+        if: failure()
         uses: actions/github-script@v7
-        env:
-          SOURCE: ${{ github.event.inputs.source || 'issue' }}
-          GOAL_TEXT: ${{ github.event.inputs.goal || '' }}
-          ISSUE_NR: ${{ steps.create_issue.outputs.issue_number || github.event.inputs.issue_number || '0' }}
-          WA_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
-          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
-          WA_TO: ${{ secrets.WHATSAPP_TO_NUMBER }}
         with:
           script: |
-            const source = process.env.SOURCE;
-            const goalText = process.env.GOAL_TEXT;
-            const issueNr = parseInt(process.env.ISSUE_NR || '0');
-
-            // WhatsApp-Fehler-Benachrichtigung
-            if (source === 'whatsapp') {
-              await fetch(
-                `https://graph.facebook.com/v19.0/${process.env.WA_PHONE_ID}/messages`,
-                {
-                  method: 'POST',
-                  headers: {
-                    'Authorization': `Bearer ${process.env.WA_TOKEN}`,
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                    messaging_product: 'whatsapp',
-                    to: process.env.WA_TO,
-                    type: 'text',
-                    text: { body: `⏸️ *Goal pausiert* – Limit erreicht.\n\nWird in ~1 Stunde automatisch erneut versucht.\n\nGoal: _${goalText}_` }
-                  })
-                }
-              );
-            }
-
-            // Issue-Fehler-Behandlung (jetzt auch für workflow_dispatch)
-            const issue_number = context.eventName === 'issue_comment'
-              ? context.issue.number
-              : issueNr;
-
-            if (!issue_number || issue_number === 0) return;
-
-            const goal = context.eventName === 'issue_comment'
-              ? context.payload.comment.body
-              : `/goal ${goalText}`;
-
+            const nr = parseInt('${{ steps.create_issue.outputs.issue_number || github.event.inputs.issue_number }}');
+            if (!nr || nr === 0) return;
             try {
               await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issue_number,
-                labels: ['goal:retry']
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: nr, labels: ['goal:retry']
               });
             } catch(e) {}
-
             await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issue_number,
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: nr,
               body: [
-                '⏸️ **Goal pausiert** – Limit erreicht oder Fehler aufgetreten.',
+                '⏸️ **Goal pausiert** – Fehler aufgetreten.',
                 '',
                 '**Auto-Retry** läuft stündlich automatisch.',
                 '```',
-                goal,
+                `/goal ${{ github.event.inputs.goal }}`,
                 '```',
                 `_Log: [${context.runId}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})_`
               ].join('\n')
