@@ -137,6 +137,70 @@ def main():
 
     print(f"\nFertig: {len(files_written)} Datei(en) erstellt/geändert.")
 
+    # Bild-Review wenn Bilder vorhanden
+    if re.search(r'<img\s', output, re.IGNORECASE):
+        print("\n── Bild-Review-Agent ────────────────────────────────")
+        image_review(client, files_written, response.usage)
+
+
+def image_review(client, files_written: list, prev_usage):
+    """Zweiter fokussierter API-Call: prüft nur die Bild-URLs in den erstellten Dateien."""
+
+    # Nur img-Tags aus den erstellten Dateien sammeln
+    img_snippets = []
+    for fname in files_written:
+        content = read_file(fname) or ""
+        imgs = re.findall(r'<img[^>]+src="([^"]+)"[^>]*>', content)
+        if imgs:
+            img_snippets.append(f"{fname}:\n" + "\n".join(f"  - {src}" for src in imgs))
+
+    if not img_snippets:
+        print("Keine Bilder gefunden – Review übersprungen.")
+        return
+
+    files_content = ""
+    for fname in files_written:
+        content = read_file(fname) or ""
+        if "<img" in content:
+            files_content += f"\n<file path=\"{fname}\">\n{content}\n</file>\n"
+
+    review_prompt = f"""Prüfe die Bilder in diesen Dateien für eine Versicherungswebseite.
+
+Bilder die verwendet wurden:
+{chr(10).join(img_snippets)}
+
+Kriterien:
+- Passt das Bild thematisch EXAKT zum Seiteninhalt?
+- Hell, lebendig, echte Situation (keine abstrakten Stock-Fotos)?
+- Professionell und seriös?
+
+Falls ein Bild NICHT passt: Gib die korrigierte Datei als <file path="...">...</file> Block aus.
+Falls ALLE Bilder passen: Antworte nur mit: OK
+
+{files_content}"""
+
+    review_response = client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=8192,
+        system="Du bist Bildprüfer für eine Versicherungswebseite. Antworte entweder mit 'OK' oder mit korrigierten <file path=\"...\">...</file> Blöcken. Keine Erklärungen.",
+        messages=[{"role": "user", "content": review_prompt}],
+    )
+
+    review_output = review_response.content[0].text.strip()
+    cost = (review_response.usage.input_tokens * 0.8 + review_response.usage.output_tokens * 4) / 1_000_000
+    print(f"Review-Tokens: {review_response.usage.input_tokens} input / {review_response.usage.output_tokens} output (~${cost:.4f})")
+
+    if review_output.strip().upper() == "OK":
+        print("✓ Alle Bilder geprüft und freigegeben.")
+        return
+
+    pattern = re.compile(r'<file path="([^"]+)">(.*?)</file>', re.DOTALL)
+    for match in pattern.finditer(review_output):
+        file_path = match.group(1).strip()
+        file_content = match.group(2).strip()
+        if write_file(file_path, file_content):
+            print(f"✓ Bild korrigiert in: {file_path}")
+
 
 if __name__ == "__main__":
     main()
