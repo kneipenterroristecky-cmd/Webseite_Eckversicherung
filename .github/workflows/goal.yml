@@ -44,6 +44,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
+      # ── Git für automatische Commits konfigurieren ─────────────────────
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
       # ── Issue Comment: Reaktion + Label entfernen ──────────────────────
       - name: Acknowledge (Issue)
         if: github.event_name == 'issue_comment'
