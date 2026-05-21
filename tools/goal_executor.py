@@ -413,12 +413,13 @@ def main():
 
     files_written = []
     for fname in filenames:
-        # Bereits vollständige Seite überspringen (Crash-Recovery)
-        existing = read_file(fname)
-        if existing and len(existing) > 5000 and "<!DOCTYPE html>" in existing:
-            print(f"  ↷ Übersprungen (existiert bereits): {fname}")
-            files_written.append(fname)
-            continue
+        # Bereits vollständige Seite überspringen nur bei explizitem SKIP_EXISTING=1
+        if os.environ.get("SKIP_EXISTING") == "1":
+            existing = read_file(fname)
+            if existing and len(existing) > 5000 and "<!DOCTYPE html>" in existing:
+                print(f"  ↷ Übersprungen (existiert bereits): {fname}")
+                files_written.append(fname)
+                continue
 
         print(f"\n── Generiere: {fname}")
         data = generate_page_data(client, goal, fname)
