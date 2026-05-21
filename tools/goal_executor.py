@@ -311,46 +311,10 @@ def get_filenames(client, goal: str) -> list[str]:
 
 # ── Schritt 2: Inhalt als JSON generieren ─────────────────────────────────
 
-CONTENT_SCHEMA = """Antworte mit einem einzigen JSON-Objekt (kein Markdown, kein Code-Block):
-{
-  "title": "Versicherungsname – Daniel Eck – Versicherungsmakler",
-  "short_title": "Versicherungsname",
-  "meta_desc": "SEO-Beschreibung, max 155 Zeichen",
-  "category": "KATEGORIE IN GROSSBUCHSTABEN",
-  "hero_title": "Titel mit<br>Zeilenumbruch wenn sinnvoll",
-  "hero_sub": "Untertitel-Text (1-2 Sätze)",
-  "trust": ["Vertrauenspunkt 1", "Vertrauenspunkt 2", "Vertrauenspunkt 3"],
-  "intro": "Einleitungstext (2-3 Sätze)",
-  "cards": [
-    {
-      "icon": "fa-shield",
-      "badge": "Badge-Text",
-      "title": "Karten-Titel",
-      "desc": "Kurzbeschreibung",
-      "items": ["Punkt 1 mit <strong>Fettung</strong>", "Punkt 2", "Punkt 3", "Punkt 4", "Punkt 5"],
-      "alt": "Bild-Alt-Text",
-      "pexels": "PEXELS_FOTO_ID_NUR_ZAHLEN"
-    }
-  ],
-  "compare": [
-    {
-      "icon": "fa-list-check",
-      "title": "Vergleichs-Titel",
-      "sub": "Untertitel",
-      "items": ["Punkt 1", "Punkt 2", "Punkt 3"]
-    }
-  ],
-  "faq": [
-    {"q": "Frage?", "a": "Antwort (2-3 Sätze, aus Daniel Ecks Perspektive)"}
-  ],
-  "cta_title": "Warum [Versicherung] über mich abschließen?"
-}
+CONTENT_SCHEMA = """Antworte NUR mit einem JSON-Objekt, kein Text davor/danach, kein Markdown:
+{"title":"Versicherungsname – Daniel Eck – Versicherungsmakler","short_title":"Versicherungsname","meta_desc":"SEO max 155 Zeichen","category":"KATEGORIE","hero_title":"Titel","hero_sub":"1-2 Sätze","trust":["Punkt1","Punkt2","Punkt3"],"intro":"2 Sätze Einleitung","cards":[{"icon":"fa-shield","badge":"Badge","title":"Titel","desc":"Kurz","items":["Punkt1","Punkt2","Punkt3"],"alt":"Alt-Text","pexels":"FOTO_ID"},{"icon":"fa-heart","badge":"Badge","title":"Titel","desc":"Kurz","items":["Punkt1","Punkt2","Punkt3"],"alt":"Alt-Text","pexels":"FOTO_ID"},{"icon":"fa-star","badge":"Badge","title":"Titel","desc":"Kurz","items":["Punkt1","Punkt2","Punkt3"],"alt":"Alt-Text","pexels":"FOTO_ID"}],"compare":[{"icon":"fa-list-check","title":"Titel","sub":"Sub","items":["P1","P2","P3"]},{"icon":"fa-euro-sign","title":"Titel","sub":"Sub","items":["P1","P2","P3"]},{"icon":"fa-shield","title":"Titel","sub":"Sub","items":["P1","P2","P3"]}],"faq":[{"q":"Frage?","a":"Antwort 1-2 Sätze."},{"q":"Frage?","a":"Antwort."},{"q":"Frage?","a":"Antwort."}],"cta_title":"Warum X über mich?"}
 
-Regeln:
-- Genau 3 cards, 4 compare-Einträge, 5 FAQ-Einträge
-- Pexels-IDs: echte Foto-IDs zum Thema (z.B. Tiere: 1108099, 3802664, 애237691)
-- Sprache: Deutsch, professionell, "ich prüfe für Sie"-Perspektive
-- Keine HTML-Tags außer <br> und <strong>"""
+Regeln: Exakt diese Struktur (3 cards, 3 compare, 3 faq). Pexels-IDs passend zum Thema. Deutsch. Keine weiteren HTML-Tags."""
 
 
 def generate_page_data(client, goal: str, filename: str) -> dict | None:
