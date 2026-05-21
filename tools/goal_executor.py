@@ -107,7 +107,7 @@ def generate_single_file(client, goal: str, filename: str, context: str) -> str 
     """Generiert genau eine HTML-Datei."""
     user_message = f"Erstelle NUR die Datei '{filename}'.\n\nAuftrag: {goal}\n\n{context}"
     response = client.messages.create(
-        model="claude-haiku-4-5-20251001",
+        model="claude-sonnet-4-6",
         max_tokens=8192,
         system=SYSTEM_PROMPT,
         messages=[{"role": "user", "content": user_message}],
