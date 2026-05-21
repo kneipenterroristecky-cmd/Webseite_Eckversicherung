@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
@@ -71,7 +71,17 @@
     .adv-text strong{display:block;color:#fff;font-size:14px;font-weight:700}
     .adv-text span{color:rgba(255,255,255,.55);font-size:13px}
     @media(max-width:860px){.kfz-coverage{grid-template-columns:1fr}.kfz-makler{grid-template-columns:1fr;padding:0;gap:0}.kfz-makler-photo{height:260px;min-height:unset}.kfz-makler-left{padding:28px 24px 20px}.kfz-makler-advantages{padding:0 24px 28px}}
-  </style>
+    .gew-grid{grid-template-columns:repeat(4,1fr)!important;gap:24px!important}
+    .gew-card{background:var(--navy)!important;border:none!important;border-radius:20px!important;box-shadow:0 8px 32px rgba(23,45,80,.18)!important}
+    .gew-card-header{background:transparent!important;height:auto!important;padding:28px 24px 0!important;flex-direction:column!important;gap:14px!important}
+    .gew-card-header-icon{background:rgba(255,255,255,.12)!important;color:#60a5fa!important;width:52px!important;height:52px!important;font-size:22px!important;border-radius:14px!important}
+    .gew-card-header h3{color:#fff!important;font-size:17px!important}
+    .gew-card-header p{color:rgba(255,255,255,.55)!important}
+    .gew-card-body{padding:16px 24px 28px!important}
+    .gew-list li{color:rgba(255,255,255,.85)!important}
+    .gew-icon{background:rgba(96,165,250,.25)!important;color:#60a5fa!important}
+    @media(max-width:1100px){.gew-grid{grid-template-columns:repeat(2,1fr)!important}}
+    @media(max-width:600px){.gew-grid{grid-template-columns:1fr!important}}  </style>
 </head>
 <body>
   <div class="topbar">
@@ -181,7 +191,14 @@
           <div><h3>Zugang & Anforderungen</h3><p>Für wen geeignet</p></div>
         </div>
         <div class="gew-card-body"><ul class="gew-list"><li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Für Personen ab 18 Jahren</span></li><li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Bis ins höhere Alter versicherbar</span></li><li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Vorsorge in jeder Lebenssituation</span></li></ul></div>
-      </div></div>
+      
+      <div class="gew-card reveal">
+        <div class="gew-card-header">
+          <div class="gew-card-header-icon"><i class="fas fa-handshake"></i></div>
+          <div><h3>Makler-Vorteil</h3><p>Unabhängig für Sie</p></div>
+        </div>
+        <div class="gew-card-body"><ul class="gew-list"><li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Einfache Gesundheitsfragen</span></li><li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Sofortschutz möglich</span></li><li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Würdevolle Vorsorge – ich begleite Sie</span></li></ul></div>
+      </div></div></div>
 
     <div style="padding-top:120px;padding-bottom:120px;border-top:1px solid #e2e8f0;">
       <div class="section-label reveal" style="justify-content:center;margin-bottom:12px;"><span class="label-bar"></span><span>FAQ</span><span class="label-bar"></span></div>
@@ -209,6 +226,22 @@
           </button>
           <div class="faq-a" role="region">
             <div class="faq-a-inner">Nach Mitteilung des Todesfalles wird die Leistung in der Regel innerhalb von 3-5 Werktagen ausgezahlt. Dies ist besonders wichtig, da Bestattungskosten schnell bezahlt werden müssen. Manche Versicherer ermöglichen sogar Vorauszahlungen.</div>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false">
+            <span>Was kostet die Beratung bei Daniel Eck?</span><i class="fas fa-chevron-down faq-chevron"></i>
+          </button>
+          <div class="faq-a" role="region">
+            <div class="faq-a-inner">Die Beratung ist für Sie vollständig kostenlos. Als unabhängiger Versicherungsmakler erhalte ich eine Provision vom Versicherer – für Sie entstehen keine zusätzlichen Kosten.</div>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false">
+            <span>Wie schnell kann ich einen Beratungstermin vereinbaren?</span><i class="fas fa-chevron-down faq-chevron"></i>
+          </button>
+          <div class="faq-a" role="region">
+            <div class="faq-a-inner">Einen Termin können Sie bequem online über Calendly buchen – oft noch am gleichen oder nächsten Tag. Alternativ rufen Sie mich direkt unter 0174 / 322 58 85 an.</div>
           </div>
         </div></div>
     </div>
