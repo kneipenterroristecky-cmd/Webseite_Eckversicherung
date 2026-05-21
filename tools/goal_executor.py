@@ -51,16 +51,15 @@ def build_html(d: dict) -> str:
         out = []
         for g in d.get("compare", []):
             items = "".join(
-                f'<li><div class="gew-icon"><i class="fas fa-check"></i></div><span>{it}</span></li>'
+                f'<li><div class="kachel-check"><i class="fas fa-check"></i></div><span>{it}</span></li>'
                 for it in g.get("items", [])
             )
             out.append(f"""
-      <div class="gew-card reveal">
-        <div class="gew-card-header">
-          <div class="gew-card-header-icon"><i class="fas {g.get('icon','fa-shield')}"></i></div>
-          <div><h3>{g.get('title','')}</h3><p>{g.get('sub','')}</p></div>
-        </div>
-        <div class="gew-card-body"><ul class="gew-list">{items}</ul></div>
+      <div class="kachel-card reveal">
+        <div class="kachel-icon"><i class="fas {g.get('icon','fa-shield')}"></i></div>
+        <h3>{g.get('title','')}</h3>
+        <p>{g.get('sub','')}</p>
+        <ul class="kachel-list">{items}</ul>
       </div>""")
         return "".join(out)
 
