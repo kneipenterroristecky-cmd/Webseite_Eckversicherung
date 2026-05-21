@@ -23,7 +23,9 @@ window.openGratisPaket = function() {
 (function() {
   var lastScrollY = window.scrollY;
   var gw = null;
-  var isStartPage = /\/(start\.html)?$/.test(window.location.pathname.replace(/\\/g, '/'));
+  var isStartPage = window.location.href.indexOf('start.html') !== -1
+                 || window.location.pathname === '/'
+                 || window.location.pathname.endsWith('/');
 
   document.addEventListener('DOMContentLoaded', function() {
     gw = document.getElementById('gratisFloatWrap');
