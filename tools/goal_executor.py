@@ -12,7 +12,7 @@ import anthropic
 
 REPO_ROOT = Path(".")
 TEMPLATE_FILE = "grundfaehigkeitsversicherung.html"
-MAX_TEMPLATE_LINES = 320
+MAX_TEMPLATE_LINES = 100
 
 
 def read_file(path, max_lines=None):
