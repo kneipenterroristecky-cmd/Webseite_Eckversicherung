@@ -17,6 +17,31 @@ week_of_month = (today_preview.day - 1) // 7  # 0=Woche1 … 3=Woche4
 month_topics = topics[month_key]
 topic = month_topics[week_of_month % len(month_topics)]
 
+# Bild-Duplikat-Schutz: Falls das Bild dieses Themas kürzlich schon verwendet wurde,
+# weicht der Algorithmus auf ein alternatives Thema des gleichen Monats aus.
+import glob as _glob
+def _recent_og_images(n=8):
+    posts = sorted(_glob.glob("blog/posts/*.html"), key=os.path.getmtime, reverse=True)[:n]
+    seen = set()
+    for p in posts:
+        try:
+            with open(p, encoding="utf-8") as _f:
+                m = re.search(r'<meta property="og:image" content="([^"]+)"', _f.read())
+            if m:
+                seen.add(m.group(1).split("?")[0])
+        except Exception:
+            pass
+    return seen
+
+_recent_imgs = _recent_og_images()
+for _i in range(len(month_topics)):
+    _candidate = month_topics[(week_of_month + _i) % len(month_topics)]
+    if _candidate.get("og_image", "").split("?")[0] not in _recent_imgs:
+        if _i > 0:
+            print(f"   ℹ️  Ausweichthema (Bild-Duplikat vermieden): {_candidate['title']}")
+        topic = _candidate
+        break
+
 print(f"📌 Thema diese Woche: {topic['title']}")
 
 # ── Bild-URLs aus topics.json (stabile Unsplash-CDN-URLs) ─────────────────────
