@@ -112,6 +112,11 @@ jobs:
           # Instagram-Caption für WhatsApp (Sonderzeichen escapen)
           INSTA_SAFE=$(echo "$INSTA" | tr -d '\n\r' | sed 's/"/\\"/g')
           echo "POST_INSTA=$INSTA_SAFE" >> $GITHUB_ENV
+          SUMMARY=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m.get('social_summary','')[:300])")
+          SUMMARY_SAFE=$(echo "$SUMMARY" | tr -d '\n\r')
+          echo "POST_SUMMARY=$SUMMARY_SAFE" >> $GITHUB_ENV
+          CHANGE_URL="https://github.com/${GITHUB_REPOSITORY}/actions/workflows/request-changes.yml"
+          echo "CHANGE_URL=$CHANGE_URL" >> $GITHUB_ENV
 
       - name: WhatsApp-Status-Vorlage an Daniel senden
         env:
