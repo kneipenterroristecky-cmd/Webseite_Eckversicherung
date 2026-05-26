@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sterbegeldversicherung – Daniel Eck – Versicherungsmakler</title>
+  <meta name="description" content="Sterbegeldversicherung in Schmalkalden – unabhängige Beratung durch Daniel Eck. Bestattungskosten absichern ohne Gesundheitsprüfung – ehrliche Beratung ohne Druck." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
+  <script src="https://assets.calendly.com/assets/external/widget.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    .page-hero { position: relative; overflow: hidden; background: var(--navy); }
+    .page-hero-bg { position: absolute; inset: 0; background-image: url('gespraech.png'); background-size: cover; background-position: center; opacity: .18; }
+    .page-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(23,45,80,.95) 50%, rgba(23,45,80,.5) 100%); pointer-events: none; }
+    .page-hero-split { max-width: 1200px; margin: 0 auto; padding: 88px 28px; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 320px; align-items: center; gap: 60px; min-height: 480px; }
+    .page-hero-left { display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 22px; }
+    .page-hero-title { font-size: clamp(32px, 4vw, 52px); font-weight: 900; color: #fff; letter-spacing: -.4px; margin: 0; line-height: 1.1; }
+    .page-hero-sub { font-size: 17px; color: rgba(255,255,255,.7); line-height: 1.7; margin: 0; max-width: 520px; }
+    .page-hero-trust { display: flex; flex-direction: column; gap: 10px; }
+    .page-hero-trust-item { display: flex; align-items: center; gap: 12px; font-size: 15px; color: rgba(255,255,255,.9); font-weight: 600; }
+    .page-hero-trust-icon { width: 22px; height: 22px; border-radius: 50%; background: rgba(96,165,250,.3); display: flex; align-items: center; justify-content: center; color: #60a5fa; font-size: 10px; flex-shrink: 0; }
+    .page-hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+    .page-hero-btn-primary { display: inline-flex; align-items: center; gap: 9px; background: rgb(33,103,204); color: #fff; font-size: 16px; font-weight: 700; padding: 16px 32px; border-radius: 50px; text-decoration: none; border: none; cursor: pointer; transition: background .2s, transform .2s, box-shadow .2s; box-shadow: 0 4px 20px rgba(33,103,204,.4); }
+    .page-hero-btn-primary:hover { background: #1a50c8; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(33,103,204,.5); }
+    .page-hero-btn-secondary { display: inline-flex; align-items: center; gap: 9px; background: transparent; color: #fff; font-size: 16px; font-weight: 600; padding: 15px 30px; border-radius: 50px; text-decoration: none; border: 2px solid rgba(255,255,255,.4); transition: border-color .2s, background .2s, transform .2s; }
+    .page-hero-btn-secondary:hover { border-color: #fff; background: rgba(255,255,255,.08); transform: translateY(-2px); }
+    .page-hero-photo { display: flex; align-items: center; justify-content: center; }
+    .page-hero-photo img { width: 280px; height: 280px; border-radius: 50%; object-fit: cover; object-position: center top; border: 5px solid rgba(255,255,255,.2); box-shadow: 0 20px 60px rgba(0,0,0,.4); display: block; }
+    @media (max-width: 860px) {
+      .page-hero-split { grid-template-columns: 1fr; gap: 36px; padding: 60px 24px; }
+      .page-hero-photo { display: none; }
+      .page-hero-left { align-items: center; text-align: center; }
+      .page-hero-sub { max-width: 100%; }
+      .page-hero-buttons { justify-content: center; }
+      .page-hero-trust { align-items: center; }
+    }
+    .kfz-content { max-width: 1100px; margin: 0 auto; padding: 72px 28px 96px; }
+    .kfz-intro { max-width: 700px; margin: 0 auto 72px; text-align: center; }
+    .kfz-intro p { font-size: 17px; color: var(--gray-500); line-height: 1.8; }
+    .optional-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(26,80,200,.08); border: 1px solid rgba(26,80,200,.25); color: var(--blue); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 10px; }
+    .kfz-coverage { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 72px; }
+    .cov-card { background: #fff; border: 1.5px solid var(--gray-100); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.06); display: flex; flex-direction: column; }
+    .cov-card-img { position: relative; height: 220px; overflow: hidden; }
+    .cov-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .cov-card-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(23,45,80,.45) 0%, rgba(23,45,80,0) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 16px 20px; gap: 6px; }
+    .cov-card-img-overlay .optional-badge { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.5); color: #fff; align-self: flex-start; }
+    .cov-card-title { font-size: 18px; font-weight: 900; color: #fff; line-height: 1.2; margin: 0; }
+    .cov-card-body { padding: 20px 22px 24px; flex: 1; }
+    .cov-card-desc { font-size: 13px; color: var(--gray-500); line-height: 1.6; margin-bottom: 16px; }
+    .cov-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+    .cov-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+    .cov-check { width: 22px; height: 22px; border-radius: 6px; background: rgba(26,80,200,.1); display: flex; align-items: center; justify-content: center; color: var(--blue); font-size: 11px; flex-shrink: 0; margin-top: 1px; }
+    .cov-list li strong { color: var(--navy); font-weight: 700; }
+    .kfz-section-title { font-size: 24px; font-weight: 900; color: var(--navy); margin-bottom: 8px; }
+    .kfz-section-sub { font-size: 15px; color: var(--gray-500); margin-bottom: 36px; }
+    .gew-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-bottom: 72px; }
+    .gew-card { background: #fff; border: 1.5px solid var(--gray-100); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+    .gew-card-header { background: var(--navy); padding: 20px 22px; display: flex; align-items: flex-start; gap: 14px; height: 130px; overflow: hidden; }
+    .gew-card-header-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,.12); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; flex-shrink: 0; }
+    .gew-card-header h3 { font-size: 15px; font-weight: 800; color: #fff; margin: 0; overflow-wrap: break-word; hyphens: auto; }
+    .gew-card-header p { font-size: 12px; color: rgba(255,255,255,.6); margin: 3px 0 0; }
+    .gew-card-body { padding: 18px 22px 22px; }
+    .gew-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+    .gew-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--gray-500); padding: 7px 10px; border-radius: 8px; margin: 0 -10px; }
+    .gew-icon { width: 26px; height: 26px; border-radius: 7px; background: rgba(26,80,200,.08); display: flex; align-items: center; justify-content: center; color: var(--blue); font-size: 12px; flex-shrink: 0; }
+    .kfz-makler { background: var(--navy); border-radius: 20px; padding: 0 52px 0 0; margin-bottom: 56px; display: grid; grid-template-columns: 220px 1fr 1fr; gap: 48px; align-items: stretch; overflow: hidden; }
+    .kfz-makler-photo { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; min-height: 320px; }
+    .kfz-makler-left { padding: 48px 0; }
+    .kfz-makler-left h2 { font-size: 26px; font-weight: 900; color: #fff; margin-bottom: 14px; line-height: 1.25; }
+    .kfz-makler-left p { font-size: 15px; color: rgba(255,255,255,.65); line-height: 1.7; margin-bottom: 28px; }
+    .kfz-makler-advantages { display: flex; flex-direction: column; gap: 14px; padding: 48px 0; justify-content: center; }
+    .adv-item { display: flex; align-items: center; gap: 14px; }
+    .adv-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(26,80,200,.35); display: flex; align-items: center; justify-content: center; color: #93c5fd; font-size: 16px; flex-shrink: 0; }
+    .adv-text strong { display: block; color: #fff; font-size: 14px; font-weight: 700; }
+    .adv-text span { color: rgba(255,255,255,.55); font-size: 13px; }
+    @media (max-width: 860px) {
+      .kfz-coverage { grid-template-columns: 1fr; }
+      .kfz-makler { grid-template-columns: 1fr; padding: 0; gap: 0; }
+      .kfz-makler-photo { height: 260px; min-height: unset; }
+      .kfz-makler-left { padding: 28px 24px 20px; }
+      .kfz-makler-advantages { padding: 0 24px 28px; justify-content: flex-start; }
+    }
+    @media (max-width: 768px) {
+      .kfz-content { padding: 48px 20px 64px; }
+      .kfz-intro { margin-bottom: 48px; }
+      .kfz-intro p { font-size: 15px; }
+      .kfz-coverage { gap: 20px; margin-bottom: 48px; }
+      .kfz-section-title { font-size: 20px; }
+      .gew-grid { grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 48px; }
+      .kfz-makler-left h2 { font-size: 20px; }
+    }
+    @media (max-width: 480px) {
+      .kfz-content { padding: 36px 16px 52px; }
+      .gew-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-container">
+      <div class="topbar-right"><a href="tel:+491743225885"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a><a href="mailto:daniel@eckversicherung.de"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a></div>
+    </div>
+  </div>
+
+  <header class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="start.html" class="logo"><img src="Logo Eck weis.png" alt="Daniel Eck Versicherungsmakler" class="logo-img" /><div class="logo-text"><span class="logo-name" style="color: rgb(33, 103, 204)">Daniel Eck</span><span class="logo-subtitle">Versicherungsmakler</span></div></a>
+      <nav class="nav-links" id="navLinks"><a href="private-versicherungen.html" class="nav-link active">Private Versicherungen</a><a href="gewerbliche-versicherungen.html" class="nav-link">Gewerbliche Versicherungen</a><a href="start.html#team" class="nav-link">Über uns</a><a href="faq.html" class="nav-link">FAQ</a><a href="blog/index.html" class="nav-link">Ratgeber &amp; Tipps</a><a href="onlineabschluss.html" class="btn btn-nav btn-online-abschluss"><i class="fas fa-laptop"></i> Onlineabschluss</a><button onclick="openCalendlyDirect();window._track&&_track('cta','Termin – Navbar')" class="btn btn-nav" style="background-color: rgb(33, 103, 204)">Termin buchen</button></nav>
+      <button class="hamburger" id="hamburger" aria-label="Menü"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-split">
+      <div class="page-hero-left">
+        <div class="section-label left" style="margin-bottom:4px;"><span class="label-bar short"></span><span>ALTERSVORSORGE &amp; KAPITALAUFBAU</span></div>
+        <h1 class="page-hero-title">Sterbegeldversicherung –<br>Würdevolle Vorsorge</h1>
+        <p class="page-hero-sub">Die Sterbegeldversicherung stellt sicher, dass Ihre Familie im Ernstfall nicht auf den Bestattungskosten sitzen bleibt. Eine Bestattung kostet heute durchschnittlich 8.000–12.000 € — diese Last nehmen Sie Ihren Angehörigen mit einer einfachen Absicherung ab.</p>
+        <div class="page-hero-trust">
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Ohne Gesundheitsprüfung abschließbar</div>
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Bestattungskosten vollständig abgesichert</div>
+          <div class="page-hero-trust-item"><div class="page-hero-trust-icon"><i class="fas fa-check"></i></div>Ehrliche Beratung — ohne Druck und ohne Provision-Fokus</div>
+        </div>
+        <div class="page-hero-buttons">
+          <button class="page-hero-btn-primary" onclick="openCalendlyDirect();window._track&&_track('cta','Sterbe Hero – Termin')"><i class="fas fa-calendar-check"></i> Termin buchen</button>
+          <a href="tel:+491743225885" class="page-hero-btn-secondary"><i class="fas fa-phone"></i> 0174 / 322 58 85</a>
+        </div>
+      </div>
+      <div class="page-hero-photo"><img src="Dummybild 1_rund.png" alt="Daniel Eck – Ihr Versicherungsmakler" /></div>
+    </div>
+  </section>
+
+  <div class="kfz-content">
+
+    <div class="kfz-intro reveal">
+      <p>Eine Bestattung kostet heute durchschnittlich 8.000–12.000 € — Kosten, die Hinterbliebene innerhalb weniger Tage aufbringen müssen. Die Sterbegeldversicherung leistet genau dann, wenn es drauf ankommt: sofort nach dem Todesfall, ohne Gesundheitsprüfung beim Abschluss. Als unabhängiger Versicherungsmakler berate ich Sie ehrlich darüber, ob und welche Lösung für Ihre Situation am sinnvollsten ist.</p>
+    </div>
+
+    <div class="kfz-coverage">
+
+      <div class="cov-card reveal">
+        <div class="cov-card-img">
+          <img src="https://images.unsplash.com/photo-1552641156-93ea2a5f78e2?auto=format&fit=crop&w=800&q=80" alt="Blumen – würdevolle Bestattungsvorsorge" loading="lazy" />
+          <div class="cov-card-img-overlay">
+            <div class="optional-badge" style="margin-bottom:0;"><i class="fas fa-heart"></i> Was ist das?</div>
+            <div class="cov-card-title">Bestattungskosten absichern — ohne Gesundheitsprüfung</div>
+          </div>
+        </div>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Die Sterbegeldversicherung ist eine Lebensversicherung mit kleiner Versicherungssumme, die speziell zur Deckung von Bestattungskosten gedacht ist. Sie können sie auch im hohen Alter noch abschließen.</p>
+          <ul class="cov-list">
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Keine Gesundheitsprüfung</strong> — Abschluss auch mit Vorerkrankungen möglich</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Abschluss bis 85 Jahre</strong> je nach Anbieter möglich</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Fester Monatsbeitrag</strong> — bleibt über die gesamte Laufzeit gleich</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Begünstigte frei wählbar</strong> — Auszahlung direkt an Familie</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Unabhängig von Erbmasse</strong> — kein Zugriff durch Gläubiger</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cov-card reveal">
+        <div class="cov-card-img">
+          <img src="https://images.unsplash.com/photo-1640622302099-f10b18de7b16?auto=format&fit=crop&w=800&q=80" alt="Euro-Scheine – Leistung der Sterbegeldversicherung" loading="lazy" />
+          <div class="cov-card-img-overlay">
+            <div class="optional-badge" style="margin-bottom:0;"><i class="fas fa-euro-sign"></i> Leistung</div>
+            <div class="cov-card-title">Was zahlt die Sterbegeldversicherung?</div>
+          </div>
+        </div>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Im Todesfall wird die vereinbarte Versicherungssumme sofort und unkompliziert an die begünstigten Personen ausgezahlt — in der Regel innerhalb weniger Tage.</p>
+          <ul class="cov-list">
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Einmalige Auszahlung</strong> der Versicherungssumme im Todesfall</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Typische Summen</strong> zwischen 3.000 € und 15.000 €</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Schnelle Auszahlung</strong> — direkt an Bestattungsunternehmen oder Familie</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Alle Bestattungskosten</strong> inkl. Grabstein, Feier und Trauerdruck abgedeckt</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Keine Verwendungspflicht</strong> — Begünstigte entscheiden frei über das Geld</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cov-card reveal">
+        <div class="cov-card-img">
+          <img src="https://images.unsplash.com/photo-1653656121092-33a6c3a78973?auto=format&fit=crop&w=800&q=80" alt="Ältere Person – Sterbegeldversicherung für Senioren" loading="lazy" />
+          <div class="cov-card-img-overlay">
+            <div class="optional-badge" style="margin-bottom:0;"><i class="fas fa-person-cane"></i> Für wen?</div>
+            <div class="cov-card-title">Für wen ist sie sinnvoll?</div>
+          </div>
+        </div>
+        <div class="cov-card-body">
+          <p class="cov-card-desc">Die Sterbegeldversicherung eignet sich besonders für ältere Menschen, die ihre Familie entlasten möchten — und für Personen, die keine andere Lebensversicherung mehr abschließen können.</p>
+          <ul class="cov-list">
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Ältere Menschen</strong> ab 50–60 Jahren ohne bestehenden Todesfallschutz</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Personen mit Vorerkrankungen</strong> die keine Risikolebensversicherung erhalten</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Familien</strong> die keine finanziellen Überraschungen im Trauerfall wollen</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Alleinstehende</strong> die niemanden mit den Kosten belasten wollen</span></li>
+            <li><div class="cov-check"><i class="fas fa-check"></i></div><span><strong>Eltern</strong> die sicherstellen wollen, dass Kinder nicht bezahlen müssen</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="reveal">
+      <div class="kfz-section-title">Wichtige Details &amp; Alternativen</div>
+      <div class="kfz-section-sub">Das sollten Sie wissen, bevor Sie eine Sterbegeldversicherung abschließen.</div>
+    </div>
+
+    <div class="gew-grid">
+      <div class="gew-card reveal">
+        <div class="gew-card-header"><div class="gew-card-header-icon"><i class="fas fa-heart-pulse"></i></div><div><h3>Keine Gesundheitsprüfung</h3><p>Einfacher Abschluss</p></div></div>
+        <div class="gew-card-body"><ul class="gew-list">
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Kein Arztbesuch, keine Blutuntersuchung, keine Fragebögen</span></li>
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Abschluss auch mit Diabetes, Herzerkrankung oder Krebs möglich</span></li>
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Dafür ist der Beitrag etwas höher als bei klassischen Lebensversicherungen</span></li>
+        </ul></div>
+      </div>
+      <div class="gew-card reveal">
+        <div class="gew-card-header"><div class="gew-card-header-icon"><i class="fas fa-clock"></i></div><div><h3>Sofortschutz vs. Wartezeit</h3><p>Wichtiger Unterschied</p></div></div>
+        <div class="gew-card-body"><ul class="gew-list">
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Viele Tarife haben 1–3 Jahre Wartezeit nach Abschluss</span></li>
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>In der Wartezeit: meist nur Rückzahlung der Beiträge bei Todesfall</span></li>
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Sofortschutz-Tarife zahlen ab Tag 1 — oft etwas teurer</span></li>
+        </ul></div>
+      </div>
+      <div class="gew-card reveal">
+        <div class="gew-card-header"><div class="gew-card-header-icon"><i class="fas fa-sliders"></i></div><div><h3>Versicherungssumme wählen</h3><p>Was kostet eine Bestattung?</p></div></div>
+        <div class="gew-card-body"><ul class="gew-list">
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Erdbestattung: ca. 8.000–12.000 €; Feuerbestattung ab ca. 3.000 €</span></li>
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Kosten für Grabstein, Blumen, Trauerfeier und Beisetzung einkalkulieren</span></li>
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Empfehlung: mindestens 8.000–10.000 € Versicherungssumme absichern</span></li>
+        </ul></div>
+      </div>
+      <div class="gew-card reveal">
+        <div class="gew-card-header"><div class="gew-card-header-icon"><i class="fas fa-scale-balanced"></i></div><div><h3>Alternative: Bestattungsvorsorge</h3><p>Die andere Option</p></div></div>
+        <div class="gew-card-body"><ul class="gew-list">
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Bestattungsvorsorgevertrag direkt beim Bestatter: Wünsche und Preise fixiert</span></li>
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Vorteil: Betrag wird zweckgebunden — kein Risiko der anderweitigen Verwendung</span></li>
+          <li><div class="gew-icon"><i class="fas fa-check"></i></div><span>Ich berate neutral: Versicherung oder Vorsorgevertrag — was passt besser?</span></li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div style="padding-top: 120px; padding-bottom: 120px; border-top: 1px solid #e2e8f0;">
+      <div class="section-label reveal" style="justify-content:center; margin-bottom:12px;"><span class="label-bar"></span><span>FAQ</span><span class="label-bar"></span></div>
+      <h2 class="section-title reveal" style="text-align:center; margin-bottom:36px;">Häufige Fragen zur Sterbegeldversicherung</h2>
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Wann zahlt die Sterbegeldversicherung nicht?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Innerhalb einer Wartezeit (meist 1–3 Jahre) wird bei natürlichem Tod oft nur das eingezahlte Kapital zurückgezahlt, nicht die volle Versicherungssumme. Bei Unfalltod zahlen die meisten Tarife jedoch sofort die volle Summe — auch während der Wartezeit. Es lohnt sich, Tarife mit Sofortschutz zu vergleichen.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Lohnt sich die Sterbegeldversicherung finanziell?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Rein finanziell ist die Rendite der Sterbegeldversicherung nicht das Ziel — man zahlt oft mehr ein als man herausbekommt, wenn man sehr alt wird. Der eigentliche Wert liegt im Schutz der Familie vor einer unerwarteten finanziellen Belastung in einer emotional ohnehin schweren Zeit. Wer die nötige Liquidität besitzt, kann alternativ auch einfach Geld zweckgebunden zurücklegen.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Ab welchem Alter sollte man eine Sterbegeldversicherung abschließen?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Je früher, desto günstiger der Monatsbeitrag. Viele Menschen schließen sie zwischen 55 und 70 Jahren ab, wenn das Thema akuter wird und andere Absicherungen (z. B. Risikoleben) auslaufen. Selbst mit 80 Jahren ist ein Abschluss bei vielen Anbietern noch möglich — allerdings zu höheren Beiträgen.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Kann ich die Sterbegeldversicherung kündigen?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Ja, in der Regel ist eine Kündigung jederzeit möglich. Zu Beginn erhalten Sie nur einen kleinen Rückkaufswert, da Abschlusskosten verrechnet werden. Mit zunehmender Laufzeit nähert sich der Rückkaufswert dem Fondsguthaben an. Eine Beitragsfreistellung ist oft sinnvoller als eine Kündigung.</div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q" aria-expanded="false"><span>Muss die Auszahlung für die Bestattung verwendet werden?</span><i class="fas fa-chevron-down faq-chevron"></i></button>
+          <div class="faq-a" role="region"><div class="faq-a-inner">Nein — die begünstigte Person erhält das Geld ohne Verwendungsnachweis und kann es frei einsetzen. Das ist ein Vorteil gegenüber einem Bestattungsvorsorgevertrag, der zweckgebunden ist. Wer sichergehen möchte, dass das Geld wirklich für die Bestattung verwendet wird, kann einen Vorsorgevertrag beim Bestatter in Betracht ziehen.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kfz-makler reveal">
+      <img src="Dummybild 1.png" alt="Daniel Eck – Versicherungsmakler" class="kfz-makler-photo" />
+      <div class="kfz-makler-left">
+        <h2>Würdevolle Vorsorge — ich berate Sie ehrlich und ohne Druck</h2>
+        <p>Als unabhängiger Versicherungsmakler aus Schmalkalden zeige ich Ihnen alle Optionen — Sterbegeldversicherung, Bestattungsvorsorgevertrag oder einfach angespartes Kapital. Ohne Provisionsinteresse empfehle ich nur, was wirklich zu Ihrer Situation passt.</p>
+        <a href="kontakt.html" class="btn btn-primary" style="background-color: rgb(33, 103, 204); text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">Jetzt Kontakt aufnehmen <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="kfz-makler-advantages">
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-magnifying-glass-dollar"></i></div><div class="adv-text"><strong>Unabhängiger Vergleich</strong><span>Nur Tarife mit echtem Sofortschutz oder kurzer Wartezeit</span></div></div>
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-scale-balanced"></i></div><div class="adv-text"><strong>Ehrliche Empfehlung</strong><span>Versicherung oder Vorsorgevertrag — ich zeige was passt</span></div></div>
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-heart"></i></div><div class="adv-text"><strong>Familie entlasten</strong><span>Bestattungskosten sind in Sekunden geregelt</span></div></div>
+        <div class="adv-item"><div class="adv-icon"><i class="fas fa-euro-sign"></i></div><div class="adv-text"><strong>Kostenlos für Sie</strong><span>Mein Honorar zahlt die Versicherungsgesellschaft</span></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer" id="kontakt">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="start.html" class="logo footer-logo"><div class="footer-logo-bracket"></div><div class="logo-text"><span class="logo-name">Daniel Eck</span><span class="logo-subtitle">Versicherungsmakler</span></div></a><p>Unabhängige Versicherungsberatung in 3. Generation. Persönlich, transparent und immer in Ihrem Interesse.</p><div class="footer-social"><a href="https://www.facebook.com/profile.php?id=61565584784878" target="_blank" rel="noopener" class="footer-social-btn fsb-fb" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/daniel.eck.versicherungsmakler/" target="_blank" rel="noopener" class="footer-social-btn fsb-ig" aria-label="Instagram"><i class="fab fa-instagram"></i></a></div></div>
+      <div class="footer-col"><h4>Navigation</h4><ul><li><a href="start.html#leistungen">Leistungen</a></li><li><a href="start.html#team">Über uns</a></li><li><a href="private-versicherungen.html">Private Versicherungen</a></li><li><a href="gewerbliche-versicherungen.html">Gewerbliche Versicherungen</a></li><li><a href="faq.html">FAQ</a></li><li><a href="kontakt.html">Kontakt</a></li></ul></div>
+      <div class="footer-col"><h4>Kontakt</h4><ul class="footer-contact-list"><li><i class="fas fa-phone"></i><a href="tel:+491743225885">0174 / 322 58 85</a></li><li><i class="fas fa-envelope"></i><a href="mailto:daniel@eckversicherung.de">daniel@eckversicherung.de</a></li><li><i class="fas fa-location-dot"></i><a href="https://www.google.com/maps/place/Talstra%C3%9Fe+73,+98574+Schmalkalden" target="_blank" class="maps-link">Talstraße 73<br />98574 Schmalkalden</a></li></ul></div>
+      <div class="footer-col"><h4>Schadenhotline</h4><a href="tel:+491743225885" class="schadenhotline-box" style="background-color: rgb(33, 103, 204)"><i class="fas fa-phone"></i><div><span class="sh-number">0174 / 322 58 85</span><span class="sh-label">Im Schadensfall sofort anrufen</span></div></a></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Daniel Eck – Versicherungsmakler. Alle Rechte vorbehalten.</p>
+      <div class="footer-bottom-links"><a href="datenschutz.html">Datenschutz</a><a href="impressum.html">Impressum</a><a href="erstinformation.html">Erstinformation</a><a href="#" onclick="openCookieSettings();return false;">Cookie-Einstellungen</a></div>
+    </div>
+  </footer>
+
+  <script src="script.js?v=8"></script>
+  <script src="cookie.js"></script>
+  <script src="analytics.js" defer></script>
+  <div class="mobile-cta-bar">
+    <a href="tel:+491743225885" class="mobile-cta-call"><i class="fas fa-phone"></i><span>Anrufen</span></a>
+    <a href="kontakt.html" class="mobile-cta-termin"><i class="fas fa-calendar-check"></i><span>Termin buchen</span></a>
+  </div>
+  <div class="social-peek" id="socialPeek">
+    <div id="gratisFloatWrap" class="gratis-float-wrap">
+      <button class="social-peek-btn gratis-float-btn" onclick="openGratisPaket()" aria-label="5 Tools gratis sichern"><span class="social-peek-tooltip gratis-float-tip">5 Tools gratis sichern<span class="social-peek-tooltip-arrow"></span></span><i class="fas fa-gift"></i></button>
+    </div>
+    <a href="https://www.facebook.com/profile.php?id=61565584784878" target="_blank" rel="noopener" class="social-peek-btn social-peek-fb" aria-label="Facebook"><span class="social-peek-tooltip">Auf Facebook folgen<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/daniel.eck.versicherungsmakler/" target="_blank" rel="noopener" class="social-peek-btn social-peek-ig" aria-label="Instagram"><span class="social-peek-tooltip">Auf Instagram folgen<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/491743225885" target="_blank" rel="noopener" class="social-peek-btn social-peek-wa" aria-label="WhatsApp"><span class="social-peek-tooltip">WhatsApp schreiben<span class="social-peek-tooltip-arrow"></span></span><i class="fab fa-whatsapp"></i></a>
+  </div>
+</body>
+</html>
