@@ -113,12 +113,12 @@ jobs:
           import os, html as hl, requests as req, json, re, io, base64 as b64m
           from PIL import Image
 
-          def thumb(path, w=80, h=142):
+          def thumb(path, w=150, h=267):
             try:
               img = Image.open(path).convert("RGB")
               img = img.resize((w, h), Image.Resampling.LANCZOS)
               buf = io.BytesIO()
-              img.save(buf, "JPEG", quality=20, optimize=True)
+              img.save(buf, "JPEG", quality=40, optimize=True)
               data = b64m.b64encode(buf.getvalue()).decode()
               print(f"Thumbnail {path}: {len(data)//1024}KB (base64)")
               return "data:image/jpeg;base64," + data
@@ -150,52 +150,53 @@ jobs:
           d  = hl.escape(date_de)
           fb = hl.escape(fb_text)
           ig = hl.escape(ig_text).replace("\n", "<br>")
-          img_d = f'<img src="{d_src}" width="80" height="142" style="display:block;border-radius:5px">' if d_src else '<table width="80" height="142" cellpadding="0" cellspacing="0"><tr><td style="background:#cbd5e1;border-radius:5px;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:11px;color:#94a3b8">Bild</td></tr></table>'
-          img_h = f'<img src="{h_src}" width="80" height="142" style="display:block;border-radius:5px">' if h_src else '<table width="80" height="142" cellpadding="0" cellspacing="0"><tr><td style="background:#cbd5e1;border-radius:5px;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:11px;color:#94a3b8">Bild</td></tr></table>'
+          img_d = f'<img src="{d_src}" width="150" height="267" style="display:block;border-radius:5px">' if d_src else '<table width="150" height="267" cellpadding="0" cellspacing="0"><tr><td style="background:#cbd5e1;border-radius:5px;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:11px;color:#94a3b8">Bild</td></tr></table>'
+          img_h = f'<img src="{h_src}" width="150" height="267" style="display:block;border-radius:5px">' if h_src else '<table width="150" height="267" cellpadding="0" cellspacing="0"><tr><td style="background:#cbd5e1;border-radius:5px;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:11px;color:#94a3b8">Bild</td></tr></table>'
           body = (
-            '<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#f1f5f9"><tr><td align="center">'
-            '<table width="100%" cellpadding="0" cellspacing="0" style="max-width:460px">'
+            '<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#f1f5f9" border="0"><tr><td align="center" style="padding:16px 8px">'
+            '<table width="500" align="center" cellpadding="0" cellspacing="0" border="0">'
             # Header
-            '<tr><td bgcolor="#172d50" style="padding:16px 18px;border-radius:10px 10px 0 0">'
+            '<tr><td width="500" bgcolor="#172d50" style="padding:16px 18px;border-radius:10px 10px 0 0">'
             '<p style="color:rgba(255,255,255,.5);margin:0 0 3px;font-family:Arial,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Neuer Blog-Entwurf</p>'
             f'<p style="color:#ffffff;margin:0 0 2px;font-family:Arial,sans-serif;font-size:15px;font-weight:800;line-height:1.35;word-break:break-word">{t}</p>'
             f'<p style="color:rgba(255,255,255,.45);margin:0;font-family:Arial,sans-serif;font-size:11px">{d}</p>'
             '</td></tr>'
             # Bilder nebeneinander
-            '<tr><td bgcolor="#ffffff" style="padding:12px 14px 14px;border-top:3px solid #f1f5f9">'
+            '<tr><td width="500" bgcolor="#ffffff" style="padding:12px 14px 14px;border-top:3px solid #f1f5f9">'
             '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:0 0 8px">WhatsApp-Bilder</p>'
-            '<table cellpadding="0" cellspacing="0"><tr>'
-            '<td width="88" valign="top" style="padding-right:8px">'
+            '<table cellpadding="0" cellspacing="0" border="0"><tr>'
+            '<td valign="top" style="padding-right:10px">'
             '<p style="font-family:Arial,sans-serif;font-size:10px;color:#94a3b8;margin:0 0 4px;font-weight:600;text-align:center">Daniel</p>'
             f'{img_d}</td>'
-            '<td width="88" valign="top">'
+            '<td valign="top">'
             '<p style="font-family:Arial,sans-serif;font-size:10px;color:#94a3b8;margin:0 0 4px;font-weight:600;text-align:center">Heiko</p>'
             f'{img_h}</td>'
             '</tr></table>'
             '</td></tr>'
             # Beitrags-Auszug
-            '<tr><td bgcolor="#ffffff" style="padding:10px 14px;border-top:3px solid #f1f5f9">'
+            '<tr><td width="500" bgcolor="#ffffff" style="padding:10px 14px;border-top:3px solid #f1f5f9">'
             '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px">Beitrags-Auszug</p>'
             f'<p style="font-family:Arial,sans-serif;font-size:13px;color:#374151;line-height:1.55;margin:0;word-break:break-word">{excerpt}</p>'
             '</td></tr>'
             # Facebook
-            '<tr><td bgcolor="#ffffff" style="padding:10px 14px;border-top:3px solid #f1f5f9;word-break:break-word">'
+            '<tr><td width="500" bgcolor="#ffffff" style="padding:10px 14px;border-top:3px solid #f1f5f9;word-break:break-word">'
             '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px">&#128216; Facebook</p>'
             f'<p style="font-family:Arial,sans-serif;font-size:13px;color:#1e3a5f;line-height:1.55;background:#eff6ff;padding:9px 11px;border-radius:5px;border-left:3px solid #3b82f6;margin:0;word-break:break-word">{fb}</p>'
             '</td></tr>'
             # Instagram
-            '<tr><td bgcolor="#ffffff" style="padding:10px 14px;border-top:3px solid #f1f5f9;word-break:break-word">'
+            '<tr><td width="500" bgcolor="#ffffff" style="padding:10px 14px;border-top:3px solid #f1f5f9;word-break:break-word">'
             '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px">&#128248; Instagram</p>'
             f'<p style="font-family:Arial,sans-serif;font-size:13px;color:#374151;line-height:1.55;background:#fefce8;padding:9px 11px;border-radius:5px;border-left:3px solid #eab308;margin:0;word-break:break-word">{ig}</p>'
             '</td></tr>'
             # Buttons
-            '<tr><td bgcolor="#ffffff" style="padding:10px 14px 16px;border-top:3px solid #f1f5f9;border-radius:0 0 10px 10px">'
+            '<tr><td width="500" bgcolor="#ffffff" style="padding:10px 14px 16px;border-top:3px solid #f1f5f9;border-radius:0 0 10px 10px">'
             f'<a href="{approve_url}" style="display:block;background:#16a34a;color:#ffffff;text-align:center;padding:12px 16px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:14px;font-weight:700;margin-bottom:7px">&#9989; Freigeben &amp; ver&ouml;ffentlichen</a>'
             f'<a href="{change_url}" style="display:block;background:#f59e0b;color:#ffffff;text-align:center;padding:12px 16px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:14px;font-weight:700">&#9999;&#65039; &Auml;nderung beantragen</a>'
             '</td></tr>'
             '</table>'
             '</td></tr></table>'
           )
+          print(f"E-Mail Body: {len(body)//1024}KB")
           payload = {
             "sender": {"name": "Daniel Eck Webseite", "email": "kneipenterroristecky@googlemail.com"},
             "to": [{"email": "daniel@eckversicherung.de", "name": "Daniel Eck"}],
