@@ -1,0 +1,104 @@
+name: 3 – Änderung am Blog-Entwurf beantragen
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_unsplash_id:
+        description: 'Neues Bild – Unsplash Foto-ID (z.B. photo-1552664730-d307ca884978). Leer = kein Bildwechsel.'
+        required: false
+        default: ''
+      new_title:
+        description: 'Neuer Beitragstitel. Leer = Titel bleibt.'
+        required: false
+        default: ''
+      new_summary:
+        description: 'Neuer Facebook/Instagram-Text. Leer = Text bleibt.'
+        required: false
+        default: ''
+
+jobs:
+  aendern:
+    name: Entwurf anpassen und neu rendern
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Abhängigkeiten installieren
+        run: pip install requests playwright
+
+      - name: Änderungen anwenden
+        env:
+          NEW_UNSPLASH_ID: ${{ inputs.new_unsplash_id }}
+          NEW_TITLE: ${{ inputs.new_title }}
+          NEW_SUMMARY: ${{ inputs.new_summary }}
+        run: |
+          python3 - <<'PYEOF'
+          import json, os, re, sys
+          if not os.path.exists('tools/draft_meta.json'):
+            print("Kein Entwurf gefunden – zuerst Workflow 1 ausfuehren.")
+            sys.exit(1)
+          meta = json.load(open('tools/draft_meta.json', encoding='utf-8'))
+          html_path = f"blog/posts/{meta['filename']}"
+          blog_html = open(html_path, encoding='utf-8').read()
+          changed = []
+          new_id      = os.environ.get('NEW_UNSPLASH_ID', '').strip()
+          new_title   = os.environ.get('NEW_TITLE', '').strip()
+          new_summary = os.environ.get('NEW_SUMMARY', '').strip()
+          if new_id:
+            new_url = (new_id if new_id.startswith('https://') else
+              f"https://images.unsplash.com/{new_id}?w=1200&h=630&fit=crop&auto=format")
+            meta['og_image'] = new_url
+            blog_html = re.sub(
+              r'<meta property="og:image" content="[^"]*"',
+              f'<meta property="og:image" content="{new_url}"', blog_html)
+            ig_url = re.sub(r'w=\d+&h=\d+', 'w=1080&h=1920', new_url)
+            for sf in ['social/latest-ig.html', 'social/latest-ig-heiko.html']:
+              if os.path.exists(sf):
+                s = open(sf, encoding='utf-8').read()
+                s = re.sub(r'(<img class="bg-img" src=")[^"]+(")', fr'\g<1>{ig_url}\g<2>', s)
+                open(sf, 'w', encoding='utf-8').write(s)
+            changed.append(f"Bild -> {new_id}")
+          if new_title:
+            old = meta['title']
+            meta['title'] = new_title
+            blog_html = re.sub(
+              r'<meta property="og:title" content="[^"]*"',
+              f'<meta property="og:title" content="{new_title}"', blog_html)
+            blog_html = re.sub(r'<title>[^<]*</title>',
+              f'<title>{new_title} | Daniel Eck - Versicherungsmakler</title>', blog_html)
+            blog_html = blog_html.replace(f'>{old}<', f'>{new_title}<', 2)
+            changed.append(f"Titel -> {new_title}")
+          if new_summary:
+            meta['social_summary'] = new_summary
+            meta['instagram_caption'] = new_summary
+            changed.append("Social-Text aktualisiert")
+          open(html_path, 'w', encoding='utf-8').write(blog_html)
+          json.dump(meta, open('tools/draft_meta.json', 'w', encoding='utf-8'),
+            ensure_ascii=False, indent=2)
+          print("Aenderungen:", ', '.join(changed) if changed else "keine")
+          PYEOF
+
+      - name: Playwright Chromium installieren
+        if: ${{ inputs.new_unsplash_id != '' }}
+        run: playwright install chromium --with-deps
+
+      - name: Social-Bild neu rendern
+        if: ${{ inputs.new_unsplash_id != '' }}
+        run: python tools/generate_social_image.py
+
+      - name: Änderungen committen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin master
+          git add blog/posts/ tools/draft_meta.json social/
+          TITLE=$(python3 -c "import json; print(json.load(open('tools/draft_meta.json'))['title'])")
+          git diff --staged --quiet || git commit -m "Entwurf geaendert: $TITLE"
+          git push || echo "Nichts zu pushen"
