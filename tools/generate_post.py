@@ -279,7 +279,8 @@ filename = f"{date_iso}-{meta['slug']}.html"
 post_url = f"{SITE_URL}/blog/posts/{filename}"
 
 
-social_image_url = f"{SITE_URL.rstrip('/')}/social/latest-ig.png"
+_repo = os.environ.get("GITHUB_REPOSITORY", "kneipenterroristecky-cmd/Webseite_Eckversicherung")
+social_image_url = f"https://raw.githubusercontent.com/{_repo}/master/social/latest-ig-clean.png"
 
 with open("tools/blog_post_template.html", encoding="utf-8") as f:
     template = f.read()
