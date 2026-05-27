@@ -36,7 +36,12 @@ def render(html_path, output_path, hide_cta=False):
         page = browser.new_page(viewport={"width": 1080, "height": 1920})
         page.goto(f"file://{os.path.abspath(tmp_path)}", wait_until="networkidle", timeout=30000)
         if hide_cta:
-            page.evaluate("const el = document.querySelector('.cta'); if (el) el.style.display = 'none';")
+            page.evaluate("""
+                ['.cta', '.branding', '.brand-text', '.divider'].forEach(sel => {
+                    const el = document.querySelector(sel);
+                    if (el) el.style.display = 'none';
+                });
+            """)
         page.wait_for_timeout(1500)
         page.screenshot(path=output_path, clip={"x": 0, "y": 0, "width": 1080, "height": 1920})
         browser.close()
