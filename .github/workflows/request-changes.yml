@@ -15,6 +15,11 @@ on:
         description: 'Neuer Facebook/Instagram-Text. Leer = Text bleibt.'
         required: false
         default: ''
+      suggest_new_image:
+        description: 'Automatisch ein neues passendes Bild vorschlagen (überschreibt Foto-ID oben)'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   aendern:
