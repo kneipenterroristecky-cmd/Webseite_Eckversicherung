@@ -105,6 +105,14 @@ jobs:
           msg_api   = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
           auth      = {"Authorization": f"Bearer {token}"}
 
+          import time
+          r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json={
+            "messaging_product":"whatsapp","to":wa_to,"type":"template",
+            "template":{"name":"blog_benachrichtigung","language":{"code":"de"}}})
+          print(f"Template: {r.status_code}")
+          if r.status_code < 300:
+            time.sleep(2)
+
           def upload(path):
             with open(path, "rb") as f:
               r = req.post(media_api, headers=auth,
