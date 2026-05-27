@@ -49,7 +49,7 @@ jobs:
           fi
 
           RAW_BASE="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/master/social"
-          POST_URL=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m.get('url',''))" 2>/dev/null || echo "$SITE_URL")
+          POST_URL=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m.get('post_url',''))" 2>/dev/null || echo "$SITE_URL")
 
           send_wa() {
             RESP=$(curl -s -X POST "https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages" \
