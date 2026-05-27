@@ -33,11 +33,6 @@ jobs:
           phone_id = os.environ.get("WA_PHONE_ID", "")
           wa_to    = os.environ.get("WA_TO", "")
 
-          with open("tools/draft_meta.json", encoding="utf-8") as f:
-            meta = json.load(f)
-          caption = meta.get("instagram_caption", "")
-          title   = meta.get("title", "Test")
-
           media_api = f"https://graph.facebook.com/v19.0/{phone_id}/media"
           msg_api   = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
           auth      = {"Authorization": f"Bearer {token}"}
@@ -64,10 +59,8 @@ jobs:
 
           if mid_d:
             send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
-                  "image":{"id":mid_d,"caption":caption}})
+                  "image":{"id":mid_d}})
           if mid_h:
             send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
-                  "image":{"id":mid_h,"caption":caption}})
-          send({"messaging_product":"whatsapp","to":wa_to,"type":"text",
-                "text":{"body":f"🧪 *Test erfolgreich* – Beitrag: {title}"}})
+                  "image":{"id":mid_h}})
           PYEOF
