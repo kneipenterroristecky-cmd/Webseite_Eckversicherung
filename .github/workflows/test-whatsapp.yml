@@ -63,12 +63,6 @@ jobs:
               return None
             return r.json().get("id")
 
-          def send(payload):
-            r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json=payload)
-            print(f"WA send {payload['type']}: {r.status_code}")
-            if r.status_code >= 300:
-              print(f"  ❌ {r.text[:400]}")
-
           mid_d = upload("social/latest-ig.png")
           mid_h = upload("social/latest-ig-heiko.png")
 
