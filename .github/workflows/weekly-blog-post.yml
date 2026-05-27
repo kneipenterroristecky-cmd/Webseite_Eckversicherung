@@ -47,74 +47,19 @@ jobs:
           git commit -m "Blog-Entwurf: $TITLE"
           git push
 
-      - name: GitHub Issue mit Vorschau erstellen
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+      - name: Metadaten für Benachrichtigung vorbereiten
         run: |
           TITLE=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['title'])")
-          SUMMARY=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['social_summary'])")
-          INSTA=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['instagram_caption'])")
-          FILENAME=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['filename'])")
           DATE=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['date_de'])")
-          CONTENT=$(python3 -c "
-          import json, re
-          m = json.load(open('tools/draft_meta.json'))
-          html = open(f'blog/posts/{m[\"filename\"]}').read()
-          # Nur den Inhalt zwischen blog-content div extrahieren
-          match = re.search(r'<div class=\"blog-content\">(.*?)</div>\s*<div class=\"blog-author', html, re.DOTALL)
-          if match:
-              text = match.group(1)
-              # HTML-Tags entfernen für Lesbarkeit
-              text = re.sub(r'<h2[^>]*>', '\n\n### ', text)
-              text = re.sub(r'</h2>', '', text)
-              text = re.sub(r'<li[^>]*>', '\n- ', text)
-              text = re.sub(r'<[^>]+>', '', text)
-              text = re.sub(r'\n{3,}', '\n\n', text).strip()
-              print(text[:3000])
-          ")
           APPROVE_URL="https://github.com/${GITHUB_REPOSITORY}/actions/workflows/publish-blog-post.yml"
-
-          ISSUE_URL=$(gh issue create \
-            --title "📝 Blog-Entwurf $DATE: $TITLE" \
-            --body "## 📰 Neuer Beitrag zur Freigabe: $TITLE
-
-          **Datum:** $DATE
-
-          ---
-
-          ## Beitragsinhalt (Vorschau)
-
-          $CONTENT
-
-          ---
-
-          ### 📘 Facebook-Text:
-          > $SUMMARY
-
-          ### 📸 Instagram-Caption:
-          > $INSTA
-
-          ---
-
-          ## ✅ Freigabe – ein Klick:
-
-          👉 **[$TITLE freigeben und veröffentlichen]($APPROVE_URL)**
-
-          Seite öffnet sich → **Run workflow** klicken → fertig.
-          Beitrag erscheint dann automatisch auf Webseite, Facebook & Instagram.")
-          echo "ISSUE_URL=$ISSUE_URL" >> $GITHUB_ENV
+          CHANGE_URL="https://github.com/${GITHUB_REPOSITORY}/actions/workflows/request-changes.yml"
           echo "POST_TITLE=$TITLE" >> $GITHUB_ENV
           echo "POST_DATE=$DATE" >> $GITHUB_ENV
           echo "APPROVE_URL=$APPROVE_URL" >> $GITHUB_ENV
-          # Instagram-Caption für WhatsApp (Sonderzeichen escapen)
+          echo "CHANGE_URL=$CHANGE_URL" >> $GITHUB_ENV
+          INSTA=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['instagram_caption'])")
           INSTA_SAFE=$(echo "$INSTA" | tr -d '\n\r' | sed 's/"/\\"/g')
           echo "POST_INSTA=$INSTA_SAFE" >> $GITHUB_ENV
-          SUMMARY=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m.get('social_summary','')[:300])")
-          SUMMARY_SAFE=$(echo "$SUMMARY" | tr -d '\n\r')
-          echo "POST_SUMMARY=$SUMMARY_SAFE" >> $GITHUB_ENV
-          CHANGE_URL="https://github.com/${GITHUB_REPOSITORY}/actions/workflows/request-changes.yml"
-          echo "CHANGE_URL=$CHANGE_URL" >> $GITHUB_ENV
 
       - name: WhatsApp-Status-Vorlage an Daniel senden
         env:
