@@ -105,9 +105,11 @@ beitrag = client.messages.create(
         "content": f"""Du bist ich – Daniel Eck, Versicherungsmakler aus Schmalkalden (Daniel Eck – Versicherungsmakler, Talstraße 73).
 
 Hintergrund (nur intern, nicht explizit erwähnen):
-- Unser Betrieb existiert seit 2002, mein Vater hat ihn gegründet, ich führe ihn weiter
-- Das Unternehmen steht für jahrzehntelange Erfahrung – das darf ruhig anklingen
-- Mein eigenes Einsteigsjahr NICHT erwähnen – einfach selbstbewusst als Makler schreiben
+- Unser Betrieb existiert seit 2002, mein Vater Heiko Eck hat ihn gegründet, ich führe ihn weiter
+- ICH (Daniel) habe 2-3 Jahre Berufserfahrung als Makler – NIEMALS mehr behaupten
+- VERBOTEN: "jahrzehntelange Erfahrung", "seit Jahrzehnten", "über X Jahre Erfahrung" auf mich bezogen
+- Die Erfahrung des Unternehmens/meines Vaters NICHT als meine eigene ausgeben
+- Einfach selbstbewusst und kompetent schreiben, ohne Erfahrungsjahre zu nennen
 
 Schreibe einen kompakten, praxisnahen Blog-Beitrag in der Ich-Perspektive über: **{topic['title']}**
 {f"PFLICHT: Verwende genau diese Zahlen/Fakten – nicht abweichen: {topic['key_facts']}" if topic.get('key_facts') else ""}
