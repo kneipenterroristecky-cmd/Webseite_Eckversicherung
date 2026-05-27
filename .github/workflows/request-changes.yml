@@ -127,11 +127,17 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git stash --include-untracked
           git pull --rebase origin master
+          git stash pop
           git add blog/posts/ tools/draft_meta.json social/
           TITLE=$(python3 -c "import json; print(json.load(open('tools/draft_meta.json'))['title'])")
           git diff --staged --quiet || git commit -m "Entwurf geaendert: $TITLE"
-          git push || echo "Nichts zu pushen"
+          for i in 1 2 3 4 5; do
+            git push && break
+            echo "Push-Versuch $i fehlgeschlagen, warte 15 Sekunden..."
+            sleep 15
+          done
 
       - name: Metadaten und Issue-URL vorbereiten
         env:
