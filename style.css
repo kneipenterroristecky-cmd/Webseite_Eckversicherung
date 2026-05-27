@@ -2,6 +2,12 @@
    Daniel Eck – Versicherungsmakler – Exact Recreation
    ================================================ */
 
+/* Geschenk-Button: auf allen Seiten außer start.html immer sichtbar */
+body:not(.page-start) #gratisFloatWrap {
+  max-height: 52px !important;
+  overflow: visible !important;
+}
+
 /* ---------- RESET ---------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; overflow-x: clip; max-width: 100%; }

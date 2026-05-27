@@ -1,0 +1,138 @@
+name: 🤖 /goal – Claude Code Runner
+
+on:
+  workflow_dispatch:
+    inputs:
+      goal:
+        description: 'Goal-Text (z.B. "Erstelle Seite Tierkrankenversicherung")'
+        required: true
+        type: string
+      issue_number:
+        description: 'Issue-Nummer (0 = neu erstellen)'
+        required: false
+        type: string
+        default: '0'
+      source:
+        description: 'Auslöser (whatsapp / manual)'
+        required: false
+        type: string
+        default: 'manual'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  goal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
+      - name: Create tracking issue
+        if: github.event.inputs.issue_number == '0'
+        id: create_issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const goal = `${{ github.event.inputs.goal }}`;
+            const { data: issue } = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🖥️ Goal: ${goal.substring(0, 75)}`,
+              body: `**Goal:** ${goal}\n\n**Gestartet:** ${new Date().toISOString()}\n\n_Wird automatisch geschlossen wenn fertig._`
+            });
+            console.log(`Issue #${issue.number} erstellt.`);
+            core.setOutput('issue_number', issue.number.toString());
+
+      - name: Resume notice
+        if: github.event.inputs.issue_number != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const nr = parseInt('${{ github.event.inputs.issue_number }}');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: nr,
+              body: '🔄 **Auto-Retry gestartet** – wird erneut versucht...'
+            });
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: nr, name: 'goal:retry'
+              });
+            } catch(e) {}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install anthropic --quiet
+
+      - name: Execute goal
+        id: execute
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GOAL: ${{ github.event.inputs.goal }}
+        run: python tools/goal_executor.py
+
+      - name: Commit and push
+        run: |
+          git add -A
+          git diff --cached --quiet || git commit -m "goal: ${{ github.event.inputs.goal }}"
+          git push origin master
+
+      - name: Close tracking issue (success)
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const nr = parseInt('${{ steps.create_issue.outputs.issue_number || github.event.inputs.issue_number }}');
+            if (!nr || nr === 0) return;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: nr,
+              body: '✅ **Fertig!** Änderungen wurden direkt auf master committed.'
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: nr, state: 'closed'
+            });
+
+      - name: Handle failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const nr = parseInt('${{ steps.create_issue.outputs.issue_number || github.event.inputs.issue_number }}');
+            if (!nr || nr === 0) return;
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: nr, labels: ['goal:retry']
+              });
+            } catch(e) {}
+            await github.rest.issues.createComment({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: nr,
+              body: [
+                '⏸️ **Goal pausiert** – Fehler aufgetreten.',
+                '',
+                '**Auto-Retry** läuft stündlich automatisch.',
+                '```',
+                `/goal ${{ github.event.inputs.goal }}`,
+                '```',
+                `_Log: [${context.runId}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})_`
+              ].join('\n')
+            });
