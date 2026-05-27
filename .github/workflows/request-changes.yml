@@ -176,31 +176,60 @@ jobs:
           GITHUB_RUN_ID: ${{ github.run_id }}
         run: |
           python3 - <<'PYEOF'
-          import os, html as hl, requests as req
-          title       = os.environ.get('POST_TITLE', '')
-          date        = os.environ.get('POST_DATE', '')
-          summary     = hl.escape(os.environ.get('POST_SUMMARY', ''))
-          issue_url   = os.environ.get('ISSUE_URL', '')
-          approve_url = os.environ.get('APPROVE_URL', '')
-          change_url  = os.environ.get('CHANGE_URL', '')
-          repo        = os.environ.get('GITHUB_REPOSITORY', '')
-          api_key     = os.environ.get('BREVO_API_KEY', '').strip()
-          run_id      = os.environ.get('GITHUB_RUN_ID', '')
-          # ?v= bricht Gmail-Bild-Cache auf (gleiche URL → neues Bild)
-          img = f"https://raw.githubusercontent.com/{repo}/master/social/latest-ig.png?v={run_id}"
-          t = hl.escape(title)
-          d = hl.escape(date)
+          import os, html as hl, requests as req, json, re
+          meta        = json.load(open("tools/draft_meta.json", encoding="utf-8"))
+          title       = meta.get("title", "")
+          date_de     = meta.get("date_de", "")
+          fb_text     = meta.get("social_summary", "")
+          ig_text     = meta.get("instagram_caption", "")
+          approve_url = os.environ.get("APPROVE_URL", "")
+          change_url  = os.environ.get("CHANGE_URL", "")
+          repo        = os.environ.get("GITHUB_REPOSITORY", "")
+          api_key     = os.environ.get("BREVO_API_KEY", "").strip()
+          run_id      = os.environ.get("GITHUB_RUN_ID", "")
+          daniel_img  = f"https://raw.githubusercontent.com/{repo}/master/social/latest-ig.png?v={run_id}"
+          heiko_img   = f"https://raw.githubusercontent.com/{repo}/master/social/latest-ig-heiko.png?v={run_id}"
+          blog_html = ""
+          try:
+            raw = open(f"blog/posts/{meta['filename']}", encoding="utf-8").read()
+            m = re.search(r'<div class="blog-content">(.*?)</div>\s*<div class="blog-author', raw, re.DOTALL)
+            if m:
+              c = m.group(1)
+              c = re.sub(r"<h2[^>]*>", '<p style="font-size:15px;font-weight:700;color:#172d50;margin:16px 0 6px">', c)
+              c = re.sub(r"</h2>", "</p>", c)
+              c = re.sub(r"<p[^>]*>", '<p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 10px">', c)
+              c = re.sub(r"<ul[^>]*>", '<ul style="font-size:14px;color:#374151;padding-left:20px;margin:0 0 10px">', c)
+              c = re.sub(r"<li[^>]*>", '<li style="margin-bottom:5px">', c)
+              blog_html = c.strip()
+          except Exception as e:
+            blog_html = f"<p>Fehler beim Laden: {e}</p>"
+          t  = hl.escape(title)
+          d  = hl.escape(date_de)
+          fb = hl.escape(fb_text)
+          ig = hl.escape(ig_text).replace("\n", "<br>")
+          lbl = '<p style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px">'
           body = (
-            '<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">'
+            '<div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto">'
             '<div style="background:#f59e0b;padding:24px 28px;border-radius:12px 12px 0 0">'
             '<h2 style="color:#fff;margin:0;font-size:20px">&#9999;&#65039; Aktualisierter Entwurf</h2></div>'
             '<div style="background:#fff;padding:28px;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px">'
             f'<p style="margin:0 0 4px;font-size:18px;font-weight:bold;color:#172d50">{t}</p>'
-            f'<p style="margin:0 0 20px;font-size:14px;color:#64748b">{d}</p>'
-            f'<a href="{issue_url}"><img src="{img}" alt="Social Media Bild" '
-            'style="width:100%;max-width:544px;border-radius:8px;display:block;margin:0 0 20px"/></a>'
-            f'<p style="margin:0 0 24px;font-size:14px;color:#374151;line-height:1.6;'
-            f'background:#f8fafc;padding:16px;border-radius:8px;border-left:3px solid #f59e0b">{summary}</p>'
+            f'<p style="margin:0 0 24px;font-size:14px;color:#64748b">{d}</p>'
+            f'{lbl}WhatsApp-Bilder</p>'
+            '<table style="width:100%;border-collapse:collapse;margin-bottom:28px"><tr>'
+            '<td style="width:50%;padding-right:8px;vertical-align:top">'
+            '<p style="font-size:12px;color:#64748b;margin:0 0 5px;text-align:center">Daniel</p>'
+            f'<img src="{daniel_img}" alt="Daniel" style="width:100%;border-radius:6px;display:block"></td>'
+            '<td style="width:50%;padding-left:8px;vertical-align:top">'
+            '<p style="font-size:12px;color:#64748b;margin:0 0 5px;text-align:center">Heiko</p>'
+            f'<img src="{heiko_img}" alt="Heiko" style="width:100%;border-radius:6px;display:block"></td>'
+            '</tr></table>'
+            f'{lbl}Blogbeitrag</p>'
+            f'<div style="border-left:3px solid #f59e0b;padding-left:16px;margin-bottom:28px">{blog_html}</div>'
+            f'{lbl}&#128216; Facebook</p>'
+            f'<p style="font-size:14px;color:#374151;line-height:1.6;background:#e8f0fe;padding:14px;border-radius:8px;border-left:3px solid #1a50c8;margin:0 0 20px">{fb}</p>'
+            f'{lbl}&#128248; Instagram</p>'
+            f'<p style="font-size:14px;color:#374151;line-height:1.6;background:#fef3c7;padding:14px;border-radius:8px;border-left:3px solid #f59e0b;margin:0 0 28px">{ig}</p>'
             '<table style="width:100%;border-collapse:collapse"><tr>'
             f'<td style="padding:0 6px 0 0;width:50%"><a href="{approve_url}" '
             'style="display:block;background:#16a34a;color:#fff;text-align:center;padding:14px 12px;'
@@ -211,9 +240,6 @@ jobs:
             'border-radius:8px;text-decoration:none;font-size:14px;font-weight:bold">'
             '&#9999;&#65039; Nochmal &auml;ndern</a></td>'
             '</tr></table>'
-            f'<p style="margin:20px 0 0;font-size:12px;color:#94a3b8;text-align:center">'
-            f'Vollst&auml;ndige Vorschau: <a href="{issue_url}" style="color:#172d50">'
-            'GitHub Issue &ouml;ffnen</a></p>'
             '</div></div>'
           )
           payload = {
