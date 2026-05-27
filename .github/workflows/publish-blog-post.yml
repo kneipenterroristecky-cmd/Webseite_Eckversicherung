@@ -40,31 +40,48 @@ jobs:
           WA_TO:         ${{ secrets.WHATSAPP_TO_NUMBER }}
           SITE_URL:      ${{ secrets.SITE_URL }}
         run: |
-          # Token verlängern
-          ACTIVE_TOKEN="$WA_TOKEN"
-          if [ -n "$WA_TOKEN" ] && [ -n "$WA_APP_ID" ] && [ -n "$WA_APP_SECRET" ]; then
-            FRESH=$(curl -s "https://graph.facebook.com/v19.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${WA_APP_ID}&client_secret=${WA_APP_SECRET}&fb_exchange_token=${WA_TOKEN}" \
-              | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('access_token',''))" 2>/dev/null || echo "")
-            [ -n "$FRESH" ] && ACTIVE_TOKEN="$FRESH"
-          fi
+          python3 - <<'PYEOF'
+          import os, json, requests as req
 
-          RAW_BASE="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/master/social"
-          POST_URL=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m.get('post_url',''))" 2>/dev/null || echo "$SITE_URL")
+          token    = os.environ.get("WA_TOKEN", "")
+          app_id   = os.environ.get("WA_APP_ID", "")
+          app_sec  = os.environ.get("WA_APP_SECRET", "")
+          phone_id = os.environ.get("WA_PHONE_ID", "")
+          wa_to    = os.environ.get("WA_TO", "")
+          site_url = os.environ.get("SITE_URL", "")
+          repo     = os.environ.get("GITHUB_REPOSITORY", "")
 
-          send_wa() {
-            RESP=$(curl -s -X POST "https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages" \
-              -H "Authorization: Bearer $ACTIVE_TOKEN" \
-              -H "Content-Type: application/json" \
-              -d "$1")
-            echo "$RESP"
-            echo "$RESP" | grep -q '"error"' && echo "⚠️  WhatsApp-Fehler: $RESP" || true
-          }
+          if token and app_id and app_sec:
+            try:
+              r = req.get("https://graph.facebook.com/v19.0/oauth/access_token",
+                params={"grant_type":"fb_exchange_token","client_id":app_id,
+                        "client_secret":app_sec,"fb_exchange_token":token}, timeout=15)
+              fresh = r.json().get("access_token","")
+              if fresh:
+                token = fresh
+                print("✅ Token verlängert")
+            except Exception as e:
+              print(f"⚠️  Token-Fehler: {e}")
 
-          INSTA=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m.get('instagram_caption',''))" | tr -d '\n\r' | sed 's/"/\\"/g')
+          raw_base = f"https://raw.githubusercontent.com/{repo}/master/social"
+          with open("tools/draft_meta.json", encoding="utf-8") as f:
+            meta = json.load(f)
+          caption  = meta.get("instagram_caption", "")
+          post_url = meta.get("post_url", site_url)
 
-          # Daniel-Bild
-          send_wa "{\"messaging_product\":\"whatsapp\",\"to\":\"$WA_TO\",\"type\":\"image\",\"image\":{\"link\":\"${RAW_BASE}/latest-ig.png\",\"caption\":\"$INSTA\"}}"
-          # Heiko-Bild
-          send_wa "{\"messaging_product\":\"whatsapp\",\"to\":\"$WA_TO\",\"type\":\"image\",\"image\":{\"link\":\"${RAW_BASE}/latest-ig-heiko.png\",\"caption\":\"$INSTA\"}}"
-          # Beitrags-Link
-          send_wa "{\"messaging_product\":\"whatsapp\",\"to\":\"$WA_TO\",\"type\":\"text\",\"text\":{\"body\":\"✅ *Veröffentlicht!* $POST_URL\"}}"
+          api     = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+
+          def send(payload):
+            r = req.post(api, headers=headers, json=payload)
+            print(f"WA {payload['type']}: {r.status_code}")
+            if r.status_code >= 300:
+              print(f"  ❌ {r.text[:400]}")
+
+          send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
+                "image":{"link":f"{raw_base}/latest-ig.png","caption":caption}})
+          send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
+                "image":{"link":f"{raw_base}/latest-ig-heiko.png","caption":caption}})
+          send({"messaging_product":"whatsapp","to":wa_to,"type":"text",
+                "text":{"body":f"✅ *Veröffentlicht!* {post_url}"}})
+          PYEOF
