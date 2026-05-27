@@ -146,7 +146,12 @@ if IG_USER_ID and IG_ACCESS_TOKEN:
         else:
             img_url = "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1080&h=1080&fit=crop&auto=format"
 
-        caption = meta['instagram_caption'] + "\n\n🔗 Link in Bio"
+        import re as _re
+        _cap = meta['instagram_caption']
+        _cap = _re.sub(r'#DanielEck\b', '', _cap, flags=_re.IGNORECASE)
+        _cap = _re.sub(r'\bDaniel Eck\b', '', _cap)
+        _cap = _re.sub(r' +', ' ', _cap).strip()
+        caption = _cap + "\n\n🔗 Link in Bio"
 
         # Schritt 1: Media-Container erstellen
         r1 = requests.post(
