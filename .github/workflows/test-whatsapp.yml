@@ -1,0 +1,73 @@
+name: Test – WhatsApp-Bilder senden
+
+on:
+  workflow_dispatch:
+
+jobs:
+  whatsapp-test:
+    name: Aktuelle Social-Bilder per WhatsApp senden
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Abhängigkeiten installieren
+        run: pip install requests
+
+      - name: WhatsApp-Bilder senden
+        env:
+          WA_PHONE_ID:   ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WA_TOKEN:      ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WA_TO:         ${{ secrets.WHATSAPP_TO_NUMBER }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, json, requests as req
+
+          token    = os.environ.get("WA_TOKEN", "")
+          phone_id = os.environ.get("WA_PHONE_ID", "")
+          wa_to    = os.environ.get("WA_TO", "")
+
+          with open("tools/draft_meta.json", encoding="utf-8") as f:
+            meta = json.load(f)
+          caption = meta.get("instagram_caption", "")
+          title   = meta.get("title", "Test")
+
+          media_api = f"https://graph.facebook.com/v19.0/{phone_id}/media"
+          msg_api   = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          auth      = {"Authorization": f"Bearer {token}"}
+
+          def upload(path):
+            with open(path, "rb") as f:
+              r = req.post(media_api, headers=auth,
+                data={"messaging_product": "whatsapp"},
+                files={"file": (os.path.basename(path), f, "image/png")})
+            print(f"Upload {path}: {r.status_code}")
+            if r.status_code >= 300:
+              print(f"  ❌ {r.text[:400]}")
+              return None
+            return r.json().get("id")
+
+          def send(payload):
+            r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json=payload)
+            print(f"WA send {payload['type']}: {r.status_code}")
+            if r.status_code >= 300:
+              print(f"  ❌ {r.text[:400]}")
+
+          mid_d = upload("social/latest-ig.png")
+          mid_h = upload("social/latest-ig-heiko.png")
+
+          if mid_d:
+            send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
+                  "image":{"id":mid_d,"caption":caption}})
+          if mid_h:
+            send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
+                  "image":{"id":mid_h,"caption":caption}})
+          send({"messaging_product":"whatsapp","to":wa_to,"type":"text",
+                "text":{"body":f"🧪 *Test erfolgreich* – Beitrag: {title}"}})
+          PYEOF
