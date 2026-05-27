@@ -6,7 +6,7 @@ zu social/latest-ig.png und social/latest-ig-heiko.png (1080×1920).
 import os, re, base64, requests
 from playwright.sync_api import sync_playwright
 
-def render(html_path, output_path):
+def render(html_path, output_path, hide_cta=False):
     tmp_path = html_path.replace(".html", "-render.html")
     if not os.path.exists(html_path):
         print(f"❌ Datei nicht gefunden: {html_path}")
@@ -35,6 +35,8 @@ def render(html_path, output_path):
         browser = p.chromium.launch()
         page = browser.new_page(viewport={"width": 1080, "height": 1920})
         page.goto(f"file://{os.path.abspath(tmp_path)}", wait_until="networkidle", timeout=30000)
+        if hide_cta:
+            page.evaluate("const el = document.querySelector('.cta'); if (el) el.style.display = 'none';")
         page.wait_for_timeout(1500)
         page.screenshot(path=output_path, clip={"x": 0, "y": 0, "width": 1080, "height": 1920})
         browser.close()
@@ -44,3 +46,4 @@ def render(html_path, output_path):
 
 render("social/latest-ig.html",       "social/latest-ig.png")
 render("social/latest-ig-heiko.html", "social/latest-ig-heiko.png")
+render("social/latest-ig.html",       "social/latest-ig-clean.png", hide_cta=True)
