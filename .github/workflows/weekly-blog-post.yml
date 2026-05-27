@@ -104,10 +104,22 @@ jobs:
       - name: Freigabe-E-Mail an Daniel senden
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-          GITHUB_RUN_ID: ${{ github.run_id }}
         run: |
           python3 - <<'PYEOF'
-          import os, html as hl, requests as req, json, re
+          import os, html as hl, requests as req, json, re, io, base64 as b64m
+          from PIL import Image
+
+          def thumb(path):
+            try:
+              img = Image.open(path).convert("RGB")
+              img.thumbnail((150, 267), Image.LANCZOS)
+              buf = io.BytesIO()
+              img.save(buf, "JPEG", quality=72, optimize=True)
+              return "data:image/jpeg;base64," + b64m.b64encode(buf.getvalue()).decode()
+            except Exception as e:
+              print(f"Thumbnail-Fehler: {e}")
+              return ""
+
           meta        = json.load(open("tools/draft_meta.json", encoding="utf-8"))
           title       = meta.get("title", "")
           date_de     = meta.get("date_de", "")
@@ -115,22 +127,20 @@ jobs:
           ig_text     = meta.get("instagram_caption", "")
           approve_url = os.environ.get("APPROVE_URL", "")
           change_url  = os.environ.get("CHANGE_URL", "")
-          repo        = os.environ.get("GITHUB_REPOSITORY", "")
           api_key     = os.environ.get("BREVO_API_KEY", "").strip()
-          run_id      = os.environ.get("GITHUB_RUN_ID", "")
-          daniel_img  = f"https://raw.githubusercontent.com/{repo}/master/social/latest-ig.png?v={run_id}"
-          heiko_img   = f"https://raw.githubusercontent.com/{repo}/master/social/latest-ig-heiko.png?v={run_id}"
+          d_src = thumb("social/latest-ig.png")
+          h_src = thumb("social/latest-ig-heiko.png")
           blog_html = ""
           try:
             raw = open(f"blog/posts/{meta['filename']}", encoding="utf-8").read()
             m = re.search(r'<div class="blog-content">(.*?)</div>\s*<div class="blog-author', raw, re.DOTALL)
             if m:
               c = m.group(1)
-              c = re.sub(r"<h2[^>]*>", '<p style="font-size:15px;font-weight:700;color:#172d50;margin:16px 0 6px">', c)
+              c = re.sub(r"<h2[^>]*>", '<p style="font-size:14px;font-weight:700;color:#172d50;margin:14px 0 5px">', c)
               c = re.sub(r"</h2>", "</p>", c)
-              c = re.sub(r"<p[^>]*>", '<p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 10px">', c)
-              c = re.sub(r"<ul[^>]*>", '<ul style="font-size:14px;color:#374151;padding-left:20px;margin:0 0 10px">', c)
-              c = re.sub(r"<li[^>]*>", '<li style="margin-bottom:5px">', c)
+              c = re.sub(r"<p[^>]*>", '<p style="font-size:13px;color:#374151;line-height:1.65;margin:0 0 9px">', c)
+              c = re.sub(r"<ul[^>]*>", '<ul style="font-size:13px;color:#374151;padding-left:18px;margin:0 0 9px">', c)
+              c = re.sub(r"<li[^>]*>", '<li style="margin-bottom:4px">', c)
               blog_html = c.strip()
           except Exception as e:
             blog_html = f"<p>Fehler beim Laden: {e}</p>"
@@ -138,49 +148,52 @@ jobs:
           d  = hl.escape(date_de)
           fb = hl.escape(fb_text)
           ig = hl.escape(ig_text).replace("\n", "<br>")
+          img_d = f'<img src="{d_src}" width="150" height="267" style="display:block;border-radius:6px">' if d_src else '<div style="width:150px;height:267px;background:#e2e8f0;border-radius:6px"></div>'
+          img_h = f'<img src="{h_src}" width="150" height="267" style="display:block;border-radius:6px">' if h_src else '<div style="width:150px;height:267px;background:#e2e8f0;border-radius:6px"></div>'
           body = (
-            '<div style="font-family:-apple-system,Arial,sans-serif;max-width:600px;margin:0 auto;background:#f1f5f9">'
+            '<table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9">'
+            '<tr><td align="center" style="padding:0">'
+            '<table width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%">'
             # Header
-            '<div style="background:#172d50;padding:20px 22px;border-radius:12px 12px 0 0">'
-            '<p style="color:rgba(255,255,255,.5);margin:0 0 5px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px">Neuer Blog-Entwurf</p>'
-            f'<p style="color:#fff;margin:0 0 3px;font-size:17px;font-weight:800;line-height:1.3">{t}</p>'
-            f'<p style="color:rgba(255,255,255,.45);margin:0;font-size:12px">{d}</p>'
-            '</div>'
+            '<tr><td style="background:#172d50;padding:18px 20px;border-radius:10px 10px 0 0">'
+            '<p style="color:rgba(255,255,255,.5);margin:0 0 4px;font-family:Arial,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px">Neuer Blog-Entwurf</p>'
+            f'<p style="color:#fff;margin:0 0 2px;font-family:Arial,sans-serif;font-size:16px;font-weight:800;line-height:1.3">{t}</p>'
+            f'<p style="color:rgba(255,255,255,.45);margin:0;font-family:Arial,sans-serif;font-size:11px">{d}</p>'
+            '</td></tr>'
             # Bilder
-            '<div style="background:#fff;padding:16px 18px 18px;margin-top:2px">'
-            '<p style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 10px">WhatsApp-Bilder</p>'
-            '<table style="width:100%;border-collapse:collapse"><tr>'
-            '<td style="width:50%;padding-right:5px;vertical-align:top">'
-            '<p style="font-size:11px;color:#94a3b8;margin:0 0 5px;text-align:center;font-weight:600">Daniel</p>'
-            f'<div style="height:220px;overflow:hidden;border-radius:8px;background:#f8fafc"><img src="{daniel_img}" width="100%" style="display:block"></div>'
-            '</td>'
-            '<td style="width:50%;padding-left:5px;vertical-align:top">'
-            '<p style="font-size:11px;color:#94a3b8;margin:0 0 5px;text-align:center;font-weight:600">Heiko</p>'
-            f'<div style="height:220px;overflow:hidden;border-radius:8px;background:#f8fafc"><img src="{heiko_img}" width="100%" style="display:block"></div>'
-            '</td>'
+            '<tr><td style="background:#fff;padding:14px 16px 16px;border-top:2px solid #f1f5f9">'
+            '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 10px">WhatsApp-Bilder</p>'
+            '<table width="100%" cellpadding="0" cellspacing="0"><tr>'
+            '<td width="50%" style="padding-right:6px;text-align:center;vertical-align:top">'
+            '<p style="font-family:Arial,sans-serif;font-size:10px;color:#94a3b8;margin:0 0 5px;font-weight:600">Daniel</p>'
+            f'{img_d}</td>'
+            '<td width="50%" style="padding-left:6px;text-align:center;vertical-align:top">'
+            '<p style="font-family:Arial,sans-serif;font-size:10px;color:#94a3b8;margin:0 0 5px;font-weight:600">Heiko</p>'
+            f'{img_h}</td>'
             '</tr></table>'
-            '</div>'
+            '</td></tr>'
             # Blogtext
-            '<div style="background:#fff;padding:16px 18px;margin-top:2px">'
-            '<p style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 12px">Blogbeitrag</p>'
-            f'<div style="font-size:14px;color:#374151;line-height:1.75">{blog_html}</div>'
-            '</div>'
+            '<tr><td style="background:#fff;padding:14px 16px;border-top:2px solid #f1f5f9">'
+            '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 10px">Blogbeitrag</p>'
+            f'{blog_html}'
+            '</td></tr>'
             # Facebook
-            '<div style="background:#fff;padding:14px 18px;margin-top:2px">'
-            '<p style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 8px">&#128216; Facebook</p>'
-            f'<div style="font-size:14px;color:#1e3a5f;line-height:1.65;background:#eff6ff;padding:12px 14px;border-radius:8px;border-left:3px solid #3b82f6">{fb}</div>'
-            '</div>'
+            '<tr><td style="background:#fff;padding:12px 16px;border-top:2px solid #f1f5f9">'
+            '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 7px">&#128216; Facebook</p>'
+            f'<p style="font-family:Arial,sans-serif;font-size:13px;color:#1e3a5f;line-height:1.6;background:#eff6ff;padding:10px 12px;border-radius:6px;border-left:3px solid #3b82f6;margin:0">{fb}</p>'
+            '</td></tr>'
             # Instagram
-            '<div style="background:#fff;padding:14px 18px;margin-top:2px">'
-            '<p style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 8px">&#128248; Instagram</p>'
-            f'<div style="font-size:14px;color:#374151;line-height:1.75;background:#fefce8;padding:12px 14px;border-radius:8px;border-left:3px solid #eab308">{ig}</div>'
-            '</div>'
+            '<tr><td style="background:#fff;padding:12px 16px;border-top:2px solid #f1f5f9">'
+            '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 7px">&#128248; Instagram</p>'
+            f'<p style="font-family:Arial,sans-serif;font-size:13px;color:#374151;line-height:1.6;background:#fefce8;padding:10px 12px;border-radius:6px;border-left:3px solid #eab308;margin:0">{ig}</p>'
+            '</td></tr>'
             # Buttons
-            '<div style="background:#fff;padding:14px 18px 20px;margin-top:2px;border-radius:0 0 12px 12px">'
-            f'<a href="{approve_url}" style="display:block;background:#16a34a;color:#fff;text-align:center;padding:14px 20px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:700;margin-bottom:8px">&#9989; Freigeben &amp; ver&ouml;ffentlichen</a>'
-            f'<a href="{change_url}" style="display:block;background:#f59e0b;color:#fff;text-align:center;padding:14px 20px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:700">&#9999;&#65039; &Auml;nderung beantragen</a>'
-            '</div>'
-            '</div>'
+            '<tr><td style="background:#fff;padding:12px 16px 18px;border-top:2px solid #f1f5f9;border-radius:0 0 10px 10px">'
+            f'<a href="{approve_url}" style="display:block;background:#16a34a;color:#fff;text-align:center;padding:13px 20px;border-radius:7px;text-decoration:none;font-family:Arial,sans-serif;font-size:14px;font-weight:700;margin-bottom:8px">&#9989; Freigeben &amp; ver&ouml;ffentlichen</a>'
+            f'<a href="{change_url}" style="display:block;background:#f59e0b;color:#fff;text-align:center;padding:13px 20px;border-radius:7px;text-decoration:none;font-family:Arial,sans-serif;font-size:14px;font-weight:700">&#9999;&#65039; &Auml;nderung beantragen</a>'
+            '</td></tr>'
+            '</table>'
+            '</td></tr></table>'
           )
           payload = {
             "sender": {"name": "Daniel Eck Webseite", "email": "kneipenterroristecky@googlemail.com"},
