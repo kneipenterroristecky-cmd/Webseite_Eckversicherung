@@ -127,10 +127,10 @@ jobs:
 
           if mid_d:
             send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
-                  "image":{"id":mid_d,"caption":caption}})
+                  "image":{"id":mid_d}})
           if mid_h:
             send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
-                  "image":{"id":mid_h,"caption":caption}})
+                  "image":{"id":mid_h}})
           PYEOF
 
       - name: Freigabe-E-Mail an Daniel senden
