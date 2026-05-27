@@ -128,12 +128,12 @@ jobs:
           import os, html as hl, requests as req, json, re, io, base64 as b64m
           from PIL import Image
 
-          def thumb(path, w=150, h=267):
+          def thumb(path, w=240, h=427):
             try:
               img = Image.open(path).convert("RGB")
               img = img.resize((w, h), Image.Resampling.LANCZOS)
               buf = io.BytesIO()
-              img.save(buf, "JPEG", quality=40, optimize=True)
+              img.save(buf, "JPEG", quality=55, optimize=True)
               data = b64m.b64encode(buf.getvalue()).decode()
               print(f"Thumbnail {path}: {len(data)//1024}KB (base64)")
               return "data:image/jpeg;base64," + data
