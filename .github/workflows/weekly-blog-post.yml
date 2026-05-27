@@ -99,7 +99,7 @@ jobs:
           # 2) Heiko-Bild
           send_wa "{\"messaging_product\":\"whatsapp\",\"to\":\"$WA_TO\",\"type\":\"image\",\"image\":{\"link\":\"${RAW_BASE}/latest-ig-heiko.png\",\"caption\":\"$POST_INSTA\"}}"
           # 3) Freigabe-Link
-          send_wa "{\"messaging_product\":\"whatsapp\",\"to\":\"$WA_TO\",\"type\":\"text\",\"text\":{\"body\":\"✅ *Freigabe:* $APPROVE_URL\n\nIssue: $ISSUE_URL\"}}"
+          send_wa "{\"messaging_product\":\"whatsapp\",\"to\":\"$WA_TO\",\"type\":\"text\",\"text\":{\"body\":\"✅ *Freigabe:* $APPROVE_URL\"}}"
 
       - name: Freigabe-E-Mail an Daniel senden
         env:
