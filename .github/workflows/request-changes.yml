@@ -37,7 +37,7 @@ jobs:
           python-version: '3.11'
 
       - name: Abhängigkeiten installieren
-        run: pip install requests playwright
+        run: pip install requests playwright pillow
 
       - name: Änderungen anwenden
         env:
