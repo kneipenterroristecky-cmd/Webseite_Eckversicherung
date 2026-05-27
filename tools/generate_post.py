@@ -17,30 +17,46 @@ week_of_month = (today_preview.day - 1) // 7  # 0=Woche1 … 3=Woche4
 month_topics = topics[month_key]
 topic = month_topics[week_of_month % len(month_topics)]
 
-# Bild-Duplikat-Schutz: Falls das Bild dieses Themas kürzlich schon verwendet wurde,
-# weicht der Algorithmus auf ein alternatives Thema des gleichen Monats aus.
-import glob as _glob
-def _recent_og_images(n=8):
-    posts = sorted(_glob.glob("blog/posts/*.html"), key=os.path.getmtime, reverse=True)[:n]
+# Duplikat-Schutz: Titel der letzten 4 Wochen prüfen (datum-basiert, nicht mtime)
+import glob as _glob, datetime as _dt
+
+def _recently_published_titles(weeks=4):
+    cutoff = today_preview - _dt.timedelta(weeks=weeks)
     seen = set()
-    for p in posts:
+    for p in _glob.glob("blog/posts/*.html"):
+        fn = os.path.basename(p)
+        m = re.match(r'^(\d{4}-\d{2}-\d{2})-', fn)
+        if not m:
+            continue
         try:
-            with open(p, encoding="utf-8") as _f:
-                m = re.search(r'<meta property="og:image" content="([^"]+)"', _f.read())
-            if m:
-                seen.add(m.group(1).split("?")[0])
-        except Exception:
-            pass
+            post_date = _dt.date.fromisoformat(m.group(1))
+        except ValueError:
+            continue
+        if post_date >= cutoff:
+            try:
+                with open(p, encoding="utf-8") as _f:
+                    content = _f.read()
+                om = re.search(r'<meta property="og:title" content="([^"]+)"', content)
+                if om:
+                    seen.add(om.group(1).strip())
+            except Exception:
+                pass
     return seen
 
-_recent_imgs = _recent_og_images()
+_recent_titles = _recently_published_titles(weeks=4)
 for _i in range(len(month_topics)):
     _candidate = month_topics[(week_of_month + _i) % len(month_topics)]
-    if _candidate.get("og_image", "").split("?")[0] not in _recent_imgs:
+    if _candidate['title'] not in _recent_titles:
         if _i > 0:
-            print(f"   ℹ️  Ausweichthema (Bild-Duplikat vermieden): {_candidate['title']}")
+            print(f"   ℹ️  Ausweichthema (Duplikat vermieden): {_candidate['title']}")
         topic = _candidate
         break
+else:
+    # Alle Themen dieses Monats bereits erstellt → nächsten Monat beginnen
+    next_month_key = str(today_preview.month % 12 + 1)
+    if next_month_key in topics and topics[next_month_key]:
+        topic = topics[next_month_key][0]
+        print(f"   ℹ️  Alle {month_key}er Themen genutzt → Nächster Monat: {topic['title']}")
 
 print(f"📌 Thema diese Woche: {topic['title']}")
 
