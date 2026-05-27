@@ -45,7 +45,11 @@ jobs:
           git add blog/posts/ tools/draft_meta.json social/latest-ig.html social/latest-ig.png social/latest-ig-heiko.html social/latest-ig-heiko.png
           TITLE=$(python3 -c "import json; print(json.load(open('tools/draft_meta.json'))['title'])")
           git commit -m "Blog-Entwurf: $TITLE"
-          git push
+          for i in 1 2 3 4 5; do
+            git push && break
+            echo "Push-Versuch $i fehlgeschlagen, warte 15 Sekunden..."
+            sleep 15
+          done
 
       - name: Metadaten für Benachrichtigung vorbereiten
         run: |
