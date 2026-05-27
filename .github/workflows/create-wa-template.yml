@@ -26,16 +26,7 @@ jobs:
           phone_id = os.environ["WA_PHONE_ID"]
           headers  = {"Authorization": f"Bearer {token}"}
 
-          # WABA-ID aus der Phone-Number-ID lesen
-          r = requests.get(
-            f"https://graph.facebook.com/v19.0/{phone_id}",
-            params={"fields": "whatsapp_business_account", "access_token": token}
-          )
-          print("Phone lookup:", r.status_code, r.text[:300])
-          waba_id = r.json().get("whatsapp_business_account", {}).get("id", "")
-          if not waba_id:
-            print("❌ WABA-ID nicht gefunden")
-            exit(1)
+          waba_id = "984626847600060"
           print(f"✅ WABA-ID: {waba_id}")
 
           # Template erstellen
