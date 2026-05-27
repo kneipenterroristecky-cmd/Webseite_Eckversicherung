@@ -155,7 +155,7 @@ jobs:
           approve_url = os.environ.get('APPROVE_URL', '')
           change_url  = os.environ.get('CHANGE_URL', '')
           repo        = os.environ.get('GITHUB_REPOSITORY', '')
-          api_key     = os.environ.get('BREVO_API_KEY', '')
+          api_key     = os.environ.get('BREVO_API_KEY', '').strip()
           run_id      = os.environ.get('GITHUB_RUN_ID', '')
           # ?v= bricht Gmail-Bild-Cache auf (gleiche URL → neues Bild)
           img = f"https://raw.githubusercontent.com/{repo}/master/social/latest-ig.png?v={run_id}"
