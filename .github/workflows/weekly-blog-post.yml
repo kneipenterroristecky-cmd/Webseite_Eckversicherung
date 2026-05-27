@@ -42,7 +42,7 @@ jobs:
           git stash --include-untracked
           git pull --rebase origin master
           git stash pop
-          git add blog/posts/ tools/draft_meta.json social/latest-ig.html social/latest-ig.png social/latest-ig-heiko.html social/latest-ig-heiko.png
+          git add blog/posts/ tools/draft_meta.json social/latest-ig.html social/latest-ig.png social/latest-ig-heiko.html social/latest-ig-heiko.png social/latest-ig-clean.png
           TITLE=$(python3 -c "import json; print(json.load(open('tools/draft_meta.json'))['title'])")
           git commit -m "Blog-Entwurf: $TITLE"
           for i in 1 2 3 4 5; do
