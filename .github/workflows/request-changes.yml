@@ -103,3 +103,100 @@ jobs:
           TITLE=$(python3 -c "import json; print(json.load(open('tools/draft_meta.json'))['title'])")
           git diff --staged --quiet || git commit -m "Entwurf geaendert: $TITLE"
           git push || echo "Nichts zu pushen"
+
+      - name: Metadaten und Issue-URL vorbereiten
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 - <<'PYEOF'
+          import json, os
+          m = json.load(open('tools/draft_meta.json', encoding='utf-8'))
+          summary = m.get('social_summary', '')[:300].replace('\n', ' ')
+          with open(os.environ['GITHUB_ENV'], 'a') as f:
+              f.write(f"POST_TITLE={m['title']}\n")
+              f.write(f"POST_DATE={m.get('date_de', '')}\n")
+              f.write(f"POST_SUMMARY={summary}\n")
+          PYEOF
+          ISSUE_NUM=$(gh issue list --state open --json number,title \
+            --jq '[.[] | select(.title | startswith("📝 Blog-Entwurf"))] | .[0].number' 2>/dev/null || echo "")
+          if [ -n "$ISSUE_NUM" ] && [ "$ISSUE_NUM" != "null" ]; then
+            echo "ISSUE_URL=https://github.com/${GITHUB_REPOSITORY}/issues/${ISSUE_NUM}" >> $GITHUB_ENV
+            echo "ISSUE_NUM=$ISSUE_NUM" >> $GITHUB_ENV
+          else
+            echo "ISSUE_URL=https://github.com/${GITHUB_REPOSITORY}/issues" >> $GITHUB_ENV
+            echo "ISSUE_NUM=" >> $GITHUB_ENV
+          fi
+          echo "APPROVE_URL=https://github.com/${GITHUB_REPOSITORY}/actions/workflows/publish-blog-post.yml" >> $GITHUB_ENV
+          echo "CHANGE_URL=https://github.com/${GITHUB_REPOSITORY}/actions/workflows/request-changes.yml" >> $GITHUB_ENV
+
+      - name: Issue-Kommentar mit Änderungsprotokoll
+        if: ${{ env.ISSUE_NUM != '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          CHANGED=""
+          [ -n "${{ inputs.new_unsplash_id }}" ] && CHANGED="$CHANGED\n- 🖼️ Bild geändert: \`${{ inputs.new_unsplash_id }}\`"
+          [ -n "${{ inputs.new_title }}" ]       && CHANGED="$CHANGED\n- 📝 Titel: ${{ inputs.new_title }}"
+          [ -n "${{ inputs.new_summary }}" ]     && CHANGED="$CHANGED\n- 💬 Social-Text aktualisiert"
+          printf "✏️ **Entwurf angepasst:**%b\n\n📬 Neue Vorschau-E-Mail wurde gesendet." "$CHANGED" \
+            | gh issue comment "$ISSUE_NUM" --body-file -
+
+      - name: Aktualisierte Vorschau-E-Mail senden
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, html as hl, requests as req
+          title       = os.environ.get('POST_TITLE', '')
+          date        = os.environ.get('POST_DATE', '')
+          summary     = hl.escape(os.environ.get('POST_SUMMARY', ''))
+          issue_url   = os.environ.get('ISSUE_URL', '')
+          approve_url = os.environ.get('APPROVE_URL', '')
+          change_url  = os.environ.get('CHANGE_URL', '')
+          repo        = os.environ.get('GITHUB_REPOSITORY', '')
+          api_key     = os.environ.get('BREVO_API_KEY', '')
+          run_id      = os.environ.get('GITHUB_RUN_ID', '')
+          # ?v= bricht Gmail-Bild-Cache auf (gleiche URL → neues Bild)
+          img = f"https://raw.githubusercontent.com/{repo}/master/social/latest-ig.png?v={run_id}"
+          t = hl.escape(title)
+          d = hl.escape(date)
+          body = (
+            '<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">'
+            '<div style="background:#f59e0b;padding:24px 28px;border-radius:12px 12px 0 0">'
+            '<h2 style="color:#fff;margin:0;font-size:20px">&#9999;&#65039; Aktualisierter Entwurf</h2></div>'
+            '<div style="background:#fff;padding:28px;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px">'
+            f'<p style="margin:0 0 4px;font-size:18px;font-weight:bold;color:#172d50">{t}</p>'
+            f'<p style="margin:0 0 20px;font-size:14px;color:#64748b">{d}</p>'
+            f'<a href="{issue_url}"><img src="{img}" alt="Social Media Bild" '
+            'style="width:100%;max-width:544px;border-radius:8px;display:block;margin:0 0 20px"/></a>'
+            f'<p style="margin:0 0 24px;font-size:14px;color:#374151;line-height:1.6;'
+            f'background:#f8fafc;padding:16px;border-radius:8px;border-left:3px solid #f59e0b">{summary}</p>'
+            '<table style="width:100%;border-collapse:collapse"><tr>'
+            f'<td style="padding:0 6px 0 0;width:50%"><a href="{approve_url}" '
+            'style="display:block;background:#16a34a;color:#fff;text-align:center;padding:14px 12px;'
+            'border-radius:8px;text-decoration:none;font-size:14px;font-weight:bold">'
+            '&#9989; Freigeben &amp; ver&ouml;ffentlichen</a></td>'
+            f'<td style="padding:0 0 0 6px;width:50%"><a href="{change_url}" '
+            'style="display:block;background:#f59e0b;color:#fff;text-align:center;padding:14px 12px;'
+            'border-radius:8px;text-decoration:none;font-size:14px;font-weight:bold">'
+            '&#9999;&#65039; Nochmal &auml;ndern</a></td>'
+            '</tr></table>'
+            f'<p style="margin:20px 0 0;font-size:12px;color:#94a3b8;text-align:center">'
+            f'Vollst&auml;ndige Vorschau: <a href="{issue_url}" style="color:#172d50">'
+            'GitHub Issue &ouml;ffnen</a></p>'
+            '</div></div>'
+          )
+          payload = {
+            "sender": {"name": "Daniel Eck Webseite", "email": "kneipenterroristecky@googlemail.com"},
+            "to": [{"email": "daniel@eckversicherung.de", "name": "Daniel Eck"}],
+            "subject": f"✏️ Entwurf aktualisiert: {title}",
+            "htmlContent": body
+          }
+          r = req.post("https://api.brevo.com/v3/smtp/email",
+            headers={"api-key": api_key, "Content-Type": "application/json"},
+            json=payload)
+          print(f"E-Mail Status: {r.status_code}")
+          if r.status_code >= 300:
+            print(f"Fehler: {r.text[:500]}")
+          PYEOF
