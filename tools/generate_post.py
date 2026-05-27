@@ -52,11 +52,19 @@ for _i in range(len(month_topics)):
         topic = _candidate
         break
 else:
-    # Alle Themen dieses Monats bereits erstellt → nächsten Monat beginnen
-    next_month_key = str(today_preview.month % 12 + 1)
-    if next_month_key in topics and topics[next_month_key]:
-        topic = topics[next_month_key][0]
-        print(f"   ℹ️  Alle {month_key}er Themen genutzt → Nächster Monat: {topic['title']}")
+    # Alle Themen dieses Monats bereits erstellt → vergangene Monate rückwärts durchsuchen
+    for _back in range(1, 12):
+        _past_key = str(((today_preview.month - 1 - _back) % 12) + 1)
+        if _past_key not in topics:
+            continue
+        for _pc in topics[_past_key]:
+            if _pc['title'] not in _recent_titles:
+                topic = _pc
+                print(f"   ℹ️  Alle {month_key}er Themen genutzt → Monat {_past_key}: {topic['title']}")
+                break
+        else:
+            continue
+        break
 
 print(f"📌 Thema diese Woche: {topic['title']}")
 
