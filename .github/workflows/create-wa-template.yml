@@ -1,0 +1,59 @@
+name: Einmalig – WhatsApp Template erstellen
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Abhängigkeiten installieren
+        run: pip install requests
+
+      - name: Template erstellen
+        env:
+          WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, requests
+
+          token    = os.environ["WA_TOKEN"]
+          phone_id = os.environ["WA_PHONE_ID"]
+          headers  = {"Authorization": f"Bearer {token}"}
+
+          # WABA-ID aus der Phone-Number-ID lesen
+          r = requests.get(
+            f"https://graph.facebook.com/v19.0/{phone_id}",
+            params={"fields": "whatsapp_business_account", "access_token": token}
+          )
+          print("Phone lookup:", r.status_code, r.text[:300])
+          waba_id = r.json().get("whatsapp_business_account", {}).get("id", "")
+          if not waba_id:
+            print("❌ WABA-ID nicht gefunden")
+            exit(1)
+          print(f"✅ WABA-ID: {waba_id}")
+
+          # Template erstellen
+          payload = {
+            "name": "blog_benachrichtigung",
+            "language": "de",
+            "category": "UTILITY",
+            "components": [
+              {
+                "type": "BODY",
+                "text": "Neuer Blog-Entwurf ist zur Freigabe bereit."
+              }
+            ]
+          }
+          r2 = requests.post(
+            f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+            headers={**headers, "Content-Type": "application/json"},
+            json=payload
+          )
+          print(f"Template erstellt: {r2.status_code} – {r2.text}")
+          PYEOF
