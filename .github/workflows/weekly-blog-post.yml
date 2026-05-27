@@ -21,7 +21,7 @@ jobs:
           python-version: '3.11'
 
       - name: Abhängigkeiten installieren
-        run: pip install anthropic requests playwright
+        run: pip install anthropic requests playwright pillow
 
       - name: Blog-Beitrag generieren
         env:
