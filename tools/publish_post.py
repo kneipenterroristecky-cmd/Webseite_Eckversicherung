@@ -105,7 +105,7 @@ if FB_PAGE_TOKEN and FB_PAGE_ID:
         fb_text = (
             f"💡 {meta['social_summary']}\n\n"
             f"Den vollständigen Beitrag jetzt lesen 👇\n{full_url}\n\n"
-            f"#DanielEck #Versicherungsmakler #Schmalkalden"
+            f"#Versicherungsmakler #Schmalkalden"
         )
 
         # Foto-Post mit gestaltetem Bild (kein einfacher Link-Post)
