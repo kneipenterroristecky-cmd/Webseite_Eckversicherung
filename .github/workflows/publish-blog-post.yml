@@ -63,25 +63,41 @@ jobs:
             except Exception as e:
               print(f"⚠️  Token-Fehler: {e}")
 
-          raw_base = f"https://raw.githubusercontent.com/{repo}/master/social"
           with open("tools/draft_meta.json", encoding="utf-8") as f:
             meta = json.load(f)
           caption  = meta.get("instagram_caption", "")
           post_url = meta.get("post_url", site_url)
 
-          api     = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
-          headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+          media_api = f"https://graph.facebook.com/v19.0/{phone_id}/media"
+          msg_api   = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          auth      = {"Authorization": f"Bearer {token}"}
+
+          def upload(path):
+            with open(path, "rb") as f:
+              r = req.post(media_api, headers=auth,
+                data={"messaging_product": "whatsapp"},
+                files={"file": (os.path.basename(path), f, "image/png")})
+            print(f"Upload {path}: {r.status_code}")
+            if r.status_code >= 300:
+              print(f"  ❌ {r.text[:400]}")
+              return None
+            return r.json().get("id")
 
           def send(payload):
-            r = req.post(api, headers=headers, json=payload)
-            print(f"WA {payload['type']}: {r.status_code}")
+            r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json=payload)
+            print(f"WA send {payload['type']}: {r.status_code}")
             if r.status_code >= 300:
               print(f"  ❌ {r.text[:400]}")
 
-          send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
-                "image":{"link":f"{raw_base}/latest-ig.png","caption":caption}})
-          send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
-                "image":{"link":f"{raw_base}/latest-ig-heiko.png","caption":caption}})
+          mid_d = upload("social/latest-ig.png")
+          mid_h = upload("social/latest-ig-heiko.png")
+
+          if mid_d:
+            send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
+                  "image":{"id":mid_d,"caption":caption}})
+          if mid_h:
+            send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
+                  "image":{"id":mid_h,"caption":caption}})
           send({"messaging_product":"whatsapp","to":wa_to,"type":"text",
                 "text":{"body":f"✅ *Veröffentlicht!* {post_url}"}})
           PYEOF
