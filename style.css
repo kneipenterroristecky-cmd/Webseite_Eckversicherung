@@ -1829,6 +1829,8 @@ body.nav-open .social-peek { display: none !important; }
   cursor: pointer;
   transition: all .2s;
   font-family: inherit;
+  text-transform: none;
+  letter-spacing: normal;
 }
 .cal-tab:hover { border-color: #94a3b8; color: #374151; }
 .cal-tab.active { background: rgb(26,80,200); border-color: rgb(26,80,200); color: #fff; }
