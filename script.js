@@ -277,11 +277,7 @@ var _calOpenParams = '';
 
 function showCalendlyInline() {
   document.querySelector('.funnel-modal').classList.add('funnel-modal-wide');
-  document.getElementById('funnelStepLabel').innerHTML =
-    '<div class="cal-tabs" style="margin:4px 0 0">' +
-      '<button class="cal-tab active" onclick="switchCalTab(0,this)">Daniel Eck</button>' +
-      '<button class="cal-tab cal-tab-secondary" onclick="switchCalTab(1,this)">Heiko Eck</button>' +
-    '</div>';
+  document.getElementById('funnelStepLabel').innerHTML = _calTabsHtml();
   var body = document.getElementById('funnelBody');
   body.innerHTML =
     '<div class="funnel-result">' +
