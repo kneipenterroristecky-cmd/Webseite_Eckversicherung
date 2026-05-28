@@ -332,6 +332,7 @@ function openCalendlyDirect() {
     '<div class="funnel-result">' +
       '<h3>Jetzt Termin buchen</h3>' +
       '<p>Wählen Sie einen freien Slot – kostenlos &amp; unverbindlich.</p>' +
+      '<div class="cal-tabs"><button class="cal-tab active" onclick="switchCalTab(0,this)">Daniel Eck</button><button class="cal-tab cal-tab-secondary" onclick="switchCalTab(1,this)">Heiko Eck</button></div>' +
       '<div id="calendlyInline"></div>' +
     '</div>';
 
