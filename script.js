@@ -329,13 +329,14 @@ function openCalendlyDirect() {
   window.scrollTo(0, savedScroll);
 
   document.getElementById('funnelBar').style.width = '100%';
-  document.getElementById('funnelStepLabel').textContent = 'Wählen Sie Ihren Wunschtermin';
+  document.getElementById('funnelStepLabel').innerHTML =
+    '<div class="cal-tabs" style="margin:4px 0 0">' +
+      '<button class="cal-tab active" onclick="switchCalTab(0,this)">Daniel Eck</button>' +
+      '<button class="cal-tab cal-tab-secondary" onclick="switchCalTab(1,this)">Heiko Eck</button>' +
+    '</div>';
 
   document.getElementById('funnelBody').innerHTML =
     '<div class="funnel-result">' +
-      '<h3>Jetzt Termin buchen</h3>' +
-      '<p>Wählen Sie einen freien Slot – kostenlos &amp; unverbindlich.</p>' +
-      '<div class="cal-tabs"><button class="cal-tab active" onclick="switchCalTab(0,this)">Daniel Eck</button><button class="cal-tab cal-tab-secondary" onclick="switchCalTab(1,this)">Heiko Eck</button></div>' +
       '<div id="calendlyInline"></div>' +
     '</div>';
 
