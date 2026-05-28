@@ -384,6 +384,16 @@ function closeFunnelOutside(e) {
   if (e.target.id === 'funnelOverlay') closeFunnel();
 }
 
+function switchCalTab(idx, btn) {
+  document.querySelectorAll('.cal-tab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  var container = document.getElementById('calendlyInline');
+  container.innerHTML = '';
+  if (!window.Calendly) return;
+  var base = idx === 1 ? HEIKO_CALENDLY : 'https://calendly.com/eckversicherung/30min';
+  Calendly.initInlineWidget({ url: base + _calOpenParams, parentElement: container });
+}
+
 function renderFunnelStep() {
   var total = funnelSteps.length;
   var bar = document.getElementById('funnelBar');
