@@ -1810,6 +1810,30 @@ body.nav-open .social-peek { display: none !important; }
   box-shadow: none;
 }
 
+/* Berater-Tabs (Daniel / Heiko) */
+.cal-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 0 auto 14px;
+  max-width: 360px;
+}
+.cal-tab {
+  flex: 1;
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
+  background: #fff;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: inherit;
+}
+.cal-tab:hover { border-color: #94a3b8; color: #374151; }
+.cal-tab.active { background: rgb(26,80,200); border-color: rgb(26,80,200); color: #fff; }
+.cal-tab-secondary:not(.active) { opacity: .6; font-size: 12px; }
+
 /* Final step */
 .funnel-result {
   text-align: center;
