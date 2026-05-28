@@ -325,11 +325,7 @@ function openCalendlyDirect() {
   window.scrollTo(0, savedScroll);
 
   document.getElementById('funnelBar').style.width = '100%';
-  document.getElementById('funnelStepLabel').innerHTML =
-    '<div class="cal-tabs" style="margin:4px 0 0">' +
-      '<button class="cal-tab active" onclick="switchCalTab(0,this)">Daniel Eck</button>' +
-      '<button class="cal-tab cal-tab-secondary" onclick="switchCalTab(1,this)">Heiko Eck</button>' +
-    '</div>';
+  document.getElementById('funnelStepLabel').innerHTML = _calTabsHtml();
 
   document.getElementById('funnelBody').innerHTML =
     '<div class="funnel-result">' +
