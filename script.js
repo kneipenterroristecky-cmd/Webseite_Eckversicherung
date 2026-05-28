@@ -306,6 +306,7 @@ function showCalendlyInline() {
     if (funnelContact.name)  params += '&name='  + encodeURIComponent(funnelContact.name);
     if (funnelContact.email) params += '&email=' + encodeURIComponent(funnelContact.email);
     params += '&a1=' + encodeURIComponent(notes.trim());
+    _calOpenParams = params;
 
     Calendly.initInlineWidget({
       url: 'https://calendly.com/eckversicherung/30min' + params,
