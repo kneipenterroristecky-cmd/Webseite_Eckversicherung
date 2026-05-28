@@ -380,6 +380,7 @@ function openFunnel() {
 function closeFunnel() {
   document.getElementById('funnelOverlay').classList.remove('open');
   document.querySelector('.funnel-modal').classList.remove('funnel-modal-wide');
+  document.getElementById('funnelStepLabel').innerHTML = '';
   document.body.style.overflow = '';
   document.documentElement.style.overflow = '';
 }
