@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BKV-Kampagne – Firmenliste Südthüringen</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8fafc; color: #1e293b; }
+
+    header {
+      background: #1e3a5f;
+      color: white;
+      padding: 24px 40px;
+    }
+    header h1 { font-size: 22px; font-weight: 700; }
+    header p { font-size: 14px; opacity: 0.75; margin-top: 4px; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 10px;
+      padding: 18px 20px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+    .stat-card .num { font-size: 28px; font-weight: 700; color: #1e3a5f; }
+    .stat-card .label { font-size: 13px; color: #64748b; margin-top: 4px; }
+
+    .anleitung {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+    .anleitung h3 { font-size: 15px; font-weight: 600; color: #1e40af; margin-bottom: 12px; }
+    .anleitung ol { padding-left: 20px; }
+    .anleitung li { font-size: 14px; color: #1e40af; line-height: 1.8; }
+    .anleitung code { background: #dbeafe; padding: 1px 6px; border-radius: 4px; font-family: monospace; font-size: 13px; }
+
+    .dsgvo {
+      background: #fefce8;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 14px 20px;
+      margin-bottom: 32px;
+      font-size: 13px;
+      color: #78350f;
+    }
+    .dsgvo strong { color: #92400e; }
+
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; font-size: 14px; }
+    thead tr { background: #1e3a5f; color: white; }
+    thead th { padding: 12px 14px; text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    tbody tr { border-bottom: 1px solid #f1f5f9; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f8fafc; }
+    tbody td { padding: 12px 14px; vertical-align: top; }
+
+    .badge-ma {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .ansprechpartner-known { color: #16a34a; font-weight: 600; }
+    .ansprechpartner-unknown { color: #f59e0b; font-style: italic; }
+
+    .status-cell { text-align: center; }
+    .status-cell input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #1e3a5f;
+    }
+
+    .link a { color: #2563eb; text-decoration: none; font-size: 13px; }
+    .link a:hover { text-decoration: underline; }
+
+    .notiz textarea {
+      width: 100%;
+      min-width: 120px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 12px;
+      resize: vertical;
+      font-family: inherit;
+      color: #475569;
+      background: #f8fafc;
+    }
+
+    .priority-high { border-left: 3px solid #16a34a; }
+    .priority-mid  { border-left: 3px solid #f59e0b; }
+
+    .legend {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      align-items: center;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 12px; height: 12px; border-radius: 2px; }
+    .dot-green { background: #16a34a; }
+    .dot-yellow { background: #f59e0b; }
+
+    .section-title { font-size: 16px; font-weight: 700; color: #1e3a5f; margin-bottom: 12px; }
+
+    @media (max-width: 900px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      table { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>BKV-Akquisekampagne – Firmenliste Südthüringen</h1>
+  <p>Daniel Eck Versicherungsmakler · Umkreis 50 km Schmalkalden · Stand Mai 2026</p>
+</header>
+
+<div class="container">
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="num">10</div>
+      <div class="label">Ziel-Firmen</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">~3.200</div>
+      <div class="label">Potenzielle Versicherte</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">2</div>
+      <div class="label">Kontakte bekannt</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="gesendete">0</div>
+      <div class="label">Mails versendet</div>
+    </div>
+  </div>
+
+  <div class="anleitung">
+    <h3>Versandanleitung: Word-Seriendruck über Outlook 2019</h3>
+    <ol>
+      <li>Öffne <code>kontakte.csv</code> in Excel → speichere als <code>.xlsx</code></li>
+      <li>Öffne <code>email-vorlage.txt</code> → kopiere den Text in ein neues Word-Dokument</li>
+      <li>Word: <code>Sendungen → Seriendruck starten → E-Mail-Nachrichten</code></li>
+      <li>Word: <code>Empfänger auswählen → Vorhandene Liste verwenden</code> → kontakte.xlsx wählen</li>
+      <li>Seriendruckfelder einfügen: Cursor auf <code>«Anrede»</code> stellen → <code>Seriendruckfeld einfügen</code> klicken</li>
+      <li>Word: <code>Vorschau Ergebnisse</code> prüfen – sehen alle Mails gut aus?</li>
+      <li>Word: <code>Fertig stellen und zusammenführen → E-Mail-Nachrichten senden</code></li>
+      <li>Betreff eingeben: <code>Betriebliche Krankenversicherung für [Firma] – attraktives Benefit für Ihre Mitarbeiter</code></li>
+    </ol>
+  </div>
+
+  <div class="dsgvo">
+    <strong>DSGVO-Hinweis:</strong> B2B-Kaltakquise per E-Mail ist in Deutschland bei berechtigtem Interesse zulässig (§ 7 Abs. 3 UWG).
+    Die Vorlage enthält bereits den Abmelde-Satz im Footer. Bitte keine Privatpersonen anschreiben.
+  </div>
+
+  <div class="section-title">Ziel-Unternehmen</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="dot dot-green"></div> Ansprechpartner bekannt</div>
+    <div class="legend-item"><div class="dot dot-yellow"></div> Ansprechpartner noch recherchieren</div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30px">✓</th>
+        <th>Firma</th>
+        <th>Ort</th>
+        <th>MA</th>
+        <th>Ansprechpartner</th>
+        <th>Position</th>
+        <th>E-Mail / Kontakt</th>
+        <th>Website</th>
+        <th>Notiz</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr class="priority-high">
+        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
+        <td><strong>ADVA / Adtran</strong></td>
+        <td>Meiningen</td>
+        <td><span class="badge-ma">~575</span></td>
+        <td class="ansprechpartner-known">Claudia Kästner</td>
+        <td>Senior HR Generalist</td>
+        <td>via adtran.com/de/careers → Kontaktformular HR</td>
+        <td class="link"><a href="https://www.adtran.com" target="_blank">adtran.com</a></td>
+        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
+      </tr>
+
+      <tr class="priority-high">
+        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
+        <td><strong>BorgWarner</strong></td>
+        <td>Ilmenau</td>
+        <td><span class="badge-ma">~650</span></td>
+        <td class="ansprechpartner-unknown">Personalleiter recherchieren</td>
+        <td>HR Manager Standort Ilmenau</td>
+        <td>über borgwarner.com → Careers → Kontakt Ilmenau</td>
+        <td class="link"><a href="https://www.borgwarner.com" target="_blank">borgwarner.com</a></td>
+        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
+      </tr>
+
+      <tr class="priority-high">
+        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
+        <td><strong>Impuls Direktwerbung GmbH</strong></td>
+        <td>Untermaßfeld</td>
+        <td><span class="badge-ma">~700</span></td>
+        <td class="ansprechpartner-known">Stefan Ebner</td>
+        <td>Geschäftsführer</td>
+        <td>über impuls-direktwerbung.de → Impressum</td>
+        <td class="link"><a href="https://www.impuls-direktwerbung.de" target="_blank">impuls-direktwerbung.de</a></td>
+        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
+      </tr>
+
+      <tr class="priority-high">
+        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
+        <td><strong>Werra Papier (Sofidel)</strong></td>
+        <td>Wernshausen</td>
+        <td><span class="badge-ma">~430</span></td>
+        <td class="ansprechpartner-unknown">Personalleiter recherchieren</td>
+        <td>Personalleiter / Werksleitung</td>
+        <td>Tel. 036848-385-0 → nach Personalabteilung fragen</td>
+        <td class="link"><a href="https://www.sofidel.com" target="_blank">sofidel.com</a></td>
+        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
+      </tr>
+
+      <tr class="priority-mid">
+        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
+        <td><strong>Rennsteig Werkzeuge GmbH</strong></td>
+        <td>Steinbach-Hallenberg</td>
+        <td><span class="badge-ma">~300</span></td>
+        <td class="ansprechpartner-unknown">GF / HR recherchieren</td>
+        <td>Geschäftsführer oder Personalleiter</td>
+        <td>über rennsteig.com → Kontakt/Impressum</td>
+        <td class="link"><a href="https://www.rennsteig.com" target="_blank">rennsteig.com</a></td>
+        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
+      </tr>
+
+      <tr class="priority-mid">
+        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
+        <td><strong>Die frische Thüringer GmbH</strong></td>
+        <td>Suhl</td>
+        <td><span class="badge-ma">~210</span></td>
+        <td class="ansprechpartner-unknown">HR recherchieren</td>
+        <td>Personalleiter / HR</td>
+        <td>info@zurmuehlen-group.com</td>
+        <td class="link"><a href="https://www.zurmuehlengruppe.de" target="_blank">zurmuehlengruppe.de</a></td>
+        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
+      </tr>
+
+      <tr class="priority-mid">
+        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
+        <td><strong>Paragon Electronic GmbH</strong></td>
+        <td>Suhl</td>
+        <td><span class="badge-ma">~250</span></td>
+        <td class="ansprechpartner-unknown">GF recherchieren</td>
+        <td>Geschäftsführer</td>
+        <td>kontakt@paragon.de</td>
+        <td class="link"><a href="https://paragon.ag" target="_blank">paragon.ag</a></td>
+        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
+      </tr>
+
+      <tr class="priority-mid">
+        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
+        <td><strong>CDA GmbH</strong></td>
+        <td>Suhl</td>
+        <td><span class="badge-ma">~200</span></td>
+        <td class="ansprechpartner-unknown">GF recherchieren</td>
+        <td>Geschäftsführer</td>
+        <td>über cda.de → Impressum</td>
+        <td class="link"><a href="https://www.cda.de" target="_blank">cda.de</a></td>
+        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
+      </tr>
+
+      <tr class="priority-mid">
+        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
+        <td><strong>Lehren- &amp; Meßgerätewerk GmbH</strong></td>
+        <td>Schmalkalden</td>
+        <td><span class="badge-ma">~200</span></td>
+        <td class="ansprechpartner-unknown">GF recherchieren</td>
+        <td>Geschäftsführer</td>
+        <td>Tel. 03683-6680 → nach Ansprechpartner fragen</td>
+        <td class="link"><a href="https://www.lehrmess.de" target="_blank">lehrmess.de</a></td>
+        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
+      </tr>
+
+      <tr class="priority-mid">
+        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
+        <td><strong>Kündig Nahrungsmittel GmbH</strong></td>
+        <td>Ritschenhausen</td>
+        <td><span class="badge-ma">~120</span></td>
+        <td class="ansprechpartner-unknown">GF recherchieren</td>
+        <td>Geschäftsführer</td>
+        <td>über kuendig.com → Kontakt/Impressum</td>
+        <td class="link"><a href="https://www.kuendig.com" target="_blank">kuendig.com</a></td>
+        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
+      </tr>
+
+    </tbody>
+  </table>
+
+</div>
+
+<script>
+  function zähleCheckboxen() {
+    const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+    document.getElementById('gesendete').textContent = checked;
+  }
+</script>
+
+</body>
+</html>
