@@ -354,6 +354,7 @@ function openCalendlyDirect() {
 
     var params = '?hide_gdpr_banner=1&primary_color=1a50c8&locale=de';
     params += '&a1=' + encodeURIComponent(notes.trim());
+    _calOpenParams = params;
 
     Calendly.initInlineWidget({
       url: 'https://calendly.com/eckversicherung/30min' + params,
