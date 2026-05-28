@@ -1,0 +1,82 @@
+===============================================================
+ BKV-AKQUISE E-MAIL · VORLAGE FÜR WORD-SERIENDRUCK
+ Daniel Eck Versicherungsmakler · Mai 2026
+===============================================================
+
+BETREFFZEILE (in Word-Seriendruck als Betreff eingeben):
+---------------------------------------------------------
+Betriebliche Krankenversicherung für «Firma» – attraktives Benefit für Ihre Mitarbeiter
+
+
+ANLEITUNG WORD-SERIENDRUCK (Schritt für Schritt):
+---------------------------------------------------------
+1. kontakte.csv in Excel öffnen → Datei speichern als kontakte.xlsx
+2. Diesen Text in ein neues Word-Dokument kopieren
+3. Word: Sendungen → Seriendruck starten → E-Mail-Nachrichten
+4. Word: Empfänger auswählen → Vorhandene Liste verwenden → kontakte.xlsx wählen
+5. Die Felder «Anrede», «Nachname», «Firma» usw. in Word einfügen:
+   - Cursor auf das Platzhalter-Wort «Anrede» stellen
+   - Sendungen → Seriendruckfeld einfügen → Anrede wählen
+   - Wiederholen für «Nachname» und «Firma»
+6. Sendungen → Vorschau Ergebnisse → alle Einträge durchklicken
+7. Sendungen → Fertig stellen und zusammenführen → E-Mail-Nachrichten senden
+8. Betreff eingeben, E-Mail-Feld auf "Email" setzen → OK
+
+
+===============================================================
+ E-MAIL-TEXT (alles ab hier in Word einfügen)
+===============================================================
+
+«Anrede» «Nachname»,
+
+in Zeiten von Fachkräftemangel suchen viele Unternehmen nach Wegen,
+ihre Mitarbeiter langfristig zu binden – und dabei gleichzeitig als
+attraktiver Arbeitgeber wahrgenommen zu werden.
+
+Eine Betriebliche Krankenversicherung (BKV) ist genau das: ein
+wirkungsvolles Benefit, das Ihre Mitarbeiter wertschätzen – und das
+Sie als Arbeitgeber steuerlich klug einsetzen können.
+
+Was «Firma» davon hat:
+
+  ✓ Günstigere Gruppenkonditionen als bei Einzelverträgen
+  ✓ Kein Gesundheitscheck erforderlich – alle Mitarbeiter sind dabei
+  ✓ Bis zu 600 € pro Mitarbeiter/Jahr als Sachbezug steuerlich absetzbar
+  ✓ Kein Verwaltungsaufwand für Sie – ich kümmere mich um alles
+
+Ich bin Daniel Eck, unabhängiger Versicherungsmakler aus der Region
+Schmalkalden. Ich berate Unternehmen ausschließlich in Ihrem Interesse –
+ohne Bindung an einen einzelnen Versicherer.
+
+Darf ich Ihnen in einem kurzen 20-Minuten-Gespräch zeigen, was eine
+BKV konkret für «Firma» bedeuten würde – ohne Verpflichtung?
+
+Herzliche Grüße
+
+Daniel Eck
+Versicherungsmakler
+Tel.: 0174 / 322 58 85
+daniel@eckversicherung.de
+www.eckversicherung.de
+
+──────────────────────────────────────────────────────────────
+Falls Sie keine weiteren Informationen wünschen, antworten Sie
+bitte kurz mit „Abmelden" – ich streiche Sie sofort aus meiner
+Liste. (§ 7 Abs. 3 UWG)
+──────────────────────────────────────────────────────────────
+
+
+===============================================================
+ HINWEISE ZUR PERSONALISIERUNG
+===============================================================
+
+Wo kein Name bekannt ist (Anrede = "Sehr geehrte Damen und Herren"):
+→ Das Seriendruckfeld «Nachname» leer lassen oder durch einen
+  Komma-Abstand ersetzen: "Sehr geehrte Damen und Herren,"
+
+Tipp: Für Firmen, bei denen die E-Mail noch fehlt (in der CSV
+mit eckigen Klammern markiert), bitte vor dem Versand:
+→ Impressum der Firma aufrufen und E-Mail dort eintragen
+→ Alternativ: kurz anrufen und nach Personalleiter-Kontakt fragen
+
+===============================================================
