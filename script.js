@@ -277,11 +277,14 @@ var _calOpenParams = '';
 
 function showCalendlyInline() {
   document.querySelector('.funnel-modal').classList.add('funnel-modal-wide');
+  document.getElementById('funnelStepLabel').innerHTML =
+    '<div class="cal-tabs" style="margin:4px 0 0">' +
+      '<button class="cal-tab active" onclick="switchCalTab(0,this)">Daniel Eck</button>' +
+      '<button class="cal-tab cal-tab-secondary" onclick="switchCalTab(1,this)">Heiko Eck</button>' +
+    '</div>';
   var body = document.getElementById('funnelBody');
   body.innerHTML =
     '<div class="funnel-result">' +
-      '<h3>Wählen Sie Ihren Wunschtermin</h3>' +
-      '<div class="cal-tabs"><button class="cal-tab active" onclick="switchCalTab(0,this)">Daniel Eck</button><button class="cal-tab cal-tab-secondary" onclick="switchCalTab(1,this)">Heiko Eck</button></div>' +
       '<div id="calendlyInline"></div>' +
       '<div class="funnel-nav" style="margin-top:12px">' +
         '<button class="funnel-back" onclick="renderFunnelStep()"><i class="fas fa-arrow-left"></i> Zurück</button>' +
