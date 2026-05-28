@@ -310,11 +310,14 @@ function showCalendlyInline() {
 }
 
 function openCalendlyDirect() {
+  var savedScroll = window.scrollY || window.pageYOffset || 0;
   var overlay = document.getElementById('funnelOverlay');
   var modal   = document.querySelector('.funnel-modal');
   overlay.classList.add('open');
   modal.classList.add('funnel-modal-wide');
   document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
+  window.scrollTo(0, savedScroll);
 
   document.getElementById('funnelBar').style.width = '100%';
   document.getElementById('funnelStepLabel').textContent = 'Wählen Sie Ihren Wunschtermin';

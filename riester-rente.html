@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
@@ -303,6 +303,15 @@
       <div class="footer-bottom-links"><a href="datenschutz.html">Datenschutz</a><a href="impressum.html">Impressum</a><a href="erstinformation.html">Erstinformation</a><a href="#" onclick="openCookieSettings();return false;">Cookie-Einstellungen</a></div>
     </div>
   </footer>
+
+    <div class="funnel-overlay" id="funnelOverlay" onclick="closeFunnelOutside(event)">
+    <div class="funnel-modal" role="dialog" aria-modal="true">
+      <button class="funnel-close" onclick="closeFunnel()" aria-label="Schließen"><i class="fas fa-times"></i></button>
+      <div class="funnel-progress-wrap"><div class="funnel-progress-bar" id="funnelBar"></div></div>
+      <p class="funnel-step-label" id="funnelStepLabel">Schritt 1 von 4</p>
+      <div class="funnel-body" id="funnelBody"></div>
+    </div>
+  </div>
 
   <script src="script.js?v=8"></script>
   <script src="cookie.js"></script>
