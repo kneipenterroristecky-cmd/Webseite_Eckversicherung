@@ -276,10 +276,10 @@ var HEIKO_CALENDLY = 'https://calendly.com/heiko-eckversicherung/beratung';
 var _calOpenParams = '';
 
 function _calTabsHtml() {
-  return '<div class="cal-tabs" style="margin:6px 0 0">' +
+  return '<div class="cal-tabs">' +
     '<button class="cal-tab active" onclick="switchCalTab(0,this)">' +
       '<img class="cal-tab-photo" src="Dummybild 1_rund.png" alt="Daniel Eck">' +
-      '<div class="cal-tab-info"><span class="cal-tab-name">Daniel Eck</span><span class="cal-tab-role">Versicherungsmakler</span></div>' +
+      '<div class="cal-tab-info"><span class="cal-tab-name">Daniel Eck</span><span class="cal-tab-role">Ihr Makler</span></div>' +
       '<i class="cal-tab-check fas fa-circle-check"></i>' +
     '</button>' +
     '<button class="cal-tab cal-tab-secondary" onclick="switchCalTab(1,this)">' +
