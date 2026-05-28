@@ -368,6 +368,7 @@ function closeFunnel() {
   document.getElementById('funnelOverlay').classList.remove('open');
   document.querySelector('.funnel-modal').classList.remove('funnel-modal-wide');
   document.body.style.overflow = '';
+  document.documentElement.style.overflow = '';
 }
 
 function closeFunnelOutside(e) {
