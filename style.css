@@ -1815,7 +1815,7 @@ body.nav-open .social-peek { display: none !important; }
   display: flex;
   background: #eef2f8;
   border-radius: 12px;
-  padding: 4px;
+  padding: 4px 52px 4px 4px;
   gap: 4px;
   margin: 8px 0 0;
 }
