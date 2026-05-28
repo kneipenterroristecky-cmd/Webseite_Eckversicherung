@@ -352,6 +352,7 @@ function openCalendlyDirect() {
       url: 'https://calendly.com/eckversicherung/30min' + params,
       parentElement: document.getElementById('calendlyInline')
     });
+    requestAnimationFrame(function() { window.scrollTo(0, savedScroll); });
   }
 }
 
