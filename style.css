@@ -1162,10 +1162,8 @@ p   { line-height: 1.7; }
 .reviews-carousel {
   display: flex;
   align-items: center;
-  gap: 16px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 32px;
+  gap: 12px;
+  padding: 0 40px;
   box-sizing: border-box;
 }
 .reviews-viewport {
@@ -1175,7 +1173,7 @@ p   { line-height: 1.7; }
 }
 .reviews-track {
   display: flex;
-  gap: 24px;
+  gap: 16px;
   transition: transform .4s cubic-bezier(.4,0,.2,1);
   will-change: transform;
   align-items: stretch;
