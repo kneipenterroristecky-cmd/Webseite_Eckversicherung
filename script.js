@@ -685,3 +685,87 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeFunnel();
 });
 
+/* =============================================
+   Reviews Carousel
+   ============================================= */
+var _reviewIdx = 0;
+
+function reviewsNav(dir) {
+  var track = document.getElementById('reviewsTrack');
+  if (!track) return;
+  var perPage = _revPerPage();
+  var pages = Math.ceil(track.children.length / perPage);
+  _reviewIdx = Math.max(0, Math.min(pages - 1, _reviewIdx + dir));
+  _reviewsApply();
+}
+
+function reviewsGoTo(idx) {
+  _reviewIdx = idx;
+  _reviewsApply();
+}
+
+function _revPerPage() {
+  var vp = document.getElementById('reviewsViewport');
+  return (vp && vp.offsetWidth < 600) ? 1 : 3;
+}
+
+function _reviewsInit() {
+  var track = document.getElementById('reviewsTrack');
+  var vp = document.getElementById('reviewsViewport');
+  if (!track || !vp) return;
+
+  var perPage = _revPerPage();
+  var gap = 24;
+  var w = vp.offsetWidth;
+  var cardW = (w - gap * (perPage - 1)) / perPage;
+  var pages = Math.ceil(track.children.length / perPage);
+
+  Array.prototype.forEach.call(track.children, function(c) {
+    c.style.width = cardW + 'px';
+    c.style.flexShrink = '0';
+  });
+
+  var dots = document.getElementById('reviewsDots');
+  if (dots) {
+    dots.innerHTML = '';
+    for (var i = 0; i < pages; i++) {
+      var btn = document.createElement('button');
+      btn.className = 'reviews-dot' + (i === 0 ? ' active' : '');
+      btn.setAttribute('aria-label', 'Seite ' + (i + 1));
+      (function(idx) { btn.onclick = function() { reviewsGoTo(idx); }; })(i);
+      dots.appendChild(btn);
+    }
+  }
+
+  _reviewIdx = 0;
+  _reviewsApply();
+}
+
+function _reviewsApply() {
+  var track = document.getElementById('reviewsTrack');
+  var vp = document.getElementById('reviewsViewport');
+  if (!track || !vp) return;
+
+  var perPage = _revPerPage();
+  var pages = Math.ceil(track.children.length / perPage);
+  _reviewIdx = Math.max(0, Math.min(pages - 1, _reviewIdx));
+
+  var w = vp.offsetWidth;
+  var gap = 24;
+  track.style.transform = 'translateX(-' + (_reviewIdx * (w + gap)) + 'px)';
+
+  document.querySelectorAll('.reviews-dot').forEach(function(d, i) {
+    d.classList.toggle('active', i === _reviewIdx);
+  });
+
+  var prev = document.querySelector('.reviews-prev');
+  var next = document.querySelector('.reviews-next');
+  if (prev) prev.disabled = (_reviewIdx === 0);
+  if (next) next.disabled = (_reviewIdx === pages - 1);
+}
+
+window.addEventListener('load', function() {
+  _reviewsInit();
+  window.addEventListener('resize', _reviewsInit);
+});
+
