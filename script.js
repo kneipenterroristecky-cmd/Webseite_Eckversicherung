@@ -706,7 +706,9 @@ function reviewsGoTo(idx) {
 
 function _revPerPage() {
   var vp = document.getElementById('reviewsViewport');
-  return (vp && vp.offsetWidth < 600) ? 1 : 3;
+  if (!vp) return 5;
+  var w = vp.offsetWidth;
+  return w < 600 ? 1 : w < 900 ? 3 : 5;
 }
 
 function _reviewsInit() {
