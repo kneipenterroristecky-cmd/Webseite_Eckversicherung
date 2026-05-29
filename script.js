@@ -753,7 +753,7 @@ function _reviewsApply() {
   _reviewIdx = Math.max(0, Math.min(pages - 1, _reviewIdx));
 
   var w = vp.offsetWidth;
-  var gap = 24;
+  var gap = 16;
   track.style.transform = 'translateX(-' + (_reviewIdx * (w + gap)) + 'px)';
 
   document.querySelectorAll('.reviews-dot').forEach(function(d, i) {
