@@ -2014,6 +2014,7 @@ body.nav-open .social-peek { display: none !important; }
   max-width: 900px;
   padding: 20px 24px 16px;
 }
+.funnel-modal-wide .funnel-close { top: 44px; }
 .funnel-modal-wide .funnel-result > h3 { display: none; }
 .funnel-modal-wide .funnel-result > p  { display: none; }
 .funnel-modal-wide #calendlyInline {
