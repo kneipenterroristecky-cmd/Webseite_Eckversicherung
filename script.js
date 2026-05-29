@@ -717,7 +717,7 @@ function _reviewsInit() {
   if (!track || !vp) return;
 
   var perPage = _revPerPage();
-  var gap = 24;
+  var gap = 16;
   var w = vp.offsetWidth;
   var cardW = (w - gap * (perPage - 1)) / perPage;
   var pages = Math.ceil(track.children.length / perPage);
