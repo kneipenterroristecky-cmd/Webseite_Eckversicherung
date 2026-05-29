@@ -3,329 +3,869 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BKV-Kampagne – Firmenliste Südthüringen</title>
+  <title>BKV-Kampagne – Top 50 Firmenliste Südthüringen</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8fafc; color: #1e293b; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f1f5f9; color: #1e293b; font-size: 13px; }
 
-    header {
-      background: #1e3a5f;
-      color: white;
-      padding: 24px 40px;
-    }
-    header h1 { font-size: 22px; font-weight: 700; }
-    header p { font-size: 14px; opacity: 0.75; margin-top: 4px; }
+    header { background: #1e3a5f; color: white; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; }
+    header h1 { font-size: 20px; font-weight: 700; }
+    header p { font-size: 13px; opacity: 0.7; margin-top: 3px; }
+    .header-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #93c5fd; }
 
-    .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+    .container { max-width: 1500px; margin: 0 auto; padding: 24px 20px; }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-    .stat-card {
-      background: white;
-      border-radius: 10px;
-      padding: 18px 20px;
-      border: 1px solid #e2e8f0;
-      text-align: center;
-    }
-    .stat-card .num { font-size: 28px; font-weight: 700; color: #1e3a5f; }
-    .stat-card .label { font-size: 13px; color: #64748b; margin-top: 4px; }
+    .stats { display: flex; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+    .stat { background: white; border-radius: 10px; padding: 14px 20px; border: 1px solid #e2e8f0; text-align: center; min-width: 120px; }
+    .stat .num { font-size: 26px; font-weight: 800; color: #1e3a5f; }
+    .stat .label { font-size: 11px; color: #64748b; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
 
-    .anleitung {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-radius: 10px;
-      padding: 20px 24px;
-      margin-bottom: 32px;
-    }
-    .anleitung h3 { font-size: 15px; font-weight: 600; color: #1e40af; margin-bottom: 12px; }
-    .anleitung ol { padding-left: 20px; }
-    .anleitung li { font-size: 14px; color: #1e40af; line-height: 1.8; }
-    .anleitung code { background: #dbeafe; padding: 1px 6px; border-radius: 4px; font-family: monospace; font-size: 13px; }
+    .anleitung { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; }
+    .anleitung h3 { font-size: 13px; font-weight: 700; color: #1e40af; margin-bottom: 8px; }
+    .anleitung ol { padding-left: 18px; }
+    .anleitung li { font-size: 12px; color: #1e40af; line-height: 1.9; }
+    .anleitung code { background: #dbeafe; padding: 1px 5px; border-radius: 3px; font-family: monospace; }
 
-    .dsgvo {
-      background: #fefce8;
-      border: 1px solid #fde68a;
-      border-radius: 10px;
-      padding: 14px 20px;
-      margin-bottom: 32px;
-      font-size: 13px;
-      color: #78350f;
-    }
-    .dsgvo strong { color: #92400e; }
+    .dsgvo { background: #fefce8; border: 1px solid #fde68a; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 12px; color: #78350f; }
 
-    table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; font-size: 14px; }
+    .filters { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
+    .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #cbd5e1; background: white; cursor: pointer; font-size: 12px; font-weight: 600; color: #475569; transition: all 0.15s; }
+    .filter-btn:hover, .filter-btn.active { background: #1e3a5f; color: white; border-color: #1e3a5f; }
+    .search-box { margin-left: auto; padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; width: 200px; }
+
+    .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid #e2e8f0; }
+    table { width: 100%; border-collapse: collapse; background: white; font-size: 12px; }
     thead tr { background: #1e3a5f; color: white; }
-    thead th { padding: 12px 14px; text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-    tbody tr { border-bottom: 1px solid #f1f5f9; }
+    th { padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; cursor: pointer; user-select: none; }
+    th:hover { background: #2d4f7c; }
+    th .sort-icon { opacity: 0.5; margin-left: 4px; }
+    th.sorted .sort-icon { opacity: 1; }
+    tbody tr { border-bottom: 1px solid #f1f5f9; transition: background 0.1s; }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: #f8fafc; }
-    tbody td { padding: 12px 14px; vertical-align: top; }
+    tbody tr.sent { opacity: 0.5; }
+    td { padding: 8px 12px; vertical-align: middle; }
 
-    .badge-ma {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      background: #dbeafe;
-      color: #1e40af;
-    }
+    .nr { color: #94a3b8; font-weight: 600; text-align: center; width: 32px; }
+    .badge-ma { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 700; background: #dbeafe; color: #1e40af; white-space: nowrap; }
+    .badge-ma.big { background: #dcfce7; color: #15803d; }
+    .badge-ma.medium { background: #fef9c3; color: #854d0e; }
+    .badge-ma.small { background: #f1f5f9; color: #475569; }
 
-    .ansprechpartner-known { color: #16a34a; font-weight: 600; }
-    .ansprechpartner-unknown { color: #f59e0b; font-style: italic; }
+    .firma-name { font-weight: 700; color: #1e293b; }
+    .firma-ort { font-size: 11px; color: #64748b; margin-top: 1px; }
+
+    .contact-known { color: #16a34a; font-weight: 600; }
+    .contact-unknown { color: #94a3b8; font-style: italic; }
+    .contact-name { font-weight: 600; color: #1e293b; }
+    .contact-pos { font-size: 11px; color: #64748b; }
+
+    .email-link { color: #2563eb; text-decoration: none; font-size: 11px; }
+    .email-link:hover { text-decoration: underline; }
+    .email-missing { color: #94a3b8; font-size: 11px; font-style: italic; }
+    .tel { color: #475569; font-size: 11px; white-space: nowrap; }
+    .web a { color: #7c3aed; font-size: 11px; text-decoration: none; }
+    .web a:hover { text-decoration: underline; }
 
     .status-cell { text-align: center; }
-    .status-cell input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      accent-color: #1e3a5f;
-    }
+    .status-cell input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: #16a34a; }
 
-    .link a { color: #2563eb; text-decoration: none; font-size: 13px; }
-    .link a:hover { text-decoration: underline; }
+    .priority-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; flex-shrink: 0; }
+    .p1 { background: #16a34a; }
+    .p2 { background: #3b82f6; }
+    .p3 { background: #f59e0b; }
 
-    .notiz textarea {
-      width: 100%;
-      min-width: 120px;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      padding: 6px 8px;
-      font-size: 12px;
-      resize: vertical;
-      font-family: inherit;
-      color: #475569;
-      background: #f8fafc;
-    }
+    .note-tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-top: 2px; }
+    .note-public { background: #f1f5f9; color: #64748b; }
+    .note-border { background: #fef3c7; color: #92400e; }
 
-    .priority-high { border-left: 3px solid #16a34a; }
-    .priority-mid  { border-left: 3px solid #f59e0b; }
+    .legend { display: flex; gap: 20px; align-items: center; margin-bottom: 12px; font-size: 11px; color: #64748b; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 5px; }
 
-    .legend {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 16px;
-      font-size: 13px;
-      align-items: center;
-    }
-    .legend-item { display: flex; align-items: center; gap: 6px; }
-    .dot { width: 12px; height: 12px; border-radius: 2px; }
-    .dot-green { background: #16a34a; }
-    .dot-yellow { background: #f59e0b; }
-
-    .section-title { font-size: 16px; font-weight: 700; color: #1e3a5f; margin-bottom: 12px; }
-
-    @media (max-width: 900px) {
-      .stats { grid-template-columns: repeat(2, 1fr); }
-      table { font-size: 12px; }
-    }
+    @media (max-width: 768px) { .stats { grid-template-columns: repeat(2,1fr); } }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>BKV-Akquisekampagne – Firmenliste Südthüringen</h1>
-  <p>Daniel Eck Versicherungsmakler · Umkreis 50 km Schmalkalden · Stand Mai 2026</p>
+  <div>
+    <h1>BKV-Akquisekampagne · Top 50 Firmen Südthüringen</h1>
+    <p>50km-Umkreis Schmalkalden · Stand Mai 2026 · Daniel Eck Versicherungsmakler</p>
+  </div>
+  <div class="header-logo">ECK</div>
 </header>
 
 <div class="container">
 
   <div class="stats">
-    <div class="stat-card">
-      <div class="num">10</div>
-      <div class="label">Ziel-Firmen</div>
-    </div>
-    <div class="stat-card">
-      <div class="num">~3.200</div>
-      <div class="label">Potenzielle Versicherte</div>
-    </div>
-    <div class="stat-card">
-      <div class="num">2</div>
-      <div class="label">Kontakte bekannt</div>
-    </div>
-    <div class="stat-card">
-      <div class="num" id="gesendete">0</div>
-      <div class="label">Mails versendet</div>
-    </div>
+    <div class="stat"><div class="num">50</div><div class="label">Ziel-Firmen</div></div>
+    <div class="stat"><div class="num" id="cnt-contact">28</div><div class="label">Kontakte bekannt</div></div>
+    <div class="stat"><div class="num" id="cnt-email">21</div><div class="label">E-Mails vorhanden</div></div>
+    <div class="stat"><div class="num" id="cnt-sent">0</div><div class="label">Mails versendet</div></div>
+    <div class="stat"><div class="num">~15.600</div><div class="label">Potenz. Versicherte</div></div>
   </div>
 
   <div class="anleitung">
-    <h3>Versandanleitung: Word-Seriendruck über Outlook 2019</h3>
+    <h3>Versandanleitung: Word-Seriendruck → Outlook 2019</h3>
     <ol>
-      <li>Öffne <code>kontakte.csv</code> in Excel → speichere als <code>.xlsx</code></li>
-      <li>Öffne <code>email-vorlage.txt</code> → kopiere den Text in ein neues Word-Dokument</li>
-      <li>Word: <code>Sendungen → Seriendruck starten → E-Mail-Nachrichten</code></li>
-      <li>Word: <code>Empfänger auswählen → Vorhandene Liste verwenden</code> → kontakte.xlsx wählen</li>
-      <li>Seriendruckfelder einfügen: Cursor auf <code>«Anrede»</code> stellen → <code>Seriendruckfeld einfügen</code> klicken</li>
-      <li>Word: <code>Vorschau Ergebnisse</code> prüfen – sehen alle Mails gut aus?</li>
-      <li>Word: <code>Fertig stellen und zusammenführen → E-Mail-Nachrichten senden</code></li>
-      <li>Betreff eingeben: <code>Betriebliche Krankenversicherung für [Firma] – attraktives Benefit für Ihre Mitarbeiter</code></li>
+      <li><strong>Vorbereitung:</strong> <code>kontakte.csv</code> in Excel öffnen, fehlende E-Mails ergänzen, als <code>kontakte.xlsx</code> speichern</li>
+      <li><strong>Word:</strong> <code>email-vorlage.txt</code> öffnen → Text in neues Word-Dokument kopieren</li>
+      <li><strong>Word:</strong> <code>Sendungen → Seriendruck starten → E-Mail-Nachrichten</code></li>
+      <li><strong>Word:</strong> <code>Empfänger auswählen → Vorhandene Liste verwenden</code> → <code>kontakte.xlsx</code> auswählen</li>
+      <li><strong>Felder einfügen:</strong> Cursor auf «Anrede», «Nachname», «Firma» → <code>Sendungen → Seriendruckfeld einfügen</code></li>
+      <li><strong>Prüfen:</strong> <code>Vorschau Ergebnisse</code> → alle Einträge durchklicken</li>
+      <li><strong>Versand:</strong> <code>Fertig stellen → E-Mail-Nachrichten senden</code> → Betreff eingeben → OK</li>
     </ol>
   </div>
 
   <div class="dsgvo">
-    <strong>DSGVO-Hinweis:</strong> B2B-Kaltakquise per E-Mail ist in Deutschland bei berechtigtem Interesse zulässig (§ 7 Abs. 3 UWG).
-    Die Vorlage enthält bereits den Abmelde-Satz im Footer. Bitte keine Privatpersonen anschreiben.
+    <strong>DSGVO:</strong> B2B-Kaltakquise per E-Mail ist bei berechtigtem Interesse zulässig (§ 7 Abs. 3 UWG). Die E-Mail-Vorlage enthält bereits den Abmeldesatz. Bitte keine Privatpersonen anschreiben.
   </div>
 
-  <div class="section-title">Ziel-Unternehmen</div>
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterTable('all', this)">Alle 50</button>
+    <button class="filter-btn" onclick="filterTable('email', this)">E-Mail bekannt</button>
+    <button class="filter-btn" onclick="filterTable('contact', this)">Kontakt bekannt</button>
+    <button class="filter-btn" onclick="filterTable('unsent', this)">Noch nicht versendet</button>
+    <input class="search-box" type="text" placeholder="Firma suchen..." oninput="searchTable(this.value)">
+  </div>
 
   <div class="legend">
-    <div class="legend-item"><div class="dot dot-green"></div> Ansprechpartner bekannt</div>
-    <div class="legend-item"><div class="dot dot-yellow"></div> Ansprechpartner noch recherchieren</div>
+    <div class="legend-item"><span class="priority-dot p1"></span> Priorität 1 (500+ MA)</div>
+    <div class="legend-item"><span class="priority-dot p2"></span> Priorität 2 (150–499 MA)</div>
+    <div class="legend-item"><span class="priority-dot p3"></span> Priorität 3 (50–149 MA)</div>
+    <div class="legend-item"><span class="note-tag note-public">Öff. Dienst</span> geringere BKV-Relevanz</div>
+    <div class="legend-item"><span class="note-tag note-border">~50km</span> Entfernung prüfen</div>
   </div>
 
-  <table>
+  <div class="table-wrap">
+  <table id="firmenTable">
     <thead>
       <tr>
         <th style="width:30px">✓</th>
-        <th>Firma</th>
-        <th>Ort</th>
-        <th>MA</th>
+        <th class="nr">#</th>
+        <th onclick="sortTable(2)">Firma <span class="sort-icon">↕</span></th>
+        <th onclick="sortTable(3)">Ort <span class="sort-icon">↕</span></th>
+        <th onclick="sortTable(4)">MA <span class="sort-icon">↕</span></th>
         <th>Ansprechpartner</th>
         <th>Position</th>
-        <th>E-Mail / Kontakt</th>
+        <th>E-Mail</th>
+        <th>Telefon</th>
         <th>Website</th>
-        <th>Notiz</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="tableBody">
 
-      <tr class="priority-high">
-        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
-        <td><strong>ADVA / Adtran</strong></td>
-        <td>Meiningen</td>
-        <td><span class="badge-ma">~575</span></td>
-        <td class="ansprechpartner-known">Claudia Kästner</td>
-        <td>Senior HR Generalist</td>
-        <td>via adtran.com/de/careers → Kontaktformular HR</td>
-        <td class="link"><a href="https://www.adtran.com" target="_blank">adtran.com</a></td>
-        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
-      </tr>
+<!-- ===== PRIORITÄT 1: 500+ MA ===== -->
 
-      <tr class="priority-high">
-        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
-        <td><strong>BorgWarner</strong></td>
-        <td>Ilmenau</td>
-        <td><span class="badge-ma">~650</span></td>
-        <td class="ansprechpartner-unknown">Personalleiter recherchieren</td>
-        <td>HR Manager Standort Ilmenau</td>
-        <td>über borgwarner.com → Careers → Kontakt Ilmenau</td>
-        <td class="link"><a href="https://www.borgwarner.com" target="_blank">borgwarner.com</a></td>
-        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
-      </tr>
+<tr data-ma="1450" data-email="" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">1</td>
+  <td><span class="priority-dot p1"></span><span class="firma-name">TU Ilmenau</span><br><span class="note-tag note-public">Öff. Dienst</span></td>
+  <td><span class="firma-ort">Ilmenau</span></td>
+  <td><span class="badge-ma big">1.450</span></td>
+  <td><span class="contact-name">Prof. Dr. Kai-Uwe Sattler</span><br><span class="contact-pos">Präsident</span></td>
+  <td>Präsident</td>
+  <td><a class="email-link" href="mailto:praesident@tu-ilmenau.de">praesident@tu-ilmenau.de</a></td>
+  <td class="tel">03677 69-0</td>
+  <td class="web"><a href="https://www.tu-ilmenau.de" target="_blank">tu-ilmenau.de</a></td>
+</tr>
 
-      <tr class="priority-high">
-        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
-        <td><strong>Impuls Direktwerbung GmbH</strong></td>
-        <td>Untermaßfeld</td>
-        <td><span class="badge-ma">~700</span></td>
-        <td class="ansprechpartner-known">Stefan Ebner</td>
-        <td>Geschäftsführer</td>
-        <td>über impuls-direktwerbung.de → Impressum</td>
-        <td class="link"><a href="https://www.impuls-direktwerbung.de" target="_blank">impuls-direktwerbung.de</a></td>
-        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
-      </tr>
+<tr data-ma="1400" data-email="1" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">2</td>
+  <td><span class="priority-dot p1"></span><span class="firma-name">SRH Zentralklinikum Suhl</span></td>
+  <td><span class="firma-ort">Suhl</span></td>
+  <td><span class="badge-ma big">1.400</span></td>
+  <td><span class="contact-unknown">Personalleitung recherchieren</span></td>
+  <td>Personalleitung / HR</td>
+  <td><a class="email-link" href="mailto:info@zentralklinikum-suhl.de">info@zentralklinikum-suhl.de</a></td>
+  <td class="tel">03681 35-0</td>
+  <td class="web"><a href="https://www.zentralklinikum-suhl.de" target="_blank">zentralklinikum-suhl.de</a></td>
+</tr>
 
-      <tr class="priority-high">
-        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
-        <td><strong>Werra Papier (Sofidel)</strong></td>
-        <td>Wernshausen</td>
-        <td><span class="badge-ma">~430</span></td>
-        <td class="ansprechpartner-unknown">Personalleiter recherchieren</td>
-        <td>Personalleiter / Werksleitung</td>
-        <td>Tel. 036848-385-0 → nach Personalabteilung fragen</td>
-        <td class="link"><a href="https://www.sofidel.com" target="_blank">sofidel.com</a></td>
-        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
-      </tr>
+<tr data-ma="1200" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">3</td>
+  <td><span class="priority-dot p1"></span><span class="firma-name">Helios Klinikum Meiningen</span></td>
+  <td><span class="firma-ort">Meiningen</span></td>
+  <td><span class="badge-ma big">1.200</span></td>
+  <td><span class="contact-name">Claudia Holland-Jopp</span><br><span class="contact-pos">Geschäftsführerin</span></td>
+  <td>Geschäftsführerin</td>
+  <td><a class="email-link" href="mailto:info.meiningen@helios-gesundheit.de">info.meiningen@helios-gesundheit.de</a></td>
+  <td class="tel">03693 90-0</td>
+  <td class="web"><a href="https://www.helios-gesundheit.de" target="_blank">helios-gesundheit.de</a></td>
+</tr>
 
-      <tr class="priority-mid">
-        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
-        <td><strong>Rennsteig Werkzeuge GmbH</strong></td>
-        <td>Steinbach-Hallenberg</td>
-        <td><span class="badge-ma">~300</span></td>
-        <td class="ansprechpartner-unknown">GF / HR recherchieren</td>
-        <td>Geschäftsführer oder Personalleiter</td>
-        <td>über rennsteig.com → Kontakt/Impressum</td>
-        <td class="link"><a href="https://www.rennsteig.com" target="_blank">rennsteig.com</a></td>
-        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
-      </tr>
+<tr data-ma="1100" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">4</td>
+  <td><span class="priority-dot p1"></span><span class="firma-name">N3 Engine Overhaul Services GmbH</span><br><span class="note-tag note-border">~52km</span></td>
+  <td><span class="firma-ort">Arnstadt</span></td>
+  <td><span class="badge-ma big">1.100</span></td>
+  <td><span class="contact-unknown">HR Manager recherchieren</span></td>
+  <td>HR Manager</td>
+  <td><span class="email-missing">über n3eos.com</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.n3eos.com" target="_blank">n3eos.com</a></td>
+</tr>
 
-      <tr class="priority-mid">
-        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
-        <td><strong>Die frische Thüringer GmbH</strong></td>
-        <td>Suhl</td>
-        <td><span class="badge-ma">~210</span></td>
-        <td class="ansprechpartner-unknown">HR recherchieren</td>
-        <td>Personalleiter / HR</td>
-        <td>info@zurmuehlen-group.com</td>
-        <td class="link"><a href="https://www.zurmuehlengruppe.de" target="_blank">zurmuehlengruppe.de</a></td>
-        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
-      </tr>
+<tr data-ma="1010" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">5</td>
+  <td><span class="priority-dot p1"></span><span class="firma-name">Impuls Direktwerbung GmbH</span></td>
+  <td><span class="firma-ort">Untermaßfeld</span></td>
+  <td><span class="badge-ma big">1.010</span></td>
+  <td><span class="contact-name">Stefan Ebner</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@impuls-direktwerbung.de">info@impuls-direktwerbung.de</a></td>
+  <td class="tel">036949 400-3</td>
+  <td class="web"><a href="https://www.impuls-direktwerbung.de" target="_blank">impuls-direktwerbung.de</a></td>
+</tr>
 
-      <tr class="priority-mid">
-        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
-        <td><strong>Paragon Electronic GmbH</strong></td>
-        <td>Suhl</td>
-        <td><span class="badge-ma">~250</span></td>
-        <td class="ansprechpartner-unknown">GF recherchieren</td>
-        <td>Geschäftsführer</td>
-        <td>kontakt@paragon.de</td>
-        <td class="link"><a href="https://paragon.ag" target="_blank">paragon.ag</a></td>
-        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
-      </tr>
+<tr data-ma="800" data-email="0" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">6</td>
+  <td><span class="priority-dot p1"></span><span class="firma-name">Werra Papier Wernshausen GmbH</span><br><span class="firma-ort" style="font-size:10px">(Sofidel Germany)</span></td>
+  <td><span class="firma-ort">Wernshausen</span></td>
+  <td><span class="badge-ma big">~800</span></td>
+  <td><span class="contact-name">Francesco Sebastiani</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über sofidel.com ermitteln</span></td>
+  <td class="tel">036848 385-0</td>
+  <td class="web"><a href="https://www.sofidel.com" target="_blank">sofidel.com</a></td>
+</tr>
 
-      <tr class="priority-mid">
-        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
-        <td><strong>CDA GmbH</strong></td>
-        <td>Suhl</td>
-        <td><span class="badge-ma">~200</span></td>
-        <td class="ansprechpartner-unknown">GF recherchieren</td>
-        <td>Geschäftsführer</td>
-        <td>über cda.de → Impressum</td>
-        <td class="link"><a href="https://www.cda.de" target="_blank">cda.de</a></td>
-        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
-      </tr>
+<tr data-ma="750" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">7</td>
+  <td><span class="priority-dot p1"></span><span class="firma-name">Klinikum Bad Salzungen GmbH</span></td>
+  <td><span class="firma-ort">Bad Salzungen</span></td>
+  <td><span class="badge-ma big">~750</span></td>
+  <td><span class="contact-name">Harald Muhs</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@klinikum-badsalzungen.de">info@klinikum-badsalzungen.de</a></td>
+  <td class="tel">03695 64-0</td>
+  <td class="web"><a href="https://www.klinikum-badsalzungen.de" target="_blank">klinikum-badsalzungen.de</a></td>
+</tr>
 
-      <tr class="priority-mid">
-        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
-        <td><strong>Lehren- &amp; Meßgerätewerk GmbH</strong></td>
-        <td>Schmalkalden</td>
-        <td><span class="badge-ma">~200</span></td>
-        <td class="ansprechpartner-unknown">GF recherchieren</td>
-        <td>Geschäftsführer</td>
-        <td>Tel. 03683-6680 → nach Ansprechpartner fragen</td>
-        <td class="link"><a href="https://www.lehrmess.de" target="_blank">lehrmess.de</a></td>
-        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
-      </tr>
+<tr data-ma="690" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">8</td>
+  <td><span class="priority-dot p1"></span><span class="firma-name">NIDEC GPM GmbH</span></td>
+  <td><span class="firma-ort">Auengrund (Hildburghausen)</span></td>
+  <td><span class="badge-ma big">~690</span></td>
+  <td><span class="contact-name">Holger Ehrhardt</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@nidec-gpm.com">info@nidec-gpm.com</a></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.nidec-gpm.com" target="_blank">nidec-gpm.com</a></td>
+</tr>
 
-      <tr class="priority-mid">
-        <td class="status-cell"><input type="checkbox" title="Versendet" onchange="zähleCheckboxen()"></td>
-        <td><strong>Kündig Nahrungsmittel GmbH</strong></td>
-        <td>Ritschenhausen</td>
-        <td><span class="badge-ma">~120</span></td>
-        <td class="ansprechpartner-unknown">GF recherchieren</td>
-        <td>Geschäftsführer</td>
-        <td>über kuendig.com → Kontakt/Impressum</td>
-        <td class="link"><a href="https://www.kuendig.com" target="_blank">kuendig.com</a></td>
-        <td class="notiz"><textarea rows="2" placeholder="Notizen..."></textarea></td>
-      </tr>
+<tr data-ma="650" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">9</td>
+  <td><span class="priority-dot p1"></span><span class="firma-name">BorgWarner Ilmenau GmbH</span></td>
+  <td><span class="firma-ort">Ilmenau</span></td>
+  <td><span class="badge-ma big">~650</span></td>
+  <td><span class="contact-unknown">HR Manager recherchieren</span></td>
+  <td>HR Manager</td>
+  <td><span class="email-missing">über borgwarner.com</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.borgwarner.com" target="_blank">borgwarner.com</a></td>
+</tr>
+
+<tr data-ma="575" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">10</td>
+  <td><span class="priority-dot p1"></span><span class="firma-name">ADVA Optical Networking / Adtran</span></td>
+  <td><span class="firma-ort">Meiningen</span></td>
+  <td><span class="badge-ma big">~575</span></td>
+  <td><span class="contact-name">Corinna Hilpert</span><br><span class="contact-pos">HR Generalist</span></td>
+  <td>HR Generalist</td>
+  <td><a class="email-link" href="mailto:info@adva.com">info@adva.com</a></td>
+  <td class="tel">03693 45000</td>
+  <td class="web"><a href="https://www.adtran.com" target="_blank">adtran.com</a></td>
+</tr>
+
+<!-- ===== PRIORITÄT 2: 150–499 MA ===== -->
+
+<tr data-ma="420" data-email="0" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">11</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Thüringer Landstolz GmbH</span><br><span class="firma-ort" style="font-size:10px">(Fleisch &amp; Wurstwaren)</span></td>
+  <td><span class="firma-ort">Schmalkalden</span></td>
+  <td><span class="badge-ma medium">~420</span></td>
+  <td><span class="contact-name">Kevin Holland-Moritz</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über thueringer-landstolz.de</span></td>
+  <td class="tel">03683 6440</td>
+  <td class="web"><a href="https://www.thueringer-landstolz.de" target="_blank">thueringer-landstolz.de</a></td>
+</tr>
+
+<tr data-ma="370" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">12</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Sozialwerk Meiningen gGmbH</span></td>
+  <td><span class="firma-ort">Meiningen</span></td>
+  <td><span class="badge-ma medium">~370</span></td>
+  <td><span class="contact-name">Miriam Bilinger</span><br><span class="contact-pos">Leiterin Personal</span></td>
+  <td>Leiterin Personal</td>
+  <td><a class="email-link" href="mailto:bewerbung@sozialwerk-meiningen.de">bewerbung@sozialwerk-meiningen.de</a></td>
+  <td class="tel">03693 456-371</td>
+  <td class="web"><a href="https://www.sozialwerk-meiningen.de" target="_blank">sozialwerk-meiningen.de</a></td>
+</tr>
+
+<tr data-ma="350" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">13</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Sana Klinikum Hildburghausen</span><br><span class="firma-ort" style="font-size:10px">(ehem. REGIOMED)</span></td>
+  <td><span class="firma-ort">Hildburghausen</span></td>
+  <td><span class="badge-ma medium">~350</span></td>
+  <td><span class="contact-unknown">Personalleitung recherchieren</span></td>
+  <td>Personalleitung</td>
+  <td><span class="email-missing">über sana.de ermitteln</span></td>
+  <td class="tel">03685 775-0</td>
+  <td class="web"><a href="https://www.sana.de" target="_blank">sana.de</a></td>
+</tr>
+
+<tr data-ma="330" data-email="0" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">14</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Ehrhardt AG</span><br><span class="firma-ort" style="font-size:10px">(Autohandel &amp; Werkstatt)</span></td>
+  <td><span class="firma-ort">Hildburghausen</span></td>
+  <td><span class="badge-ma medium">~330</span></td>
+  <td><span class="contact-name">Michael Ehrhardt</span><br><span class="contact-pos">Vorstand</span></td>
+  <td>Vorstand / Chairman</td>
+  <td><span class="email-missing">über ah-ehrhardt.de ermitteln</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.ah-ehrhardt.de" target="_blank">ah-ehrhardt.de</a></td>
+</tr>
+
+<tr data-ma="300" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">15</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Rennsteig Werkzeuge GmbH</span></td>
+  <td><span class="firma-ort">Steinbach-Hallenberg</span></td>
+  <td><span class="badge-ma medium">~300</span></td>
+  <td><span class="contact-unknown">GF / Personalleiter recherchieren</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über rennsteig.com ermitteln</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.rennsteig.com" target="_blank">rennsteig.com</a></td>
+</tr>
+
+<tr data-ma="290" data-email="1" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">16</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Rhön-Rennsteig-Sparkasse</span></td>
+  <td><span class="firma-ort">Meiningen</span></td>
+  <td><span class="badge-ma medium">~290</span></td>
+  <td><span class="contact-unknown">Personalleitung recherchieren</span></td>
+  <td>Personalleitung</td>
+  <td><a class="email-link" href="mailto:info@rhoen-rennsteig-sparkasse.de">info@rhoen-rennsteig-sparkasse.de</a></td>
+  <td class="tel">03693 468-0</td>
+  <td class="web"><a href="https://www.rhoen-rennsteig-sparkasse.de" target="_blank">rhoen-rennsteig-sparkasse.de</a></td>
+</tr>
+
+<tr data-ma="270" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">17</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">QSIL SE / STEREON Materials</span><br><span class="firma-ort" style="font-size:10px">(Quarzglas &amp; Keramik)</span></td>
+  <td><span class="firma-ort">Ilmenau</span></td>
+  <td><span class="badge-ma medium">~270</span></td>
+  <td><span class="contact-name">Heinz Fabian</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@qsil.de">info@qsil.de</a></td>
+  <td class="tel">03677 6415-0</td>
+  <td class="web"><a href="https://www.qsil.com" target="_blank">qsil.com</a></td>
+</tr>
+
+<tr data-ma="260" data-email="0" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">18</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Sandvik Tooling Supply Germany</span><br><span class="firma-ort" style="font-size:10px">(Zerspanungswerkzeuge)</span></td>
+  <td><span class="firma-ort">Wernshausen</span></td>
+  <td><span class="badge-ma medium">~260</span></td>
+  <td><span class="contact-name">Oliver Thomas</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über sandvik.coromant.com</span></td>
+  <td class="tel">036848 254</td>
+  <td class="web"><a href="https://www.sandvik.coromant.com" target="_blank">sandvik.coromant.com</a></td>
+</tr>
+
+<tr data-ma="250" data-email="1" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">19</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Paragon Electronic GmbH</span><br><span class="firma-ort" style="font-size:10px">(Automobil-Elektronik)</span></td>
+  <td><span class="firma-ort">Suhl</span></td>
+  <td><span class="badge-ma medium">~250</span></td>
+  <td><span class="contact-unknown">GF recherchieren</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:kontakt@paragon.de">kontakt@paragon.de</a></td>
+  <td class="tel">03681 8929</td>
+  <td class="web"><a href="https://paragon.ag" target="_blank">paragon.ag</a></td>
+</tr>
+
+<tr data-ma="250" data-email="0" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">20</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Feintechnik GmbH Eisfeld</span><br><span class="firma-ort" style="font-size:10px">(Rasierklingen – Produktion für Harry's)</span></td>
+  <td><span class="firma-ort">Eisfeld</span></td>
+  <td><span class="badge-ma medium">~250</span></td>
+  <td><span class="contact-name">Florian G. Schebitz</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über Website ermitteln</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.feintechnik-eisfeld.de" target="_blank">feintechnik-eisfeld.de</a></td>
+</tr>
+
+<tr data-ma="220" data-email="0" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">21</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Lehren- u. Meßgerätewerk Schmalkalden GmbH</span></td>
+  <td><span class="firma-ort">Schmalkalden</span></td>
+  <td><span class="badge-ma medium">~220</span></td>
+  <td><span class="contact-name">Matthias Frey</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über lehrmess.de ermitteln</span></td>
+  <td class="tel">03683 6680</td>
+  <td class="web"><a href="https://www.lehrmess.de" target="_blank">lehrmess.de</a></td>
+</tr>
+
+<tr data-ma="210" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">22</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Die frische Thüringer GmbH</span><br><span class="firma-ort" style="font-size:10px">(Zur Mühlen Gruppe)</span></td>
+  <td><span class="firma-ort">Suhl</span></td>
+  <td><span class="badge-ma medium">~210</span></td>
+  <td><span class="contact-name">Marten Redlefsen</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@zurmuehlen-group.com">info@zurmuehlen-group.com</a></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.zurmuehlengruppe.de" target="_blank">zurmuehlengruppe.de</a></td>
+</tr>
+
+<tr data-ma="200" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">23</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">PIKO Spielwaren GmbH</span><br><span class="firma-ort" style="font-size:10px">(Modellbahnen &amp; Spielzeug)</span></td>
+  <td><span class="firma-ort">Sonneberg</span></td>
+  <td><span class="badge-ma medium">~200</span></td>
+  <td><span class="contact-name">Rainer Landwehr</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@piko.de">info@piko.de</a></td>
+  <td class="tel">03675 8972-42</td>
+  <td class="web"><a href="https://www.piko.de" target="_blank">piko.de</a></td>
+</tr>
+
+<tr data-ma="200" data-email="1" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">24</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Kreiswerke Schmalkalden-Meiningen GmbH</span></td>
+  <td><span class="firma-ort">Schmalkalden</span></td>
+  <td><span class="badge-ma medium">~200</span></td>
+  <td><span class="contact-unknown">GF recherchieren</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@kwsm.de">info@kwsm.de</a></td>
+  <td class="tel">03683 4091-0</td>
+  <td class="web"><a href="https://www.kwsm.de" target="_blank">kwsm.de</a></td>
+</tr>
+
+<tr data-ma="200" data-email="1" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">25</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">CDA GmbH</span><br><span class="firma-ort" style="font-size:10px">(Optische Speichermedien)</span></td>
+  <td><span class="firma-ort">Suhl</span></td>
+  <td><span class="badge-ma medium">~200</span></td>
+  <td><span class="contact-unknown">GF recherchieren</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@cda.de">info@cda.de</a></td>
+  <td class="tel">03681 387-0</td>
+  <td class="web"><a href="https://www.cda.de" target="_blank">cda.de</a></td>
+</tr>
+
+<tr data-ma="200" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">26</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">MWS Schneidwerkzeuge GmbH &amp; Co. KG</span></td>
+  <td><span class="firma-ort">Schmalkalden</span></td>
+  <td><span class="badge-ma medium">~200</span></td>
+  <td><span class="contact-name">Ralf Althoff</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:sales@mws-sm.com">sales@mws-sm.com</a></td>
+  <td class="tel">03683 642-0</td>
+  <td class="web"><a href="https://www.premiumcuttingsolutions.com" target="_blank">premiumcuttingsolutions.com</a></td>
+</tr>
+
+<tr data-ma="190" data-email="1" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">27</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Sparkasse Arnstadt-Ilmenau</span></td>
+  <td><span class="firma-ort">Ilmenau</span></td>
+  <td><span class="badge-ma medium">~190</span></td>
+  <td><span class="contact-unknown">Personalleitung recherchieren</span></td>
+  <td>Personalleitung</td>
+  <td><a class="email-link" href="mailto:sparkasse@spk-arnstadt-ilmenau.de">sparkasse@spk-arnstadt-ilmenau.de</a></td>
+  <td class="tel">03677 660-8000</td>
+  <td class="web"><a href="https://www.spk-arnstadt-ilmenau.de" target="_blank">spk-arnstadt-ilmenau.de</a></td>
+</tr>
+
+<tr data-ma="170" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">28</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">H&amp;K Logistik GmbH</span></td>
+  <td><span class="firma-ort">Zella-Mehlis</span></td>
+  <td><span class="badge-ma medium">~170</span></td>
+  <td><span class="contact-unknown">GF recherchieren</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über Impressum ermitteln</span></td>
+  <td class="tel">03682 4921-23</td>
+  <td class="web"><span style="color:#94a3b8;font-size:11px">–</span></td>
+</tr>
+
+<tr data-ma="160" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">29</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">AWO Kreisverband Schmalkalden-Meiningen</span><br><span class="nota-tag note-public" style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:600;background:#f1f5f9;color:#64748b;">gGmbH</span></td>
+  <td><span class="firma-ort">Meiningen</span></td>
+  <td><span class="badge-ma medium">~160</span></td>
+  <td><span class="contact-unknown">Geschäftsführer recherchieren</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über awo.de / awo-suedthueringen.de</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.awo.de" target="_blank">awo.de</a></td>
+</tr>
+
+<tr data-ma="150" data-email="0" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">30</td>
+  <td><span class="priority-dot p2"></span><span class="firma-name">Boehm Systems Engineering GmbH</span><br><span class="firma-ort" style="font-size:10px">(Spezialmaschinen- und Anlagenbau)</span></td>
+  <td><span class="firma-ort">Zella-Mehlis</span></td>
+  <td><span class="badge-ma medium">~150</span></td>
+  <td><span class="contact-name">Andree Behling</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über boehm-group.com ermitteln</span></td>
+  <td class="tel">03682 4520</td>
+  <td class="web"><a href="https://www.boehm-group.com" target="_blank">boehm-group.com</a></td>
+</tr>
+
+<!-- ===== PRIORITÄT 3: 50–149 MA ===== -->
+
+<tr data-ma="130" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">31</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">TKF Thüringer Kugellagerfabrik GmbH</span></td>
+  <td><span class="firma-ort">Zella-Mehlis</span></td>
+  <td><span class="badge-ma small">~130</span></td>
+  <td><span class="contact-name">Kay-Guido Jäger</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@tkf-germany.de">info@tkf-germany.de</a></td>
+  <td class="tel">03682 4914-3</td>
+  <td class="web"><a href="https://www.tkf-germany.de" target="_blank">tkf-germany.de</a></td>
+</tr>
+
+<tr data-ma="120" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">32</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Stadtwerke Suhl GmbH</span><br><span class="nota-tag note-public" style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:600;background:#f1f5f9;color:#64748b;">Öff. Dienst</span></td>
+  <td><span class="firma-ort">Suhl</span></td>
+  <td><span class="badge-ma small">~120</span></td>
+  <td><span class="contact-unknown">GF recherchieren</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über stadtwerke-suhl.de</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.stadtwerke-suhl.de" target="_blank">stadtwerke-suhl.de</a></td>
+</tr>
+
+<tr data-ma="120" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">33</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Kündig Nahrungsmittel GmbH &amp; Co. KG</span><br><span class="firma-ort" style="font-size:10px">(Trockengemüse, Kräuter, Gewürze)</span></td>
+  <td><span class="firma-ort">Ritschenhausen</span></td>
+  <td><span class="badge-ma small">~120</span></td>
+  <td><span class="contact-name">Stefanie Goschala</span><br><span class="contact-pos">Geschäftsführerin</span></td>
+  <td>Geschäftsführerin</td>
+  <td><a class="email-link" href="mailto:info.de@kuendig.com">info.de@kuendig.com</a></td>
+  <td class="tel">036949 284-0</td>
+  <td class="web"><a href="https://www.kuendig.com" target="_blank">kuendig.com</a></td>
+</tr>
+
+<tr data-ma="110" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">34</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Stadtwerke Ilmenau GmbH</span><br><span class="nota-tag note-public" style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:600;background:#f1f5f9;color:#64748b;">Öff. Dienst</span></td>
+  <td><span class="firma-ort">Ilmenau</span></td>
+  <td><span class="badge-ma small">~110</span></td>
+  <td><span class="contact-name">Veit Sengeboden</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@stadtwerke-ilmenau.de">info@stadtwerke-ilmenau.de</a></td>
+  <td class="tel">03677 788-0</td>
+  <td class="web"><a href="https://www.stadtwerke-ilmenau.de" target="_blank">stadtwerke-ilmenau.de</a></td>
+</tr>
+
+<tr data-ma="110" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">35</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">PTM Präzisionsteile GmbH</span></td>
+  <td><span class="firma-ort">Meiningen</span></td>
+  <td><span class="badge-ma small">~110</span></td>
+  <td><span class="contact-unknown">GF recherchieren</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über ptm-meiningen.de ermitteln</span></td>
+  <td class="tel">03693 4458-0</td>
+  <td class="web"><a href="https://www.ptm-meiningen.de" target="_blank">ptm-meiningen.de</a></td>
+</tr>
+
+<tr data-ma="100" data-email="0" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">36</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Asklepios Burgseekliniken Bad Salzungen</span></td>
+  <td><span class="firma-ort">Bad Salzungen</span></td>
+  <td><span class="badge-ma small">~100</span></td>
+  <td><span class="contact-name">Martin Merbitz</span><br><span class="contact-pos">Klinikleitung</span></td>
+  <td>Klinikleitung</td>
+  <td><span class="email-missing">über asklepios.com ermitteln</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.asklepios.com" target="_blank">asklepios.com</a></td>
+</tr>
+
+<tr data-ma="100" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">37</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">neuroConn GmbH</span><br><span class="firma-ort" style="font-size:10px">(Medizintechnik / Neurotechnologie)</span></td>
+  <td><span class="firma-ort">Ilmenau</span></td>
+  <td><span class="badge-ma small">~100</span></td>
+  <td><span class="contact-name">Klaus Schellhorn</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@neurocaregroup.com">info@neurocaregroup.com</a></td>
+  <td class="tel">03677 68979-0</td>
+  <td class="web"><a href="https://www.neurocaregroup.com" target="_blank">neurocaregroup.com</a></td>
+</tr>
+
+<tr data-ma="100" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">38</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">SWZ Spezialwerkzeuge GmbH</span><br><span class="firma-ort" style="font-size:10px">(Räum- und Zahnschneidewerkzeuge)</span></td>
+  <td><span class="firma-ort">Zella-Mehlis</span></td>
+  <td><span class="badge-ma small">~100</span></td>
+  <td><span class="contact-name">Werner Klink</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@swz-zm.de">info@swz-zm.de</a></td>
+  <td class="tel">03682 4567-0</td>
+  <td class="web"><a href="https://www.swz-zm.de" target="_blank">swz-zm.de</a></td>
+</tr>
+
+<tr data-ma="100" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">39</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Sparkasse Hildburghausen</span></td>
+  <td><span class="firma-ort">Hildburghausen</span></td>
+  <td><span class="badge-ma small">~100</span></td>
+  <td><span class="contact-unknown">Personalleitung recherchieren</span></td>
+  <td>Personalleitung</td>
+  <td><span class="email-missing">über sparkasse-hildburghausen.de</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.sparkasse-hildburghausen.de" target="_blank">sparkasse-hildburghausen.de</a></td>
+</tr>
+
+<tr data-ma="90" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">40</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Volksbank Meiningen eG</span></td>
+  <td><span class="firma-ort">Meiningen</span></td>
+  <td><span class="badge-ma small">~90</span></td>
+  <td><span class="contact-unknown">Vorstand recherchieren</span></td>
+  <td>Vorstand / Personal</td>
+  <td><span class="email-missing">über volksbank-meiningen.de</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.vr.de" target="_blank">vr.de (Volksbank)</a></td>
+</tr>
+
+<tr data-ma="80" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">41</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Limbach Analytics GmbH</span><br><span class="firma-ort" style="font-size:10px">(Labordienstleistungen / Lebensmittelanalytik)</span></td>
+  <td><span class="firma-ort">Zella-Mehlis</span></td>
+  <td><span class="badge-ma small">~80</span></td>
+  <td><span class="contact-name">Markus Hoffmann</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@analytics-thueringen.de">info@analytics-thueringen.de</a></td>
+  <td class="tel">03682 46982-0</td>
+  <td class="web"><a href="https://www.limbach-analytics.de" target="_blank">limbach-analytics.de</a></td>
+</tr>
+
+<tr data-ma="77" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">42</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">alupress GmbH</span><br><span class="firma-ort" style="font-size:10px">(Aluminiumdruckguss)</span></td>
+  <td><span class="firma-ort">Hildburghausen</span></td>
+  <td><span class="badge-ma small">~77</span></td>
+  <td><span class="contact-name">Uwe Kleemann / Denise Reese</span><br><span class="contact-pos">GF / HR-Ansprechpartnerin</span></td>
+  <td>GF / HR</td>
+  <td><a class="email-link" href="mailto:personal@alupress.net">personal@alupress.net</a></td>
+  <td class="tel">03685 44880</td>
+  <td class="web"><a href="https://www.alupress.com" target="_blank">alupress.com</a></td>
+</tr>
+
+<tr data-ma="70" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">43</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">PAV Präzisionsteile Deutschland GmbH</span></td>
+  <td><span class="firma-ort">Zella-Mehlis</span></td>
+  <td><span class="badge-ma small">~70</span></td>
+  <td><span class="contact-name">Martin Feuerstein</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@pav.eu">info@pav.eu</a></td>
+  <td class="tel">03682 4008-0</td>
+  <td class="web"><a href="https://www.pav.eu" target="_blank">pav.eu</a></td>
+</tr>
+
+<tr data-ma="70" data-email="1" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">44</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Metalltechnik Meiningen GmbH</span><br><span class="firma-ort" style="font-size:10px">(Stanzerei, Biegen, Tiefziehen)</span></td>
+  <td><span class="firma-ort">Meiningen</span></td>
+  <td><span class="badge-ma small">~70</span></td>
+  <td><span class="contact-unknown">GF recherchieren</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@mt-mgn.de">info@mt-mgn.de</a></td>
+  <td class="tel">03693 9414-0</td>
+  <td class="web"><a href="https://www.mt-mgn.de" target="_blank">mt-mgn.de</a></td>
+</tr>
+
+<tr data-ma="65" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">45</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Caritasverband Meiningen e.V.</span><br><span class="nota-tag note-public" style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:600;background:#f1f5f9;color:#64748b;">Sozial</span></td>
+  <td><span class="firma-ort">Meiningen</span></td>
+  <td><span class="badge-ma small">~65</span></td>
+  <td><span class="contact-unknown">GF recherchieren</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über caritas.de → Region Meiningen</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.caritas.de" target="_blank">caritas.de</a></td>
+</tr>
+
+<tr data-ma="60" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">46</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Schmalkaldener Bau GmbH</span></td>
+  <td><span class="firma-ort">Schmalkalden</span></td>
+  <td><span class="badge-ma small">~60</span></td>
+  <td><span class="contact-unknown">GF recherchieren</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über sm-bau.de ermitteln</span></td>
+  <td class="tel">03684 7430-0</td>
+  <td class="web"><a href="https://www.sm-bau.de" target="_blank">sm-bau.de</a></td>
+</tr>
+
+<tr data-ma="60" data-email="0" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">47</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">MoldTecs GmbH</span><br><span class="firma-ort" style="font-size:10px">(Formenbau)</span></td>
+  <td><span class="firma-ort">Sonneberg</span></td>
+  <td><span class="badge-ma small">~60</span></td>
+  <td><span class="contact-name">Marcus Teschner</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><span class="email-missing">über moldtecs.com ermitteln</span></td>
+  <td class="tel">–</td>
+  <td class="web"><a href="https://www.moldtecs.com" target="_blank">moldtecs.com</a></td>
+</tr>
+
+<tr data-ma="55" data-email="0" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">48</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Dyckerhoff Transportbeton Schmalkalden</span><br><span class="firma-ort" style="font-size:10px">(Baustoffherstellung)</span></td>
+  <td><span class="firma-ort">Schmalkalden</span></td>
+  <td><span class="badge-ma small">~55</span></td>
+  <td><span class="contact-name">Jens Zick</span><br><span class="contact-pos">Vertrieb</span></td>
+  <td>Vertriebsleiter</td>
+  <td><span class="email-missing">info@dytb-thueringen.de</span></td>
+  <td class="tel">03684 2390</td>
+  <td class="web"><span style="color:#94a3b8;font-size:11px">–</span></td>
+</tr>
+
+<tr data-ma="50" data-email="0" data-contact="0">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">49</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Sparkasse Südthüringen Hildburghausen</span><br><span class="firma-ort" style="font-size:10px">(Filialbereich / Personalverantwortung lokal)</span></td>
+  <td><span class="firma-ort">Hildburghausen</span></td>
+  <td><span class="badge-ma small">~50</span></td>
+  <td><span class="contact-unknown">Filialleiter / Personal recherchieren</span></td>
+  <td>Filialleitung / HR</td>
+  <td><span class="email-missing">über sparkasse-hildburghausen.de</span></td>
+  <td class="tel">–</td>
+  <td class="web"><span style="color:#94a3b8;font-size:11px">–</span></td>
+</tr>
+
+<tr data-ma="50" data-email="1" data-contact="1">
+  <td class="status-cell"><input type="checkbox" onchange="markSent(this)"></td>
+  <td class="nr">50</td>
+  <td><span class="priority-dot p3"></span><span class="firma-name">Spezialwerkzeuge GmbH (SWZ) Zella-Mehlis</span><br><span class="firma-ort" style="font-size:10px">(Rennsteig-Gruppe)</span></td>
+  <td><span class="firma-ort">Zella-Mehlis</span></td>
+  <td><span class="badge-ma small">~50</span></td>
+  <td><span class="contact-name">Werner Klink</span><br><span class="contact-pos">Geschäftsführer</span></td>
+  <td>Geschäftsführer</td>
+  <td><a class="email-link" href="mailto:info@swz-zm.de">info@swz-zm.de</a></td>
+  <td class="tel">03682 4567-0</td>
+  <td class="web"><a href="https://www.swz-zm.de" target="_blank">swz-zm.de</a></td>
+</tr>
 
     </tbody>
   </table>
+  </div>
 
 </div>
 
 <script>
-  function zähleCheckboxen() {
-    const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
-    document.getElementById('gesendete').textContent = checked;
+  function markSent(cb) {
+    const row = cb.closest('tr');
+    row.classList.toggle('sent', cb.checked);
+    updateCounts();
+  }
+
+  function updateCounts() {
+    const sent = document.querySelectorAll('#tableBody input:checked').length;
+    document.getElementById('cnt-sent').textContent = sent;
+  }
+
+  function filterTable(type, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const rows = document.querySelectorAll('#tableBody tr');
+    rows.forEach(row => {
+      let show = true;
+      if (type === 'email') show = row.dataset.email === '1';
+      else if (type === 'contact') show = row.dataset.contact === '1';
+      else if (type === 'unsent') show = !row.querySelector('input').checked;
+      row.style.display = show ? '' : 'none';
+    });
+  }
+
+  function searchTable(q) {
+    const rows = document.querySelectorAll('#tableBody tr');
+    const lq = q.toLowerCase();
+    rows.forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(lq) ? '' : 'none';
+    });
+  }
+
+  let sortDir = {};
+  function sortTable(col) {
+    const tbody = document.getElementById('tableBody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const dir = sortDir[col] = -(sortDir[col] || 1);
+    rows.sort((a, b) => {
+      const av = a.cells[col]?.textContent.trim() || '';
+      const bv = b.cells[col]?.textContent.trim() || '';
+      const an = parseFloat(av.replace(/[^\d]/g, ''));
+      const bn = parseFloat(bv.replace(/[^\d]/g, ''));
+      if (!isNaN(an) && !isNaN(bn)) return (an - bn) * dir;
+      return av.localeCompare(bv, 'de') * dir;
+    });
+    rows.forEach(r => tbody.appendChild(r));
   }
 </script>
-
 </body>
 </html>
