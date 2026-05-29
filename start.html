@@ -7,65 +7,6 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="style.css?v=5" />
   <style>
-    @keyframes marquee {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .testimonials-track {
-      display: flex !important;
-      flex-direction: row !important;
-      flex-wrap: nowrap !important;
-      width: max-content !important;
-      gap: 0 !important;
-      padding: 16px 0 24px;
-      align-items: flex-start;
-      animation: marquee 40s linear infinite;
-      will-change: transform;
-    }
-    .testimonials-track:hover { animation-play-state: paused; }
-    .testi-card {
-      width: 260px;
-      flex-shrink: 0 !important;
-      flex-grow: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center;
-      text-align: center;
-      padding: 0 44px;
-      border-right: 1px solid #e2e8f0;
-    }
-    .testi-card:last-child { border-right: none; }
-    .testi-img-wrap {
-      width: 160px !important;
-      height: 160px !important;
-      border-radius: 50% !important;
-      overflow: hidden !important;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-    }
-    .testi-img-wrap img {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: cover !important;
-      border-radius: 50% !important;
-      display: block !important;
-    }
-    .testi-name {
-      font-size: 15px;
-      font-weight: 700;
-      color: rgb(33, 103, 204);
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
-    .testi-card p {
-      font-size: 13px;
-      color: #64748b;
-      line-height: 1.7;
-      margin-bottom: 16px;
-      flex: 1;
-    }
-    .testi-quote { display: none !important; }
-
     /* ===== QUIZ ===== */
     .section-quiz { background: #fff; }
     .quiz-layout {
@@ -474,17 +415,76 @@
   <!-- TESTIMONIALS -->
   <section class="section section-testimonials" id="testimonials" style="padding-top: 120px;">
     <div class="section-container">
-      <div class="section-label reveal"><span class="label-bar"></span><span>KUNDENMEINUNGEN</span><span class="label-bar"></span>
-      </div>
+      <div class="section-label reveal"><span class="label-bar"></span><span>KUNDENMEINUNGEN</span><span class="label-bar"></span></div>
       <h2 class="section-title reveal">Was unsere Kunden sagen</h2>
     </div>
 
-    <div class="testimonials-track-wrapper">
-      <div class="testimonials-track" style="display:flex;flex-direction:row;flex-wrap:nowrap;width:max-content;"><!-- Set 1 --><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Markus K." /></div>  <div class="testi-name">Markus K., Privatkunde</div>  <p>„Endlich nur noch Versicherungen, die ich wirklich brauche. Jederzeit wieder!"</p>  <div class="testi-quote">"</div></div><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Sandra R." /></div>  <div class="testi-name">Sandra R., Kundin seit 2015</div>  <p>„Beim Wasserschaden hat Daniel sofort reagiert. Professionell und menschlich!"</p>  <div class="testi-quote">"</div></div><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Thomas H." /></div>  <div class="testi-name">Thomas H., Gewerbekunde</div>  <p>„Als Selbstständiger war ich überfordert. Daniel hat alles perfekt geregelt."</p>  <div class="testi-quote">"</div></div><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/17.jpg" alt="Anna B." /></div>  <div class="testi-name">Anna B., Privatkundin</div>  <p>„Durch Daniels Empfehlung spare ich über 400 € im Jahr. Absolute Empfehlung!"</p>  <div class="testi-quote">"</div></div><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Frank L." /></div>  <div class="testi-name">Frank L., Kunde in 2. Generation</div>  <p>„Schon meine Eltern waren Kunden. Echtes Vertrauen und Verlässlichkeit."</p>  <div class="testi-quote">"</div></div><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/90.jpg" alt="Katrin W." /></div>  <div class="testi-name">Katrin W., Kundin seit 2019</div>  <p>„Daniel denkt wirklich mit und ist immer erreichbar. Absolute Weiterempfehlung!"</p>  <div class="testi-quote">"</div></div><!-- Set 2 – Duplikat für nahtlose Schleife --><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Markus K." /></div>  <div class="testi-name">Markus K., Privatkunde</div>  <p>„Endlich nur noch Versicherungen, die ich wirklich brauche. Jederzeit wieder!"</p>  <div class="testi-quote">"</div></div><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Sandra R." /></div>  <div class="testi-name">Sandra R., Kundin seit 2015</div>  <p>„Beim Wasserschaden hat Daniel sofort reagiert. Professionell und menschlich!"</p>  <div class="testi-quote">"</div></div><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Thomas H." /></div>  <div class="testi-name">Thomas H., Gewerbekunde</div>  <p>„Als Selbstständiger war ich überfordert. Daniel hat alles perfekt geregelt."</p>  <div class="testi-quote">"</div></div><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/17.jpg" alt="Anna B." /></div>  <div class="testi-name">Anna B., Privatkundin</div>  <p>„Durch Daniels Empfehlung spare ich über 400 € im Jahr. Absolute Empfehlung!"</p>  <div class="testi-quote">"</div></div><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Frank L." /></div>  <div class="testi-name">Frank L., Kunde in 2. Generation</div>  <p>„Schon meine Eltern waren Kunden. Echtes Vertrauen und Verlässlichkeit."</p>  <div class="testi-quote">"</div></div><div class="testi-card">  <div class="testi-img-wrap"><img src="https://randomuser.me/api/portraits/women/90.jpg" alt="Katrin W." /></div>  <div class="testi-name">Katrin W., Kundin seit 2019</div>  <p>„Daniel denkt wirklich mit und ist immer erreichbar. Absolute Weiterempfehlung!"</p>  <div class="testi-quote">"</div></div>
-      </div>
-    </div>
-  </section>
+    <div class="reviews-carousel" id="reviewsCarousel">
+      <button class="reviews-nav reviews-prev" onclick="reviewsNav(-1)" aria-label="Zurück"><i class="fas fa-chevron-left"></i></button>
+      <div class="reviews-viewport" id="reviewsViewport">
+        <div class="reviews-track" id="reviewsTrack">
 
+          <div class="review-card">
+            <div class="review-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+            <p class="review-text">&bdquo;Endlich nur noch Versicherungen, die ich wirklich brauche. Keine &Uuml;berversicherung, alles passt genau zur Situation. Jederzeit wieder!&ldquo;</p>
+            <div class="review-author">
+              <div class="review-avatar" style="background:#1a50c8">M</div>
+              <span class="review-name">Markus K.</span>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+            <p class="review-text">&bdquo;Beim Wasserschaden hat Daniel sofort reagiert und alles professionell geregelt. Schnell, unkompliziert und immer erreichbar!&ldquo;</p>
+            <div class="review-author">
+              <div class="review-avatar" style="background:#172d50">S</div>
+              <span class="review-name">Sandra R.</span>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+            <p class="review-text">&bdquo;Als Selbstst&auml;ndiger war ich mit meinen Versicherungen &uuml;berfordert. Daniel hat alles strukturiert, erkl&auml;rt und perfekt geregelt.&ldquo;</p>
+            <div class="review-author">
+              <div class="review-avatar" style="background:#2167cc">T</div>
+              <span class="review-name">Thomas H.</span>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+            <p class="review-text">&bdquo;Durch Daniels Empfehlung spare ich &uuml;ber 400 &euro; im Jahr bei gleichem Schutz. H&auml;tte ich das fr&uuml;her gewusst &ndash; absolute Empfehlung!&ldquo;</p>
+            <div class="review-author">
+              <div class="review-avatar" style="background:#1a50c8">A</div>
+              <span class="review-name">Anna B.</span>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+            <p class="review-text">&bdquo;Schon meine Eltern waren bei Eck versichert. Echtes Vertrauen &uuml;ber Generationen &ndash; und diese Verl&auml;sslichkeit setzt Daniel einfach fort.&ldquo;</p>
+            <div class="review-author">
+              <div class="review-avatar" style="background:#172d50">F</div>
+              <span class="review-name">Frank L.</span>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+            <p class="review-text">&bdquo;Daniel denkt wirklich mit und ist immer erreichbar. F&uuml;r jede Frage gibt es eine klare Antwort. Absolute Weiterempfehlung!&ldquo;</p>
+            <div class="review-author">
+              <div class="review-avatar" style="background:#2167cc">K</div>
+              <span class="review-name">Katrin W.</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <button class="reviews-nav reviews-next" onclick="reviewsNav(1)" aria-label="Weiter"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <div class="reviews-dots" id="reviewsDots"></div>
+  </section>
   <!-- VERSICHERUNGEN -->
   <section class="section section-gray" id="versicherungen">
     <div class="section-container">
