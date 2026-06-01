@@ -89,7 +89,7 @@ jobs:
               r'<meta property="og:image" content="[^"]*"',
               f'<meta property="og:image" content="{new_url}"', blog_html)
             ig_url = re.sub(r'w=\d+&h=\d+', 'w=1080&h=1920', new_url)
-            for sf in ['social/latest-ig.html', 'social/latest-ig-heiko.html']:
+            for sf in ['social/latest-ig.html', 'social/latest-ig-heiko.html', 'social/latest-ig-beide.html']:
               if os.path.exists(sf):
                 s = open(sf, encoding='utf-8').read()
                 s = re.sub(r'(<img class="bg-img" src=")[^"]+(")', fr'\g<1>{ig_url}\g<2>', s)
