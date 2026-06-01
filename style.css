@@ -74,6 +74,7 @@ p   { line-height: 1.7; }
   top: 0;
   z-index: 200;
   box-shadow: 0 1px 0 rgba(0,0,0,.07);
+  overflow: visible;
   transition: box-shadow .3s var(--ease);
 }
 .navbar.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,.10); }
@@ -87,12 +88,25 @@ p   { line-height: 1.7; }
 /* Logo */
 .logo { display: flex; align-items: center; gap: 12px; }
 .logo-img {
-  height: 64px;
+  height: 110px;
   width: auto;
   display: block;
+  transform: rotate(-5deg);
+  position: relative;
+  top: 16px;
+  filter: drop-shadow(2px 5px 10px rgba(0,0,0,.35));
   transition: opacity .2s var(--ease);
 }
-.logo:hover .logo-img { opacity: .85; }
+.logo:hover .logo-img {
+  height: 110px;
+  width: auto;
+  display: block;
+  transform: rotate(-5deg);
+  position: relative;
+  top: 16px;
+  filter: drop-shadow(2px 5px 10px rgba(0,0,0,.35));
+  transition: opacity .2s var(--ease);
+}
 .logo-text {
   display: flex;
   flex-direction: column;
