@@ -271,6 +271,11 @@ with open("social/latest-ig-heiko.html", "w", encoding="utf-8") as f:
     f.write(heiko_html)
 print("✅ Social Image HTML erstellt: social/latest-ig-heiko.html")
 
+beide_html = social_html.replace("<strong>Daniel Eck</strong>", "<strong>Daniel &amp; Heiko Eck</strong>")
+with open("social/latest-ig-beide.html", "w", encoding="utf-8") as f:
+    f.write(beide_html)
+print("✅ Social Image HTML erstellt: social/latest-ig-beide.html")
+
 # ── HTML-Datei erstellen ──────────────────────────────────────────────────────
 today = datetime.date.today()
 date_de = today.strftime("%d.%m.%Y")
