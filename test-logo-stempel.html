@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #1a2f5e; }
+
+.navbar {
+  background: #fff;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  overflow: visible;       /* Logo darf über den Rand hinausgehen */
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 2px 12px rgba(0,0,0,.12);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+.logo-img-wrap {
+  position: relative;
+  top: 10px;               /* ragt 10px nach unten über den Balken */
+  transform: rotate(-9deg);
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,.28));
+  flex-shrink: 0;
+}
+
+.logo-img-wrap img {
+  height: 80px;
+  width: auto;
+  display: block;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+.logo-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: rgb(33,103,204);
+  line-height: 1.2;
+}
+.logo-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 400;
+}
+
+/* Hero-Hintergrund als Kontext */
+.hero-preview {
+  height: 220px;
+  background: linear-gradient(to bottom, rgba(15,30,60,.3), rgba(15,30,60,.7)),
+              url('https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=800&auto=format') center/cover;
+  display: flex;
+  align-items: center;
+  padding: 0 48px;
+}
+.hero-preview h1 {
+  color: #fff;
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -.02em;
+}
+.hero-preview h1 span { color: #60a5fa; }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="#" class="logo">
+    <div class="logo-img-wrap">
+      <img src="LOGO_RUND.png" alt="ECK Logo" />
+    </div>
+    <div class="logo-text">
+      <span class="logo-name">Daniel Eck</span>
+      <span class="logo-subtitle">Versicherungsmakler</span>
+    </div>
+  </a>
+</nav>
+
+<div class="hero-preview">
+  <h1>Unsere <span>Sicherheit.</span></h1>
+</div>
+
+</body>
+</html>
