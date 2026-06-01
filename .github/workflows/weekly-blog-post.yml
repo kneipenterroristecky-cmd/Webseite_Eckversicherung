@@ -30,7 +30,7 @@ jobs:
   erstellen:
     name: Beitrag mit KI erstellen
     needs: duplikat-check
-    if: needs.duplikat-check.outputs.should_run == 'true'
+    if: needs.duplikat-check.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: write
