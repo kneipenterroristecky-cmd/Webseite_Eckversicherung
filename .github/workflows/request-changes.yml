@@ -272,11 +272,6 @@ jobs:
             '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px">&#128248; Instagram</p>'
             f'<p style="font-family:Arial,sans-serif;font-size:13px;color:#374151;line-height:1.55;background:#fefce8;padding:9px 11px;border-radius:5px;border-left:3px solid #eab308;margin:0;word-break:break-word">{ig}</p>'
             '</td></tr>'
-            # Buttons
-            '<tr><td width="500" bgcolor="#ffffff" style="padding:10px 14px 16px;border-top:3px solid #f1f5f9;border-radius:0 0 10px 10px">'
-            f'<a href="{approve_url}" style="display:block;background:#16a34a;color:#ffffff;text-align:center;padding:12px 16px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:14px;font-weight:700;margin-bottom:7px">&#9989; Freigeben &amp; ver&ouml;ffentlichen</a>'
-            f'<a href="{change_url}" style="display:block;background:#f59e0b;color:#ffffff;text-align:center;padding:12px 16px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:14px;font-weight:700">&#9999;&#65039; Nochmal &auml;ndern</a>'
-            '</td></tr>'
             '</table>'
             '</td></tr></table>'
           )
