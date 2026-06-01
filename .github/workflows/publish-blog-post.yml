@@ -90,6 +90,7 @@ jobs:
 
           mid_d = upload("social/latest-ig.png")
           mid_h = upload("social/latest-ig-heiko.png")
+          mid_b = upload("social/latest-ig-beide.png")
 
           if mid_d:
             send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
@@ -97,4 +98,7 @@ jobs:
           if mid_h:
             send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
                   "image":{"id":mid_h}})
+          if mid_b:
+            send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
+                  "image":{"id":mid_b}})
           PYEOF
