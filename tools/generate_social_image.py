@@ -51,4 +51,5 @@ def render(html_path, output_path, hide_cta=False):
 
 render("social/latest-ig.html",       "social/latest-ig.png")
 render("social/latest-ig-heiko.html", "social/latest-ig-heiko.png")
+render("social/latest-ig-beide.html", "social/latest-ig-beide.png")
 render("social/latest-ig.html",       "social/latest-ig-clean.png", hide_cta=True)
