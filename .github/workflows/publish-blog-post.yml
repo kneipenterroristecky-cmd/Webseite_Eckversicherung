@@ -72,15 +72,22 @@ jobs:
           auth      = {"Authorization": f"Bearer {token}"}
 
           def upload(path):
-            with open(path, "rb") as f:
-              r = req.post(media_api, headers=auth,
-                data={"messaging_product": "whatsapp"},
-                files={"file": (os.path.basename(path), f, "image/png")})
-            print(f"Upload {path}: {r.status_code}")
-            if r.status_code >= 300:
-              print(f"  ❌ {r.text[:400]}")
+            if not os.path.exists(path):
+              print(f"⚠️  Datei nicht gefunden, übersprungen: {path}")
               return None
-            return r.json().get("id")
+            try:
+              with open(path, "rb") as f:
+                r = req.post(media_api, headers=auth,
+                  data={"messaging_product": "whatsapp"},
+                  files={"file": (os.path.basename(path), f, "image/png")})
+              print(f"Upload {path}: {r.status_code}")
+              if r.status_code >= 300:
+                print(f"  ❌ {r.text[:400]}")
+                return None
+              return r.json().get("id")
+            except Exception as e:
+              print(f"  ❌ Upload-Fehler {path}: {e}")
+              return None
 
           def send(payload):
             r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json=payload)
