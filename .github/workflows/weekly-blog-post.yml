@@ -120,6 +120,7 @@ jobs:
           api_key     = os.environ.get("BREVO_API_KEY", "").strip()
           d_src = thumb("social/latest-ig.png")
           h_src = thumb("social/latest-ig-heiko.png")
+          b_src = thumb("social/latest-ig-beide.png")
           excerpt = ""
           try:
             raw = open(f"blog/posts/{meta['filename']}", encoding="utf-8").read()
