@@ -230,7 +230,7 @@ social_html = f"""<!DOCTYPE html>
   .overlay {{ position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,25,50,.05) 0%, rgba(10,25,50,.25) 45%, rgba(10,25,50,.90) 65%, rgba(10,25,50,.97) 100%); }}
   .content {{ position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 80px 76px 200px; }}
   h1 {{ font-size: 100px; font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 36px; letter-spacing: -.02em; text-shadow: 0 2px 20px rgba(0,0,0,.6); }}
-  h1 span {{ color: #7dd3fc; text-shadow: 0 2px 24px rgba(0,0,0,.95), 0 0 40px rgba(0,0,0,.7); }}
+  h1 span {{ color: rgb(33,103,204); text-shadow: 0 2px 24px rgba(0,0,0,.95), 0 0 40px rgba(0,0,0,.7); }}
   .sub {{ font-size: 44px; color: rgba(255,255,255,.85); font-weight: 500; line-height: 1.5; margin-bottom: 28px; }}
   .body {{ font-size: 36px; color: rgba(255,255,255,.75); font-weight: 400; line-height: 1.65; margin-bottom: 52px; }}
   .cta {{ display: inline-flex; align-items: center; gap: 20px; background: #1a50c8; color: #fff; font-size: 38px; font-weight: 700; padding: 20px 44px; border-radius: 16px; margin-bottom: 64px; align-self: flex-start; }}
