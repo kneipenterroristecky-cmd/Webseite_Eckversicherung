@@ -87,7 +87,7 @@ p   { line-height: 1.7; }
 /* Logo */
 .logo { display: flex; align-items: center; gap: 12px; }
 .logo-img {
-  height: 48px;
+  height: 64px;
   width: auto;
   display: block;
   transition: opacity .2s var(--ease);
