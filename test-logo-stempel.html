@@ -31,14 +31,15 @@ body { font-family: 'Inter', sans-serif; background: #1a2f5e; }
   top: 20px;
   transform: rotate(-9deg);
   flex-shrink: 0;
-  line-height: 0;
+  filter: drop-shadow(2px 5px 10px rgba(0,0,0,.4));
 }
 
 .logo-img-wrap img {
   height: 110px;
-  width: auto;
+  width: 110px;
+  object-fit: cover;
+  border-radius: 50%;
   display: block;
-  filter: drop-shadow(2px 4px 10px rgba(0,0,0,.35));
 }
 
 .logo-text {
