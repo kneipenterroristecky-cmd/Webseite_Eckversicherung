@@ -257,6 +257,9 @@ jobs:
             '<td valign="top">'
             '<p style="font-family:Arial,sans-serif;font-size:10px;color:#94a3b8;margin:0 0 4px;font-weight:600;text-align:center">Heiko</p>'
             f'{img_h}</td>'
+            '<td valign="top" style="padding-left:10px">'
+            '<p style="font-family:Arial,sans-serif;font-size:10px;color:#94a3b8;margin:0 0 4px;font-weight:600;text-align:center">Beide</p>'
+            f'{img_b}</td>'
             '</tr></table>'
             '</td></tr>'
             # Beitrags-Auszug
