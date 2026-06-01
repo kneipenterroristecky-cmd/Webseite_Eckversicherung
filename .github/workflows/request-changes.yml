@@ -213,8 +213,9 @@ jobs:
           approve_url = f"https://github.com/{repo}/actions/workflows/publish-blog-post.yml"
           change_url  = f"https://github.com/{repo}/actions/workflows/request-changes.yml"
           api_key     = os.environ.get("BREVO_API_KEY", "").strip()
-          d_src = thumb("social/latest-ig.png")
-          h_src = thumb("social/latest-ig-heiko.png")
+          d_src = thumb("social/latest-ig.png", 140, 249)
+          h_src = thumb("social/latest-ig-heiko.png", 140, 249)
+          b_src = thumb("social/latest-ig-beide.png", 140, 249)
           excerpt = ""
           try:
             raw = open(f"blog/posts/{meta['filename']}", encoding="utf-8").read()
