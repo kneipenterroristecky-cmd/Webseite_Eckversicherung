@@ -2,12 +2,35 @@ name: 1 – Blog-Beitrag erstellen (automatisch montags)
 
 on:
   schedule:
-    - cron: '15 8 * * 1'   # Jeden Montag: 10:15 Uhr Sommer (CEST) / 09:15 Uhr Winter (CET)
+    - cron: '15 8 * * 1'   # Jeden Montag 10:15 Uhr DE (Sommer, CEST = UTC+2)
+    - cron: '15 9 * * 1'   # Jeden Montag 10:15 Uhr DE (Winter, CET  = UTC+1)
   workflow_dispatch:        # Auch manuell startbar
 
 jobs:
+  duplikat-check:
+    name: Bereits heute gelaufen?
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+      - id: check
+        run: |
+          TODAY=$(TZ="Europe/Berlin" date +%Y-%m-%d)
+          COUNT=$(git log --oneline --after="${TODAY}T00:00:00" -- tools/draft_meta.json | wc -l)
+          if [ "$COUNT" -gt 0 ]; then
+            echo "Heute bereits gelaufen – überspringe zweiten Trigger."
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          else
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          fi
+
   erstellen:
     name: Beitrag mit KI erstellen
+    needs: duplikat-check
+    if: needs.duplikat-check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
