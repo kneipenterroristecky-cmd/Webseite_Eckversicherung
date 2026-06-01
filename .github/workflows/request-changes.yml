@@ -222,7 +222,7 @@ jobs:
             if m:
               text = re.sub(r'<[^>]+>', ' ', m.group(1))
               text = re.sub(r'\s+', ' ', text).strip()
-              excerpt = hl.escape(text[:400]) + ("&#8230;" if len(text) > 400 else "")
+              excerpt = hl.escape(text)
           except Exception:
             pass
           t  = hl.escape(title)
