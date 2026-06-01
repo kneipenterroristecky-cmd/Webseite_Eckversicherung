@@ -2,7 +2,8 @@ name: 1 – Blog-Beitrag erstellen (automatisch montags)
 
 on:
   schedule:
-    - cron: '0 9 * * 1'   # Jeden Montag 10:00 Uhr DE
+    - cron: '15 8 * * 1'   # Jeden Montag ~10:15 Uhr DE (CEST/Sommer UTC+2)
+    - cron: '15 9 * * 1'   # Jeden Montag ~10:15 Uhr DE (CET/Winter UTC+1)
   workflow_dispatch:        # Auch manuell startbar
 
 jobs:
