@@ -27,8 +27,11 @@ const tools = [
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
-  // Tools die Querformat brauchen
-  const landscapeTools = ['01-versicherungscheck'];
+  // Seitenformat je Tool
+  const pdfOptions = {
+    '01-versicherungscheck': { width: '297mm', height: '210mm' }, // A4 Querformat
+  };
+  const defaultOpts = { format: 'A4' };
 
   for (const tool of tools) {
     const page = await browser.newPage();
@@ -38,10 +41,10 @@ const tools = [
     });
     // Wait for fonts
     await new Promise(r => setTimeout(r, 1500));
+    const sizeOpts = pdfOptions[tool] || defaultOpts;
     await page.pdf({
       path: `produkte/pdfs/${tool}.pdf`,
-      format: 'A4',
-      landscape: landscapeTools.includes(tool),
+      ...sizeOpts,
       printBackground: true,
       margin: { top: 0, right: 0, bottom: 0, left: 0 }
     });
