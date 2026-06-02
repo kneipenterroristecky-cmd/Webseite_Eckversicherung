@@ -7,8 +7,12 @@ jobs:
   whatsapp-test:
     name: Aktuelle Social-Bilder per WhatsApp senden
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
+      - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -31,28 +35,61 @@ jobs:
           wa_to    = os.environ.get("WA_TO", "")
           site_url = os.environ.get("SITE_URL", "").rstrip("/")
 
-          msg_api = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
-          auth    = {"Authorization": f"Bearer {token}"}
+          media_api = f"https://graph.facebook.com/v19.0/{phone_id}/media"
+          msg_api   = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          auth      = {"Authorization": f"Bearer {token}"}
 
-          def send_bild(image_url, label):
-            r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json={
-              "messaging_product": "whatsapp",
-              "to": wa_to,
-              "type": "template",
-              "template": {
-                "name": "blog_bild",
-                "language": {"code": "de"},
-                "components": [{
-                  "type": "header",
-                  "parameters": [{"type": "image", "image": {"link": image_url}}]
-                }]
-              }
-            })
-            print(f"WA Bild {label}: {r.status_code}")
+          def send(payload):
+            r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json=payload)
+            t = payload.get("type","?")
+            print(f"WA send {t}: {r.status_code}")
             if r.status_code >= 300:
               print(f"  ❌ {r.text[:400]}")
+            return r.status_code < 300
 
-          send_bild(f"{site_url}/social/latest-ig.png",       "Daniel")
-          send_bild(f"{site_url}/social/latest-ig-heiko.png", "Heiko")
-          send_bild(f"{site_url}/social/latest-ig-beide.png", "Beide")
+          def upload(path):
+            if not os.path.exists(path):
+              print(f"⚠️  Nicht gefunden: {path}")
+              return None
+            with open(path, "rb") as f:
+              r = req.post(media_api, headers=auth,
+                data={"messaging_product":"whatsapp"},
+                files={"file":(os.path.basename(path), f, "image/png")})
+            print(f"Upload {path}: {r.status_code}")
+            if r.status_code >= 300:
+              print(f"  ❌ {r.text[:300]}")
+              return None
+            return r.json().get("id")
+
+          def send_bild_template(image_url, label):
+            ok = send({
+              "messaging_product":"whatsapp","to":wa_to,"type":"template",
+              "template":{
+                "name":"blog_bild","language":{"code":"de"},
+                "components":[{"type":"header","parameters":[
+                  {"type":"image","image":{"link":image_url}}
+                ]}]
+              }
+            })
+            print(f"  → {label}: {'✅' if ok else '❌'}")
+            return ok
+
+          # Versuch 1: blog_bild Template (funktioniert nach Approval, immer zuverlässig)
+          print("=== Versuch 1: Template blog_bild (kein 24h-Fenster nötig) ===")
+          ok1 = send_bild_template(f"{site_url}/social/latest-ig.png",       "Daniel")
+          ok2 = send_bild_template(f"{site_url}/social/latest-ig-heiko.png", "Heiko")
+          ok3 = send_bild_template(f"{site_url}/social/latest-ig-beide.png", "Beide")
+
+          if ok1 and ok2 and ok3:
+            print("✅ Alle 3 Bilder als Template gesendet.")
+          else:
+            # Versuch 2: Direkt-Upload (funktioniert nur wenn du vorher an die Business-Nr geschrieben hast)
+            print("\n=== Versuch 2: Direkt-Upload (benötigt 24h-Fenster) ===")
+            print("Tipp: Schreib einmal 'Hi' an die WhatsApp Business-Nummer, dann klappt das.")
+            mid_d = upload("social/latest-ig.png")
+            mid_h = upload("social/latest-ig-heiko.png")
+            mid_b = upload("social/latest-ig-beide.png")
+            if mid_d: send({"messaging_product":"whatsapp","to":wa_to,"type":"image","image":{"id":mid_d}})
+            if mid_h: send({"messaging_product":"whatsapp","to":wa_to,"type":"image","image":{"id":mid_h}})
+            if mid_b: send({"messaging_product":"whatsapp","to":wa_to,"type":"image","image":{"id":mid_b}})
           PYEOF
