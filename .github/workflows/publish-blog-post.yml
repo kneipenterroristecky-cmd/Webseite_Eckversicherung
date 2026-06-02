@@ -34,46 +34,45 @@ jobs:
       - name: WhatsApp-Benachrichtigung nach Veröffentlichung
         env:
           WA_PHONE_ID:   ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
-          WA_APP_ID:     ${{ secrets.WHATSAPP_APP_ID }}
-          WA_APP_SECRET: ${{ secrets.WHATSAPP_APP_SECRET }}
           WA_TOKEN:      ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           WA_TO:         ${{ secrets.WHATSAPP_TO_NUMBER }}
           SITE_URL:      ${{ secrets.SITE_URL }}
         run: |
           python3 - <<'PYEOF'
-          import os, json, requests as req
+          import os, json, time, requests as req
 
           token    = os.environ.get("WA_TOKEN", "")
-          app_id   = os.environ.get("WA_APP_ID", "")
-          app_sec  = os.environ.get("WA_APP_SECRET", "")
           phone_id = os.environ.get("WA_PHONE_ID", "")
           wa_to    = os.environ.get("WA_TO", "")
-          site_url = os.environ.get("SITE_URL", "")
-
-          if token and app_id and app_sec:
-            try:
-              r = req.get("https://graph.facebook.com/v19.0/oauth/access_token",
-                params={"grant_type":"fb_exchange_token","client_id":app_id,
-                        "client_secret":app_sec,"fb_exchange_token":token}, timeout=15)
-              fresh = r.json().get("access_token","")
-              if fresh:
-                token = fresh
-                print("✅ Token verlängert")
-            except Exception as e:
-              print(f"⚠️  Token-Fehler: {e}")
-
-          with open("tools/draft_meta.json", encoding="utf-8") as f:
-            meta = json.load(f)
-          caption  = meta.get("instagram_caption", "")
-          post_url = meta.get("post_url", site_url)
 
           media_api = f"https://graph.facebook.com/v19.0/{phone_id}/media"
           msg_api   = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
           auth      = {"Authorization": f"Bearer {token}"}
 
+          def send(payload):
+            r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json=payload)
+            print(f"WA send {payload['type']}: {r.status_code}")
+            if r.status_code >= 300:
+              print(f"  ❌ {r.text[:400]}")
+            return r.status_code < 300
+
+          # Schritt 1: Template senden → öffnet 24h-Fenster für normale Nachrichten
+          print("📨 Sende Template um 24h-Fenster zu öffnen …")
+          ok = send({
+            "messaging_product": "whatsapp",
+            "to": wa_to,
+            "type": "template",
+            "template": {"name": "blog_benachrichtigung", "language": {"code": "de"}}
+          })
+          if ok:
+            time.sleep(3)
+          else:
+            print("⚠️  Template fehlgeschlagen – versuche trotzdem Bilder zu senden")
+
+          # Schritt 2: Bilder hochladen und senden
           def upload(path):
             if not os.path.exists(path):
-              print(f"⚠️  Datei nicht gefunden, übersprungen: {path}")
+              print(f"⚠️  Datei nicht gefunden: {path}")
               return None
             try:
               with open(path, "rb") as f:
@@ -89,23 +88,14 @@ jobs:
               print(f"  ❌ Upload-Fehler {path}: {e}")
               return None
 
-          def send(payload):
-            r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json=payload)
-            print(f"WA send {payload['type']}: {r.status_code}")
-            if r.status_code >= 300:
-              print(f"  ❌ {r.text[:400]}")
-
           mid_d = upload("social/latest-ig.png")
           mid_h = upload("social/latest-ig-heiko.png")
           mid_b = upload("social/latest-ig-beide.png")
 
           if mid_d:
-            send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
-                  "image":{"id":mid_d}})
+            send({"messaging_product":"whatsapp","to":wa_to,"type":"image","image":{"id":mid_d}})
           if mid_h:
-            send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
-                  "image":{"id":mid_h}})
+            send({"messaging_product":"whatsapp","to":wa_to,"type":"image","image":{"id":mid_h}})
           if mid_b:
-            send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
-                  "image":{"id":mid_b}})
+            send({"messaging_product":"whatsapp","to":wa_to,"type":"image","image":{"id":mid_b}})
           PYEOF
