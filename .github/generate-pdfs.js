@@ -30,6 +30,7 @@ const tools = [
   // Seitenformat je Tool
   const pdfOptions = {
     '01-versicherungscheck': { width: '297mm', height: '210mm' }, // A4 Querformat
+    '02-budgetplaner':       { width: '297mm', height: '210mm' }, // A4 Querformat
   };
   const defaultOpts = { format: 'A4' };
 
