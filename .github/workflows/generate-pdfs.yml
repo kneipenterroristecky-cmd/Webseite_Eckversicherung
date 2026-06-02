@@ -5,6 +5,7 @@ on:
     paths:
       - 'produkte/0[1-5]-*.html'
       - '.github/workflows/generate-pdfs.yml'
+      - '.github/generate-pdfs.js'
   workflow_dispatch:
 
 jobs:
