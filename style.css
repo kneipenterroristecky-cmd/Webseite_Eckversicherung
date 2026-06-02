@@ -86,27 +86,17 @@ p   { line-height: 1.7; }
 }
 
 /* Logo */
-.logo { display: flex; align-items: center; position: relative; padding-left: 120px; pointer-events: none; }
+.logo { display: flex; align-items: center; gap: 12px; }
 .logo-img {
-  position: absolute;
-  left: -130px;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 200px;
+  height: 110px;
   width: auto;
-  clip-path: circle(80px at 50% 50%);
-  pointer-events: auto;
-  cursor: pointer;
   transition: opacity .2s var(--ease);
-  z-index: 2;
 }
-.logo-img:hover { opacity: .85; }
+.logo:hover .logo-img { opacity: .85; }
 .logo-text {
   display: flex;
   flex-direction: column;
   line-height: 1.2;
-  position: relative;
-  z-index: 1;
 }
 .logo-name {
   font-size: 17px;
