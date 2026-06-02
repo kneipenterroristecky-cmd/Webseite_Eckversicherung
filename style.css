@@ -96,7 +96,7 @@ p   { line-height: 1.7; }
   width: auto;
   transition: opacity .2s var(--ease);
 }
-.logo:hover .logo-img { opacity: .85; }
+.logo:hover .logo-img { opacity: 1; }
 .logo-text {
   display: flex;
   flex-direction: column;
