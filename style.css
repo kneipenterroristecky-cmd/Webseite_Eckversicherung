@@ -383,6 +383,8 @@ p   { line-height: 1.7; }
   border-radius: var(--r-lg);
   display: block;
   box-shadow: 0 24px 60px rgba(0,0,0,.45);
+  position: relative;
+  z-index: 1;
 }
 .hero-img-deco {
   position: absolute;
