@@ -88,9 +88,10 @@ p   { line-height: 1.7; }
 /* Logo */
 .logo { display: flex; align-items: center; gap: 12px; }
 .logo-img {
-  height: 48px;
+  height: 110px;
   width: auto;
   display: block;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.18));
   transition: opacity .2s var(--ease);
 }
 .logo:hover .logo-img { opacity: .85; }
