@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Hero Badge – Varianten</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #f1f5f9; padding: 40px 24px; }
+h1 { font-size: 14px; font-weight: 700; color: #64748b; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 32px; }
+
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; max-width: 1100px; }
+.variant { display: flex; flex-direction: column; gap: 12px; }
+.label { font-size: 13px; font-weight: 700; color: #172d50; }
+.sub { font-size: 11px; color: #64748b; line-height: 1.5; }
+
+.img-wrap {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  height: 320px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.3);
+}
+.img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 10%;
+  display: block;
+}
+
+/* ── Variante A: Aktuell (weiße Kachel unten-rechts) ── */
+.badge-a {
+  position: absolute; bottom: 0; right: 0;
+  background: #fff;
+  border-radius: 12px 0 0 0;
+  padding: 12px 18px;
+  box-shadow: -3px -3px 18px rgba(0,0,0,.15);
+}
+.badge-a .name { font-size: 16px; font-weight: 900; color: #172d50; }
+.badge-a .role { font-size: 11px; font-weight: 700; color: #1a50c8; letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
+
+/* Deko-Ecken */
+.deco { position: absolute; width: 56px; height: 56px; pointer-events: none; }
+.deco.tl { top: -8px; left: -8px; border-top: 5px solid #1a50c8; border-left: 5px solid #1a50c8; border-radius: 12px 0 0 0; }
+.deco.br { bottom: -8px; right: -8px; border-bottom: 5px solid #1a50c8; border-right: 5px solid #1a50c8; border-radius: 0 0 12px 0; }
+
+/* ── Variante B: Gradient-Overlay mit Text direkt im Bild ── */
+.gradient-b::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(23,45,80,.9) 0%, rgba(23,45,80,.4) 45%, transparent 70%);
+}
+.badge-b {
+  position: absolute; bottom: 18px; left: 20px; z-index: 2;
+}
+.badge-b .name { font-size: 18px; font-weight: 900; color: #fff; line-height: 1.1; }
+.badge-b .divider { width: 36px; height: 3px; background: #60a5fa; border-radius: 2px; margin: 6px 0; }
+.badge-b .role { font-size: 10px; font-weight: 700; color: #60a5fa; letter-spacing: .1em; text-transform: uppercase; }
+
+/* ── Variante C: Schwebende Karte neben dem Bild ── */
+.img-wrap-c {
+  position: relative;
+  border-radius: 18px;
+  height: 320px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.3);
+  overflow: visible;
+}
+.img-wrap-c img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 10%;
+  border-radius: 18px;
+  display: block;
+}
+.badge-c {
+  position: absolute;
+  bottom: 28px; right: -20px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 20px;
+  box-shadow: 0 12px 40px rgba(23,45,80,.2);
+  display: flex; flex-direction: column; gap: 3px;
+  border-left: 4px solid #1a50c8;
+  z-index: 5;
+}
+.badge-c .name { font-size: 15px; font-weight: 900; color: #172d50; }
+.badge-c .role { font-size: 10px; font-weight: 700; color: #1a50c8; letter-spacing: .07em; text-transform: uppercase; }
+.badge-c .phone { font-size: 11px; color: #64748b; margin-top: 4px; }
+
+/* ── Variante D: Navy-Streifen unten ── */
+.badge-d {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(23,45,80,.92);
+  backdrop-filter: blur(4px);
+  padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.badge-d .left .name { font-size: 16px; font-weight: 900; color: #fff; }
+.badge-d .left .role { font-size: 10px; font-weight: 700; color: #60a5fa; letter-spacing: .09em; text-transform: uppercase; margin-top: 2px; }
+.badge-d .right { display: flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(255,255,255,.7); }
+.badge-d .right .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+
+/* current marker */
+.current-tag {
+  display: inline-block;
+  background: #172d50;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  letter-spacing: .05em;
+}
+</style>
+</head>
+<body>
+
+<h1>Hero – Namensfeld Varianten</h1>
+
+<div class="grid">
+
+  <!-- A: Aktuell -->
+  <div class="variant">
+    <div class="img-wrap">
+      <img src="Dummybild 1.png" alt="Daniel Eck">
+      <div class="deco tl"></div>
+      <div class="deco br"></div>
+      <div class="badge-a">
+        <span class="name">Daniel Eck</span>
+        <span class="role">Versicherungsmakler</span>
+      </div>
+    </div>
+    <div>
+      <div class="current-tag">AKTUELL</div>
+      <div class="label">A – Weiße Kachel</div>
+      <div class="sub">Weiße Karte unten-rechts, blaue Deko-Ecken</div>
+    </div>
+  </div>
+
+  <!-- B: Gradient -->
+  <div class="variant">
+    <div class="img-wrap gradient-b">
+      <img src="Dummybild 1.png" alt="Daniel Eck">
+      <div class="badge-b">
+        <div class="name">Daniel Eck</div>
+        <div class="divider"></div>
+        <div class="role">Versicherungsmakler</div>
+      </div>
+    </div>
+    <div>
+      <div class="label">B – Gradient-Overlay</div>
+      <div class="sub">Dunkler Verlauf im Bild, Name direkt eingebettet</div>
+    </div>
+  </div>
+
+  <!-- C: Schwebende Karte -->
+  <div class="variant">
+    <div class="img-wrap-c">
+      <img src="Dummybild 1.png" alt="Daniel Eck">
+      <div class="badge-c">
+        <span class="name">Daniel Eck</span>
+        <span class="role">Versicherungsmakler</span>
+        <span class="phone">0174 / 322 58 85</span>
+      </div>
+    </div>
+    <div style="margin-top: 8px;">
+      <div class="label">C – Schwebende Karte</div>
+      <div class="sub">Karte ragt aus dem Bild heraus, mit Telefonnummer</div>
+    </div>
+  </div>
+
+  <!-- D: Navy-Streifen -->
+  <div class="variant">
+    <div class="img-wrap">
+      <img src="Dummybild 1.png" alt="Daniel Eck">
+      <div class="deco tl"></div>
+      <div class="badge-d">
+        <div class="left">
+          <div class="name">Daniel Eck</div>
+          <div class="role">Versicherungsmakler</div>
+        </div>
+        <div class="right">
+          <div class="dot"></div>
+          Verfügbar
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="label">D – Navy-Streifen</div>
+      <div class="sub">Volle Breite, dunkel-transparent mit Status-Indikator</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
