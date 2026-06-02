@@ -324,14 +324,10 @@ tbody td:last-child { border-right: none; }
 }
 
 @media print {
-  @page { margin: 0; }
+  @page { size: A4 landscape; margin: 8mm 12mm; }
   body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .page { margin: 0; min-height: 0; page-break-after: always; }
+  .page { margin: 0; min-height: 0; page-break-after: always; width: 100%; }
   .page:last-child { page-break-after: avoid; }
-  .page-landscape { page: p-land; width: 100%; }
-  .page-portrait  { page: p-port; width: 100%; }
-  @page p-land { size: A4 landscape; margin: 8mm 12mm; }
-  @page p-port { size: A4 portrait;  margin: 9mm 11mm; }
 }
 </style>
 </head>
