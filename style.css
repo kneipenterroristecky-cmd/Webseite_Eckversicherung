@@ -89,7 +89,7 @@ p   { line-height: 1.7; }
 }
 
 /* Logo */
-.logo { display: flex; align-items: center; gap: 12px; }
+.logo { display: flex; align-items: center; gap: 12px; margin-left: -12px; }
 .logo-img {
   height: 110px;
   width: auto;
