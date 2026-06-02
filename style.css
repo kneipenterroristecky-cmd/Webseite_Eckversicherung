@@ -629,8 +629,10 @@ p   { line-height: 1.7; }
 }
 .team-info h3 {
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 900;
   color: var(--navy);
+  letter-spacing: -.3px;
+  line-height: 1.1;
   margin: 0 0 4px;
 }
 .team-role {
