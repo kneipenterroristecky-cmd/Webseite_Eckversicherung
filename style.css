@@ -373,7 +373,7 @@ p   { line-height: 1.7; }
   position: relative;
   border-radius: var(--r-lg);
   flex: 1;
-  overflow: hidden;
+  overflow: visible;
 }
 .hero-img {
   width: 100%;
