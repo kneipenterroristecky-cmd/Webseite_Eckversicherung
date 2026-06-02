@@ -403,24 +403,25 @@ p   { line-height: 1.7; }
   border-radius: 0 0 14px 0;
 }
 
-/* Hero name badge (overlay bottom-right inside photo) */
+/* Hero name badge (schwebende Karte rechts aus Bild heraus) */
 .hero-name-badge {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 28px;
+  right: -20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2px;
+  gap: 3px;
   background: #fff;
-  border-radius: 12px 0 0 0;
-  padding: 12px 18px;
-  box-shadow: -3px -3px 18px rgba(0,0,0,.15);
+  border-radius: 14px;
+  padding: 14px 20px;
+  box-shadow: 0 12px 40px rgba(23,45,80,.22);
+  border-left: 4px solid var(--blue);
   z-index: 4;
 }
 .hero-name-badge-name {
   display: block;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 900;
   color: var(--navy);
   letter-spacing: -.3px;
@@ -428,10 +429,10 @@ p   { line-height: 1.7; }
 }
 .hero-name-badge-role {
   display: block;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  color: #2167cc;
-  letter-spacing: .06em;
+  color: var(--blue);
+  letter-spacing: .07em;
   text-transform: uppercase;
 }
 
