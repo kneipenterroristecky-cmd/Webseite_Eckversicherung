@@ -86,19 +86,26 @@ p   { line-height: 1.7; }
 }
 
 /* Logo */
-.logo { display: flex; align-items: center; gap: 12px; }
+.logo { display: flex; align-items: center; position: relative; padding-left: 96px; }
 .logo-img {
+  position: absolute;
+  left: -50px;
+  top: 50%;
+  transform: translateY(-50%);
   height: 110px;
   width: auto;
-  display: block;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,.18));
+  clip-path: circle(33px at 50% 50%);
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,.25));
   transition: opacity .2s var(--ease);
+  z-index: 0;
 }
 .logo:hover .logo-img { opacity: .85; }
 .logo-text {
   display: flex;
   flex-direction: column;
   line-height: 1.2;
+  position: relative;
+  z-index: 1;
 }
 .logo-name {
   font-size: 17px;
