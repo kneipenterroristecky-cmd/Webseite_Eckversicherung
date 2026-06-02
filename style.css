@@ -88,7 +88,7 @@ p   { line-height: 1.7; }
 /* Logo */
 .logo { display: flex; align-items: center; gap: 12px; }
 .logo-img {
-  height: 90px;
+  height: 120px;
   width: auto;
   display: block;
   transform: rotate(-5deg);
@@ -98,7 +98,7 @@ p   { line-height: 1.7; }
   transition: opacity .2s var(--ease);
 }
 .logo:hover .logo-img {
-  height: 90px;
+  height: 120px;
   width: auto;
   display: block;
   transform: rotate(-5deg);
