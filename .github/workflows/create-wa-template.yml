@@ -73,7 +73,6 @@ jobs:
 
           if "blog_bild" not in templates:
             print("\n⚠️  blog_bild fehlt – wird erstellt …")
-            sample_url = f"{site_url}/social/latest-ig.png" if site_url else "https://via.placeholder.com/1080x1920.png"
             payload = {
               "name": "blog_bild",
               "language": "de",
@@ -81,8 +80,7 @@ jobs:
               "components": [
                 {
                   "type": "HEADER",
-                  "format": "IMAGE",
-                  "example": {"header_url": [sample_url]}
+                  "format": "IMAGE"
                 },
                 {
                   "type": "BODY",
@@ -97,4 +95,6 @@ jobs:
             print(f"blog_bild erstellt: {r2.status_code} – {r2.text[:300]}")
             if r2.status_code < 300:
               print("   → Eingereicht. Bitte in 1-2 Stunden Status prüfen (diesen Workflow erneut starten).")
+            else:
+              print("   → Fehler! Bitte Log an Daniel schicken.")
           PYEOF
