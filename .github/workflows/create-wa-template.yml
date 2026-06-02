@@ -73,28 +73,69 @@ jobs:
 
           if "blog_bild" not in templates:
             print("\n⚠️  blog_bild fehlt – wird erstellt …")
-            payload = {
-              "name": "blog_bild",
-              "language": "de",
-              "category": "UTILITY",
-              "components": [
-                {
-                  "type": "HEADER",
-                  "format": "IMAGE"
-                },
-                {
-                  "type": "BODY",
-                  "text": "✅ Blog-Beitrag veröffentlicht! Social-Media-Bild zur Kontrolle."
-                }
-              ]
-            }
-            r2 = requests.post(
-              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
-              headers=headers, json=payload
-            )
-            print(f"blog_bild erstellt: {r2.status_code} – {r2.text[:300]}")
-            if r2.status_code < 300:
-              print("   → Eingereicht. Bitte in 1-2 Stunden Status prüfen (diesen Workflow erneut starten).")
+
+            # Schritt 1: Beispielbild von der öffentlichen Website holen
+            sample_url = f"{site_url}/social/latest-ig.png"
+            print(f"  Lade Beispielbild: {sample_url}")
+            img_r = requests.get(sample_url, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
+            if not img_r.ok:
+              print(f"  ❌ Bild-Download fehlgeschlagen: {img_r.status_code}")
             else:
-              print("   → Fehler! Bitte Log an Daniel schicken.")
+              img_bytes = img_r.content
+              print(f"  Bild: {len(img_bytes)//1024} KB")
+
+              # Schritt 2: Upload-Session bei Facebook eröffnen
+              r_session = requests.post(
+                "https://graph.facebook.com/v19.0/app/uploads",
+                headers={"Authorization": f"Bearer {token}"},
+                params={"file_length": len(img_bytes), "file_type": "image/png"}
+              )
+              print(f"  Upload-Session: {r_session.status_code} – {r_session.text[:200]}")
+              upload_id = r_session.json().get("id")
+
+              handle = None
+              if upload_id:
+                # Schritt 3: Bild hochladen und Handle bekommen
+                r_upload = requests.post(
+                  f"https://graph.facebook.com/v19.0/{upload_id}",
+                  headers={
+                    "Authorization": f"Bearer {token}",
+                    "file_offset": "0",
+                    "Content-Type": "image/png"
+                  },
+                  data=img_bytes
+                )
+                print(f"  Bild-Upload: {r_upload.status_code} – {r_upload.text[:200]}")
+                handle = r_upload.json().get("h")
+
+              if handle:
+                print(f"  ✅ Handle: {handle[:60]}…")
+                # Schritt 4: Template mit Handle erstellen
+                payload = {
+                  "name": "blog_bild",
+                  "language": "de",
+                  "category": "UTILITY",
+                  "components": [
+                    {
+                      "type": "HEADER",
+                      "format": "IMAGE",
+                      "example": {"header_handle": [handle]}
+                    },
+                    {
+                      "type": "BODY",
+                      "text": "✅ Blog-Beitrag veröffentlicht! Social-Media-Bild zur Kontrolle."
+                    }
+                  ]
+                }
+                r2 = requests.post(
+                  f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+                  headers=headers, json=payload
+                )
+                print(f"blog_bild erstellt: {r2.status_code} – {r2.text[:300]}")
+                if r2.status_code < 300:
+                  print("   → Eingereicht. Bitte in 1-2 Stunden Status prüfen (diesen Workflow erneut starten).")
+                else:
+                  print("   → Fehler bei Template-Erstellung!")
+              else:
+                print("  ❌ Kein Handle erhalten – Template kann nicht erstellt werden.")
           PYEOF
