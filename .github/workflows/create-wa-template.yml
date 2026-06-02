@@ -14,67 +14,87 @@ jobs:
       - name: Abhängigkeiten installieren
         run: pip install requests
 
-      - name: Template-Status prüfen und bei Bedarf erstellen
+      - name: Templates prüfen und bei Bedarf erstellen
         env:
           WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
-          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          SITE_URL:    ${{ secrets.SITE_URL }}
         run: |
           python3 - <<'PYEOF'
           import os, requests
 
           token    = os.environ["WA_TOKEN"]
+          site_url = os.environ.get("SITE_URL", "").rstrip("/")
           headers  = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
           waba_id  = "984626847600060"
 
-          # Bestehende Templates auflisten
+          # Bestehende Templates abrufen
           r = requests.get(
             f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
             headers=headers,
             params={"fields": "name,status,language"}
           )
-          print(f"Templates abrufen: {r.status_code}")
           templates = {t["name"]: t for t in r.json().get("data", [])}
 
+          print("Alle Templates im Account:")
+          for name, t in templates.items():
+            print(f"  - {name}: {t.get('status','?')} ({t.get('language','?')})")
+
+          # blog_benachrichtigung (Text-Template, Fallback)
           if "blog_benachrichtigung" in templates:
-            t = templates["blog_benachrichtigung"]
-            status = t.get("status", "?")
-            print(f"\n✅ Template 'blog_benachrichtigung' gefunden: Status = {status}")
-            if status == "APPROVED":
-              print("   → Alles gut! Workflow 2 wird die Bilder zuverlässig senden.")
-            elif status == "PENDING":
-              print("   → Noch in Prüfung bei Meta. Bitte in 1-2 Stunden erneut prüfen.")
-            elif status == "REJECTED":
-              print("   → Template abgelehnt! Wird neu erstellt …")
-              # Altes löschen
-              tid = t.get("id")
+            st = templates["blog_benachrichtigung"].get("status","?")
+            print(f"\n✅ blog_benachrichtigung: {st}")
+          else:
+            print("\n⚠️  blog_benachrichtigung fehlt – wird erstellt …")
+            requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "blog_benachrichtigung",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [{"type":"BODY","text":"✅ Blog-Beitrag veröffentlicht! Die Social-Media-Bilder folgen sofort."}]
+              }
+            )
+
+          # blog_bild (Bild-Template – das eigentliche Haupt-Template)
+          if "blog_bild" in templates:
+            st = templates["blog_bild"].get("status","?")
+            print(f"✅ blog_bild: {st}")
+            if st == "APPROVED":
+              print("   → Perfekt! Workflow 2 sendet die 3 Bilder direkt als Templates.")
+            elif st == "PENDING":
+              print("   → Noch in Prüfung. Bitte in 1-2 Stunden erneut prüfen.")
+            elif st == "REJECTED":
+              print("   → Abgelehnt! Wird gelöscht und neu erstellt …")
+              tid = templates["blog_bild"].get("id")
               if tid:
                 requests.delete(f"https://graph.facebook.com/v19.0/{tid}", headers=headers)
-              templates.pop("blog_benachrichtigung")
-          else:
-            print("\n⚠️  Template 'blog_benachrichtigung' nicht gefunden – wird erstellt …")
+              templates.pop("blog_bild")
 
-          if "blog_benachrichtigung" not in templates:
+          if "blog_bild" not in templates:
+            print("\n⚠️  blog_bild fehlt – wird erstellt …")
+            sample_url = f"{site_url}/social/latest-ig.png" if site_url else "https://via.placeholder.com/1080x1920.png"
             payload = {
-              "name": "blog_benachrichtigung",
+              "name": "blog_bild",
               "language": "de",
               "category": "UTILITY",
               "components": [
                 {
+                  "type": "HEADER",
+                  "format": "IMAGE",
+                  "example": {"header_url": [sample_url]}
+                },
+                {
                   "type": "BODY",
-                  "text": "✅ Blog-Beitrag veröffentlicht! Die Social-Media-Bilder folgen sofort."
+                  "text": "✅ Blog-Beitrag veröffentlicht! Social-Media-Bild zur Kontrolle."
                 }
               ]
             }
             r2 = requests.post(
               f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
-              headers=headers,
-              json=payload
+              headers=headers, json=payload
             )
-            print(f"Template erstellt: {r2.status_code} – {r2.text}")
+            print(f"blog_bild erstellt: {r2.status_code} – {r2.text[:300]}")
             if r2.status_code < 300:
-              print("   → Template eingereicht. Bitte in 1-2 Stunden erneut prüfen ob Status = APPROVED.")
-
-          print("\nAlle Templates im Account:")
-          for name, t in templates.items():
-            print(f"  - {name}: {t.get('status','?')} ({t.get('language','?')})")
+              print("   → Eingereicht. Bitte in 1-2 Stunden Status prüfen (diesen Workflow erneut starten).")
           PYEOF
