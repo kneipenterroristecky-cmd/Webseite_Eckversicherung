@@ -94,7 +94,7 @@ p   { line-height: 1.7; }
   transform: translateY(-50%);
   height: 200px;
   width: auto;
-  clip-path: circle(60px at 50% 50%);
+  clip-path: circle(80px at 50% 50%);
   pointer-events: auto;
   cursor: pointer;
   transition: opacity .2s var(--ease);
