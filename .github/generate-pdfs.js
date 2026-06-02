@@ -27,6 +27,9 @@ const tools = [
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
+  // Tools die Querformat brauchen
+  const landscapeTools = ['01-versicherungscheck'];
+
   for (const tool of tools) {
     const page = await browser.newPage();
     await page.goto(`http://localhost:8080/produkte/${tool}.html`, {
@@ -38,6 +41,7 @@ const tools = [
     await page.pdf({
       path: `produkte/pdfs/${tool}.pdf`,
       format: 'A4',
+      landscape: landscapeTools.includes(tool),
       printBackground: true,
       margin: { top: 0, right: 0, bottom: 0, left: 0 }
     });
