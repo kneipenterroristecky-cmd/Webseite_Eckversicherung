@@ -97,6 +97,9 @@ p   { line-height: 1.7; }
   transition: opacity .2s var(--ease);
 }
 .logo:hover .logo-img { opacity: 1; }
+.navbar .logo-text {
+  display: none;
+}
 .logo-text {
   display: flex;
   flex-direction: column;
