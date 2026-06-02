@@ -32,11 +32,11 @@ body {
 
 .page {
   width: 210mm;
-  min-height: 297mm;
   margin: 0 auto;
   padding: 12mm 14mm 10mm;
   background: var(--white);
 }
+@media screen { .page { min-height: 297mm; } }
 
 /* ── HEADER ── */
 .doc-header {
