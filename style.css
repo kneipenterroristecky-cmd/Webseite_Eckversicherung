@@ -387,10 +387,7 @@ p   { line-height: 1.7; }
   z-index: 1;
 }
 .hero-img-deco {
-  position: absolute;
-  width: 64px; height: 64px;
-  z-index: 3;
-  pointer-events: none;
+  display: none;
 }
 .hero-img-deco.top-left {
   top: -10px; left: -10px;
