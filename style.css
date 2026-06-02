@@ -86,18 +86,21 @@ p   { line-height: 1.7; }
 }
 
 /* Logo */
-.logo { display: flex; align-items: center; position: relative; padding-left: 96px; }
+.logo { display: flex; align-items: center; position: relative; padding-left: 120px; pointer-events: none; }
 .logo-img {
   position: absolute;
-  left: -50px;
+  left: -130px;
   top: 50%;
   transform: translateY(-50%);
-  height: 110px;
+  height: 200px;
   width: auto;
+  clip-path: circle(60px at 50% 50%);
+  pointer-events: auto;
+  cursor: pointer;
   transition: opacity .2s var(--ease);
-  z-index: 0;
+  z-index: 2;
 }
-.logo:hover .logo-img { opacity: .85; }
+.logo-img:hover { opacity: .85; }
 .logo-text {
   display: flex;
   flex-direction: column;
