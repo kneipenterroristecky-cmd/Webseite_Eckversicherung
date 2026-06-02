@@ -27,7 +27,7 @@ jobs:
           WA_TO:         ${{ secrets.WHATSAPP_TO_NUMBER }}
         run: |
           python3 - <<'PYEOF'
-          import os, json, requests as req
+          import os, time, requests as req
 
           token    = os.environ.get("WA_TOKEN", "")
           phone_id = os.environ.get("WA_PHONE_ID", "")
@@ -42,17 +42,23 @@ jobs:
             print(f"WA send {payload['type']}: {r.status_code}")
             if r.status_code >= 300:
               print(f"  ❌ {r.text[:400]}")
+            return r.status_code < 300
 
-          # Template senden um Konversationsfenster zu öffnen
-          import time
-          r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json={
-            "messaging_product":"whatsapp","to":wa_to,"type":"template",
-            "template":{"name":"blog_benachrichtigung","language":{"code":"de"}}})
-          print(f"Template: {r.status_code}")
-          if r.status_code < 300:
-            time.sleep(2)
+          # Template senden → öffnet 24h-Fenster
+          print("📨 Sende Template …")
+          ok = send({
+            "messaging_product": "whatsapp",
+            "to": wa_to,
+            "type": "template",
+            "template": {"name": "blog_benachrichtigung", "language": {"code": "de"}}
+          })
+          if ok:
+            time.sleep(3)
 
           def upload(path):
+            if not os.path.exists(path):
+              print(f"⚠️  Datei nicht gefunden: {path}")
+              return None
             with open(path, "rb") as f:
               r = req.post(media_api, headers=auth,
                 data={"messaging_product": "whatsapp"},
@@ -65,11 +71,12 @@ jobs:
 
           mid_d = upload("social/latest-ig.png")
           mid_h = upload("social/latest-ig-heiko.png")
+          mid_b = upload("social/latest-ig-beide.png")
 
           if mid_d:
-            send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
-                  "image":{"id":mid_d}})
+            send({"messaging_product":"whatsapp","to":wa_to,"type":"image","image":{"id":mid_d}})
           if mid_h:
-            send({"messaging_product":"whatsapp","to":wa_to,"type":"image",
-                  "image":{"id":mid_h}})
+            send({"messaging_product":"whatsapp","to":wa_to,"type":"image","image":{"id":mid_h}})
+          if mid_b:
+            send({"messaging_product":"whatsapp","to":wa_to,"type":"image","image":{"id":mid_b}})
           PYEOF
