@@ -88,22 +88,22 @@ p   { line-height: 1.7; }
 /* Logo */
 .logo { display: flex; align-items: center; gap: 12px; }
 .logo-img {
-  height: 110px;
+  height: 90px;
   width: auto;
   display: block;
   transform: rotate(-5deg);
   position: relative;
-  top: 16px;
+  top: 0px;
   filter: drop-shadow(2px 5px 10px rgba(0,0,0,.35));
   transition: opacity .2s var(--ease);
 }
 .logo:hover .logo-img {
-  height: 110px;
+  height: 90px;
   width: auto;
   display: block;
   transform: rotate(-5deg);
   position: relative;
-  top: 16px;
+  top: 0px;
   filter: drop-shadow(2px 5px 10px rgba(0,0,0,.35));
   transition: opacity .2s var(--ease);
 }
