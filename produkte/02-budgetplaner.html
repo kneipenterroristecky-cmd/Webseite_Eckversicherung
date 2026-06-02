@@ -244,9 +244,10 @@ tfoot tr td:first-child {
 }
 
 @media print {
-  @page { size: A4 landscape; margin: 8mm 10mm; }
+  @page { size: A4 landscape; margin: 0; }
+  html, body { height: 210mm; overflow: hidden; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .page { width: 100%; margin: 0; padding: 0; page-break-after: avoid; }
+  .page { width: 100%; min-height: 0; margin: 0; padding: 10mm 14mm 8mm; page-break-after: avoid; }
 }
 </style>
 </head>
