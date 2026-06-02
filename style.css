@@ -405,8 +405,8 @@ p   { line-height: 1.7; }
 /* Hero name badge (schwebende Karte rechts aus Bild heraus) */
 .hero-name-badge {
   position: absolute;
-  bottom: 28px;
-  right: -20px;
+  bottom: 48px;
+  right: -28px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -415,7 +415,6 @@ p   { line-height: 1.7; }
   border-radius: 14px;
   padding: 14px 20px;
   box-shadow: 0 12px 40px rgba(23,45,80,.22);
-  border-left: 4px solid var(--blue);
   z-index: 4;
 }
 .hero-name-badge-name {
