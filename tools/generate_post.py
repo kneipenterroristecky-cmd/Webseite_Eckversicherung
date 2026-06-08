@@ -81,8 +81,9 @@ if not FORCE_TOPIC:
 print(f"📌 Thema diese Woche: {topic['title']}")
 
 # ── Bild-URLs aus topics.json (stabile Unsplash-CDN-URLs) ─────────────────────
-og_image = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format")
-_og_base = og_image.split("?")[0]
+_FALLBACK_IMG = "https://images.unsplash.com/photo-1554224155-6726b3ff858f"
+og_image = topic.get("og_image") or f"{_FALLBACK_IMG}?w=1200&h=630&fit=crop&auto=format"
+_og_base = og_image.split("?")[0] or _FALLBACK_IMG
 og_image = f"{_og_base}?w=1200&h=630&fit=crop&auto=format"
 
 # ── Anthropic-Client initialisieren (wird auch für Bildanalyse gebraucht) ────────
