@@ -33,18 +33,23 @@ jobs:
 
       - name: WhatsApp-Benachrichtigung nach Veröffentlichung
         env:
-          WA_PHONE_ID:   ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
-          WA_TOKEN:      ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
-          WA_TO:         ${{ secrets.WHATSAPP_TO_NUMBER }}
-          SITE_URL:      ${{ secrets.SITE_URL }}
+          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WA_TO:       ${{ secrets.WHATSAPP_TO_NUMBER }}
+          REPO:        ${{ github.repository }}
         run: |
           python3 - <<'PYEOF'
-          import os, requests as req
+          import os, requests as req, time
 
           token    = os.environ.get("WA_TOKEN", "")
           phone_id = os.environ.get("WA_PHONE_ID", "")
           wa_to    = os.environ.get("WA_TO", "")
-          site_url = os.environ.get("SITE_URL", "").rstrip("/")
+          repo     = os.environ.get("REPO", "")
+
+          # raw.githubusercontent.com liefert sofort die aktuell commitete Datei –
+          # ohne GitHub-Pages-Deploy-Verzögerung und ohne Cache-Probleme.
+          ts = int(time.time())
+          raw_base = f"https://raw.githubusercontent.com/{repo}/master/social"
 
           msg_api = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
           auth    = {"Authorization": f"Bearer {token}"}
@@ -67,7 +72,7 @@ jobs:
             if r.status_code >= 300:
               print(f"  ❌ {r.text[:400]}")
 
-          send_bild(f"{site_url}/social/latest-ig.png",       "Daniel")
-          send_bild(f"{site_url}/social/latest-ig-heiko.png", "Heiko")
-          send_bild(f"{site_url}/social/latest-ig-beide.png", "Beide")
+          send_bild(f"{raw_base}/latest-ig.png?t={ts}",       "Daniel")
+          send_bild(f"{raw_base}/latest-ig-heiko.png?t={ts}", "Heiko")
+          send_bild(f"{raw_base}/latest-ig-beide.png?t={ts}", "Beide")
           PYEOF
