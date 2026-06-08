@@ -1,0 +1,57 @@
+name: 4 – WhatsApp-Bilder senden (manuell)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  whatsapp:
+    name: WhatsApp-Bilder senden
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: WhatsApp-Bilder senden
+        env:
+          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WA_TO:       ${{ secrets.WHATSAPP_TO_NUMBER }}
+          REPO:        ${{ github.repository }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, requests as req, time
+
+          token    = os.environ.get("WA_TOKEN", "")
+          phone_id = os.environ.get("WA_PHONE_ID", "")
+          wa_to    = os.environ.get("WA_TO", "")
+          repo     = os.environ.get("REPO", "")
+
+          ts       = int(time.time())
+          raw_base = f"https://raw.githubusercontent.com/{repo}/master/social"
+
+          msg_api = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          auth    = {"Authorization": f"Bearer {token}"}
+
+          def send_bild(image_url, label):
+            r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json={
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "template",
+              "template": {
+                "name": "blog_bild",
+                "language": {"code": "de"},
+                "components": [{
+                  "type": "header",
+                  "parameters": [{"type": "image", "image": {"link": image_url}}]
+                }]
+              }
+            })
+            print(f"WA Bild {label}: {r.status_code}")
+            if r.status_code >= 300:
+              print(f"  ❌ {r.text[:400]}")
+
+          send_bild(f"{raw_base}/latest-ig.png?t={ts}",       "Daniel")
+          send_bild(f"{raw_base}/latest-ig-heiko.png?t={ts}", "Heiko")
+          send_bild(f"{raw_base}/latest-ig-beide.png?t={ts}", "Beide")
+          print("✅ Fertig")
+          PYEOF
