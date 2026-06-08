@@ -104,6 +104,9 @@ jobs:
             blog_html = re.sub(
               r'<meta property="og:image" content="[^"]*"',
               f'<meta property="og:image" content="{new_url}"', blog_html)
+            blog_html = re.sub(
+              r'<img([^>]*?)src="[^"]*"([^>]*?)class="blog-hero-img"',
+              f'<img\\1src="{new_url}"\\2class="blog-hero-img"', blog_html)
             ig_url = re.sub(r'w=\d+&h=\d+', 'w=1080&h=1920', new_url)
             for sf in ['social/latest-ig.html', 'social/latest-ig-heiko.html', 'social/latest-ig-beide.html']:
               if os.path.exists(sf):
