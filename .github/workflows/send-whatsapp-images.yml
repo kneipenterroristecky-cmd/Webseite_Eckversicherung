@@ -29,32 +29,19 @@ jobs:
           auth      = {"Authorization": f"Bearer {token}"}
 
           def upload_und_senden(pfad, label):
-            # Bild direkt hochladen → frische Media-ID, kein URL-Cache
             with open(pfad, "rb") as f:
-              r = req.post(media_api,
-                headers=auth,
+              r = req.post(media_api, headers=auth,
                 data={"messaging_product": "whatsapp", "type": "image/png"},
-                files={"file": (os.path.basename(pfad), f, "image/png")}
-              )
+                files={"file": (os.path.basename(pfad), f, "image/png")})
             print(f"Upload {label}: {r.status_code}")
             if r.status_code >= 300:
-              print(f"  ❌ Upload-Fehler: {r.text[:400]}")
-              return
+              print(f"  ❌ {r.text[:400]}"); return
             media_id = r.json()["id"]
-
-            # Template mit Media-ID senden
             r2 = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json={
               "messaging_product": "whatsapp",
               "to": wa_to,
-              "type": "template",
-              "template": {
-                "name": "blog_bild",
-                "language": {"code": "de"},
-                "components": [{
-                  "type": "header",
-                  "parameters": [{"type": "image", "image": {"id": media_id}}]
-                }]
-              }
+              "type": "image",
+              "image": {"id": media_id}
             })
             print(f"Senden {label}: {r2.status_code}")
             if r2.status_code >= 300:
