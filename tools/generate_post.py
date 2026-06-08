@@ -54,8 +54,9 @@ def _recently_published_titles(weeks=4):
                 pass
     return seen
 
-_recent_titles = _recently_published_titles(weeks=4)
-for _i in range(len(month_topics)):
+if not FORCE_TOPIC:
+ _recent_titles = _recently_published_titles(weeks=4)
+ for _i in range(len(month_topics)):
     _candidate = month_topics[(week_of_month + _i) % len(month_topics)]
     if _candidate['title'] not in _recent_titles:
         if _i > 0:
