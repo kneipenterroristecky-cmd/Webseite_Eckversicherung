@@ -3,6 +3,10 @@ name: 3 – Änderung am Blog-Entwurf beantragen
 on:
   workflow_dispatch:
     inputs:
+      new_topic:
+        description: 'Komplett neues Thema generieren (z.B. "Hausratversicherung: Was wirklich versichert ist"). Leer = Thema bleibt.'
+        required: false
+        default: ''
       new_unsplash_id:
         description: 'Neues Bild – Unsplash Foto-ID (z.B. photo-1552664730-d307ca884978). Leer = kein Bildwechsel.'
         required: false
