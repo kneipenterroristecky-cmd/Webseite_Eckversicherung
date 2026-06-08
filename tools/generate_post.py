@@ -7,15 +7,26 @@ import os, json, re, datetime, base64, requests, anthropic
 SITE_URL = os.environ.get("SITE_URL", "https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung")
 
 # ── Thema der Woche bestimmen ─────────────────────────────────────────────────
-with open("tools/topics.json", encoding="utf-8") as f:
-    topics = json.load(f)
-
-# Saisonales Thema: Monat bestimmt die Themengruppe, Woche im Monat den Beitrag
 today_preview = datetime.date.today()
-month_key = str(today_preview.month)
-week_of_month = (today_preview.day - 1) // 7  # 0=Woche1 … 3=Woche4
-month_topics = topics[month_key]
-topic = month_topics[week_of_month % len(month_topics)]
+FORCE_TOPIC = os.environ.get("FORCE_TOPIC", "").strip()
+
+if FORCE_TOPIC:
+    topic = {
+        "title": FORCE_TOPIC,
+        "label": "Ratgeber",
+        "unsplash_query": FORCE_TOPIC,
+        "og_image": ""
+    }
+    print(f"📌 Erzwungenes Thema: {topic['title']}")
+else:
+    with open("tools/topics.json", encoding="utf-8") as f:
+        topics = json.load(f)
+
+    # Saisonales Thema: Monat bestimmt die Themengruppe, Woche im Monat den Beitrag
+    month_key = str(today_preview.month)
+    week_of_month = (today_preview.day - 1) // 7  # 0=Woche1 … 3=Woche4
+    month_topics = topics[month_key]
+    topic = month_topics[week_of_month % len(month_topics)]
 
 # Duplikat-Schutz: Titel der letzten 4 Wochen prüfen (datum-basiert, nicht mtime)
 import glob as _glob, datetime as _dt
