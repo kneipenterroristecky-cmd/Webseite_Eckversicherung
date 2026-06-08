@@ -41,9 +41,21 @@ jobs:
           python-version: '3.11'
 
       - name: Abhängigkeiten installieren
-        run: pip install requests playwright pillow
+        run: pip install requests playwright pillow anthropic
+
+      - name: Neues Thema generieren
+        if: ${{ inputs.new_topic != '' }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+          FORCE_TOPIC: ${{ inputs.new_topic }}
+        run: |
+          playwright install chromium --with-deps
+          python tools/generate_post.py
+          python tools/generate_social_image.py
 
       - name: Änderungen anwenden
+        if: ${{ inputs.new_topic == '' }}
         env:
           NEW_UNSPLASH_ID: ${{ inputs.new_unsplash_id }}
           NEW_TITLE: ${{ inputs.new_title }}
