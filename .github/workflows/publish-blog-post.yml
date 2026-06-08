@@ -31,48 +31,44 @@ jobs:
           SITE_URL: ${{ secrets.SITE_URL }}
         run: python tools/publish_post.py
 
-      - name: WhatsApp-Benachrichtigung nach Veröffentlichung
+      - name: WhatsApp-Bilder senden
         env:
           WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           WA_TO:       ${{ secrets.WHATSAPP_TO_NUMBER }}
-          REPO:        ${{ github.repository }}
         run: |
           python3 - <<'PYEOF'
-          import os, requests as req, time
+          import os, requests as req
 
           token    = os.environ.get("WA_TOKEN", "")
           phone_id = os.environ.get("WA_PHONE_ID", "")
           wa_to    = os.environ.get("WA_TO", "")
-          repo     = os.environ.get("REPO", "")
 
-          # raw.githubusercontent.com liefert sofort die aktuell commitete Datei –
-          # ohne GitHub-Pages-Deploy-Verzögerung und ohne Cache-Probleme.
-          ts = int(time.time())
-          raw_base = f"https://raw.githubusercontent.com/{repo}/master/social"
+          media_api = f"https://graph.facebook.com/v19.0/{phone_id}/media"
+          msg_api   = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          auth      = {"Authorization": f"Bearer {token}"}
 
-          msg_api = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
-          auth    = {"Authorization": f"Bearer {token}"}
-
-          def send_bild(image_url, label):
-            r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json={
+          def upload_und_senden(pfad, label):
+            with open(pfad, "rb") as f:
+              r = req.post(media_api, headers=auth,
+                data={"messaging_product": "whatsapp", "type": "image/png"},
+                files={"file": (os.path.basename(pfad), f, "image/png")})
+            print(f"Upload {label}: {r.status_code}")
+            if r.status_code >= 300:
+              print(f"  ❌ {r.text[:400]}"); return
+            media_id = r.json()["id"]
+            r2 = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json={
               "messaging_product": "whatsapp",
               "to": wa_to,
-              "type": "template",
-              "template": {
-                "name": "blog_bild",
-                "language": {"code": "de"},
-                "components": [{
-                  "type": "header",
-                  "parameters": [{"type": "image", "image": {"link": image_url}}]
-                }]
-              }
+              "type": "image",
+              "image": {"id": media_id}
             })
-            print(f"WA Bild {label}: {r.status_code}")
-            if r.status_code >= 300:
-              print(f"  ❌ {r.text[:400]}")
+            print(f"Senden {label}: {r2.status_code}")
+            if r2.status_code >= 300:
+              print(f"  ❌ {r2.text[:400]}")
 
-          send_bild(f"{raw_base}/latest-ig.png?t={ts}",       "Daniel")
-          send_bild(f"{raw_base}/latest-ig-heiko.png?t={ts}", "Heiko")
-          send_bild(f"{raw_base}/latest-ig-beide.png?t={ts}", "Beide")
+          upload_und_senden("social/latest-ig.png",       "Daniel")
+          upload_und_senden("social/latest-ig-heiko.png", "Heiko")
+          upload_und_senden("social/latest-ig-beide.png", "Beide")
+          print("✅ Fertig")
           PYEOF
