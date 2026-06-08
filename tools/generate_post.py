@@ -28,7 +28,7 @@ else:
     month_topics = topics[month_key]
     topic = month_topics[week_of_month % len(month_topics)]
 
-# Duplikat-Schutz: Titel der letzten 4 Wochen prüfen (datum-basiert, nicht mtime)
+# Duplikat-Schutz: nur wenn kein Thema erzwungen wurde
 import glob as _glob, datetime as _dt
 
 def _recently_published_titles(weeks=4):
