@@ -1465,8 +1465,9 @@ p   { line-height: 1.7; }
   /* Mobile CTA Bar */
   body { padding-bottom: 85px; }
   .social-peek-wa { display: none; }
-  .social-peek { transform: translateX(46px) !important; }
-  .social-peek.is-peeked { transform: translateX(46px) !important; }
+  .social-peek-fb { display: none; }
+  .social-peek-ig { display: none; }
+  .social-peek { right: 0; transform: none !important; }
   .mobile-cta-bar {
     display: flex;
     position: fixed;
