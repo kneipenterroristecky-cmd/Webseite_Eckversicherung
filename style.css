@@ -1382,32 +1382,52 @@ p   { line-height: 1.7; }
   .topbar { display: none; }
   body { padding-top: 72px; }
 
-  /* Hero – kompakt, zentriert, kein Overflow */
-  .hero { padding: 14px 0 90px; overflow-x: hidden; }
+  /* Hero – Mobile */
+  .hero { padding: 20px 0 100px; overflow-x: hidden; }
   .hero-container {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 14px;
-    padding: 0 16px;
+    gap: 0;
+    padding: 0;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
   }
   .hero-visual { order: -1; width: 100%; box-sizing: border-box; }
-  .hero-img-wrapper { width: 100%; height: 280px; border-radius: var(--r-lg); flex: none; box-sizing: border-box; }
-  .hero-img { border-radius: var(--r-lg); object-position: center 10%; }
+  .hero-img-wrapper {
+    width: 100%;
+    height: 320px;
+    border-radius: 0;
+    flex: none;
+    box-sizing: border-box;
+  }
+  .hero-img { border-radius: 0; object-position: center 10%; }
   .hero-img-deco { display: none; }
+  .hero-name-badge {
+    right: 16px;
+    bottom: 16px;
+    padding: 12px 18px;
+    border-radius: 12px;
+  }
+  .hero-name-badge-name { font-size: 16px; }
+  .hero-name-badge-role { font-size: 11px; }
   .hero-content {
     width: 100%;
     box-sizing: border-box;
-    padding: 18px 16px;
+    padding: 24px 20px 20px;
     text-align: center;
+    border-radius: 0;
+    background: rgba(15,30,56,.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: none;
+    border-top: 1px solid rgba(255,255,255,.10);
   }
   .hero-eyebrow { justify-content: center; margin-bottom: 10px; }
-  .hero-title { font-size: clamp(32px, 9vw, 44px); margin-bottom: 12px; word-break: break-word; }
+  .hero-title { font-size: clamp(28px, 8vw, 40px); margin-bottom: 12px; word-break: break-word; line-height: 1.15; }
   .hero-desc { font-size: 14px; margin-bottom: 20px; max-width: 100%; word-break: break-word; }
-  .hero-btns { display: flex; justify-content: center; margin-bottom: 14px; width: 100%; }
+  .hero-btns { display: flex; flex-direction: column; align-items: stretch; gap: 10px; margin-bottom: 16px; width: 100%; }
   .hero-btns .btn { width: 100%; justify-content: center; box-sizing: border-box; }
   .hero-trust { justify-content: center; gap: 12px; font-size: 11px; flex-wrap: wrap; }
 
