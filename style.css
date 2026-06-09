@@ -1509,9 +1509,12 @@ p   { line-height: 1.7; }
   .section-container { padding: 0 16px; }
 
   /* Hero */
-  .hero-title { font-size: clamp(30px, 8vw, 40px); letter-spacing: -.3px; }
-  .hero-btns { display: flex; flex-direction: column; width: 100%; }
-  .hero-btns .btn { width: 100%; justify-content: center; box-sizing: border-box; }
+  .hero { padding: 16px 0 90px; }
+  .hero-img-wrapper { height: 280px; }
+  .hero-content { padding: 20px 16px 18px; }
+  .hero-title { font-size: clamp(26px, 8vw, 36px); letter-spacing: -.3px; }
+  .hero-btns { display: flex; flex-direction: column; width: 100%; gap: 8px; }
+  .hero-btns .btn { width: 100%; justify-content: center; box-sizing: border-box; font-size: 14px; padding: 13px 16px; }
 
   /* About */
   .about-stats { flex-direction: column; gap: 16px; }
