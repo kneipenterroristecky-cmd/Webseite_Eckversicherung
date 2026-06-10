@@ -1340,7 +1340,7 @@ p   { line-height: 1.7; }
 @media (max-width: 900px) {
   .hero-container { grid-template-columns: 1fr; gap: 48px; }
   .hero-visual { order: -1; }
-  .hero-img { height: 340px; }
+  .hero-img { height: 100%; }
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
   .about-img-wrap img { height: 380px; }
   .vers-grid { grid-template-columns: 1fr; }
