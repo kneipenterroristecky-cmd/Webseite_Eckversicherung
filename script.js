@@ -20,7 +20,8 @@ function getBgColor(el) {
 
 function updateNavbarTheme() {
   const midY = (navbar.offsetHeight || 80) / 2;
-  const el = document.elementFromPoint(window.innerWidth / 2, midY);
+  const els = document.elementsFromPoint(window.innerWidth / 2, midY);
+  const el = els.find(e => !navbar.contains(e) && e !== navbar);
   if (!el) return;
   const rgb = getBgColor(el);
   const lum = 0.299 * +rgb[0] + 0.587 * +rgb[1] + 0.114 * +rgb[2];
