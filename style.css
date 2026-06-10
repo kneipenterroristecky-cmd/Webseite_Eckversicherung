@@ -1398,7 +1398,7 @@ p   { line-height: 1.7; }
   .nav-links .btn-nav:not(.btn-online-abschluss) { display: none; }
 
   /* Hero – Mobile */
-  .hero { padding: 0 0 160px; overflow: hidden; clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%); margin-bottom: -80px; border-radius: 0; }
+  .hero { padding: 0 0 160px; overflow: hidden; clip-path: polygon(0 0, 100% 0, 100% 94%, 0 100%); margin-bottom: -80px; border-radius: 0; }
   .hero-container {
     display: flex;
     flex-direction: column;
