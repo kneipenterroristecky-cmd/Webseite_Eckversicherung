@@ -1527,7 +1527,7 @@ p   { line-height: 1.7; }
 
   /* Hero */
   .hero { padding: 16px 0 90px; }
-  .hero-img-wrapper { height: 280px; }
+  .hero-img-wrapper { height: 260px; }
   .hero-content { padding: 20px 16px 18px; }
   .hero-title { font-size: clamp(26px, 8vw, 36px); letter-spacing: -.3px; }
   .hero-btns { display: flex; flex-direction: column; width: 100%; gap: 8px; }
