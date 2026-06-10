@@ -1054,12 +1054,14 @@
     }
 
     // 1) Kontakt in Brevo speichern
+    var brevoAttrs = { VORNAME: name, NACHNAME: lastname, ANMELDEDATUM: new Date().toISOString().slice(0,10) };
+    if (phone) brevoAttrs.TELEFON = phone;
     fetch('https://api.brevo.com/v3/contacts', {
       method: 'POST',
       headers: brevoHdrs,
       body: JSON.stringify({
         email: email,
-        attributes: { VORNAME: name, NACHNAME: lastname, ANMELDEDATUM: new Date().toISOString().slice(0,10) },
+        attributes: brevoAttrs,
         listIds: [GP_LIST_ID],
         updateEnabled: true
       })
