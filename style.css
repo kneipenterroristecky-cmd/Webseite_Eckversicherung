@@ -368,6 +368,8 @@ p   { line-height: 1.7; }
   position: relative;
   display: flex;
   flex-direction: column;
+  aspect-ratio: 1 / 1;
+  align-self: center;
 }
 .hero-img-wrapper {
   position: relative;
