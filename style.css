@@ -1440,8 +1440,8 @@ p   { line-height: 1.7; }
   .hero-eyebrow { justify-content: center; margin-bottom: 10px; }
   .hero-title { font-size: clamp(28px, 8vw, 40px); margin-bottom: 12px; word-break: break-word; line-height: 1.15; }
   .hero-desc { font-size: 14px; margin-bottom: 20px; max-width: 100%; word-break: break-word; }
-  .hero-btns { display: flex; flex-direction: column; align-items: stretch; gap: 10px; margin-bottom: 16px; width: 100%; max-width: 220px; align-self: center; }
-  .hero-btns .btn { width: 100%; justify-content: center; box-sizing: border-box; font-size: 12px; padding: 12px 12px; white-space: normal; text-align: center; }
+  .hero-btns { display: flex; flex-direction: column; align-items: stretch; gap: 10px; margin-bottom: 16px; width: 100%; }
+  .hero-btns .btn { width: 100%; justify-content: center; box-sizing: border-box; font-size: 12px; padding: 12px 10px; white-space: nowrap; }
   .hero-trust { justify-content: center; gap: 12px; font-size: 11px; flex-wrap: wrap; }
 
   /* Cards & Grids */
