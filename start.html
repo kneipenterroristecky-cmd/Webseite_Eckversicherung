@@ -1119,7 +1119,24 @@
         + '</div></div>';
       sendEmail('Ihre 5 kostenlosen Tools – Daniel Eck Versicherungsmakler', email, name + ' ' + lastname, customerHtml).catch(function(err) { console.error('[Brevo SMTP] Kunden-Email fehlgeschlagen:', err); });
 
-      showGPSuccess();
+      // 4) Voice-Lead in Code.gs speichern (wenn Anruf-Einwilligung gegeben)
+      var wantsCall = callConsent && phone && phone.replace(/\D/g,'').length >= 6;
+      if (wantsCall) {
+        fetch(GP_GAS_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({
+            action: 'store_lead',
+            secret: GP_LEAD_SECRET,
+            vorname: name,
+            nachname: lastname,
+            email: email,
+            phone: phone
+          })
+        }).catch(function(err) { console.error('[Voice-Lead] Speichern fehlgeschlagen:', err); });
+      }
+
+      showGPSuccess(wantsCall);
     })
     .catch(function(err) {
       btn.disabled = false;
