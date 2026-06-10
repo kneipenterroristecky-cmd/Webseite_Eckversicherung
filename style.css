@@ -1371,7 +1371,8 @@ p   { line-height: 1.7; }
 
   /* Hamburger */
   .hamburger { display: flex; position: relative; z-index: 203; }
-  .hamburger span { width: 26px; height: 2.5px; background: var(--navy); }
+  .hamburger span { width: 26px; height: 2.5px; background: #fff; transition: background .3s; }
+  .navbar.scrolled .hamburger span { background: var(--navy); }
 
   /* Mobile Nav Dropdown – startet ab top:0, Webseite bleibt darunter sichtbar */
   .nav-links {
