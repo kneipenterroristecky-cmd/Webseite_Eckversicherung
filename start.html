@@ -317,11 +317,20 @@
     .gp-input.error { border-color: #dc2626; background: #fff5f5; }
     @media(max-width: 600px) {
       .gp-card { grid-template-columns: 1fr; max-height: 92vh; }
-      .gp-left { padding: 24px 22px 20px; border-radius: 0; }
-      .gp-left h2 { font-size: 17px; }
-      .gp-products { flex-direction: row; flex-wrap: wrap; gap: 8px; margin-bottom: 0; }
+      .gp-left {
+        padding: 16px 22px 14px; border-radius: 0;
+        background: #fff;
+        color: #172d50;
+      }
+      .gp-left::before { display: none; }
+      .gp-left h2 { font-size: 15px; color: #172d50; }
+      .gp-left-sub { color: #64748b; }
+      .gp-left-badge { background: rgba(26,80,200,.08); color: #1a50c8; }
+      .gp-pill { color: #172d50; }
+      .gp-products { flex-direction: row; flex-wrap: wrap; gap: 6px; margin-bottom: 0; }
+      .gp-pill i { background: rgba(74,222,128,.2); }
       .gp-left-author { display: none; }
-      .gp-right { padding: 22px 22px 24px; }
+      .gp-right { padding: 16px 22px 20px; }
     }
 
   </style>
