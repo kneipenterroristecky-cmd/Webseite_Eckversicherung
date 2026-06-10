@@ -6,17 +6,25 @@
 /* ---- Navbar scroll shadow + Hamburger Farbe ---- */
 const navbar = document.getElementById('navbar');
 
+function getBgColor(el) {
+  while (el && el !== document.body) {
+    const bg = window.getComputedStyle(el).backgroundColor;
+    const rgb = bg.match(/\d+/g);
+    if (rgb && !(rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 0 && rgb[3] == 0) && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+      return rgb;
+    }
+    el = el.parentElement;
+  }
+  return [255, 255, 255];
+}
+
 function updateNavbarTheme() {
-  const navH = navbar.offsetHeight || 80;
-  const midY = navH / 2;
+  const midY = (navbar.offsetHeight || 80) / 2;
   const el = document.elementFromPoint(window.innerWidth / 2, midY);
   if (!el) return;
-  const bg = window.getComputedStyle(el.closest('[class]') || el).backgroundColor;
-  const rgb = bg.match(/\d+/g);
-  if (rgb) {
-    const lum = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
-    navbar.classList.toggle('nav-over-dark', lum < 128);
-  }
+  const rgb = getBgColor(el);
+  const lum = 0.299 * +rgb[0] + 0.587 * +rgb[1] + 0.114 * +rgb[2];
+  navbar.classList.toggle('nav-over-dark', lum < 140);
 }
 
 window.addEventListener('scroll', () => {
