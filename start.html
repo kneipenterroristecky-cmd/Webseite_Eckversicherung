@@ -1145,8 +1145,14 @@
     });
   };
 
-  function showGPSuccess() {
+  function showGPSuccess(withCall) {
     document.getElementById('gpFormWrap').style.display = 'none';
+    var textEl = document.getElementById('gpSuccessText');
+    if (withCall && textEl) {
+      textEl.innerHTML = 'Ihre 5 kostenlosen Tools sind auf dem Weg – schauen Sie gleich in Ihr Postfach.'
+        + '<br><br><span style="display:inline-block;background:#dcfce7;border-radius:8px;padding:8px 14px;font-size:13px;color:#15803d;font-weight:600;">&#128222; Ihr KI-Check-Anruf erfolgt am nächsten Werktag zwischen 10–18 Uhr.</span>'
+        + '<br><span style="font-size:12px;color:#94a3b8;">(E-Mail kann auch im Spam-Ordner landen.)</span>';
+    }
     document.getElementById('gpSuccess').classList.add('show');
   }
   </script>
