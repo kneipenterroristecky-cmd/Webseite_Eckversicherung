@@ -1351,7 +1351,7 @@ p   { line-height: 1.7; }
 
 @media (max-width: 768px) {
   .section { padding: 64px 0; }
-  .hero { padding: 60px 0 120px; clip-path: polygon(0 0, 100% 0, 100% 96%, 0 100%); margin-bottom: -50px; }
+  .hero { padding: 60px 0 60px; clip-path: polygon(0 0, 100% 0, 100% 96%, 0 100%); margin-bottom: -50px; }
 
   /* Topbar */
   .topbar-right { gap: 16px; }
