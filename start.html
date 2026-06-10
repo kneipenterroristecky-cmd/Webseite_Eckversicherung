@@ -970,18 +970,11 @@
   var GP_GAS_URL = 'https://script.google.com/macros/s/AKfycbzxyEcTAME2BJN30Qtyk2vwt0VsDpbyAg4okkZgKvkaeclAgebU7ljT9YeRbrQT_VI/exec';
   var GP_LEAD_SECRET = 'ECK_VOICE_2024';
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var phoneInp = document.getElementById('gpPhone');
-    if (phoneInp) {
-      phoneInp.addEventListener('input', function() {
-        var digits = this.value.replace(/\D/g, '').length;
-        var row = document.getElementById('gpCallConsentRow');
-        if (row) {
-          row.style.display = digits >= 6 ? '' : 'none';
-          if (digits < 6) document.getElementById('gpCallConsent').checked = false;
-        }
-      });
-    }
+  document.getElementById('gpPhone').addEventListener('input', function() {
+    var digits = this.value.replace(/\D/g, '').length;
+    var row = document.getElementById('gpCallConsentRow');
+    row.style.display = digits >= 6 ? '' : 'none';
+    if (digits < 6) document.getElementById('gpCallConsent').checked = false;
   });
 
   window.openGratisPaket = function() {
