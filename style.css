@@ -1365,11 +1365,11 @@ p   { line-height: 1.7; }
   .nav-links {
     display: none;
     position: absolute;
-    top: 72px; left: 0; right: 0;
+    top: 80px; left: 0; right: 0;
     background: #fff;
     flex-direction: column;
     align-items: stretch;
-    padding: 16px 20px 20px;
+    padding: 10px 20px 20px;
     gap: 2px;
     box-shadow: 0 12px 32px rgba(0,0,0,.12);
     border-top: 1px solid #f1f5f9;
@@ -1378,6 +1378,7 @@ p   { line-height: 1.7; }
   .nav-links.open { display: flex; }
   .nav-link { padding: 13px 12px; border-radius: 8px; border-bottom: 1px solid #f1f5f9; }
   .btn-nav { margin: 10px 0 0; text-align: center; justify-content: center; }
+  .btn-nav[style*="background-color: rgb(33, 103, 204)"] { display: none; }
   .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; overflow: visible; height: 80px; }
   .navbar-container { height: 80px; padding: 0 20px; }
   .logo { margin-left: 0; }
