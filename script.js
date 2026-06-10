@@ -7,25 +7,31 @@
 const navbar = document.getElementById('navbar');
 
 function getBgColor(el) {
-  while (el && el !== document.body) {
-    const bg = window.getComputedStyle(el).backgroundColor;
-    const rgb = bg.match(/\d+/g);
-    if (rgb && !(rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 0 && rgb[3] == 0) && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
-      return rgb;
+  let node = el;
+  while (node && node.tagName !== 'HTML') {
+    const bg = window.getComputedStyle(node).backgroundColor;
+    if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+      const rgb = bg.match(/\d+/g);
+      if (rgb) return rgb;
     }
-    el = el.parentElement;
+    node = node.parentElement;
   }
   return [255, 255, 255];
 }
 
 function updateNavbarTheme() {
   const midY = (navbar.offsetHeight || 80) / 2;
+  // Alle Elemente an dieser Position, Navbar-Kinder überspringen
   const els = document.elementsFromPoint(window.innerWidth / 2, midY);
-  const el = els.find(e => !navbar.contains(e) && e !== navbar);
-  if (!el) return;
-  const rgb = getBgColor(el);
-  const lum = 0.299 * +rgb[0] + 0.587 * +rgb[1] + 0.114 * +rgb[2];
-  navbar.classList.toggle('nav-over-dark', lum < 140);
+  let found = null;
+  for (const e of els) {
+    if (navbar.contains(e) || e === navbar) continue;
+    const rgb = getBgColor(e);
+    const lum = 0.299 * +rgb[0] + 0.587 * +rgb[1] + 0.114 * +rgb[2];
+    // Ersten nicht-weißen Hintergrund nehmen
+    if (lum < 250) { found = lum; break; }
+  }
+  navbar.classList.toggle('nav-over-dark', found !== null && found < 140);
 }
 
 window.addEventListener('scroll', () => {
