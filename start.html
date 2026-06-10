@@ -1076,9 +1076,11 @@
         + '<tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;width:110px">Vorname</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-weight:700;color:#172d50;">' + name + '</td></tr>'
         + '<tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">Nachname</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-weight:700;color:#172d50;">' + lastname + '</td></tr>'
         + '<tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">E-Mail</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;"><a href="mailto:' + email + '" style="color:#1a50c8;font-weight:700;">' + email + '</a></td></tr>'
+        + (phone ? '<tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">Telefon</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-weight:700;color:#172d50;">' + phone + '</td></tr>' : '')
         + '<tr><td style="padding:10px 0;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">Zeitpunkt</td><td style="padding:10px 0;color:#64748b;">' + timestamp + '</td></tr>'
         + '</table>'
         + '<div style="margin-top:16px;background:#f0fdf4;border-radius:8px;padding:12px 14px;border-left:3px solid #16a34a;font-size:13px;color:#15803d;font-weight:600;">&#10003; In Brevo gespeichert (Liste: Gratis-Paket)</div>'
+        + (callConsent && phone ? '<div style="margin-top:8px;background:#dcfce7;border-radius:8px;padding:12px 14px;border-left:3px solid #16a34a;font-size:13px;color:#15803d;font-weight:600;">&#128222; KI-Anruf angefordert – wird werktags 10–18 Uhr automatisch durchgeführt</div>' : '')
         + '</div></div>';
       sendEmail('Neue Gratis-Paket-Anfrage: ' + name + ' ' + lastname, 'daniel@eckversicherung.de', 'Daniel Eck', notifHtml).catch(function(err) { console.error('[Brevo SMTP] Benachrichtigung fehlgeschlagen:', err); });
 
