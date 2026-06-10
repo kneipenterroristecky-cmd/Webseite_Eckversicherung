@@ -1407,7 +1407,7 @@ p   { line-height: 1.7; }
     max-width: 100%;
     box-sizing: border-box;
   }
-  .hero-visual { order: -1; width: 260px; height: 260px; box-sizing: border-box; margin-top: 80px; align-self: center; margin-bottom: 20px; }
+  .hero-visual { order: -1; width: 260px; height: 260px; box-sizing: border-box; margin-top: 80px; align-self: center; margin-bottom: 0; }
   .hero-img-wrapper {
     width: 260px;
     height: 260px;
