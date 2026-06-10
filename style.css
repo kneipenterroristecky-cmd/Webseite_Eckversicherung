@@ -1405,11 +1405,11 @@ p   { line-height: 1.7; }
     max-width: 100%;
     box-sizing: border-box;
   }
-  .hero-visual { order: -1; width: 75%; box-sizing: border-box; margin-top: 80px; align-self: center; }
+  .hero-visual { order: -1; width: 260px; height: 260px; box-sizing: border-box; margin-top: 80px; align-self: center; margin-bottom: 60px; }
   .hero-img-wrapper {
-    width: 100%;
-    height: 300px;
-    border-radius: 12px;
+    width: 260px;
+    height: 260px;
+    border-radius: 16px;
     flex: none;
     box-sizing: border-box;
   }
