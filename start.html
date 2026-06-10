@@ -1033,7 +1033,7 @@
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird gesendet …';
 
     if (GP_BREVO_KEY === 'DEIN_BREVO_API_KEY') {
-      showGPSuccess();
+      showGPSuccess(callConsent && phone.replace(/\D/g,'').length >= 6);
       return;
     }
 
