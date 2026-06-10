@@ -107,6 +107,7 @@ function setMenuOpen(open) {
   document.body.classList.toggle('nav-open', open);
   var sp = document.getElementById('socialPeek');
   if (sp) sp.style.display = open ? 'none' : '';
+  if (!open) updateNavbarTheme();
 }
 
 hamburger.addEventListener('click', () => {
