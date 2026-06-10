@@ -1373,19 +1373,20 @@ p   { line-height: 1.7; }
   .hamburger { display: flex; }
   .hamburger span { width: 26px; height: 2.5px; background: var(--navy); }
 
-  /* Mobile Nav Dropdown – nahtlos mit Navbar */
+  /* Mobile Nav Dropdown – überdeckt gesamten Viewport von oben */
   .nav-links {
     display: none;
-    position: absolute;
-    top: 79px; left: 0; right: 0;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: #ffffff;
     flex-direction: column;
     align-items: stretch;
-    padding: 0 20px 20px;
+    padding: 80px 20px 20px;
     gap: 0;
-    box-shadow: 0 12px 32px rgba(0,0,0,.12);
+    box-shadow: none;
     border: none;
-    z-index: 199;
+    z-index: 201;
+    overflow-y: auto;
   }
   .nav-links.open { display: flex; }
   .nav-link { padding: 15px 12px; border-radius: 0; border-bottom: 1px solid #f1f5f9; }
