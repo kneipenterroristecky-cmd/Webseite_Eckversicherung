@@ -1426,7 +1426,8 @@ p   { line-height: 1.7; }
   .hero-name-badge-name { font-size: 13px; }
   .hero-name-badge-role { font-size: 9px; }
   .hero-content {
-    width: 100%;
+    width: 260px;
+    align-self: center;
     box-sizing: border-box;
     padding: 24px 20px 20px;
     text-align: center;
