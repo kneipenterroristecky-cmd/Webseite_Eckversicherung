@@ -801,5 +801,17 @@ function _reviewsApply() {
 window.addEventListener('load', function() {
   _reviewsInit();
   window.addEventListener('resize', _reviewsInit);
+
+  var vp = document.getElementById('reviewsViewport');
+  if (vp) {
+    var _touchStartX = 0;
+    vp.addEventListener('touchstart', function(e) {
+      _touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    vp.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - _touchStartX;
+      if (Math.abs(dx) > 40) reviewsNav(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
 });
 
