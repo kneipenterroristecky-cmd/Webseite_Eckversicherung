@@ -3,11 +3,27 @@
    ============================================= */
 
 
-/* ---- Navbar scroll shadow ---- */
+/* ---- Navbar scroll shadow + Hamburger Farbe ---- */
 const navbar = document.getElementById('navbar');
+
+function updateNavbarTheme() {
+  const navH = navbar.offsetHeight || 80;
+  const midY = navH / 2;
+  const el = document.elementFromPoint(window.innerWidth / 2, midY);
+  if (!el) return;
+  const bg = window.getComputedStyle(el.closest('[class]') || el).backgroundColor;
+  const rgb = bg.match(/\d+/g);
+  if (rgb) {
+    const lum = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
+    navbar.classList.toggle('nav-over-dark', lum < 128);
+  }
+}
+
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 12);
+  updateNavbarTheme();
 }, { passive: true });
+window.addEventListener('load', updateNavbarTheme);
 
 /* ---- Gratis-Paket: Fallback auf Unterseiten → Weiterleitung zu start.html?gratis=1 ---- */
 window.openGratisPaket = function() {
