@@ -1476,7 +1476,7 @@ p   { line-height: 1.7; }
   .social-peek-wa { display: none; }
   .social-peek-fb { display: none; }
   .social-peek-ig { display: none; }
-  .social-peek { right: 0; transform: none !important; }
+  .social-peek { right: 0; transform: none !important; bottom: auto; top: 180px; }
   .mobile-cta-bar {
     display: flex;
     position: fixed;
