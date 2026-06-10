@@ -1367,7 +1367,7 @@ p   { line-height: 1.7; }
   .logo { margin-left: 0; }
   .logo-img { height: 76px; }
   .topbar { display: none; }
-  body { padding-top: 80px; }
+  body { padding-top: 0; }
 
   /* Hamburger */
   .hamburger { display: flex; position: relative; z-index: 203; }
