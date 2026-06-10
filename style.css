@@ -1363,7 +1363,7 @@ p   { line-height: 1.7; }
   /* Navbar */
   .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 202; overflow: visible; height: 80px; box-shadow: none !important; border-bottom: none; background: transparent !important; }
   .nav-links { background: #f8fafc !important; }
-  .navbar-container { height: 80px; padding: 0 20px; }
+  .navbar-container { height: 80px; padding: 0 20px; background: transparent !important; }
   .logo { margin-left: 0; }
   .logo-img { height: 76px; }
   .topbar { display: none; }
