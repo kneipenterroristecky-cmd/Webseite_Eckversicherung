@@ -916,6 +916,19 @@
               <input type="email" id="gpEmail" class="gp-input" placeholder="ihre@email.de" autocomplete="email">
               <span class="gp-error" id="gpEmailErr"></span>
             </div>
+            <div class="gp-form-row">
+              <label class="gp-label" for="gpPhone">Handynummer <span style="font-size:10px;color:#94a3b8;font-weight:400;text-transform:none;">(optional – für kostenlosen KI-Check-Anruf)</span></label>
+              <div class="gp-phone-wrap">
+                <span class="gp-phone-prefix">🇩🇪 +49</span>
+                <input type="tel" id="gpPhone" class="gp-input gp-phone-input" placeholder="0170 1234567" autocomplete="tel" maxlength="20">
+              </div>
+            </div>
+            <div id="gpCallConsentRow" class="gp-call-consent" style="display:none;">
+              <label class="funnel-checkbox-label" style="font-size:11.5px;gap:8px;align-items:flex-start;color:#15803d;">
+                <input type="checkbox" id="gpCallConsent">
+                <span>Ich möchte einen <strong>kostenlosen KI-Check-Anruf</strong> erhalten, der prüft ob ich zu viel für Versicherungen zahle. Anrufe nur werktags 10–18 Uhr. <a href="datenschutz.html" target="_blank">Datenschutz</a></span>
+              </label>
+            </div>
             <div style="margin-bottom:16px;">
               <label class="funnel-checkbox-label" style="font-size:12px;gap:8px;">
                 <input type="checkbox" id="gpConsent">
