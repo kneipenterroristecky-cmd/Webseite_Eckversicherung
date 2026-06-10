@@ -1760,11 +1760,11 @@ body.nav-open .social-peek { display: none !important; }
   top: 18px; right: 18px;
   width: 36px; height: 36px;
   border: none;
-  background: #f1f5f9;
+  background: #e2e8f0;
   border-radius: 50%;
   cursor: pointer;
-  color: #64748b;
-  font-size: 14px;
+  color: #172d50;
+  font-size: 16px;
   display: flex; align-items: center; justify-content: center;
   transition: background .2s, color .2s;
 }
