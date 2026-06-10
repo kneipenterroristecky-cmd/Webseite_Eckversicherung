@@ -1355,6 +1355,9 @@ p   { line-height: 1.7; }
   .section { padding: 64px 0; }
   .hero { padding: 60px 0 60px; clip-path: polygon(0 0, 100% 0, 100% 96%, 0 100%); margin-bottom: -50px; }
 
+  /* Reveal – keine horizontalen Einblend-Animationen auf Mobile */
+  .reveal-left.visible, .reveal-right.visible { animation: revealUp .65s var(--ease) both; }
+
   /* Topbar */
   .topbar-right { gap: 16px; }
   .topbar-right a span { display: none; }
