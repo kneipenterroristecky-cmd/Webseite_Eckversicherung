@@ -1407,10 +1407,10 @@ p   { line-height: 1.7; }
     max-width: 100%;
     box-sizing: border-box;
   }
-  .hero-visual { order: -1; width: 260px; height: 260px; box-sizing: border-box; margin-top: 100px; align-self: center; margin-bottom: 0; }
+  .hero-visual { order: -1; width: min(300px, 85vw); height: min(300px, 85vw); box-sizing: border-box; margin-top: 100px; align-self: center; margin-bottom: 0; }
   .hero-img-wrapper {
-    width: 260px;
-    height: 260px;
+    width: min(300px, 85vw);
+    height: min(300px, 85vw);
     border-radius: 16px;
     flex: none;
     box-sizing: border-box;
