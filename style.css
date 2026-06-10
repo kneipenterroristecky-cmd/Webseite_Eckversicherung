@@ -1760,10 +1760,10 @@ body.nav-open .social-peek { display: none !important; }
   top: 18px; right: 18px;
   width: 36px; height: 36px;
   border: none;
-  background: #e2e8f0;
+  background: #172d50;
   border-radius: 50%;
   cursor: pointer;
-  color: #172d50;
+  color: #fff;
   font-size: 16px;
   display: flex; align-items: center; justify-content: center;
   transition: background .2s, color .2s;
