@@ -806,9 +806,30 @@ function buildDonutChart() {
 // ================================================================
 function renderTables() {
   return '<div class="tables-row">' +
-    '<div class="table-card"><h3><i class="fas fa-arrow-turn-up"></i> Referrer</h3>' + buildRefTable() + '</div>' +
+    '<div class="table-card"><h3><i class="fas fa-arrow-turn-up"></i> Herkunft</h3>' + buildRefTable() + '</div>' +
+    '<div class="table-card"><h3><i class="fas fa-file-lines"></i> Top-Seiten</h3>' + buildTopPagesTable() + '</div>' +
     '<div class="table-card"><h3><i class="fas fa-eye"></i> Meistbesuchte Abschnitte</h3>' + buildSectionTable() + '</div>' +
   '</div>';
+}
+
+function buildTopPagesTable() {
+  var counts = {};
+  filtered.filter(function(r) { return r['Typ'] === 'pageview'; })
+    .forEach(function(r) {
+      var p = (r['Seite'] || '/').replace(/\?.*$/, '');
+      counts[p] = (counts[p] || 0) + 1;
+    });
+  var list = Object.keys(counts).map(function(k) { return [k, counts[k]]; })
+    .sort(function(a, b) { return b[1] - a[1]; }).slice(0, 8);
+  var max = list[0] ? list[0][1] : 1;
+  if (!list.length) return '<div class="empty" style="padding:20px">Keine Daten</div>';
+  return '<table class="mini-table"><tr><th>Seite</th><th>Aufrufe</th></tr>' +
+    list.map(function(l) {
+      var pct = Math.round(l[1] / max * 100);
+      var name = l[0].replace(/^\//, '').replace('.html', '') || 'Start';
+      return '<tr><td title="' + esc(l[0]) + '" style="max-width:140px;overflow:hidden;text-overflow:ellipsis">' + esc(name) + '</td>' +
+        '<td class="bar-cell" style="width:70px"><div class="bar-bg" style="width:' + pct + '%"></div><span class="bar-val">' + l[1] + '</span></td></tr>';
+    }).join('') + '</table>';
 }
 
 function buildRefTable() {
