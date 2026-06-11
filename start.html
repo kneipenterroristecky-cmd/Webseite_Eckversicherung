@@ -1156,6 +1156,18 @@
       l=c;
     },{passive:true});
   })();
+
+  (function() {
+    var last = 0;
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.key === 'd') {
+        e.preventDefault();
+        var now = Date.now();
+        if (now - last < 500) { window.open('dashboard.html', '_blank'); last = 0; }
+        else { last = now; }
+      }
+    });
+  })();
   </script>
 </body>
 </html>
