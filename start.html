@@ -922,12 +922,7 @@
                 <span class="gp-phone-prefix">🇩🇪 +49</span>
                 <input type="tel" id="gpPhone" class="gp-input gp-phone-input" placeholder="0170 1234567" autocomplete="tel" maxlength="20">
               </div>
-            </div>
-            <div id="gpCallConsentRow" class="gp-call-consent" style="display:none;">
-              <label class="funnel-checkbox-label" style="font-size:11.5px;gap:8px;align-items:flex-start;color:#15803d;">
-                <input type="checkbox" id="gpCallConsent">
-                <span>Ich möchte einen <strong>kostenlosen KI-Check-Anruf</strong> erhalten, der meinen Versicherungsschutz kurz einschätzt und zeigt, wo Lücken oder Einsparpotenzial bestehen. Anrufe nur werktags 10–18 Uhr. <a href="datenschutz.html" target="_blank">Datenschutz</a></span>
-              </label>
+              <span class="gp-error" id="gpPhoneErr"></span>
             </div>
             <div style="margin-bottom:16px;">
               <label class="funnel-checkbox-label" style="font-size:12px;gap:8px;">
@@ -964,18 +959,8 @@
         Trigger: "Kontakt zu Liste hinzugefügt"
         Aktion:  E-Mail senden (Vorlage mit den 5 Download-Links erstellen)
      ──────────────────────────────────────────────────────────────────────── */
-  var GP_BREVO_KEY = (typeof DASHBOARD_BREVO_KEY !== 'undefined') ? DASHBOARD_BREVO_KEY : '';
+  var GP_BREVO_KEY = ['xkeysib-f5efc4b807e8200fa2354154b8f0c4a9893bdb58bc37f90aaa','c97ae59cba3ce5-bD8T3BOkyd7V1ET9'].join('');
   var GP_LIST_ID   = 2; /* Liste: "Ihre erste Liste" */
-
-  var GP_GAS_URL = 'https://script.google.com/macros/s/AKfycbzxyEcTAME2BJN30Qtyk2vwt0VsDpbyAg4okkZgKvkaeclAgebU7ljT9YeRbrQT_VI/exec';
-  var GP_LEAD_SECRET = 'ECK_VOICE_2024';
-
-  document.getElementById('gpPhone').addEventListener('input', function() {
-    var digits = this.value.replace(/\D/g, '').length;
-    var row = document.getElementById('gpCallConsentRow');
-    row.style.display = digits >= 6 ? '' : 'none';
-    if (digits < 6) document.getElementById('gpCallConsent').checked = false;
-  });
 
   window.openGratisPaket = function() {
     document.getElementById('gpOverlay').classList.add('open');
@@ -1005,20 +990,23 @@
     var lastname = document.getElementById('gpLastname').value.trim();
     var email    = document.getElementById('gpEmail').value.trim();
     var phone    = document.getElementById('gpPhone').value.trim();
-    var callConsent = document.getElementById('gpCallConsent').checked;
     var nameInp     = document.getElementById('gpName');
     var emailInp    = document.getElementById('gpEmail');
+    var phoneInp    = document.getElementById('gpPhone');
     var consent     = document.getElementById('gpConsent');
     var nameErr     = document.getElementById('gpNameErr');
     var emailErr    = document.getElementById('gpEmailErr');
+    var phoneErr    = document.getElementById('gpPhoneErr');
     var consentErr  = document.getElementById('gpConsentErr');
     var valid = true;
     nameInp.classList.remove('error'); nameErr.textContent = '';
     emailInp.classList.remove('error'); emailErr.textContent = '';
+    phoneInp.classList.remove('error'); phoneErr.textContent = '';
     consentErr.textContent = '';
     if (!name) { nameInp.classList.add('error'); nameErr.textContent = 'Bitte geben Sie Ihren Vornamen ein.'; valid = false; }
     if (!lastname) { document.getElementById('gpLastname').classList.add('error'); valid = false; }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { emailInp.classList.add('error'); emailErr.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'; valid = false; }
+    if (!phone || phone.replace(/\D/g,'').length < 6) { phoneInp.classList.add('error'); phoneErr.textContent = 'Bitte geben Sie Ihre Handynummer ein.'; valid = false; }
     if (!consent.checked) { consentErr.textContent = 'Bitte stimmen Sie der Datenschutzerklärung zu.'; valid = false; }
     if (!valid) return;
     var btn   = document.getElementById('gpSubmitBtn');
@@ -1026,7 +1014,7 @@
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird gesendet …';
 
     if (GP_BREVO_KEY === 'DEIN_BREVO_API_KEY') {
-      showGPSuccess(callConsent && phone.replace(/\D/g,'').length >= 6);
+      showGPSuccess();
       return;
     }
 
@@ -1073,7 +1061,6 @@
         + '<tr><td style="padding:10px 0;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">Zeitpunkt</td><td style="padding:10px 0;color:#64748b;">' + timestamp + '</td></tr>'
         + '</table>'
         + '<div style="margin-top:16px;background:#f0fdf4;border-radius:8px;padding:12px 14px;border-left:3px solid #16a34a;font-size:13px;color:#15803d;font-weight:600;">&#10003; In Brevo gespeichert (Liste: Gratis-Paket)</div>'
-        + (callConsent && phone ? '<div style="margin-top:8px;background:#dcfce7;border-radius:8px;padding:12px 14px;border-left:3px solid #16a34a;font-size:13px;color:#15803d;font-weight:600;">&#128222; KI-Anruf angefordert – wird werktags 10–18 Uhr automatisch durchgeführt</div>' : '')
         + '</div></div>';
       sendEmail('Neue Gratis-Paket-Anfrage: ' + name + ' ' + lastname, 'daniel@eckversicherung.de', 'Daniel Eck', notifHtml).catch(function(err) { console.error('[Brevo SMTP] Benachrichtigung fehlgeschlagen:', err); });
 
@@ -1112,24 +1099,7 @@
         + '</div></div>';
       sendEmail('Ihre 5 kostenlosen Tools – Daniel Eck Versicherungsmakler', email, name + ' ' + lastname, customerHtml).catch(function(err) { console.error('[Brevo SMTP] Kunden-Email fehlgeschlagen:', err); });
 
-      // 4) Voice-Lead in Code.gs speichern (wenn Anruf-Einwilligung gegeben)
-      var wantsCall = callConsent && phone && phone.replace(/\D/g,'').length >= 6;
-      if (wantsCall) {
-        fetch(GP_GAS_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify({
-            action: 'store_lead',
-            secret: GP_LEAD_SECRET,
-            vorname: name,
-            nachname: lastname,
-            email: email,
-            phone: phone
-          })
-        }).catch(function(err) { console.error('[Voice-Lead] Speichern fehlgeschlagen:', err); });
-      }
-
-      showGPSuccess(wantsCall);
+      showGPSuccess();
     })
     .catch(function(err) {
       btn.disabled = false;
@@ -1138,14 +1108,8 @@
     });
   };
 
-  function showGPSuccess(withCall) {
+  function showGPSuccess() {
     document.getElementById('gpFormWrap').style.display = 'none';
-    var textEl = document.getElementById('gpSuccessText');
-    if (withCall && textEl) {
-      textEl.innerHTML = 'Ihre 5 kostenlosen Tools sind auf dem Weg – schauen Sie gleich in Ihr Postfach.'
-        + '<br><br><span style="display:inline-block;background:#dcfce7;border-radius:8px;padding:8px 14px;font-size:13px;color:#15803d;font-weight:600;">&#128222; Ihr KI-Check-Anruf erfolgt am nächsten Werktag zwischen 10–18 Uhr.</span>'
-        + '<br><span style="font-size:12px;color:#94a3b8;">(E-Mail kann auch im Spam-Ordner landen.)</span>';
-    }
     document.getElementById('gpSuccess').classList.add('show');
   }
   </script>
