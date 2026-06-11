@@ -1137,12 +1137,10 @@ function formatBrevoDate(iso) {
 }
 
 function updateBrevoSection() {
-  // Zähler aktualisieren
   brevoLists.forEach(function(l) {
     var el = document.getElementById('brevo-count-' + l.id);
     if (el && l.count !== null) el.innerHTML = l.count;
   });
-  // Tabelle neu bauen
   var section = document.getElementById('brevoSection');
   if (!section) return;
   var grid = document.getElementById('brevoListCards');
@@ -1151,6 +1149,40 @@ function updateBrevoSection() {
   tmp.innerHTML = buildBrevoTable();
   while (grid.nextSibling) section.removeChild(grid.nextSibling);
   section.appendChild(tmp.firstChild);
+
+  // Leads-Trend nur wenn alle Kontakte geladen
+  var allContacts = [];
+  brevoLists.forEach(function(l) { allContacts = allContacts.concat(l.contacts); });
+  if (!allContacts.length) return;
+  var trendEl = document.getElementById('brevoTrend');
+  if (trendEl) trendEl.innerHTML = buildLeadsTrend(allContacts);
+}
+
+function buildLeadsTrend(contacts) {
+  var byMonth = {};
+  contacts.forEach(function(c) {
+    var d = c.createdAt || '';
+    var m = d.slice(0, 7); // YYYY-MM
+    if (!m || m.length < 7) return;
+    byMonth[m] = (byMonth[m] || 0) + 1;
+  });
+  var months = Object.keys(byMonth).sort().slice(-6);
+  if (!months.length) return '';
+  var maxVal = Math.max.apply(null, months.map(function(m) { return byMonth[m]; }));
+  var de = { '01':'Jan','02':'Feb','03':'Mär','04':'Apr','05':'Mai','06':'Jun','07':'Jul','08':'Aug','09':'Sep','10':'Okt','11':'Nov','12':'Dez' };
+  return '<div style="margin-top:20px;padding-top:16px;border-top:1px solid #f1f5f9;">' +
+    '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px"><i class="fas fa-chart-column" style="margin-right:6px"></i>Anmeldungen pro Monat</div>' +
+    '<div style="display:flex;align-items:flex-end;gap:8px;height:60px">' +
+    months.map(function(m) {
+      var pct = Math.round(byMonth[m] / maxVal * 100);
+      var label = de[m.slice(5)] || m.slice(5);
+      return '<div style="display:flex;flex-direction:column;align-items:center;flex:1;gap:4px">' +
+        '<span style="font-size:11px;font-weight:700;color:#1a50c8">' + byMonth[m] + '</span>' +
+        '<div style="width:100%;background:#1a50c8;border-radius:4px 4px 0 0;height:' + Math.max(pct * 0.4, 2) + 'px;min-height:4px"></div>' +
+        '<span style="font-size:10px;color:#94a3b8">' + label + '</span>' +
+        '</div>';
+    }).join('') +
+    '</div></div>';
 }
 
 // ================================================================
