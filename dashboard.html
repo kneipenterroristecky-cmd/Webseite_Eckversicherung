@@ -1015,7 +1015,7 @@ function loadBrevoData() {
             email:        c.email || '',
             firstname:    (c.attributes && c.attributes.VORNAME)  || '',
             lastname:     (c.attributes && c.attributes.NACHNAME) || '',
-            phone:        (c.attributes && c.attributes.SMS)      || '',
+            phone:        (c.attributes && (c.attributes.TELEFON || c.attributes.SMS)) || '',
             unsubscribed: c.emailBlacklisted === true,
             createdAt:    c.createdAt || c.modifiedAt || (c.attributes && c.attributes.ANMELDEDATUM) || '',
             list:         list
