@@ -32,6 +32,7 @@ jobs:
         run: python tools/publish_post.py
 
       - name: WhatsApp-Benachrichtigung nach Veröffentlichung
+        if: always()
         env:
           WA_PHONE_ID:   ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           WA_TOKEN:      ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
@@ -46,28 +47,59 @@ jobs:
           wa_to    = os.environ.get("WA_TO", "")
           site_url = os.environ.get("SITE_URL", "").rstrip("/")
 
-          msg_api = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
-          auth    = {"Authorization": f"Bearer {token}"}
+          media_api = f"https://graph.facebook.com/v19.0/{phone_id}/media"
+          msg_api   = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          auth      = {"Authorization": f"Bearer {token}"}
 
-          def send_bild(image_url, label):
-            r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json={
-              "messaging_product": "whatsapp",
-              "to": wa_to,
-              "type": "template",
-              "template": {
-                "name": "blog_bild",
-                "language": {"code": "de"},
-                "components": [{
-                  "type": "header",
-                  "parameters": [{"type": "image", "image": {"link": image_url}}]
-                }]
-              }
-            })
-            print(f"WA Bild {label}: {r.status_code}")
+          def send(payload):
+            r = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json=payload)
+            print(f"WA send {payload.get('type','?')}: {r.status_code}")
             if r.status_code >= 300:
               print(f"  ❌ {r.text[:400]}")
+            return r.status_code < 300
 
-          send_bild(f"{site_url}/social/latest-ig.png",       "Daniel")
-          send_bild(f"{site_url}/social/latest-ig-heiko.png", "Heiko")
-          send_bild(f"{site_url}/social/latest-ig-beide.png", "Beide")
+          def upload(path):
+            if not os.path.exists(path):
+              print(f"⚠️  Nicht gefunden: {path}")
+              return None
+            with open(path, "rb") as f:
+              r = req.post(media_api, headers=auth,
+                data={"messaging_product":"whatsapp"},
+                files={"file":(os.path.basename(path), f, "image/png")})
+            print(f"Upload {path}: {r.status_code}")
+            if r.status_code >= 300:
+              print(f"  ❌ {r.text[:300]}")
+              return None
+            return r.json().get("id")
+
+          def send_via_template(image_url, label):
+            ok = send({
+              "messaging_product":"whatsapp","to":wa_to,"type":"template",
+              "template":{
+                "name":"blog_bild","language":{"code":"de"},
+                "components":[{"type":"header","parameters":[
+                  {"type":"image","image":{"link":image_url}}
+                ]}]
+              }
+            })
+            print(f"  → {label}: {'✅' if ok else '❌'}")
+            return ok
+
+          images = [
+            ("social/latest-ig.png",       f"{site_url}/social/latest-ig.png",       "Daniel"),
+            ("social/latest-ig-heiko.png", f"{site_url}/social/latest-ig-heiko.png", "Heiko"),
+            ("social/latest-ig-beide.png", f"{site_url}/social/latest-ig-beide.png", "Beide"),
+          ]
+
+          print("=== Versuch 1: Template blog_bild ===")
+          results = [(path, url, label, send_via_template(url, label)) for path, url, label in images]
+
+          failed = [(path, label) for path, url, label, ok in results if not ok]
+          if failed:
+            print("\n=== Versuch 2: Direkt-Upload (Fallback) ===")
+            for path, label in failed:
+              mid = upload(path)
+              if mid:
+                ok = send({"messaging_product":"whatsapp","to":wa_to,"type":"image","image":{"id":mid}})
+                print(f"  → {label} (Upload): {'✅' if ok else '❌'}")
           PYEOF
