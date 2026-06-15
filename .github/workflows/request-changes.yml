@@ -3,6 +3,10 @@ name: 3 – Änderung am Blog-Entwurf beantragen
 on:
   workflow_dispatch:
     inputs:
+      new_topic:
+        description: 'Komplett neues Thema generieren (z.B. "Hausratversicherung: Was wirklich versichert ist"). Leer = Thema bleibt.'
+        required: false
+        default: ''
       new_unsplash_id:
         description: 'Neues Bild – Unsplash Foto-ID (z.B. photo-1552664730-d307ca884978). Leer = kein Bildwechsel.'
         required: false
@@ -37,9 +41,21 @@ jobs:
           python-version: '3.11'
 
       - name: Abhängigkeiten installieren
-        run: pip install requests playwright pillow
+        run: pip install requests playwright pillow anthropic
+
+      - name: Neues Thema generieren
+        if: ${{ inputs.new_topic != '' }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+          FORCE_TOPIC: ${{ inputs.new_topic }}
+        run: |
+          playwright install chromium --with-deps
+          python tools/generate_post.py
+          python tools/generate_social_image.py
 
       - name: Änderungen anwenden
+        if: ${{ inputs.new_topic == '' }}
         env:
           NEW_UNSPLASH_ID: ${{ inputs.new_unsplash_id }}
           NEW_TITLE: ${{ inputs.new_title }}
@@ -88,6 +104,9 @@ jobs:
             blog_html = re.sub(
               r'<meta property="og:image" content="[^"]*"',
               f'<meta property="og:image" content="{new_url}"', blog_html)
+            blog_html = re.sub(
+              r'<img([^>]*?)src="[^"]*"([^>]*?)class="blog-hero-img"',
+              f'<img\\1src="{new_url}"\\2class="blog-hero-img"', blog_html)
             ig_url = re.sub(r'w=\d+&h=\d+', 'w=1080&h=1920', new_url)
             for sf in ['social/latest-ig.html', 'social/latest-ig-heiko.html', 'social/latest-ig-beide.html']:
               if os.path.exists(sf):
@@ -116,11 +135,11 @@ jobs:
           PYEOF
 
       - name: Playwright Chromium installieren
-        if: ${{ inputs.new_unsplash_id != '' || inputs.suggest_new_image == true }}
+        if: ${{ inputs.new_topic == '' && (inputs.new_unsplash_id != '' || inputs.suggest_new_image == true) }}
         run: playwright install chromium --with-deps
 
       - name: Social-Bild neu rendern
-        if: ${{ inputs.new_unsplash_id != '' || inputs.suggest_new_image == true }}
+        if: ${{ inputs.new_topic == '' && (inputs.new_unsplash_id != '' || inputs.suggest_new_image == true) }}
         run: python tools/generate_social_image.py
 
       - name: Änderungen committen

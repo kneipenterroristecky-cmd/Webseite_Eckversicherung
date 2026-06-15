@@ -3,11 +3,42 @@
    ============================================= */
 
 
-/* ---- Navbar scroll shadow ---- */
+/* ---- Navbar scroll shadow + Hamburger Farbe ---- */
 const navbar = document.getElementById('navbar');
+
+function getBgColor(el) {
+  let node = el;
+  while (node && node.tagName !== 'HTML') {
+    const bg = window.getComputedStyle(node).backgroundColor;
+    if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+      const rgb = bg.match(/\d+/g);
+      if (rgb) return rgb;
+    }
+    node = node.parentElement;
+  }
+  return [255, 255, 255];
+}
+
+function updateNavbarTheme() {
+  const midY = (navbar.offsetHeight || 80) / 2;
+  // Alle Elemente an dieser Position, Navbar-Kinder überspringen
+  const els = document.elementsFromPoint(window.innerWidth / 2, midY);
+  let found = null;
+  for (const e of els) {
+    if (navbar.contains(e) || e === navbar) continue;
+    const rgb = getBgColor(e);
+    const lum = 0.299 * +rgb[0] + 0.587 * +rgb[1] + 0.114 * +rgb[2];
+    // Ersten nicht-weißen Hintergrund nehmen
+    if (lum < 250) { found = lum; break; }
+  }
+  navbar.classList.toggle('nav-over-dark', found !== null && found < 140);
+}
+
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 12);
+  updateNavbarTheme();
 }, { passive: true });
+window.addEventListener('load', updateNavbarTheme);
 
 /* ---- Gratis-Paket: Fallback auf Unterseiten → Weiterleitung zu start.html?gratis=1 ---- */
 window.openGratisPaket = function() {
@@ -76,6 +107,7 @@ function setMenuOpen(open) {
   document.body.classList.toggle('nav-open', open);
   var sp = document.getElementById('socialPeek');
   if (sp) sp.style.display = open ? 'none' : '';
+  if (!open) updateNavbarTheme();
 }
 
 hamburger.addEventListener('click', () => {
@@ -769,5 +801,17 @@ function _reviewsApply() {
 window.addEventListener('load', function() {
   _reviewsInit();
   window.addEventListener('resize', _reviewsInit);
+
+  var vp = document.getElementById('reviewsViewport');
+  if (vp) {
+    var _touchStartX = 0;
+    vp.addEventListener('touchstart', function(e) {
+      _touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    vp.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - _touchStartX;
+      if (Math.abs(dx) > 40) reviewsNav(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
 });
 

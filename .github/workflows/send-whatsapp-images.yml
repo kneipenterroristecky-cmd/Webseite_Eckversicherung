@@ -1,0 +1,54 @@
+name: 4 – WhatsApp-Bilder senden (manuell)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  whatsapp:
+    name: WhatsApp-Bilder senden
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: WhatsApp-Bilder senden
+        env:
+          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WA_TO:       ${{ secrets.WHATSAPP_TO_NUMBER }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, requests as req
+
+          token    = os.environ.get("WA_TOKEN", "")
+          phone_id = os.environ.get("WA_PHONE_ID", "")
+          wa_to    = os.environ.get("WA_TO", "")
+
+          media_api = f"https://graph.facebook.com/v19.0/{phone_id}/media"
+          msg_api   = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          auth      = {"Authorization": f"Bearer {token}"}
+
+          def upload_und_senden(pfad, label):
+            with open(pfad, "rb") as f:
+              r = req.post(media_api, headers=auth,
+                data={"messaging_product": "whatsapp", "type": "image/png"},
+                files={"file": (os.path.basename(pfad), f, "image/png")})
+            print(f"Upload {label}: {r.status_code}")
+            if r.status_code >= 300:
+              print(f"  ❌ {r.text[:400]}"); return
+            media_id = r.json()["id"]
+            r2 = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json={
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "image",
+              "image": {"id": media_id}
+            })
+            print(f"Senden {label}: {r2.status_code}")
+            if r2.status_code >= 300:
+              print(f"  ❌ {r2.text[:400]}")
+
+          upload_und_senden("social/latest-ig.png",       "Daniel")
+          upload_und_senden("social/latest-ig-heiko.png", "Heiko")
+          upload_und_senden("social/latest-ig-beide.png", "Beide")
+          print("✅ Fertig")
+          PYEOF

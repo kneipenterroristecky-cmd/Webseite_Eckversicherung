@@ -7,17 +7,28 @@ import os, json, re, datetime, base64, requests, anthropic
 SITE_URL = os.environ.get("SITE_URL", "https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung")
 
 # ── Thema der Woche bestimmen ─────────────────────────────────────────────────
-with open("tools/topics.json", encoding="utf-8") as f:
-    topics = json.load(f)
-
-# Saisonales Thema: Monat bestimmt die Themengruppe, Woche im Monat den Beitrag
 today_preview = datetime.date.today()
-month_key = str(today_preview.month)
-week_of_month = (today_preview.day - 1) // 7  # 0=Woche1 … 3=Woche4
-month_topics = topics[month_key]
-topic = month_topics[week_of_month % len(month_topics)]
+FORCE_TOPIC = os.environ.get("FORCE_TOPIC", "").strip()
 
-# Duplikat-Schutz: Titel der letzten 4 Wochen prüfen (datum-basiert, nicht mtime)
+if FORCE_TOPIC:
+    topic = {
+        "title": FORCE_TOPIC,
+        "label": "Ratgeber",
+        "unsplash_query": FORCE_TOPIC,
+        "og_image": ""
+    }
+    print(f"📌 Erzwungenes Thema: {topic['title']}")
+else:
+    with open("tools/topics.json", encoding="utf-8") as f:
+        topics = json.load(f)
+
+    # Saisonales Thema: Monat bestimmt die Themengruppe, Woche im Monat den Beitrag
+    month_key = str(today_preview.month)
+    week_of_month = (today_preview.day - 1) // 7  # 0=Woche1 … 3=Woche4
+    month_topics = topics[month_key]
+    topic = month_topics[week_of_month % len(month_topics)]
+
+# Duplikat-Schutz: nur wenn kein Thema erzwungen wurde
 import glob as _glob, datetime as _dt
 
 def _recently_published_titles(weeks=4):
@@ -43,34 +54,36 @@ def _recently_published_titles(weeks=4):
                 pass
     return seen
 
-_recent_titles = _recently_published_titles(weeks=4)
-for _i in range(len(month_topics)):
-    _candidate = month_topics[(week_of_month + _i) % len(month_topics)]
-    if _candidate['title'] not in _recent_titles:
-        if _i > 0:
-            print(f"   ℹ️  Ausweichthema (Duplikat vermieden): {_candidate['title']}")
-        topic = _candidate
-        break
-else:
-    # Alle Themen dieses Monats bereits erstellt → vergangene Monate rückwärts durchsuchen
-    for _back in range(1, 12):
-        _past_key = str(((today_preview.month - 1 - _back) % 12) + 1)
-        if _past_key not in topics:
-            continue
-        for _pc in topics[_past_key]:
-            if _pc['title'] not in _recent_titles:
-                topic = _pc
-                print(f"   ℹ️  Alle {month_key}er Themen genutzt → Monat {_past_key}: {topic['title']}")
-                break
-        else:
-            continue
-        break
+if not FORCE_TOPIC:
+    _recent_titles = _recently_published_titles(weeks=4)
+    for _i in range(len(month_topics)):
+        _candidate = month_topics[(week_of_month + _i) % len(month_topics)]
+        if _candidate['title'] not in _recent_titles:
+            if _i > 0:
+                print(f"   ℹ️  Ausweichthema (Duplikat vermieden): {_candidate['title']}")
+            topic = _candidate
+            break
+    else:
+        # Alle Themen dieses Monats bereits erstellt → vergangene Monate rückwärts durchsuchen
+        for _back in range(1, 12):
+            _past_key = str(((today_preview.month - 1 - _back) % 12) + 1)
+            if _past_key not in topics:
+                continue
+            for _pc in topics[_past_key]:
+                if _pc['title'] not in _recent_titles:
+                    topic = _pc
+                    print(f"   ℹ️  Alle {month_key}er Themen genutzt → Monat {_past_key}: {topic['title']}")
+                    break
+            else:
+                continue
+            break
 
 print(f"📌 Thema diese Woche: {topic['title']}")
 
 # ── Bild-URLs aus topics.json (stabile Unsplash-CDN-URLs) ─────────────────────
-og_image = topic.get("og_image", "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format")
-_og_base = og_image.split("?")[0]
+_FALLBACK_IMG = "https://images.unsplash.com/photo-1554224155-6726b3ff858f"
+og_image = topic.get("og_image") or f"{_FALLBACK_IMG}?w=1200&h=630&fit=crop&auto=format"
+_og_base = og_image.split("?")[0] or _FALLBACK_IMG
 og_image = f"{_og_base}?w=1200&h=630&fit=crop&auto=format"
 
 # ── Anthropic-Client initialisieren (wird auch für Bildanalyse gebraucht) ────────

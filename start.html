@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Daniel Eck – Versicherungsmakler – Ihre Zukunft. Meine Verantwortung.</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css?v=6" />
   <style>
     /* ===== QUIZ ===== */
     .section-quiz { background: #fff; }
@@ -269,6 +269,10 @@
       transition: background .2s;
     }
     .gp-close:hover { background: rgba(255,255,255,.28); }
+    @media(min-width: 601px) {
+      .gp-close { background: #e2e8f0; color: #172d50; }
+      .gp-close:hover { background: #cbd5e1; }
+    }
     .gp-form-row { margin-bottom: 14px; }
     .gp-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .04em; }
     .gp-input {
@@ -315,13 +319,39 @@
     .gp-success > p { font-size: 14px; color: #64748b; line-height: 1.65; margin: 0; }
     .gp-error { display: block; font-size: 11.5px; color: #dc2626; margin-top: 4px; min-height: 16px; }
     .gp-input.error { border-color: #dc2626; background: #fff5f5; }
+    .gp-phone-wrap { position: relative; display: flex; align-items: center; }
+    .gp-phone-prefix {
+      position: absolute; left: 12px;
+      font-size: 12px; color: #64748b; font-weight: 600;
+      pointer-events: none; user-select: none; white-space: nowrap;
+    }
+    .gp-phone-input { padding-left: 62px !important; }
+    .gp-call-consent {
+      background: #f0fdf4; border: 1.5px solid #bbf7d0;
+      border-radius: 10px; padding: 10px 14px; margin-bottom: 14px;
+      animation: gpFadeDown .22s ease;
+    }
+    .gp-call-consent label { font-size: 11.5px; color: #15803d; line-height: 1.5; }
+    .gp-call-consent a { color: #15803d; }
+    @keyframes gpFadeDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
     @media(max-width: 600px) {
-      .gp-card { grid-template-columns: 1fr; max-height: 92vh; }
-      .gp-left { padding: 24px 22px 20px; border-radius: 0; }
-      .gp-left h2 { font-size: 17px; }
-      .gp-products { flex-direction: row; flex-wrap: wrap; gap: 8px; margin-bottom: 0; }
+      .gp-card { grid-template-columns: 1fr; max-height: 100vh; }
+      .gp-left { padding: 36px 18px 12px; border-radius: 0; }
+      .gp-left h2 { font-size: 15px; margin-bottom: 4px; }
+      .gp-left-sub { font-size: 11px; margin-bottom: 10px; }
+      .gp-left-badge { display: none; }
+      .gp-products { flex-direction: row; flex-wrap: wrap; gap: 6px; margin-bottom: 0; }
+      .gp-pill { font-size: 12px; }
+      .gp-pill i { width: 18px; height: 18px; font-size: 9px; }
       .gp-left-author { display: none; }
-      .gp-right { padding: 22px 22px 24px; }
+      .gp-right { padding: 14px 18px 16px; }
+      .gp-right-title { font-size: 15px; margin-bottom: 3px; }
+      .gp-right-sub { font-size: 11px; margin-bottom: 12px; }
+      .gp-form-row { margin-bottom: 8px; }
+      .gp-input { padding: 8px 12px; font-size: 13px; }
+      .gp-label { font-size: 10px; margin-bottom: 3px; }
+      .gp-submit { padding: 11px; font-size: 13px; margin-bottom: 8px; }
+      .gp-trust { font-size: 10px; gap: 8px; }
     }
 
   </style>
@@ -528,8 +558,8 @@
       </div>
       <h2 class="section-title reveal">Sicherheit für das, was Sie aufgebaut haben.</h2>
 
-      <div class="vers-grid"><div class="vers-card-new reveal-left">  <div class="vers-card-header blue" style="background-color: rgb(33, 103, 204)">    <h3>Private Versicherungen</h3>    <p>Schutz für Sie und Ihre Familie</p>  </div>  <div class="vers-card-body">    <ul class="vers-list-new">      <li><a href="kfz-versicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-car"></i></div><span>Kfz Versicherungen</span></a></li>      <li><a href="privathaftpflicht-versicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-shield"></i></div><span>Privathaftpflicht</span></a></li>      <li><a href="wohngebaeude-versicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-house"></i></div><span>Gebäudeversicherung</span></a></li>      <li><a href="private-rentenversicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-heart"></i></div><span>Private Rentenversicherung</span></a></li>      <li><a href="berufsunfaehigkeitsversicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-briefcase"></i></div><span>Berufsunfähigkeit</span></a></li>    </ul>    <a href="private-versicherungen.html" class="vers-link-new">Alle Versicherungssparten <i class="fas fa-arrow-right"></i></a>  </div></div>
-<div class="vers-card-new reveal-right">  <div class="vers-card-header dark">    <h3>Gewerbliche Versicherungen</h3>    <p>Sicherheit für Ihr Unternehmen</p>  </div>  <div class="vers-card-body">    <ul class="vers-list-new">      <li><div class="vers-item-icon"><i class="fas fa-building"></i></div><span>Ertragsausfall</span></li>      <li><div class="vers-item-icon"><i class="fas fa-shield-halved"></i></div><span>Betriebsinhalt</span></li>      <li><div class="vers-item-icon"><i class="fas fa-piggy-bank"></i></div><span>Betriebliche AV</span></li>      <li><div class="vers-item-icon"><i class="fas fa-kit-medical"></i></div><span>Betriebskranken</span></li>      <li><div class="vers-item-icon"><i class="fas fa-car"></i></div><span>KFZ Flotte</span></li>    </ul>    <a href="gewerbliche-versicherungen.html" class="vers-link-new">Alle Versicherungssparten <i class="fas fa-arrow-right"></i></a>  </div></div>
+      <div class="vers-grid"><div class="vers-card-new reveal-left">  <div class="vers-card-header blue" style="background-color: rgb(33, 103, 204)">    <h3>Private Versicherungen</h3>    <p>Schutz für Sie und Ihre Familie</p>  </div>  <div class="vers-card-body">    <ul class="vers-list-new">      <li><a href="kfz-versicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-car"></i></div><span>Kfz Versicherungen</span></a></li>      <li><a href="privathaftpflicht-versicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-shield"></i></div><span>Privathaftpflichtversicherung</span></a></li>      <li><a href="wohngebaeude-versicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-house"></i></div><span>Gebäudeversicherung</span></a></li>      <li><a href="private-rentenversicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-heart"></i></div><span>Private Rentenversicherung</span></a></li>      <li><a href="berufsunfaehigkeitsversicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-briefcase"></i></div><span>Berufsunfähigkeitsversicherung</span></a></li>    </ul>    <a href="private-versicherungen.html" class="vers-link-new">Alle Versicherungssparten <i class="fas fa-arrow-right"></i></a>  </div></div>
+<div class="vers-card-new reveal-right">  <div class="vers-card-header dark">    <h3>Gewerbliche Versicherungen</h3>    <p>Sicherheit für Ihr Unternehmen</p>  </div>  <div class="vers-card-body">    <ul class="vers-list-new">      <li><a href="ertragsausfallversicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-building"></i></div><span>Ertragsausfallversicherung</span></a></li>      <li><a href="geschaeftsinhaltsversicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-shield-halved"></i></div><span>Geschäftsinhaltsversicherung</span></a></li>      <li><a href="bav.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-piggy-bank"></i></div><span>Betriebliche Altersvorsorge</span></a></li>      <li><a href="betriebliche-krankenversicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-kit-medical"></i></div><span>Betriebliche Krankenversicherung</span></a></li>      <li><a href="kfz-versicherung.html" style="display:flex;align-items:center;gap:14px;width:100%;color:inherit;text-decoration:none;"><div class="vers-item-icon"><i class="fas fa-car"></i></div><span>KFZ-Flottenversicherung</span></a></li>    </ul>    <a href="gewerbliche-versicherungen.html" class="vers-link-new">Alle Versicherungssparten <i class="fas fa-arrow-right"></i></a>  </div></div>
       </div>
     </div>
   </section>
@@ -561,7 +591,7 @@
   <!-- TERMIN -->
   <section class="section section-termin" id="termin">
     <div class="section-container">
-      <div class="termin-grid"><div class="termin-img-col reveal-left">  <div class="termin-img-frame">    <div class="termin-img-deco"></div>    <img src="Dummybild 2.png" alt="Persönliches Beratungsgespräch" />  </div></div><div class="termin-card reveal-right">  <div class="section-label left">    <span class="label-bar short"></span>    <span>TERMINBUCHUNG</span>  </div>  <h2 class="section-title left white">    Persönliches<br />Beratungsgespräch  </h2>  <p class="termin-meta">    <i class="far fa-clock"></i> 30 Min. &nbsp;•&nbsp; Kostenlos  </p>  <ul class="termin-features">    <li><i class="fas fa-circle-check"></i> Individuelle Bedarfsanalyse</li>    <li><i class="fas fa-circle-check"></i> Unverbindlicher Tarifvergleich</li>    <li><i class="fas fa-circle-check"></i> Transparente Empfehlung</li>  </ul>  <button onclick="openFunnel();window._track&&_track('cta','Termin – Sektion')" class="btn btn-primary btn-full" style="background-color: rgb(33, 103, 204); width:100%; cursor:pointer;">    Jetzt Termin buchen <i class="fas fa-arrow-right"></i>  </button>  <div class="termin-contact-grid">    <span><i class="fas fa-phone"></i> 0174 / 322 58 85</span>    <span><i class="fas fa-envelope"></i> daniel@eckversicherung.de</span>    <a href="https://www.google.com/maps/place/Talstra%C3%9Fe+73,+98574+Schmalkalden" target="_blank" class="contact-full maps-link" style="color: rgba(255,255,255,.85) !important; font-size: 12px;"><i class="fas fa-location-dot"></i> Talstraße 73, 98574 Schmalkalden</a>hmalkalden</a>  </div></div>
+      <div class="termin-grid"><div class="termin-img-col reveal-left">  <div class="termin-img-frame">    <div class="termin-img-deco"></div>    <img src="Dummybild 2.png" alt="Persönliches Beratungsgespräch" />  </div></div><div class="termin-card reveal-right">  <div class="section-label left">    <span class="label-bar short"></span>    <span>TERMINBUCHUNG</span>  </div>  <h2 class="section-title left white">    Persönliches<br />Beratungsgespräch  </h2>  <p class="termin-meta">    <i class="far fa-clock"></i> 30 Min. &nbsp;•&nbsp; Kostenlos  </p>  <ul class="termin-features">    <li><i class="fas fa-circle-check"></i> Individuelle Bedarfsanalyse</li>    <li><i class="fas fa-circle-check"></i> Unverbindlicher Tarifvergleich</li>    <li><i class="fas fa-circle-check"></i> Transparente Empfehlung</li>  </ul>  <button onclick="openCalendlyDirect();window._track&&_track('cta','Termin – Sektion')" class="btn btn-primary btn-full" style="background-color: rgb(33, 103, 204); width:100%; cursor:pointer;">    Jetzt Termin buchen <i class="fas fa-arrow-right"></i>  </button>  <div class="termin-contact-grid">    <span><i class="fas fa-phone"></i> 0174 / 322 58 85</span>    <span><i class="fas fa-envelope"></i> daniel@eckversicherung.de</span>    <a href="https://www.google.com/maps/place/Talstra%C3%9Fe+73,+98574+Schmalkalden" target="_blank" class="contact-full maps-link" style="color: rgba(255,255,255,.85) !important; font-size: 12px;"><i class="fas fa-location-dot"></i> Talstraße 73, 98574 Schmalkalden</a>hmalkalden</a>  </div></div>
       </div>
     </div>
   </section>
@@ -624,7 +654,7 @@
       <i class="fas fa-phone"></i>
       <span>Anrufen</span>
     </a>
-    <button class="mobile-cta-termin" onclick="openFunnel();window._track&&_track('cta','Termin – Mobile Bar')">
+    <button class="mobile-cta-termin" onclick="openCalendlyDirect();window._track&&_track('cta','Termin – Mobile Bar')">
       <i class="fas fa-calendar-check"></i>
       <span>Termin buchen</span>
     </button>
@@ -849,7 +879,7 @@
         <h2>5 Tools für Ihre Sicherheit</h2>
         <p class="gp-left-sub">Sofort per E-Mail – komplett kostenlos und ohne Verpflichtung.</p>
         <ul class="gp-products">
-          <li class="gp-pill"><i class="fas fa-check"></i> 7-Fehler eBook</li>
+          <li class="gp-pill"><i class="fas fa-check"></i> 7-Fehler Ratgeber</li>
           <li class="gp-pill"><i class="fas fa-check"></i> Versicherungscheck</li>
           <li class="gp-pill"><i class="fas fa-check"></i> Budgetplaner</li>
           <li class="gp-pill"><i class="fas fa-check"></i> Familien-Übersicht</li>
@@ -866,7 +896,6 @@
 
       <!-- Rechte Seite -->
       <div class="gp-right" style="position:relative;">
-        <button class="gp-success-close" onclick="closeGratisPaket()" aria-label="Schließen" style="position:absolute;top:14px;right:14px;"><i class="fas fa-times"></i></button>
         <p class="gp-right-title">Jetzt kostenlos erhalten</p>
         <p class="gp-right-sub">Tragen Sie sich ein – ich schicke Ihnen alle 5 Tools sofort zu.</p>
         <div id="gpFormWrap">
@@ -887,6 +916,14 @@
               <input type="email" id="gpEmail" class="gp-input" placeholder="ihre@email.de" autocomplete="email">
               <span class="gp-error" id="gpEmailErr"></span>
             </div>
+            <div class="gp-form-row">
+              <label class="gp-label" for="gpPhone">Handynummer</label>
+              <div class="gp-phone-wrap">
+                <span class="gp-phone-prefix">🇩🇪 +49</span>
+                <input type="tel" id="gpPhone" class="gp-input gp-phone-input" placeholder="0170 1234567" autocomplete="tel" maxlength="20">
+              </div>
+              <span class="gp-error" id="gpPhoneErr"></span>
+            </div>
             <div style="margin-bottom:16px;">
               <label class="funnel-checkbox-label" style="font-size:12px;gap:8px;">
                 <input type="checkbox" id="gpConsent">
@@ -906,7 +943,7 @@
         <div class="gp-success" id="gpSuccess">
           <div class="gp-success-icon"><i class="fas fa-check"></i></div>
           <h3>E-Mail ist unterwegs!</h3>
-          <p>Ihre 5 kostenlosen Tools sind auf dem Weg – schauen Sie gleich in Ihr Postfach.<br><span style="font-size:12px;color:#94a3b8;">(Kann auch im Spam-Ordner landen.)</span></p>
+          <p id="gpSuccessText">Ihre 5 kostenlosen Tools sind auf dem Weg – schauen Sie gleich in Ihr Postfach.<br><span style="font-size:12px;color:#94a3b8;">(Kann auch im Spam-Ordner landen.)</span></p>
         </div>
       </div>
     </div>
@@ -922,7 +959,7 @@
         Trigger: "Kontakt zu Liste hinzugefügt"
         Aktion:  E-Mail senden (Vorlage mit den 5 Download-Links erstellen)
      ──────────────────────────────────────────────────────────────────────── */
-  var GP_BREVO_KEY = (typeof DASHBOARD_BREVO_KEY !== 'undefined') ? DASHBOARD_BREVO_KEY : '';
+  var GP_BREVO_KEY = ['xkeysib-f5efc4b807e8200fa2354154b8f0c4a9893bdb58bc37f90aaa','c97ae59cba3ce5-bD8T3BOkyd7V1ET9'].join('');
   var GP_LIST_ID   = 2; /* Liste: "Ihre erste Liste" */
 
   window.openGratisPaket = function() {
@@ -952,19 +989,24 @@
     var name     = document.getElementById('gpName').value.trim();
     var lastname = document.getElementById('gpLastname').value.trim();
     var email    = document.getElementById('gpEmail').value.trim();
+    var phone    = document.getElementById('gpPhone').value.trim();
     var nameInp     = document.getElementById('gpName');
     var emailInp    = document.getElementById('gpEmail');
+    var phoneInp    = document.getElementById('gpPhone');
     var consent     = document.getElementById('gpConsent');
     var nameErr     = document.getElementById('gpNameErr');
     var emailErr    = document.getElementById('gpEmailErr');
+    var phoneErr    = document.getElementById('gpPhoneErr');
     var consentErr  = document.getElementById('gpConsentErr');
     var valid = true;
     nameInp.classList.remove('error'); nameErr.textContent = '';
     emailInp.classList.remove('error'); emailErr.textContent = '';
+    phoneInp.classList.remove('error'); phoneErr.textContent = '';
     consentErr.textContent = '';
     if (!name) { nameInp.classList.add('error'); nameErr.textContent = 'Bitte geben Sie Ihren Vornamen ein.'; valid = false; }
     if (!lastname) { document.getElementById('gpLastname').classList.add('error'); valid = false; }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { emailInp.classList.add('error'); emailErr.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'; valid = false; }
+    if (!phone || phone.replace(/\D/g,'').length < 6) { phoneInp.classList.add('error'); phoneErr.textContent = 'Bitte geben Sie Ihre Handynummer ein.'; valid = false; }
     if (!consent.checked) { consentErr.textContent = 'Bitte stimmen Sie der Datenschutzerklärung zu.'; valid = false; }
     if (!valid) return;
     var btn   = document.getElementById('gpSubmitBtn');
@@ -993,12 +1035,14 @@
     }
 
     // 1) Kontakt in Brevo speichern
+    var brevoAttrs = { VORNAME: name, NACHNAME: lastname, ANMELDEDATUM: new Date().toISOString().slice(0,10) };
+    if (phone) brevoAttrs.TELEFON = phone;
     fetch('https://api.brevo.com/v3/contacts', {
       method: 'POST',
       headers: brevoHdrs,
       body: JSON.stringify({
         email: email,
-        attributes: { VORNAME: name, NACHNAME: lastname, ANMELDEDATUM: new Date().toISOString().slice(0,10) },
+        attributes: brevoAttrs,
         listIds: [GP_LIST_ID],
         updateEnabled: true
       })
@@ -1013,6 +1057,7 @@
         + '<tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;width:110px">Vorname</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-weight:700;color:#172d50;">' + name + '</td></tr>'
         + '<tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">Nachname</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-weight:700;color:#172d50;">' + lastname + '</td></tr>'
         + '<tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">E-Mail</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;"><a href="mailto:' + email + '" style="color:#1a50c8;font-weight:700;">' + email + '</a></td></tr>'
+        + (phone ? '<tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">Telefon</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-weight:700;color:#172d50;">' + phone + '</td></tr>' : '')
         + '<tr><td style="padding:10px 0;color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;">Zeitpunkt</td><td style="padding:10px 0;color:#64748b;">' + timestamp + '</td></tr>'
         + '</table>'
         + '<div style="margin-top:16px;background:#f0fdf4;border-radius:8px;padding:12px 14px;border-left:3px solid #16a34a;font-size:13px;color:#15803d;font-weight:600;">&#10003; In Brevo gespeichert (Liste: Gratis-Paket)</div>'
@@ -1034,7 +1079,7 @@
         + '<div style="height:4px;background:#1a50c8;"></div>'
         + '<div style="background:#fff;padding:24px 32px 8px;">'
         + '<p style="font-size:15px;color:#172d50;line-height:1.8;margin:0 0 20px;">Freut mich, dass Sie dabei sind. Schauen Sie die Tools in Ruhe durch.</p>'
-        + tool('&#128214;','eBook: Die 7 teuersten Fehler','Welche Irrtümer beim Versichern richtig teuer werden können.','https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung/produkte/pdfs/03-ebook-7-fehler.pdf')
+        + tool('&#128214;','Ratgeber: Die 7 teuersten Fehler','Welche Irrtümer beim Versichern richtig teuer werden können.','https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung/produkte/pdfs/03-ebook-7-fehler.pdf')
         + tool('&#10003;','Versicherungscheck','Was habe ich? Was fehlt? Was ist überflüssig?','https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung/produkte/pdfs/01-versicherungscheck.pdf')
         + tool('&#128202;','Jahres-Budgetplaner','Alle Beiträge auf einen Blick – Monat für Monat.','https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung/produkte/pdfs/02-budgetplaner.pdf')
         + tool('&#128106;','Familien-Übersicht','Alle Verträge auf einem Blatt – im Notfall griffbereit.','https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung/produkte/pdfs/04-familien-uebersicht.pdf')
@@ -1110,6 +1155,18 @@
       if(c>l&&c>80){p.classList.add('is-peeked');}else{p.classList.remove('is-peeked');}
       l=c;
     },{passive:true});
+  })();
+
+  (function() {
+    var last = 0;
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.key === 'd') {
+        e.preventDefault();
+        var now = Date.now();
+        if (now - last < 500) { window.open('dashboard.html', '_blank'); last = 0; }
+        else { last = now; }
+      }
+    });
   })();
   </script>
 </body>
