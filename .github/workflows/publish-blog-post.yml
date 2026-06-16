@@ -74,7 +74,7 @@ jobs:
               "to": wa_to,
               "type": "template",
               "template": {
-                "name": "blog_bild",
+                "name": "blog_bild_v2",
                 "language": {"code": "de"},
                 "components": [{"type": "header", "parameters": [
                   {"type": "image", "image": {"id": media_id}}
