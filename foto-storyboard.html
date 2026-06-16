@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Foto-Storyboard – ECK Versicherungsmakler</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f6fb;
+      color: #2d2d2d;
+      padding: 40px 24px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 26px;
+      color: #1a3a6b;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 40px;
+    }
+
+    /* ── Section headers ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 40px 0 20px;
+    }
+    .section-header .badge {
+      background: #1a3a6b;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .section-header h2 {
+      font-size: 18px;
+      color: #1a3a6b;
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: #d1d9e8;
+    }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid #f0f2f7;
+    }
+
+    .shot-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #1a3a6b;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .shot-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a3a6b;
+      line-height: 1.2;
+    }
+
+    .shot-type {
+      margin-left: auto;
+      font-size: 11px;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+    .type-single { background: #3b82f6; }
+    .type-duo    { background: #10b981; }
+    .type-trio   { background: #8b5cf6; }
+
+    /* ── Placeholder preview ── */
+    .preview {
+      background: #eef1f8;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .preview-icons {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .person-silhouette {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .silhouette-head {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #9aa8c0;
+    }
+    .silhouette-body {
+      width: 44px;
+      height: 56px;
+      border-radius: 8px 8px 0 0;
+      background: #9aa8c0;
+    }
+    .silhouette-head.male   { background: #4a78c4; }
+    .silhouette-body.male   { background: #4a78c4; }
+    .silhouette-head.female { background: #e07ca0; }
+    .silhouette-body.female { background: #e07ca0; }
+    .silhouette-head.daniel { background: #6c5ce7; }
+    .silhouette-body.daniel { background: #6c5ce7; }
+
+    .silhouette-label {
+      font-size: 10px;
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+    .scene-tag {
+      position: absolute;
+      bottom: 8px;
+      right: 10px;
+      font-size: 10px;
+      color: #8899bb;
+      background: rgba(255,255,255,0.7);
+      padding: 2px 7px;
+      border-radius: 8px;
+    }
+
+    /* ── Card body ── */
+    .card-body {
+      padding: 14px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+    }
+    .info-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      min-width: 64px;
+      padding-top: 2px;
+    }
+    .info-value {
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.4;
+    }
+
+    /* ── Prompt box ── */
+    .prompt-box {
+      background: #f8faff;
+      border: 1px solid #d1d9ee;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 4px;
+    }
+    .prompt-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #6366f1;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+    .prompt-text {
+      font-size: 11.5px;
+      color: #4b5563;
+      line-height: 1.5;
+      font-family: 'Courier New', monospace;
+    }
+
+    .copy-btn {
+      display: inline-block;
+      margin-top: 7px;
+      font-size: 11px;
+      color: #6366f1;
+      cursor: pointer;
+      border: 1px solid #c7d2fe;
+      border-radius: 6px;
+      padding: 3px 10px;
+      background: white;
+      transition: background 0.15s;
+    }
+    .copy-btn:hover { background: #eef2ff; }
+
+    /* ── People legend ── */
+    .legend {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #4b5563;
+    }
+    .legend-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { background: white; padding: 20px; }
+      .copy-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Foto-Storyboard</h1>
+  <p class="subtitle">ECK Versicherungsmakler · 15 geplante Shots · inkl. KI-Prompts für Midjourney / DALL-E</p>
+
+  <!-- Legende -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#4a78c4"></div> Heiko Eck (Vater)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e07ca0"></div> Anette Eck (Mutter)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6c5ce7"></div> Daniel Eck (Sohn)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Einzelbild</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> 2er-Gruppe</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div> 3er-Gruppe</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- EINZELBILDER – Heiko                    -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="badge">EINZELBILDER</div>
+    <h2>Heiko Eck</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Shot 1 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">1</div>
+        <div class="shot-title">Portrait „Über uns" – klassisch</div>
+        <span class="shot-type type-single">Einzeln</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head male"></div>
+            <div class="silhouette-body male"></div>
+            <div class="silhouette-label">Heiko</div>
+          </div>
+        </div>
+        <span class="scene-tag">Schreibtisch / Roll-up</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Am Schreibtisch sitzend, blauer Roll-up im Hintergrund</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Direkt in die Kamera schauend, freundlich lächelnd, Hände locker auf dem Tisch</span></div>
+        <div class="info-row"><span class="info-label">Outfit</span><span class="info-value">Dunkelblauer Blazer, Lachshemd (wie vorhanden)</span></div>
+        <div class="info-row"><span class="info-label">Format</span><span class="info-value">Quadrat oder 3:4 – für „Über uns"-Seite</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt (Midjourney / DALL-E)</div>
+          <div class="prompt-text" id="p1">Professional portrait photo of a 65-year-old German man, short gray-white hair, dark-framed glasses, friendly warm smile, wearing dark navy blazer and salmon-pink shirt, sitting at an oak wood desk, blue corporate roll-up banner in background, soft natural office lighting, slightly blurred background, looking directly at camera, trustworthy insurance broker, photorealistic, 85mm lens --ar 3:4 --style raw</div>
+          <button class="copy-btn" onclick="copy('p1', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shot 2 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">2</div>
+        <div class="shot-title">Heiko schreibt – konzentriert</div>
+        <span class="shot-type type-single">Einzeln</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head male"></div>
+            <div class="silhouette-body male"></div>
+            <div class="silhouette-label">Heiko</div>
+          </div>
+        </div>
+        <span class="scene-tag">Schreibtisch / Notizen</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Schreibtisch mit Unterlagen, Laptop/Monitor im Hintergrund</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Blick auf Notizbuch gerichtet, Stift in der Hand, leicht nach vorne gebeugt – zeigt Fleiß & Kompetenz</span></div>
+        <div class="info-row"><span class="info-label">Licht</span><span class="info-value">Warmes Seitenlicht vom Fenster, ruhige Atmosphäre</span></div>
+        <div class="info-row"><span class="info-label">Format</span><span class="info-value">16:9 – für Website-Banner oder Blog</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p2">65-year-old German man, gray-white hair, dark glasses, dark navy blazer, salmon shirt, sitting at wooden desk writing notes in a notebook with a pen, looking down focused, insurance documents on desk, computer monitor visible in background, warm window light from the left, professional office environment, candid photography style, photorealistic --ar 16:9 --style raw</div>
+          <button class="copy-btn" onclick="copy('p2', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shot 3 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">3</div>
+        <div class="shot-title">Heiko stehend – selbstbewusst</div>
+        <span class="shot-type type-single">Einzeln</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head male"></div>
+            <div class="silhouette-body male" style="height:70px"></div>
+            <div class="silhouette-label">Heiko</div>
+          </div>
+        </div>
+        <span class="scene-tag">Stehend / Roll-up</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Stehend vor dem blauen ECK Roll-up Banner</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Arme verschränkt oder Hände in Jackentaschen, leichtes Lächeln, Oberkörper leicht zur Kamera</span></div>
+        <div class="info-row"><span class="info-label">Stimmung</span><span class="info-value">Erfahren, vertrauenswürdig, 20+ Jahre Erfahrung</span></div>
+        <div class="info-row"><span class="info-label">Format</span><span class="info-value">2:3 – Hochformat für Sidebar oder Karte</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p3">Professional headshot of 65-year-old German man, short gray-white hair, dark glasses, navy blazer over salmon shirt, standing with arms crossed, confident warm smile, in front of a blue corporate roll-up banner with white text, bright clean office, soft studio lighting, insurance broker portrait, photorealistic --ar 2:3 --style raw</div>
+          <button class="copy-btn" onclick="copy('p3', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- EINZELBILDER – Anette                   -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="badge">EINZELBILDER</div>
+    <h2>Anette Eck</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Shot 4 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">4</div>
+        <div class="shot-title">Portrait – freundlich & kompetent</div>
+        <span class="shot-type type-single">Einzeln</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head female"></div>
+            <div class="silhouette-body female"></div>
+            <div class="silhouette-label">Anette</div>
+          </div>
+        </div>
+        <span class="scene-tag">Büro / Computer</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Sitzend am Empfangs-/Büroschreibtisch, leicht zur Kamera gewandt</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Freundlich lächelnd, Hände auf der Tastatur oder am Tisch, entspannte Körperhaltung</span></div>
+        <div class="info-row"><span class="info-label">Outfit</span><span class="info-value">Leoparden-Bluse (wie vorhanden) oder schlichtes Business-Outfit</span></div>
+        <div class="info-row"><span class="info-label">Format</span><span class="info-value">3:4 – für Team-Seite</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p4">Professional portrait of a 60-year-old German woman, very short white-gray hair, round glasses, friendly smile, wearing a leopard print blouse, sitting at a modern office desk with a computer screen behind her, bright German office with blinds visible, warm and welcoming expression, photorealistic portrait --ar 3:4 --style raw</div>
+          <button class="copy-btn" onclick="copy('p4', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shot 5 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">5</div>
+        <div class="shot-title">Anette stehend – Willkommenspose</div>
+        <span class="shot-type type-single">Einzeln</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head female"></div>
+            <div class="silhouette-body female" style="height:70px"></div>
+            <div class="silhouette-label">Anette</div>
+          </div>
+        </div>
+        <span class="scene-tag">Stehend / Empfang</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Stehend im Büro/Empfangsbereich, helles natürliches Licht</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">ECK-Mappe/Ordner in der Hand, einladende Körpersprache, breites Lächeln</span></div>
+        <div class="info-row"><span class="info-label">Stimmung</span><span class="info-value">Herzlich, nahbar, langjährige Erfahrung im Büro</span></div>
+        <div class="info-row"><span class="info-label">Format</span><span class="info-value">2:3 – Hochformat</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p5">60-year-old German woman, very short white-gray pixie hair, round glasses, big friendly smile, standing in bright insurance office lobby holding a navy blue folder, welcoming pose, professional but warm and approachable, wearing a patterned blouse, soft natural window lighting, photorealistic --ar 2:3 --style raw</div>
+          <button class="copy-btn" onclick="copy('p5', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- EINZELBILDER – Daniel                   -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="badge">EINZELBILDER</div>
+    <h2>Daniel Eck</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Shot 6 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">6</div>
+        <div class="shot-title">Daniel – Modern & locker</div>
+        <span class="shot-type type-single">Einzeln</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head daniel"></div>
+            <div class="silhouette-body daniel"></div>
+            <div class="silhouette-label">Daniel</div>
+          </div>
+        </div>
+        <span class="scene-tag">Modernes Büro / locker</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Heller Hintergrund, modernes Büro oder weißer Raum</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Leicht lächelnd, locker stehend, Arme hängend oder eine Hand in Tasche (wie Dummybild 1)</span></div>
+        <div class="info-row"><span class="info-label">Outfit</span><span class="info-value">Dunkles Polo oder Pullover, casual-smart</span></div>
+        <div class="info-row"><span class="info-label">Format</span><span class="info-value">3:4 – für Hero-Bereich</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p6">Professional portrait of 38-year-old German man, short brown-gray hair, glasses, wearing dark navy polo shirt, standing relaxed in modern bright office, soft blurred white office background, friendly approachable smile, next-generation insurance broker, photorealistic, clean natural lighting --ar 3:4 --style raw</div>
+          <button class="copy-btn" onclick="copy('p6', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shot 7 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">7</div>
+        <div class="shot-title">Daniel – Business erklärend</div>
+        <span class="shot-type type-single">Einzeln</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head daniel"></div>
+            <div class="silhouette-body daniel"></div>
+            <div class="silhouette-label">Daniel</div>
+          </div>
+        </div>
+        <span class="scene-tag">Erklärende Geste</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Heller Hintergrund, freistehend</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Beide Hände gestikulierend, aufgeschlossen erklärend – zeigt Begeisterung & Kompetenz (wie Dummybild 2)</span></div>
+        <div class="info-row"><span class="info-label">Outfit</span><span class="info-value">Blazer über hellblauem Hemd, Business-casual</span></div>
+        <div class="info-row"><span class="info-label">Format</span><span class="info-value">3:4 oder 1:1</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p7">38-year-old German man, short brown-gray hair, glasses, wearing blazer over light blue shirt, gesturing with both hands while explaining enthusiastically, white studio background, confident and knowledgeable expression, financial advisor portrait, photorealistic --ar 3:4 --style raw</div>
+          <button class="copy-btn" onclick="copy('p7', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shot 8 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">8</div>
+        <div class="shot-title">Daniel – Formell & seriös</div>
+        <span class="shot-type type-single">Einzeln</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head daniel"></div>
+            <div class="silhouette-body daniel"></div>
+            <div class="silhouette-label">Daniel</div>
+          </div>
+        </div>
+        <span class="scene-tag">Business-Portrait</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Neutraler heller Hintergrund, klassisches Business-Portrait</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Gerader Stand, leichtes Lächeln, Krawatte, seriöser erster Eindruck (wie Dummybild 4)</span></div>
+        <div class="info-row"><span class="info-label">Outfit</span><span class="info-value">Dunkler Anzug, weißes Hemd, Krawatte</span></div>
+        <div class="info-row"><span class="info-label">Format</span><span class="info-value">1:1 – für Profilbild / LinkedIn</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p8">Formal business headshot of 38-year-old German man, short brown-gray hair, rectangular glasses, dark navy suit, white dress shirt, dark tie, slight warm smile, neutral light gray studio background, insurance professional, sharp photorealistic portrait --ar 1:1 --style raw</div>
+          <button class="copy-btn" onclick="copy('p8', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- 2ER-GRUPPEN                             -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="badge">2er GRUPPEN</div>
+    <h2>Paaraufnahmen</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Shot 9 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">9</div>
+        <div class="shot-title">Heiko + Anette – Teamfoto Roll-up</div>
+        <span class="shot-type type-duo">2er Gruppe</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head male"></div>
+            <div class="silhouette-body male"></div>
+            <div class="silhouette-label">Heiko</div>
+          </div>
+          <div class="person-silhouette">
+            <div class="silhouette-head female"></div>
+            <div class="silhouette-body female"></div>
+            <div class="silhouette-label">Anette</div>
+          </div>
+        </div>
+        <span class="scene-tag">Roll-up / stehend</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Beide stehend vor blauem ECK Roll-up, ECK-Mappe als Prop</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Schulter an Schulter, beide lächelnd in die Kamera, leicht zur Mitte gewandt. Weiterentwicklung des vorhandenen Fotos – dieses Mal mit mehr Dynamik</span></div>
+        <div class="info-row"><span class="info-label">Stimmung</span><span class="info-value">Eingespieltes Team, 20+ Jahre gemeinsame Erfahrung</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p9">Professional team photo of a 65-year-old German man (gray-white hair, dark glasses, navy blazer, salmon shirt) and a 60-year-old German woman (short white hair, round glasses, patterned blouse), both standing shoulder-to-shoulder in front of blue corporate roll-up banner, holding a navy folder together, warm friendly smiles, insurance office setting, photorealistic --ar 16:9 --style raw</div>
+          <button class="copy-btn" onclick="copy('p9', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shot 10 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">10</div>
+        <div class="shot-title">Heiko + Anette – Beratungsgespräch</div>
+        <span class="shot-type type-duo">2er Gruppe</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head male"></div>
+            <div class="silhouette-body male"></div>
+            <div class="silhouette-label">Heiko</div>
+          </div>
+          <div class="person-silhouette">
+            <div class="silhouette-head female"></div>
+            <div class="silhouette-body female"></div>
+            <div class="silhouette-label">Anette</div>
+          </div>
+        </div>
+        <span class="scene-tag">Besprechungstisch</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Sitzend am Besprechungstisch mit Unterlagen, beide schauend auf Dokumente</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Heiko erklärt, zeigt auf Unterlagen – Anette hört zu, nickt. Natürliche Arbeitssituation</span></div>
+        <div class="info-row"><span class="info-label">Format</span><span class="info-value">16:9 – für Über-uns-Bereich</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p10">65-year-old German man (gray-white hair, dark glasses, navy blazer) and 60-year-old German woman (short white hair, glasses) sitting together at a conference table, man pointing at insurance documents spread on table, woman attentively listening and smiling, professional office environment, natural window lighting, collaborative consultation scene, photorealistic --ar 16:9 --style raw</div>
+          <button class="copy-btn" onclick="copy('p10', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shot 11 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">11</div>
+        <div class="shot-title">Heiko + Daniel – Generationswechsel</div>
+        <span class="shot-type type-duo">2er Gruppe</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head male"></div>
+            <div class="silhouette-body male"></div>
+            <div class="silhouette-label">Heiko</div>
+          </div>
+          <div class="person-silhouette">
+            <div class="silhouette-head daniel"></div>
+            <div class="silhouette-body daniel"></div>
+            <div class="silhouette-label">Daniel</div>
+          </div>
+        </div>
+        <span class="scene-tag">Vater & Sohn</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Vor Roll-up oder am Schreibtisch, beide stehend</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Heiko legt Hand auf Daniels Schulter, beide lächeln, Gefühl der Übergabe/Kontinuität. Erzählt die Geschichte: seit 2002 → 2023</span></div>
+        <div class="info-row"><span class="info-label">Stimmung</span><span class="info-value">Vertrauen, Kontinuität, Familienunternehmen</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p11">Father and son portrait in insurance office: 65-year-old man (gray-white hair, dark glasses, navy blazer) with hand on shoulder of 38-year-old man (brown-gray hair, glasses, blazer), both smiling warmly at camera, blue corporate roll-up banner behind them, family business succession theme, photorealistic --ar 3:4 --style raw</div>
+          <button class="copy-btn" onclick="copy('p11', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shot 12 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">12</div>
+        <div class="shot-title">Daniel + Anette – Büroalltag</div>
+        <span class="shot-type type-duo">2er Gruppe</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head daniel"></div>
+            <div class="silhouette-body daniel"></div>
+            <div class="silhouette-label">Daniel</div>
+          </div>
+          <div class="person-silhouette">
+            <div class="silhouette-head female"></div>
+            <div class="silhouette-body female"></div>
+            <div class="silhouette-label">Anette</div>
+          </div>
+        </div>
+        <span class="scene-tag">Computer / Büro</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Beide am Computer, natürliche Büroatmosphäre</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Daniel steht hinter Anette, beide schauen auf Monitor, Daniel zeigt auf Bildschirm – moderner Arbeitsalltag</span></div>
+        <div class="info-row"><span class="info-label">Stimmung</span><span class="info-value">Kollegial, modern, eingespielt</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p12">38-year-old German man (brown-gray hair, glasses, blazer) standing behind a 60-year-old German woman (short white hair, glasses) seated at a computer, both looking at the monitor, man pointing at screen, bright modern office, natural collaborative work scene, photorealistic --ar 16:9 --style raw</div>
+          <button class="copy-btn" onclick="copy('p12', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- 3ER-GRUPPEN                             -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="badge">3er GRUPPEN</div>
+    <h2>Das ganze Team</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Shot 13 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">13</div>
+        <div class="shot-title">Alle drei – Klassisches Teamfoto</div>
+        <span class="shot-type type-trio">3er Gruppe</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head male"></div>
+            <div class="silhouette-body male"></div>
+            <div class="silhouette-label">Heiko</div>
+          </div>
+          <div class="person-silhouette">
+            <div class="silhouette-head daniel"></div>
+            <div class="silhouette-body daniel"></div>
+            <div class="silhouette-label">Daniel</div>
+          </div>
+          <div class="person-silhouette">
+            <div class="silhouette-head female"></div>
+            <div class="silhouette-body female"></div>
+            <div class="silhouette-label">Anette</div>
+          </div>
+        </div>
+        <span class="scene-tag">Roll-up / stehend</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Alle drei stehend vor dem ECK Roll-up, Daniel mittig (als neuer Chef)</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Alle lächeln in die Kamera. Daniel hält ECK-Mappe. Heiko links, Anette rechts – symmetrisch, professionell</span></div>
+        <div class="info-row"><span class="info-label">Stimmung</span><span class="info-value">Wir sind für Sie da – das Team hinter ECK</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p13">Professional team photo of three people in insurance office: center: 38-year-old man (brown-gray hair, glasses, dark blazer) holding navy folder, left: 65-year-old man (gray-white hair, dark glasses, navy blazer, salmon shirt), right: 60-year-old woman (short white hair, glasses, patterned blouse), all standing in front of blue corporate roll-up banner, all smiling warmly at camera, photorealistic --ar 16:9 --style raw</div>
+          <button class="copy-btn" onclick="copy('p13', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shot 14 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">14</div>
+        <div class="shot-title">Alle drei – Besprechungstisch</div>
+        <span class="shot-type type-trio">3er Gruppe</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head male"></div>
+            <div class="silhouette-body male"></div>
+            <div class="silhouette-label">Heiko</div>
+          </div>
+          <div class="person-silhouette">
+            <div class="silhouette-head daniel"></div>
+            <div class="silhouette-body daniel"></div>
+            <div class="silhouette-label">Daniel</div>
+          </div>
+          <div class="person-silhouette">
+            <div class="silhouette-head female"></div>
+            <div class="silhouette-body female"></div>
+            <div class="silhouette-label">Anette</div>
+          </div>
+        </div>
+        <span class="scene-tag">Besprechungstisch</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Sitzend am Besprechungstisch, Unterlagen auf dem Tisch, alle schauen auf Dokumente oder in die Kamera</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Natürliche Arbeitsatmosphäre, Daniel erklärt etwas, die Eltern hören aufmerksam zu</span></div>
+        <div class="info-row"><span class="info-label">Format</span><span class="info-value">16:9 – breit für Website-Banner</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p14">Three German insurance professionals in a meeting: 38-year-old man (brown-gray hair, glasses, blazer) seated at head of table explaining with documents, flanked by 65-year-old man (gray hair, glasses) and 60-year-old woman (white hair, glasses), modern conference room, documents and laptop on table, warm office lighting, engaged teamwork atmosphere, photorealistic --ar 16:9 --style raw</div>
+          <button class="copy-btn" onclick="copy('p14', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shot 15 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="shot-num">15</div>
+        <div class="shot-title">Alle drei – Außenaufnahme Büro</div>
+        <span class="shot-type type-trio">3er Gruppe</span>
+      </div>
+      <div class="preview">
+        <div class="preview-icons">
+          <div class="person-silhouette">
+            <div class="silhouette-head male"></div>
+            <div class="silhouette-body male" style="height:70px"></div>
+            <div class="silhouette-label">Heiko</div>
+          </div>
+          <div class="person-silhouette">
+            <div class="silhouette-head daniel"></div>
+            <div class="silhouette-body daniel" style="height:70px"></div>
+            <div class="silhouette-label">Daniel</div>
+          </div>
+          <div class="person-silhouette">
+            <div class="silhouette-head female"></div>
+            <div class="silhouette-body female" style="height:70px"></div>
+            <div class="silhouette-label">Anette</div>
+          </div>
+        </div>
+        <span class="scene-tag">Außen / Eingang</span>
+      </div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Setting</span><span class="info-value">Vor dem Bürogebäude in Schmalkalden, natürliche Lichtsituation</span></div>
+        <div class="info-row"><span class="info-label">Pose</span><span class="info-value">Alle drei stehend vor dem Eingang, entspannte natürliche Haltung, leichte Bewegung (Walking-Shot oder Stehen mit Geste)</span></div>
+        <div class="info-row"><span class="info-label">Stimmung</span><span class="info-value">Lokal verwurzelt, nahbar, echte Menschen aus Schmalkalden</span></div>
+        <div class="info-row"><span class="info-label">Licht</span><span class="info-value">Goldenes Stundenlicht (früh morgens oder Nachmittag), Frühling oder Herbst</span></div>
+        <div class="prompt-box">
+          <div class="prompt-label">KI-Prompt</div>
+          <div class="prompt-text" id="p15">Three German insurance professionals standing in front of a small-town office building in Thuringia, Germany: 38-year-old man (brown-gray hair, glasses, blazer), 65-year-old man (gray-white hair, glasses, navy blazer), 60-year-old woman (short white hair, glasses), all smiling naturally, golden hour afternoon light, small German town street in background, authentic local family business feel, photorealistic --ar 16:9 --style raw</div>
+          <button class="copy-btn" onclick="copy('p15', this)">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Hinweis-Box ── -->
+  <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:20px 24px;margin-top:48px;font-size:13px;color:#5a4500;line-height:1.7;">
+    <strong>So verwendest du die Prompts:</strong><br>
+    1. Klick auf „Kopieren" unter dem gewünschten Shot<br>
+    2. Füge den Text in <strong>Midjourney</strong> (Discord: /imagine …) oder <strong>DALL-E</strong> (ChatGPT: Bildgenerierung) ein<br>
+    3. Generiere 4 Varianten → wähle die beste aus<br>
+    4. Nutze die KI-Bilder als Vorlage für den echten Fotografen-Termin<br><br>
+    <strong>Tipp:</strong> Für persönliche Gesichter (echte Fotos von Heiko, Anette, Daniel) lassen sich in <strong>Midjourney v6 + Face Swap</strong> oder <strong>InsightFace</strong> die echten Gesichter in die KI-Bilder einsetzen.
+  </div>
+
+  <script>
+    function copy(id, btn) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '✓ Kopiert!';
+        btn.style.color = '#16a34a';
+        btn.style.borderColor = '#86efac';
+        setTimeout(() => {
+          btn.textContent = 'Kopieren';
+          btn.style.color = '';
+          btn.style.borderColor = '';
+        }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
