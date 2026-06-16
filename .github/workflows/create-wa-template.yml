@@ -57,11 +57,17 @@ jobs:
             )
 
           # blog_bild (Bild-Template – das eigentliche Haupt-Template)
+          # Löschen und neu erstellen wenn Body-Text noch die alte lange Version hat
           if "blog_bild" in templates:
             st = templates["blog_bild"].get("status","?")
             print(f"✅ blog_bild: {st}")
             if st == "APPROVED":
-              print("   → Perfekt! Workflow 2 sendet die 3 Bilder direkt als Templates.")
+              print("   → Löschen und mit minimalem Body-Text neu erstellen …")
+              tid = templates["blog_bild"].get("id")
+              if tid:
+                rd = requests.delete(f"https://graph.facebook.com/v19.0/{tid}", headers=headers)
+                print(f"   Gelöscht: {rd.status_code}")
+              templates.pop("blog_bild")
             elif st == "PENDING":
               print("   → Noch in Prüfung. Bitte in 1-2 Stunden erneut prüfen.")
             elif st == "REJECTED":
