@@ -193,6 +193,7 @@ og_image = _find_best_image(
 )
 
 # Portrait-Crop: Fokuspunkt aus topics.json nehmen wenn vorhanden, sonst KI-Analyse
+_og_base = og_image.split("?")[0] or _FALLBACK_IMG
 _fp_x = topic.get("ig_fp_x")
 _fp_y = topic.get("ig_fp_y")
 if _fp_x is not None or _fp_y is not None:
