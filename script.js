@@ -154,6 +154,15 @@ const revealObserver = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal, .reveal-left, .reveal-right')
   .forEach(el => revealObserver.observe(el));
 
+/* ---- bfcache fix: re-run reveals when page restored from back/forward cache ---- */
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) {
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+      el.classList.add('visible');
+    });
+  }
+});
+
 /* ---- Counter animation ---- */
 function animateCounter(el, target, duration = 1400) {
   const start     = performance.now();
