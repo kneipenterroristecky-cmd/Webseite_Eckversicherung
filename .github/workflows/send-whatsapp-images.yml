@@ -16,6 +16,7 @@ jobs:
           WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           WA_TO:       ${{ secrets.WHATSAPP_TO_NUMBER }}
+          SITE_URL:    ${{ secrets.SITE_URL }}
         run: |
           python3 - <<'PYEOF'
           import os, requests as req, sys
@@ -23,10 +24,10 @@ jobs:
           token    = os.environ.get("WA_TOKEN", "").strip()
           phone_id = os.environ.get("WA_PHONE_ID", "").strip()
           wa_to    = os.environ.get("WA_TO", "").strip()
+          site_url = os.environ.get("SITE_URL", "").rstrip("/")
 
           if not all([token, phone_id, wa_to]):
-            print("❌ Fehlende Secrets: WA_TOKEN, WA_PHONE_ID oder WA_TO nicht gesetzt!")
-            sys.exit(1)
+            print("❌ Fehlende Secrets!"); sys.exit(1)
 
           media_api = f"https://graph.facebook.com/v19.0/{phone_id}/media"
           msg_api   = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
@@ -38,56 +39,49 @@ jobs:
             ("social/latest-ig-beide.png", "Beide"),
           ]
 
-          # Schritt 1: Text-Template senden → öffnet 24h-Session (kein Zeitfenster nötig)
-          print("=== Schritt 1: Session öffnen via blog_benachrichtigung ===")
-          r = req.post(msg_api, headers={**auth, "Content-Type": "application/json"}, json={
-            "messaging_product": "whatsapp",
-            "to": wa_to,
-            "type": "template",
-            "template": {"name": "blog_benachrichtigung", "language": {"code": "de"}}
-          })
-          print(f"  Session-Template: {r.status_code} {'✅' if r.status_code < 300 else '❌'}")
-          if r.status_code >= 300:
-            print(f"  {r.text[:300]}")
-            sys.exit(1)
-
-          # Schritt 2: 3 Bilder als reiner Upload senden (kein Text, aktuelle Dateien aus Repo)
-          print("\n=== Schritt 2: Bilder hochladen und senden ===")
-          fehler = 0
-          for pfad, label in BILDER:
+          def upload_media(pfad):
+            """Lädt Bild aus dem Repo hoch und gibt media_id zurück."""
             if not os.path.exists(pfad):
-              print(f"  ⚠️  {label}: Datei nicht gefunden: {pfad}")
-              fehler += 1
-              continue
-
+              print(f"  ❌ Nicht gefunden: {pfad}"); return None
             with open(pfad, "rb") as f:
-              ru = req.post(media_api, headers=auth,
+              r = req.post(media_api, headers=auth,
                 data={"messaging_product": "whatsapp"},
                 files={"file": (os.path.basename(pfad), f, "image/png")})
-            print(f"  Upload {label}: {ru.status_code}")
-            if ru.status_code >= 300:
-              print(f"    ❌ {ru.text[:300]}")
-              fehler += 1
-              continue
+            if r.status_code >= 300:
+              print(f"  ❌ Upload-Fehler {r.status_code}: {r.text[:200]}"); return None
+            return r.json().get("id")
 
-            media_id = ru.json().get("id")
-            if not media_id:
-              print(f"    ❌ Keine media_id: {ru.text[:200]}")
-              fehler += 1
-              continue
-
-            rs = req.post(msg_api, headers={**auth, "Content-Type": "application/json"}, json={
+          def sende_template_mit_bild(media_id, label):
+            """Sendet blog_bild-Template mit hochgeladenem Bild – kein 24h-Fenster nötig."""
+            r = req.post(msg_api, headers={**auth, "Content-Type": "application/json"}, json={
               "messaging_product": "whatsapp",
               "to": wa_to,
-              "type": "image",
-              "image": {"id": media_id}
+              "type": "template",
+              "template": {
+                "name": "blog_bild",
+                "language": {"code": "de"},
+                "components": [{"type": "header", "parameters": [
+                  {"type": "image", "image": {"id": media_id}}
+                ]}]
+              }
             })
-            print(f"  Senden {label}: {rs.status_code} {'✅' if rs.status_code < 300 else '❌'}")
-            if rs.status_code >= 300:
-              print(f"    ❌ {rs.text[:300]}")
+            ok = r.status_code < 300
+            print(f"  Senden {label}: {r.status_code} {'✅' if ok else '❌'}")
+            if not ok:
+              print(f"    {r.text[:300]}")
+            return ok
+
+          fehler = 0
+          for pfad, label in BILDER:
+            print(f"\n--- {label} ---")
+            mid = upload_media(pfad)
+            if not mid:
+              fehler += 1; continue
+            print(f"  Upload: ✅ ({mid[:20]}…)")
+            if not sende_template_mit_bild(mid, label):
               fehler += 1
 
-          print(f"\n{'✅ Alle Bilder gesendet!' if fehler == 0 else f'❌ {fehler} Fehler aufgetreten!'}")
+          print(f"\n{'✅ Fertig!' if fehler == 0 else f'❌ {fehler} Fehler!'}")
           if fehler:
             sys.exit(1)
           PYEOF
