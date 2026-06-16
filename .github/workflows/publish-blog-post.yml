@@ -37,39 +37,105 @@ jobs:
           WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           WA_TOKEN:    ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           WA_TO:       ${{ secrets.WHATSAPP_TO_NUMBER }}
+          SITE_URL:    ${{ secrets.SITE_URL }}
         run: |
           python3 - <<'PYEOF'
-          import os, requests as req
+          import os, requests as req, sys
 
-          token    = os.environ.get("WA_TOKEN", "")
-          phone_id = os.environ.get("WA_PHONE_ID", "")
-          wa_to    = os.environ.get("WA_TO", "")
+          token    = os.environ.get("WA_TOKEN", "").strip()
+          phone_id = os.environ.get("WA_PHONE_ID", "").strip()
+          wa_to    = os.environ.get("WA_TO", "").strip()
+          site_url = os.environ.get("SITE_URL", "").rstrip("/")
+
+          if not all([token, phone_id, wa_to]):
+            print("❌ Fehlende Secrets: WA_TOKEN, WA_PHONE_ID oder WA_TO nicht gesetzt!")
+            sys.exit(1)
 
           media_api = f"https://graph.facebook.com/v19.0/{phone_id}/media"
           msg_api   = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
           auth      = {"Authorization": f"Bearer {token}"}
 
-          def upload_und_senden(pfad, label):
+          BILDER = [
+            ("social/latest-ig.png",       "Daniel"),
+            ("social/latest-ig-heiko.png", "Heiko"),
+            ("social/latest-ig-beide.png", "Beide"),
+          ]
+
+          def senden(payload, label):
+            r = req.post(msg_api, headers={**auth, "Content-Type": "application/json"}, json=payload)
+            ok = r.status_code < 300
+            print(f"  Senden {label}: {r.status_code} {'✅' if ok else '❌'}")
+            if not ok:
+              print(f"    {r.text[:400]}")
+            return ok
+
+          def via_template(pfad, label):
+            """Template blog_bild – kein 24h-Fenster nötig, funktioniert immer."""
+            if not site_url:
+              print(f"  ⚠️  SITE_URL fehlt – Template-Versand für {label} übersprungen")
+              return False
+            url = f"{site_url}/{pfad}"
+            return senden({
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "template",
+              "template": {
+                "name": "blog_bild",
+                "language": {"code": "de"},
+                "components": [{"type": "header", "parameters": [
+                  {"type": "image", "image": {"link": url}}
+                ]}]
+              }
+            }, f"{label} (Template)")
+
+          def via_upload(pfad, label):
+            """Direktupload – braucht 24h-Fenster (Nutzer muss zuletzt geschrieben haben)."""
+            if not os.path.exists(pfad):
+              print(f"  ⚠️  Datei nicht gefunden: {pfad}")
+              return False
             with open(pfad, "rb") as f:
               r = req.post(media_api, headers=auth,
-                data={"messaging_product": "whatsapp", "type": "image/png"},
+                data={"messaging_product": "whatsapp"},
                 files={"file": (os.path.basename(pfad), f, "image/png")})
-            print(f"Upload {label}: {r.status_code}")
+            print(f"  Upload {label}: {r.status_code}")
             if r.status_code >= 300:
-              print(f"  ❌ {r.text[:400]}"); return
-            media_id = r.json()["id"]
-            r2 = req.post(msg_api, headers={**auth, "Content-Type":"application/json"}, json={
+              print(f"    ❌ {r.text[:400]}")
+              return False
+            media_id = r.json().get("id")
+            if not media_id:
+              print(f"    ❌ Keine media_id in Antwort: {r.text[:200]}")
+              return False
+            return senden({
               "messaging_product": "whatsapp",
               "to": wa_to,
               "type": "image",
               "image": {"id": media_id}
-            })
-            print(f"Senden {label}: {r2.status_code}")
-            if r2.status_code >= 300:
-              print(f"  ❌ {r2.text[:400]}")
+            }, f"{label} (Upload)")
 
-          upload_und_senden("social/latest-ig.png",       "Daniel")
-          upload_und_senden("social/latest-ig-heiko.png", "Heiko")
-          upload_und_senden("social/latest-ig-beide.png", "Beide")
-          print("✅ Fertig")
+          ergebnisse = {}
+          print("=== Schritt 1: Template blog_bild (kein 24h-Fenster) ===")
+          for pfad, label in BILDER:
+            ergebnisse[label] = via_template(pfad, label)
+
+          fehlgeschlagen = [l for l, ok in ergebnisse.items() if not ok]
+          if fehlgeschlagen:
+            print(f"\n=== Schritt 2: Fallback Direktupload für {fehlgeschlagen} ===")
+            print("Hinweis: Klappt nur wenn du in den letzten 24h die Business-Nummer angeschrieben hast.")
+            for pfad, label in BILDER:
+              if not ergebnisse[label]:
+                ergebnisse[label] = via_upload(pfad, label)
+
+          print("\n=== Ergebnis ===")
+          alle_ok = True
+          for label, ok in ergebnisse.items():
+            print(f"  {label}: {'✅' if ok else '❌ NICHT gesendet'}")
+            if not ok:
+              alle_ok = False
+
+          if not alle_ok:
+            print("\n❌ Nicht alle Bilder konnten gesendet werden!")
+            print("Lösung: Template 'blog_bild' via Workflow 'Einmalig – WhatsApp Template prüfen / erstellen' einrichten.")
+            sys.exit(1)
+          else:
+            print("\n✅ Alle Bilder erfolgreich gesendet!")
           PYEOF
