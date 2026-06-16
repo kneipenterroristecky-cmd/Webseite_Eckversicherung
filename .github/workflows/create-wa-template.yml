@@ -61,21 +61,18 @@ jobs:
           if "blog_bild" in templates:
             st = templates["blog_bild"].get("status","?")
             print(f"✅ blog_bild: {st}")
-            if st == "APPROVED":
+            if st in ("APPROVED", "REJECTED"):
               print("   → Löschen und mit minimalem Body-Text neu erstellen …")
-              tid = templates["blog_bild"].get("id")
-              if tid:
-                rd = requests.delete(f"https://graph.facebook.com/v19.0/{tid}", headers=headers)
-                print(f"   Gelöscht: {rd.status_code}")
+              # Meta löscht Templates per Name, nicht per ID
+              rd = requests.delete(
+                f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+                headers=headers,
+                params={"name": "blog_bild"}
+              )
+              print(f"   Gelöscht: {rd.status_code} – {rd.text[:100]}")
               templates.pop("blog_bild")
             elif st == "PENDING":
               print("   → Noch in Prüfung. Bitte in 1-2 Stunden erneut prüfen.")
-            elif st == "REJECTED":
-              print("   → Abgelehnt! Wird gelöscht und neu erstellt …")
-              tid = templates["blog_bild"].get("id")
-              if tid:
-                requests.delete(f"https://graph.facebook.com/v19.0/{tid}", headers=headers)
-              templates.pop("blog_bild")
 
           if "blog_bild" not in templates:
             print("\n⚠️  blog_bild fehlt – wird erstellt …")
