@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Google Bewertungskarte – ECK Versicherungsmakler</title>
+  <style>
+    @page {
+      size: 105mm 148mm;
+      margin: 0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 105mm;
+      height: 148mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #4a90d9;
+      font-family: 'Roboto', Arial, sans-serif;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .card {
+      width: 85mm;
+      background: white;
+      border-radius: 14px;
+      padding: 18px 20px 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .header-text {
+      font-size: 17px;
+      font-weight: 700;
+      color: #3c4043;
+      line-height: 1.25;
+      text-align: left;
+    }
+
+    /* ── QR Code ── */
+    .qr-wrap {
+      position: relative;
+      border-radius: 14px;
+      padding: 5px;
+      margin-bottom: 16px;
+      background: conic-gradient(
+        #4285F4 0deg 90deg,
+        #EA4335 90deg 180deg,
+        #FBBC05 180deg 270deg,
+        #34A853 270deg 360deg
+      );
+    }
+
+    .qr-inner {
+      background: white;
+      border-radius: 10px;
+      padding: 5px;
+      line-height: 0;
+    }
+
+    .qr-inner img {
+      width: 140px;
+      height: 140px;
+      display: block;
+      border-radius: 4px;
+    }
+
+    /* ── Stars ── */
+    .stars {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+
+    .stars svg {
+      width: 26px;
+      height: 26px;
+      fill: #FBBC05;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 85%;
+      height: 1px;
+      background: #e8eaed;
+      margin-bottom: 14px;
+    }
+
+    /* ── Icon row ── */
+    .icons-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      font-size: 10.5px;
+      color: #5f6368;
+      line-height: 1.3;
+    }
+
+    .icon-item svg {
+      width: 38px;
+      height: 38px;
+    }
+
+    .sep {
+      width: 1px;
+      height: 44px;
+      background: #dadce0;
+    }
+
+    .oder {
+      font-size: 12px;
+      color: #9aa0a6;
+      margin-bottom: 16px;
+    }
+
+    .url-hint {
+      font-size: 8.5px;
+      color: #bdc1c6;
+      margin-top: 10px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Print mode: remove body background ── */
+    @media print {
+      body { background: #4a90d9 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <!-- Header: Google G + Text -->
+    <div class="header">
+      <svg width="44" height="44" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#4285F4" d="M47.5 24.6c0-1.6-.1-3.1-.4-4.6H24v8.7h13.2c-.6 3-2.4 5.6-5 7.3v6h8.1c4.7-4.4 7.2-10.8 7.2-17.4z"/>
+        <path fill="#34A853" d="M24 48c6.5 0 12-2.2 16-5.9l-8.1-6c-2.2 1.5-5 2.3-7.9 2.3-6.1 0-11.2-4.1-13.1-9.6H2.5v6.2C6.5 42.8 14.7 48 24 48z"/>
+        <path fill="#FBBC05" d="M10.9 28.8c-.5-1.5-.8-3-.8-4.8s.3-3.3.8-4.8v-6.2H2.5C.9 16.3 0 20 0 24s.9 7.7 2.5 10.9l8.4-6.1z"/>
+        <path fill="#EA4335" d="M24 9.6c3.5 0 6.6 1.2 9 3.5l6.7-6.7C35.9 2.4 30.4 0 24 0 14.7 0 6.5 5.2 2.5 13.1l8.4 6.1C12.8 13.7 17.9 9.6 24 9.6z"/>
+      </svg>
+      <div class="header-text">Bewerte uns<br>auf Google</div>
+    </div>
+
+    <!-- QR Code (links auf www.eckversicherung.de) -->
+    <!-- TIPP: Ersetze die ?data=URL mit deinem Google-Bewertungslink -->
+    <div class="qr-wrap">
+      <div class="qr-inner">
+        <img
+          src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&ecc=H&data=https://www.eckversicherung.de"
+          alt="QR-Code zu www.eckversicherung.de"
+          width="140"
+          height="140"
+        >
+      </div>
+    </div>
+
+    <!-- 5 Sterne -->
+    <div class="stars">
+      <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Icon-Zeile: NFC + QR scannen -->
+    <div class="icons-row">
+
+      <!-- Handy dranhalten -->
+      <div class="icon-item">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Smartphone -->
+          <rect x="10" y="7" width="18" height="30" rx="3.5" stroke="#3c4043" stroke-width="2" fill="none"/>
+          <line x1="13" y1="32" x2="25" y2="32" stroke="#3c4043" stroke-width="2" stroke-linecap="round"/>
+          <!-- NFC waves -->
+          <path d="M32 18 C36 21 36 27 32 30" stroke="#4285F4" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M36 14 C42 18.5 42 29.5 36 34" stroke="#4285F4" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span>Handy<br>dranhalten</span>
+      </div>
+
+      <div class="oder">oder</div>
+      <div class="sep"></div>
+
+      <!-- QR Code scannen -->
+      <div class="icon-item">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Top-left box -->
+          <rect x="7" y="7" width="13" height="13" rx="2" stroke="#3c4043" stroke-width="2" fill="none"/>
+          <rect x="10" y="10" width="7" height="7" fill="#3c4043"/>
+          <!-- Top-right box -->
+          <rect x="28" y="7" width="13" height="13" rx="2" stroke="#3c4043" stroke-width="2" fill="none"/>
+          <rect x="31" y="10" width="7" height="7" fill="#3c4043"/>
+          <!-- Bottom-left box -->
+          <rect x="7" y="28" width="13" height="13" rx="2" stroke="#3c4043" stroke-width="2" fill="none"/>
+          <rect x="10" y="31" width="7" height="7" fill="#3c4043"/>
+          <!-- Bottom-right L-shape (partial QR corner) -->
+          <polyline points="28,28 28,41 41,41 41,28 34,28" stroke="#3c4043" stroke-width="2" fill="none" stroke-linejoin="round"/>
+          <line x1="28" y1="34" x2="35" y2="34" stroke="#3c4043" stroke-width="2"/>
+          <line x1="35" y1="28" x2="35" y2="34" stroke="#3c4043" stroke-width="2"/>
+        </svg>
+        <span>QR Code<br>scannen</span>
+      </div>
+
+    </div>
+
+    <div class="url-hint">www.eckversicherung.de</div>
+
+  </div>
+</body>
+</html>
