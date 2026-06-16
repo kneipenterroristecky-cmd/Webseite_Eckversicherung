@@ -129,7 +129,7 @@ jobs:
                     },
                     {
                       "type": "BODY",
-                      "text": "✅ Blog-Beitrag veröffentlicht! Social-Media-Bild zur Kontrolle."
+                      "text": "."
                     }
                   ]
                 }
