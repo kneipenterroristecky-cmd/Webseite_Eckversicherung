@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /dashboard.html
+Disallow: /email-preview.html
+Disallow: /hero-badge-varianten.html
+Disallow: /test-logo-stempel.html
+
+Sitemap: https://www.eckversicherung.de/sitemap.xml
