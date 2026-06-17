@@ -74,13 +74,15 @@
     city:    ''
   };
 
-  // ── Geo-Lookup (asynchron, blockiert nie) ──────────────────────
+  // ── Geo-Lookup (nur wenn Analytics-Endpoint aktiv) ─────────────
   var geoOk = false;
-  fetch('https://ipapi.co/json/')
-    .then(function (r) { return r.json(); })
-    .then(function (g) { base.country = g.country_name || ''; base.city = g.city || ''; })
-    .catch(function () {})
-    .finally(function () { geoOk = true; });
+  if (EP) {
+    fetch('https://ipapi.co/json/')
+      .then(function (r) { return r.json(); })
+      .then(function (g) { base.country = g.country_name || ''; base.city = g.city || ''; })
+      .catch(function () {})
+      .finally(function () { geoOk = true; });
+  } else { geoOk = true; }
 
   // ── Event senden ───────────────────────────────────────────────
   function send(type, extra) {
