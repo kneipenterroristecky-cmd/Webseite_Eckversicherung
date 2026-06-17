@@ -488,7 +488,7 @@ function renderFunnelStep() {
             '<a href="mailto:daniel@eckversicherung.de" class="funnel-alt-btn"><i class="fas fa-envelope"></i> daniel@eckversicherung.de</a>' +
           '</div>' +
           '<div class="funnel-direct-profile">' +
-            '<img src="Dummybild 1.png" class="funnel-direct-avatar" alt="Daniel Eck" />' +
+            '<img src="' + _basePath + 'Dummybild 1.png" class="funnel-direct-avatar" alt="Daniel Eck" />' +
             '<div>' +
               '<strong>Daniel Eck</strong>' +
               '<span>Versicherungsmakler – persönlich für Sie da</span>' +
