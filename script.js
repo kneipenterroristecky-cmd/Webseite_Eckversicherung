@@ -334,7 +334,7 @@ function _calTabsHtml() {
       '<i class="cal-tab-check fas fa-circle-check"></i>' +
     '</button>' +
     '<button class="cal-tab cal-tab-secondary" onclick="switchCalTab(1,this)">' +
-      '<img class="cal-tab-photo" src="heiko_eck.jpg" alt="Heiko Eck" style="object-position:center 15%">' +
+      '<img class="cal-tab-photo" src="' + _basePath + 'heiko_eck.jpg" alt="Heiko Eck" style="object-position:center 15%">' +
       '<div class="cal-tab-info"><span class="cal-tab-name">Heiko Eck</span><span class="cal-tab-role">Senior-Berater</span></div>' +
       '<i class="cal-tab-check fas fa-circle-check"></i>' +
     '</button>' +
