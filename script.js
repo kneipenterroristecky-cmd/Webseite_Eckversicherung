@@ -389,7 +389,7 @@ function openCalendlyDirect() {
 
   /* Fallback für Seiten ohne Funnel-Modal (z.B. Unterseiten) */
   if (!overlay || !modal) {
-    showCalendlyInline();
+    _openCalendlyFallback();
     return;
   }
 
