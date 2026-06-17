@@ -56,10 +56,10 @@ jobs:
               }
             )
 
-          # blog_bild_v2 (Bild-Template – das eigentliche Haupt-Template)
-          if "blog_bild_v2" in templates:
-            st = templates["blog_bild_v2"].get("status","?")
-            print(f"✅ blog_bild_v2: {st}")
+          # social_bild (Bild-Template – das eigentliche Haupt-Template)
+          if "social_bild" in templates:
+            st = templates["social_bild"].get("status","?")
+            print(f"✅ social_bild: {st}")
             if st == "APPROVED":
               print("   → Perfekt! WF2 und WF4 senden die 3 Bilder per Template.")
             elif st == "PENDING":
@@ -68,13 +68,13 @@ jobs:
               print("   → Abgelehnt! Wird gelöscht und neu erstellt …")
               requests.delete(
                 f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
-                headers=headers, params={"name": "blog_bild_v2"}
+                headers=headers, params={"name": "social_bild"}
               )
-              templates.pop("blog_bild_v2")
+              templates.pop("social_bild")
 
-          if "blog_bild_v2" not in templates:
+          if "social_bild" not in templates:
             import time
-            print("\n⚠️  blog_bild_v2 fehlt – warte 30s auf Meta-Backend, dann erstellen …")
+            print("\n⚠️  social_bild fehlt – warte 30s auf Meta-Backend, dann erstellen …")
             time.sleep(30)
 
             # Schritt 1: Beispielbild von der öffentlichen Website holen
@@ -115,7 +115,7 @@ jobs:
                 print(f"  ✅ Handle: {handle[:60]}…")
                 # Schritt 4: Template mit Handle erstellen
                 payload = {
-                  "name": "blog_bild_v2",
+                  "name": "social_bild",
                   "language": "de",
                   "category": "UTILITY",
                   "components": [
@@ -134,7 +134,7 @@ jobs:
                   f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
                   headers=headers, json=payload
                 )
-                print(f"blog_bild_v2 erstellt: {r2.status_code} – {r2.text[:300]}")
+                print(f"social_bild erstellt: {r2.status_code} – {r2.text[:300]}")
                 if r2.status_code < 300:
                   print("   → Eingereicht. Bitte in 1-2 Stunden Status prüfen (diesen Workflow erneut starten).")
                 else:
