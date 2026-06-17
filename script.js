@@ -2,6 +2,16 @@
    Daniel Eck – Versicherungsmakler – Interactions & Animations
    ============================================= */
 
+/* Basispfad zur Root – funktioniert von jeder Unterseite (z.B. blog/posts/) */
+var _basePath = (function() {
+  var tags = document.getElementsByTagName('script');
+  for (var i = 0; i < tags.length; i++) {
+    if (tags[i].src && tags[i].src.indexOf('script.js') !== -1) {
+      return tags[i].src.replace(/script\.js(\?.*)?$/, '');
+    }
+  }
+  return '';
+})();
 
 /* ---- Navbar scroll shadow + Hamburger Farbe ---- */
 const navbar = document.getElementById('navbar');
