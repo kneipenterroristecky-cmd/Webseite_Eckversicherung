@@ -395,16 +395,15 @@ function _openCalendlyFallback() {
   wrap.id = '_calFallbackOverlay';
   wrap.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(10,20,50,.85);display:flex;flex-direction:column;overflow:hidden;';
 
-  /* Header mit Tabs + Schließen */
+  /* Schmaler Header: nur Schließen-Button */
   var header = document.createElement('div');
-  header.style.cssText = 'background:#fff;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;flex-shrink:0;border-bottom:1px solid #e5e7eb;';
-  header.innerHTML = _calTabsHtml() +
-    '<button id="_calFallbackClose" style="background:none;border:none;font-size:26px;cursor:pointer;color:#6b7280;line-height:1;margin-left:12px;">&times;</button>';
+  header.style.cssText = 'background:#172d50;display:flex;align-items:center;justify-content:flex-end;padding:6px 12px;flex-shrink:0;';
+  header.innerHTML = '<button id="_calFallbackClose" style="background:rgba(255,255,255,.15);border:none;font-size:20px;cursor:pointer;color:#fff;line-height:1;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;">&times;</button>';
 
   /* Calendly-Container nimmt alle verbleibende Höhe */
   var body = document.createElement('div');
   body.id = '_calFallbackBody';
-  body.style.cssText = 'flex:1;background:#fff;overflow:hidden;min-height:0;';
+  body.style.cssText = 'flex:1;background:#fff;overflow-y:auto;min-height:0;';
 
   wrap.appendChild(header);
   wrap.appendChild(body);
