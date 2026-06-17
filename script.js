@@ -222,7 +222,9 @@ document.querySelectorAll('.faq-q').forEach(btn => {
 /* ---- Smooth anchor scroll (handles fixed header offset) ---- */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
+    const href = a.getAttribute('href');
+    if (!href || href === '#') return;
+    const target = document.querySelector(href);
     if (!target) return;
     e.preventDefault();
     const offset = navbar.offsetHeight + 12;
