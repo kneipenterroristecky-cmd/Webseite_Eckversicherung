@@ -384,35 +384,43 @@ function showCalendlyInline() {
 
 function _openCalendlyFallback() {
   var existing = document.getElementById('_calFallbackOverlay');
-  if (existing) { existing.style.display = 'flex'; return; }
+  if (existing) {
+    existing.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    return;
+  }
 
+  /* Vollbild-Overlay – identisch zum Funnel-Modal auf start.html */
   var wrap = document.createElement('div');
   wrap.id = '_calFallbackOverlay';
-  wrap.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(10,20,50,.7);display:flex;align-items:center;justify-content:center;padding:16px;';
+  wrap.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(10,20,50,.85);display:flex;flex-direction:column;overflow:hidden;';
 
-  var box = document.createElement('div');
-  box.style.cssText = 'background:#fff;border-radius:16px;width:100%;max-width:700px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.4);';
-
+  /* Header mit Tabs + Schließen */
   var header = document.createElement('div');
-  header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #e5e7eb;';
-  header.innerHTML = '<div style="display:flex;align-items:center;gap:10px;">' + _calTabsHtml() + '</div>' +
-    '<button onclick="document.getElementById(\'_calFallbackOverlay\').style.display=\'none\'" style="background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280;line-height:1;">&times;</button>';
+  header.style.cssText = 'background:#fff;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;flex-shrink:0;border-bottom:1px solid #e5e7eb;';
+  header.innerHTML = _calTabsHtml() +
+    '<button id="_calFallbackClose" style="background:none;border:none;font-size:26px;cursor:pointer;color:#6b7280;line-height:1;margin-left:12px;">&times;</button>';
 
+  /* Calendly-Container nimmt alle verbleibende Höhe */
   var body = document.createElement('div');
   body.id = '_calFallbackBody';
-  body.style.cssText = 'flex:1;overflow:auto;min-height:500px;';
+  body.style.cssText = 'flex:1;background:#fff;overflow:hidden;min-height:0;';
 
-  box.appendChild(header);
-  box.appendChild(body);
-  wrap.appendChild(box);
+  wrap.appendChild(header);
+  wrap.appendChild(body);
   document.body.appendChild(wrap);
+  document.body.style.overflow = 'hidden';
 
-  wrap.addEventListener('click', function(e) { if (e.target === wrap) wrap.style.display = 'none'; });
+  document.getElementById('_calFallbackClose').addEventListener('click', function() {
+    wrap.style.display = 'none';
+    document.body.style.overflow = '';
+  });
 
   if (window.Calendly) {
     Calendly.initInlineWidget({
       url: 'https://calendly.com/eckversicherung/30min?hide_gdpr_banner=1&primary_color=1a50c8&locale=de',
-      parentElement: body
+      parentElement: body,
+      styles: { height: '100%' }
     });
   }
 }
