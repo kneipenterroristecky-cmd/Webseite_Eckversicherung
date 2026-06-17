@@ -395,10 +395,23 @@ function _openCalendlyFallback() {
   wrap.id = '_calFallbackOverlay';
   wrap.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(10,20,50,.85);display:flex;flex-direction:column;overflow:hidden;';
 
-  /* Schmaler Header: nur Schließen-Button */
+  /* Header: Tabs + Schließen-Button */
   var header = document.createElement('div');
-  header.style.cssText = 'background:#172d50;display:flex;align-items:center;justify-content:flex-end;padding:6px 12px;flex-shrink:0;';
-  header.innerHTML = '<button id="_calFallbackClose" style="background:rgba(255,255,255,.15);border:none;font-size:20px;cursor:pointer;color:#fff;line-height:1;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;">&times;</button>';
+  header.style.cssText = 'background:#172d50;display:flex;align-items:center;justify-content:space-between;padding:6px 12px;flex-shrink:0;';
+  header.innerHTML =
+    '<div class="cal-tabs" style="margin:0">' +
+      '<button class="cal-tab active" id="_calTabDaniel" onclick="_calFallbackSwitch(0,this)">' +
+        '<img class="cal-tab-photo" src="' + _basePath + 'Dummybild 1_rund.png" alt="Daniel Eck">' +
+        '<div class="cal-tab-info"><span class="cal-tab-name">Daniel Eck</span><span class="cal-tab-role">Ihr Makler</span></div>' +
+        '<i class="cal-tab-check fas fa-circle-check"></i>' +
+      '</button>' +
+      '<button class="cal-tab cal-tab-secondary" id="_calTabHeiko" onclick="_calFallbackSwitch(1,this)">' +
+        '<img class="cal-tab-photo" src="' + _basePath + 'heiko_eck.jpg" alt="Heiko Eck" style="object-position:center 15%">' +
+        '<div class="cal-tab-info"><span class="cal-tab-name">Heiko Eck</span><span class="cal-tab-role">Senior-Berater</span></div>' +
+        '<i class="cal-tab-check fas fa-circle-check"></i>' +
+      '</button>' +
+    '</div>' +
+    '<button id="_calFallbackClose" style="background:rgba(255,255,255,.15);border:none;font-size:20px;cursor:pointer;color:#fff;line-height:1;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;">&times;</button>';
 
   /* Calendly-Container nimmt alle verbleibende Höhe */
   var body = document.createElement('div');
@@ -415,9 +428,21 @@ function _openCalendlyFallback() {
     document.body.style.overflow = '';
   });
 
+  var _calFallbackParams = '?hide_gdpr_banner=1&primary_color=1a50c8&locale=de';
+
+  window._calFallbackSwitch = function(idx, btn) {
+    document.querySelectorAll('#_calFallbackOverlay .cal-tab').forEach(function(t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    var container = document.getElementById('_calFallbackBody');
+    container.innerHTML = '';
+    if (!window.Calendly) return;
+    var base = idx === 1 ? HEIKO_CALENDLY : 'https://calendly.com/eckversicherung/30min';
+    Calendly.initInlineWidget({ url: base + _calFallbackParams, parentElement: container, styles: { height: '100%' } });
+  };
+
   if (window.Calendly) {
     Calendly.initInlineWidget({
-      url: 'https://calendly.com/eckversicherung/30min?hide_gdpr_banner=1&primary_color=1a50c8&locale=de',
+      url: 'https://calendly.com/eckversicherung/30min' + _calFallbackParams,
       parentElement: body,
       styles: { height: '100%' }
     });
