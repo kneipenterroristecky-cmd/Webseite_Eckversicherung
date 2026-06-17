@@ -387,6 +387,15 @@ function _openCalendlyFallback() {
   if (existing) {
     existing.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    /* Daniel-Tab zurücksetzen */
+    existing.querySelectorAll('.cal-tab').forEach(function(t) { t.classList.remove('active'); });
+    var dt = existing.querySelector('#_calTabDaniel');
+    if (dt) dt.classList.add('active');
+    var fb = document.getElementById('_calFallbackBody');
+    if (fb && window.Calendly) {
+      fb.innerHTML = '';
+      Calendly.initInlineWidget({ url: 'https://calendly.com/eckversicherung/30min?hide_gdpr_banner=1&primary_color=1a50c8&locale=de', parentElement: fb, styles: { height: '100%' } });
+    }
     return;
   }
 
