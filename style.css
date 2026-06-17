@@ -2534,3 +2534,27 @@ body.nav-open .social-peek { display: none !important; }
   .cookie-settings-footer { flex-direction: column; }
   .cookie-settings-footer button { width: 100%; }
 }
+
+/* ── Termin-Button (global, damit auch Seiten ohne inline-CSS ihn haben) ── */
+.page-hero-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: rgb(33,103,204);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 50px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background .2s, transform .2s, box-shadow .2s;
+  box-shadow: 0 4px 20px rgba(33,103,204,.4);
+  white-space: nowrap;
+}
+.page-hero-btn-primary:hover {
+  background: #1a50c8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(33,103,204,.5);
+}
