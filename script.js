@@ -386,6 +386,13 @@ function openCalendlyDirect() {
   var savedScroll = window.scrollY || window.pageYOffset || 0;
   var overlay = document.getElementById('funnelOverlay');
   var modal   = document.querySelector('.funnel-modal');
+
+  /* Fallback für Seiten ohne Funnel-Modal (z.B. Unterseiten) */
+  if (!overlay || !modal) {
+    showCalendlyInline();
+    return;
+  }
+
   overlay.classList.add('open');
   modal.classList.add('funnel-modal-wide');
   document.body.style.overflow = 'hidden';
