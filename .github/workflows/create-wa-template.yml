@@ -57,22 +57,20 @@ jobs:
             )
 
           # blog_bild_v2 (Bild-Template – das eigentliche Haupt-Template)
-          # Löschen und neu erstellen wenn Body-Text noch die alte lange Version hat
           if "blog_bild_v2" in templates:
             st = templates["blog_bild_v2"].get("status","?")
             print(f"✅ blog_bild_v2: {st}")
-            if st in ("APPROVED", "REJECTED"):
-              print("   → Löschen und mit minimalem Body-Text neu erstellen …")
-              # Meta löscht Templates per Name, nicht per ID
-              rd = requests.delete(
-                f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
-                headers=headers,
-                params={"name": "blog_bild_v2"}
-              )
-              print(f"   Gelöscht: {rd.status_code} – {rd.text[:100]}")
-              templates.pop("blog_bild_v2")
+            if st == "APPROVED":
+              print("   → Perfekt! WF2 und WF4 senden die 3 Bilder per Template.")
             elif st == "PENDING":
               print("   → Noch in Prüfung. Bitte in 1-2 Stunden erneut prüfen.")
+            elif st == "REJECTED":
+              print("   → Abgelehnt! Wird gelöscht und neu erstellt …")
+              requests.delete(
+                f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+                headers=headers, params={"name": "blog_bild_v2"}
+              )
+              templates.pop("blog_bild_v2")
 
           if "blog_bild_v2" not in templates:
             print("\n⚠️  blog_bild_v2 fehlt – wird erstellt …")
