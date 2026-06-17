@@ -5,7 +5,8 @@
 (function () {
   'use strict';
 
-  var EP = 'https://script.google.com/macros/s/AKfycbzxyEcTAME2BJN30Qtyk2vwt0VsDpbyAg4okkZgKvkaeclAgebU7ljT9YeRbrQT_VI/exec'; // ← Apps Script URL eintragen
+  // ⚠ Deployment-URL deaktiviert bis zur Neu-Bereitstellung (Bereitstellen → Neue Bereitstellung → Zugriff: Jeder)
+  var EP = '';
 
   // ── Session-ID (gilt für eine Browser-Sitzung) ─────────────────
   var sid = sessionStorage.getItem('_esid');
