@@ -73,7 +73,9 @@ jobs:
               templates.pop("blog_bild_v2")
 
           if "blog_bild_v2" not in templates:
-            print("\n⚠️  blog_bild_v2 fehlt – wird erstellt …")
+            import time
+            print("\n⚠️  blog_bild_v2 fehlt – warte 30s auf Meta-Backend, dann erstellen …")
+            time.sleep(30)
 
             # Schritt 1: Beispielbild von der öffentlichen Website holen
             sample_url = f"{site_url}/social/latest-ig.png"
