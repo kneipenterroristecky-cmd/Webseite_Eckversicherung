@@ -325,7 +325,7 @@ var funnelSteps = [
 ];
 
 var DANIEL_CALENDLY = 'https://calendly.com/eckversicherung/30min';
-var HEIKO_CALENDLY  = 'https://calendly.com/eckheiko/personliches-beratungsgesprach';
+var HEIKO_CALENDLY  = 'https://calendly.com/eckheiko/personliches-beratungsgesprach-1';
 var _calOpenParams = '';
 
 function _calTabsHtml() {
