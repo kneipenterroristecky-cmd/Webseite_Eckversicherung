@@ -980,9 +980,7 @@
       var position = posCell.textContent.trim();
 
       var vals = [anrede, vorname, nachname, firma, position, email, ma, ort];
-      lines.push(vals.map(function(v) {
-        return (v.indexOf(',') > -1 || v.indexOf('"') > -1) ? '"' + v.replace(/"/g, '""') + '"' : v;
-      }).join(','));
+      lines.push(vals.join(SEP));
     });
     return lines.join('\r\n');
   }
