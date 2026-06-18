@@ -66,8 +66,13 @@
     td[contenteditable] { outline: none; cursor: text; border-left: 2px solid transparent; transition: background 0.12s, border-color 0.12s; }
     td[contenteditable]:hover { background: #f0f9ff !important; border-left: 2px solid #bfdbfe; }
     td[contenteditable]:focus { background: #eff6ff !important; border-left: 2px solid #3b82f6; }
-    .edit-saved { color: #16a34a; font-size: 10px; font-style: normal; margin-left: 4px; }
-    .edit-bar { background: #1e3a5f; color: #93c5fd; font-size: 11px; padding: 6px 20px; text-align: right; }
+    .edit-bar { background: #1e3a5f; color: #93c5fd; font-size: 11px; padding: 6px 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .btn-restore { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; padding: 3px 11px; font-size: 11px; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+    .btn-restore:hover { background: rgba(255,255,255,0.22); }
+    .action-cell { text-align: center; white-space: nowrap; padding: 4px 8px !important; }
+    .btn-del { border: none; background: none; cursor: pointer; padding: 5px 8px; border-radius: 6px; font-size: 15px; color: #ef4444; transition: background 0.15s; line-height: 1; }
+    .btn-del:hover { background: #fef2f2; }
+    tbody tr { transition: opacity 0.25s, transform 0.25s; }
   </style>
 </head>
 <body>
