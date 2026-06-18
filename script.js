@@ -324,7 +324,8 @@ var funnelSteps = [
   }
 ];
 
-var HEIKO_CALENDLY = 'https://calendly.com/eckheiko/30min';
+var DANIEL_CALENDLY = 'https://calendly.com/eckversicherung/30min';
+var HEIKO_CALENDLY  = 'https://calendly.com/eckheiko/30min';
 var _calOpenParams = '';
 
 function _calTabsHtml() {
