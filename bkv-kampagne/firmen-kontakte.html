@@ -89,6 +89,8 @@
 </header>
 <div class="edit-bar">
   <span class="edit-bar-hint">✎ Alle Felder direkt anklicken und bearbeiten – wird automatisch gespeichert &nbsp;·&nbsp; 🗑️ Zeilen mit dem Papierkorb-Button löschen</span>
+  <span id="csv-status"></span>
+  <button class="btn-csv-link" id="btn-csv" onclick="linkCSV()" title="kontakte.csv einmalig auswählen – danach wird bei jeder Änderung automatisch gespeichert">📂 CSV verknüpfen</button>
   <button class="btn-restore" onclick="restoreDeleted()">↩ Gelöschte wiederherstellen</button>
 </div>
 <div class="container">
