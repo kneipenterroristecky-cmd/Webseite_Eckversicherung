@@ -376,7 +376,7 @@ function showCalendlyInline() {
     _calOpenParams = params;
 
     Calendly.initInlineWidget({
-      url: 'https://calendly.com/eckheiko/30min' + params,
+      url: DANIEL_CALENDLY + params,
       parentElement: document.getElementById('calendlyInline')
     });
   }
