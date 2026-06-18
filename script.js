@@ -376,7 +376,7 @@ function showCalendlyInline() {
     _calOpenParams = params;
 
     Calendly.initInlineWidget({
-      url: 'https://calendly.com/eckversicherung/30min' + params,
+      url: 'https://calendly.com/eckheiko/30min' + params,
       parentElement: document.getElementById('calendlyInline')
     });
   }
@@ -504,7 +504,7 @@ function openCalendlyDirect() {
     _calOpenParams = params;
 
     Calendly.initInlineWidget({
-      url: 'https://calendly.com/eckversicherung/30min' + params,
+      url: 'https://calendly.com/eckheiko/30min' + params,
       parentElement: document.getElementById('calendlyInline')
     });
     requestAnimationFrame(function() { window.scrollTo(0, savedScroll); });
@@ -538,7 +538,7 @@ function switchCalTab(idx, btn) {
   var container = document.getElementById('calendlyInline');
   container.innerHTML = '';
   if (!window.Calendly) return;
-  var base = idx === 1 ? HEIKO_CALENDLY : 'https://calendly.com/eckversicherung/30min';
+  var base = idx === 1 ? HEIKO_CALENDLY : 'https://calendly.com/eckheiko/30min';
   Calendly.initInlineWidget({ url: base + _calOpenParams, parentElement: container });
 }
 
