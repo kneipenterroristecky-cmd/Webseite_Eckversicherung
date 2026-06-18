@@ -324,8 +324,7 @@ var funnelSteps = [
   }
 ];
 
-/* Heiko Calendly – URL hier eintragen sobald Konto eingerichtet ist */
-var HEIKO_CALENDLY = 'https://calendly.com/heiko-eckversicherung/beratung';
+var HEIKO_CALENDLY = 'https://calendly.com/eckheiko/30min';
 var _calOpenParams = '';
 
 function _calTabsHtml() {
