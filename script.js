@@ -538,7 +538,7 @@ function switchCalTab(idx, btn) {
   var container = document.getElementById('calendlyInline');
   container.innerHTML = '';
   if (!window.Calendly) return;
-  var base = idx === 1 ? HEIKO_CALENDLY : 'https://calendly.com/eckheiko/30min';
+  var base = idx === 1 ? HEIKO_CALENDLY : DANIEL_CALENDLY;
   Calendly.initInlineWidget({ url: base + _calOpenParams, parentElement: container });
 }
 
