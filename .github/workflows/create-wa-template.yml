@@ -1,7 +1,7 @@
 name: Einmalig – WhatsApp Template prüfen / erstellen
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # manuell startbar
 
 jobs:
   create-template:
