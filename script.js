@@ -484,23 +484,25 @@ function openCalendlyDirect() {
     '</div>';
 
   if (window.Calendly) {
-    /* Quiz-Antworten als Bemerkung formatieren */
-    var notes = 'Selbst-Check Ergebnis:\n';
+    /* Quiz-Antworten als Bemerkung formatieren – nur wenn vorhanden */
     var qa = window.quizAnswers || {};
+    var notesLines = [];
 
     var sitLabels   = { angestellt: 'Angestellt', familie: 'Familie mit Kindern', selbststaendig: 'Selbstständig', ruhestand: 'Im Ruhestand' };
     var checkLabels = { 0: 'Noch nie / Vor mehr als 3 Jahren', 1: 'Vor 1–3 Jahren', 2: 'Dieses Jahr' };
     var covLabels   = { haftpflicht: 'Privathaftpflicht', bu: 'Berufsunfähigkeit', hausrat: 'Hausrat', rechtsschutz: 'Rechtsschutz', kranken: 'Kranken-Zusatz', risikoleben: 'Risikolebensversicherung', betriebshaft: 'Betriebshaftpflicht', ertragsaus: 'Ertragsausfall', pflege: 'Pflege-Zusatz', reise: 'Reiseschutz', keine: 'Keine / Unsicher' };
 
-    if (qa.situation)      notes += '• Lebenssituation: '            + (sitLabels[qa.situation] || qa.situation) + '\n';
-    if (qa.letztercheck !== undefined) notes += '• Letzter Versicherungscheck: ' + (checkLabels[qa.letztercheck] || qa.letztercheck) + '\n';
+    if (qa.situation)      notesLines.push('• Lebenssituation: '            + (sitLabels[qa.situation] || qa.situation));
+    if (qa.letztercheck !== undefined) notesLines.push('• Letzter Versicherungscheck: ' + (checkLabels[qa.letztercheck] || qa.letztercheck));
     if (qa.absicherung && qa.absicherung.length) {
       var covList = qa.absicherung.map(function (v) { return covLabels[v] || v; }).join(', ');
-      notes += '• Vorhandene Absicherungen: ' + covList;
+      notesLines.push('• Vorhandene Absicherungen: ' + covList);
     }
 
     var params = '?hide_gdpr_banner=1&primary_color=1a50c8&locale=de';
-    params += '&a1=' + encodeURIComponent(notes.trim());
+    if (notesLines.length > 0) {
+      params += '&a1=' + encodeURIComponent('Selbst-Check Ergebnis:\n' + notesLines.join('\n'));
+    }
     _calOpenParams = params;
 
     Calendly.initInlineWidget({
