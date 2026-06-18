@@ -773,12 +773,30 @@
       thead.appendChild(th);
     }
 
+    var sentNrs = JSON.parse(localStorage.getItem('bkv_sent') || '[]');
+
     document.querySelectorAll('#tb tr').forEach(function(row) {
       var nr = row.cells[1] && row.cells[1].textContent.trim();
       if (!nr || isNaN(nr)) return;
 
       // Gelöschte Zeilen entfernen
       if (deleted.indexOf(nr) !== -1) { row.style.display = 'none'; return; }
+
+      // Versendet-Status wiederherstellen
+      if (sentNrs.indexOf(nr) !== -1) {
+        var cb = row.querySelector('input[type="checkbox"]');
+        if (cb) {
+          cb.checked = true;
+          row.classList.add('sent');
+          var td = cb.closest('td');
+          if (!td.querySelector('.sent-badge')) {
+            var badge = document.createElement('div');
+            badge.className = 'sent-badge';
+            badge.textContent = '✓ Versendet';
+            td.appendChild(badge);
+          }
+        }
+      }
 
       // Alle Felder editierbar machen
       COL_MAP.forEach(function(m) {
