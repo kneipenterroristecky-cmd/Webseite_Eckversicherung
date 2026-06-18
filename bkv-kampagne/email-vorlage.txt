@@ -87,6 +87,11 @@ Liste. (§ 7 Abs. 3 UWG)
  HINWEISE ZUR PERSONALISIERUNG
 ===============================================================
 
+LOGO in die Signatur einfügen (einmalig in Word):
+→ Cursor zwischen "Fachmann für..." und "Unser Service..." setzen
+→ Einfügen → Bilder → Logo_Stempel.png aus dem Projektordner wählen
+→ Größe auf ca. 3 cm Breite anpassen
+
 Wo kein Name bekannt ist (Anrede = "Sehr geehrte Damen und Herren"):
 → Das Seriendruckfeld «Nachname» leer lassen oder durch einen
   Komma-Abstand ersetzen: "Sehr geehrte Damen und Herren,"
