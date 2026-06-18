@@ -43,12 +43,14 @@
     .badge-ma.small { background: #f1f5f9; color: #475569; }
     .firma-name { font-weight: 700; color: #1e293b; }
     .firma-sub { font-size: 10px; color: #94a3b8; display: block; margin-top: 1px; }
-    .contact-name { font-weight: 400; color: #2563eb; font-size: 12px; }
+    .contact-name { font-weight: 400; font-size: 12px; }
     .contact-pos { display: none; }
-    .contact-unknown { color: #f59e0b; font-style: italic; font-size: 12px; }
-    .email-link { color: #2563eb; text-decoration: none; font-size: 12px; font-weight: 400; }
+    .contact-unknown { font-size: 12px; }
+    .email-link { text-decoration: none; font-size: 12px; font-weight: 400; }
     .email-link:hover { text-decoration: underline; }
-    .email-missing { color: #94a3b8; font-size: 12px; font-style: italic; }
+    .email-missing { font-size: 12px; font-style: italic; }
+    /* Ansprechpartner- und E-Mail-Spalte immer gleiche Farbe – egal ob Link, Text oder localStorage-Inhalt */
+    #tb td:nth-child(6), #tb td:nth-child(8) { color: #2563eb; }
     .tel { color: #475569; font-size: 11px; white-space: nowrap; }
     .web a { color: #7c3aed; font-size: 11px; text-decoration: none; }
     .web a:hover { text-decoration: underline; }
