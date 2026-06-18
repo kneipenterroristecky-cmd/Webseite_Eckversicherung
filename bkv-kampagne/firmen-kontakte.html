@@ -709,6 +709,25 @@
       row.style.display = row.textContent.toLowerCase().includes(lq) ? '' : 'none';
     });
   }
+  // Editable cells: Ansprechpartner (col 5), E-Mail (col 7), Telefon (col 8)
+  function initEditableCells() {
+    document.querySelectorAll('#tb tr').forEach(row => {
+      const nr = row.cells[1]?.textContent.trim();
+      if (!nr || isNaN(nr)) return;
+      [{col: 5, key: 'contact'}, {col: 7, key: 'email'}, {col: 8, key: 'tel'}].forEach(({col, key}) => {
+        const cell = row.cells[col];
+        if (!cell) return;
+        cell.setAttribute('contenteditable', 'true');
+        cell.setAttribute('title', 'Klicken zum Bearbeiten – wird automatisch gespeichert');
+        const saved = localStorage.getItem('bkv_' + nr + '_' + key);
+        if (saved !== null) cell.innerHTML = saved;
+        cell.addEventListener('input', () => localStorage.setItem('bkv_' + nr + '_' + key, cell.innerHTML));
+        cell.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); cell.blur(); } });
+      });
+    });
+  }
+  initEditableCells();
+
   let sortDir = {};
   function sortTable(col) {
     const tbody = document.getElementById('tb');
