@@ -717,23 +717,91 @@
       row.style.display = row.textContent.toLowerCase().includes(lq) ? '' : 'none';
     });
   }
-  // Editable cells: Ansprechpartner (col 5), E-Mail (col 7), Telefon (col 8)
+  // Alle editierbaren Spalten: Firma(2), Ort(3), Ansprechpartner(5), Position(6), E-Mail(7), Telefon(8), Website(9)
+  var COL_MAP = [
+    {col: 2, key: 'firma'},
+    {col: 3, key: 'ort'},
+    {col: 5, key: 'contact'},
+    {col: 6, key: 'position'},
+    {col: 7, key: 'email'},
+    {col: 8, key: 'tel'},
+    {col: 9, key: 'website'}
+  ];
+
   function initEditableCells() {
-    document.querySelectorAll('#tb tr').forEach(row => {
-      const nr = row.cells[1]?.textContent.trim();
+    var deleted = JSON.parse(localStorage.getItem('bkv_deleted') || '[]');
+
+    // Aktionen-Spalte in Header einfügen
+    var thead = document.querySelector('#tbl thead tr');
+    if (thead && !document.querySelector('.th-actions')) {
+      var th = document.createElement('th');
+      th.className = 'th-actions';
+      th.style.width = '52px';
+      th.textContent = '';
+      thead.appendChild(th);
+    }
+
+    document.querySelectorAll('#tb tr').forEach(function(row) {
+      var nr = row.cells[1] && row.cells[1].textContent.trim();
       if (!nr || isNaN(nr)) return;
-      [{col: 5, key: 'contact'}, {col: 7, key: 'email'}, {col: 8, key: 'tel'}].forEach(({col, key}) => {
-        const cell = row.cells[col];
+
+      // Gelöschte Zeilen entfernen
+      if (deleted.indexOf(nr) !== -1) { row.style.display = 'none'; return; }
+
+      // Alle Felder editierbar machen
+      COL_MAP.forEach(function(m) {
+        var cell = row.cells[m.col];
         if (!cell) return;
         cell.setAttribute('contenteditable', 'true');
-        cell.setAttribute('title', 'Klicken zum Bearbeiten – wird automatisch gespeichert');
-        const saved = localStorage.getItem('bkv_' + nr + '_' + key);
+        cell.setAttribute('title', 'Klicken zum Bearbeiten');
+        var saved = localStorage.getItem('bkv_' + nr + '_' + m.key);
         if (saved !== null) cell.innerHTML = saved;
-        cell.addEventListener('input', () => localStorage.setItem('bkv_' + nr + '_' + key, cell.innerHTML));
-        cell.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); cell.blur(); } });
+        cell.addEventListener('input', function() {
+          localStorage.setItem('bkv_' + nr + '_' + m.key, cell.innerHTML);
+        });
+        cell.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') { e.preventDefault(); cell.blur(); }
+          if (e.key === 'Escape') { cell.blur(); }
+        });
       });
+
+      // Papierkorb-Button anhängen
+      if (!row.querySelector('.btn-del')) {
+        var td = document.createElement('td');
+        td.className = 'action-cell';
+        td.innerHTML = '<button class="btn-del" title="Zeile löschen" onclick="deleteRow(this)">🗑</button>';
+        row.appendChild(td);
+      }
     });
   }
+
+  function deleteRow(btn) {
+    var row = btn.closest('tr');
+    var nr = row.cells[1].textContent.trim();
+    var firma = row.cells[2].textContent.trim().substring(0, 50);
+    if (!confirm('„' + firma + '" aus der Liste löschen?\n\nMit „Gelöschte wiederherstellen" kann die Zeile wieder eingeblendet werden.')) return;
+
+    var deleted = JSON.parse(localStorage.getItem('bkv_deleted') || '[]');
+    if (deleted.indexOf(nr) === -1) deleted.push(nr);
+    localStorage.setItem('bkv_deleted', JSON.stringify(deleted));
+
+    row.style.opacity = '0';
+    row.style.transform = 'translateX(30px)';
+    setTimeout(function() { row.style.display = 'none'; }, 260);
+  }
+
+  function restoreDeleted() {
+    var deleted = JSON.parse(localStorage.getItem('bkv_deleted') || '[]');
+    if (deleted.length === 0) { alert('Keine gelöschten Einträge vorhanden.'); return; }
+    if (!confirm(deleted.length + ' gelöschte Zeile(n) wieder einblenden?')) return;
+    localStorage.removeItem('bkv_deleted');
+    document.querySelectorAll('#tb tr').forEach(function(row) {
+      row.style.display = '';
+      row.style.opacity = '';
+      row.style.transform = '';
+    });
+  }
+
   initEditableCells();
 
   let sortDir = {};
