@@ -707,7 +707,29 @@
 </div>
 <script>
   function markSent(cb) {
-    cb.closest('tr').classList.toggle('sent', cb.checked);
+    var row = cb.closest('tr');
+    var nr = row.cells[1].textContent.trim();
+    var checked = cb.checked;
+    row.classList.toggle('sent', checked);
+
+    // Badge anzeigen / entfernen
+    var td = cb.closest('td');
+    var badge = td.querySelector('.sent-badge');
+    if (checked && !badge) {
+      badge = document.createElement('div');
+      badge.className = 'sent-badge';
+      badge.textContent = '✓ Versendet';
+      td.appendChild(badge);
+    } else if (!checked && badge) {
+      badge.remove();
+    }
+
+    // In localStorage speichern (überlebt Page-Reload)
+    var sent = JSON.parse(localStorage.getItem('bkv_sent') || '[]');
+    if (checked) { if (sent.indexOf(nr) === -1) sent.push(nr); }
+    else { sent = sent.filter(function(n) { return n !== nr; }); }
+    localStorage.setItem('bkv_sent', JSON.stringify(sent));
+
     document.getElementById('cnt-sent').textContent = document.querySelectorAll('#tb input:checked').length;
   }
   function filterTable(type, btn) {
