@@ -51,8 +51,10 @@
     .email-link { text-decoration: none; font-size: 12px; font-weight: 400; }
     .email-link:hover { text-decoration: underline; }
     .email-missing { font-size: 12px; font-style: italic; }
-    /* Ansprechpartner- und E-Mail-Spalte immer gleiche Farbe – egal ob Link, Text oder localStorage-Inhalt */
-    #tb td:nth-child(6), #tb td:nth-child(8) { color: #2563eb; }
+    /* Ansprechpartner- und E-Mail-Spalte: überall gleiche Schrift+Farbe, egal ob Link, Plain-Text oder localStorage-Inhalt */
+    #tb td:nth-child(6), #tb td:nth-child(8) { color: #2563eb !important; font-weight: 400 !important; font-size: 12px !important; }
+    #tb td:nth-child(6) *, #tb td:nth-child(8) * { color: #2563eb !important; font-weight: 400 !important; font-size: 12px !important; }
+    .contact-pos { display: none !important; }
     .tel { color: #475569; font-size: 11px; white-space: nowrap; }
     .web a { color: #7c3aed; font-size: 11px; text-decoration: none; }
     .web a:hover { text-decoration: underline; }
