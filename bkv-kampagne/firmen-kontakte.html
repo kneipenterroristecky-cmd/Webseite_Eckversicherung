@@ -871,9 +871,11 @@
 
   function buildCSVContent() {
     var lines = ['Anrede,Vorname,Nachname,Firma,Position,Email,Mitarbeiter,Ort'];
+    var deleted = JSON.parse(localStorage.getItem('bkv_deleted') || '[]');
     document.querySelectorAll('#tb tr').forEach(function(row) {
       var nr = row.cells[1] && row.cells[1].textContent.trim();
       if (!nr || isNaN(nr)) return;
+      if (deleted.indexOf(nr) !== -1) return;
 
       var firmaCell    = row.cells[2];
       var ortCell      = row.cells[3];
