@@ -968,25 +968,24 @@
   }
 
   async function initCSVAutoSave() {
-    // Restore file handle from last session
-    var handle = await loadHandleIDB();
-    if (handle) {
-      csvFileHandle = handle;
-      setCSVButtonLinked(handle.name);
-    }
-    // Hook into all future cell edits (after a short debounce)
+    // Event-Listener sofort registrieren (vor dem async IDB-Lookup)
     var saveTimer = null;
     document.getElementById('tb').addEventListener('input', function() {
       clearTimeout(saveTimer);
       saveTimer = setTimeout(autoSaveCSV, 800);
     });
-    // Also hook into checkbox changes (sent-status)
     document.getElementById('tb').addEventListener('change', function(e) {
       if (e.target.type === 'checkbox') {
         clearTimeout(saveTimer);
         saveTimer = setTimeout(autoSaveCSV, 800);
       }
     });
+    // File-Handle aus letzter Session wiederherstellen
+    var handle = await loadHandleIDB();
+    if (handle) {
+      csvFileHandle = handle;
+      setCSVButtonLinked(handle.name);
+    }
   }
   // ── Ende CSV Auto-Save ────────────────────────────────────────────────────
 
