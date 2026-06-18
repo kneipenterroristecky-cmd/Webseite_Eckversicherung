@@ -261,11 +261,50 @@
         <h2 class="section-title" style="margin-bottom:10px;">Termin direkt buchen</h2>
         <p style="font-size:15px; color:#64748b; max-width:480px; margin:0 auto;">Wählen Sie einen freien Termin für Ihr persönliches Beratungsgespräch – kostenlos & unverbindlich.</p>
       </div>
-      <div style="max-width:900px; margin:0 auto; border-radius:16px; overflow:hidden; border:1.5px solid #e2e8f0; box-shadow:0 4px 24px rgba(0,0,0,.06);">
-        <div class="calendly-inline-widget"
-             data-url="https://calendly.com/eckversicherung/30min?hide_gdpr_banner=1&primary_color=1a50c8&locale=de"
-             style="min-width:320px; height:700px;"></div>
+      <!-- Berater-Tabs -->
+      <div style="max-width:900px; margin:0 auto;">
+        <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+          <button id="kalTab0" onclick="switchKalTab(0)" style="flex:1; min-width:160px; display:flex; align-items:center; gap:12px; padding:14px 20px; border-radius:12px; border:2px solid rgb(33,103,204); background:rgb(33,103,204); color:#fff; cursor:pointer; font-family:inherit; font-weight:700; font-size:15px; transition:.2s;">
+            <img src="daniel_eck.jpg" alt="Daniel Eck" style="width:36px; height:36px; border-radius:50%; object-fit:cover; flex-shrink:0;" onerror="this.style.display='none'">
+            <div style="text-align:left;"><div>Daniel Eck</div><div style="font-size:12px; font-weight:400; opacity:.85;">Ihr Makler</div></div>
+          </button>
+          <button id="kalTab1" onclick="switchKalTab(1)" style="flex:1; min-width:160px; display:flex; align-items:center; gap:12px; padding:14px 20px; border-radius:12px; border:2px solid #e2e8f0; background:#f8fafc; color:#172d50; cursor:pointer; font-family:inherit; font-weight:700; font-size:15px; transition:.2s;">
+            <img src="heiko_eck.jpg" alt="Heiko Eck" style="width:36px; height:36px; border-radius:50%; object-fit:cover; object-position:center 15%; flex-shrink:0;" onerror="this.style.display='none'">
+            <div style="text-align:left;"><div>Heiko Eck</div><div style="font-size:12px; font-weight:400; opacity:.65;">Senior-Berater</div></div>
+          </button>
+        </div>
+        <div style="border-radius:16px; overflow:hidden; border:1.5px solid #e2e8f0; box-shadow:0 4px 24px rgba(0,0,0,.06);">
+          <div id="kalInline" style="min-width:320px; height:700px;"></div>
+        </div>
       </div>
+      <script>
+        var _kalUrls = [
+          'https://calendly.com/eckversicherung/30min?hide_gdpr_banner=1&primary_color=1a50c8&locale=de',
+          'https://calendly.com/eckheiko/personliches-beratungsgesprach-1?hide_gdpr_banner=1&primary_color=1a50c8&locale=de'
+        ];
+        var _kalActive = 0;
+        function switchKalTab(idx) {
+          _kalActive = idx;
+          document.getElementById('kalTab0').style.background = idx===0 ? 'rgb(33,103,204)' : '#f8fafc';
+          document.getElementById('kalTab0').style.borderColor = idx===0 ? 'rgb(33,103,204)' : '#e2e8f0';
+          document.getElementById('kalTab0').style.color = idx===0 ? '#fff' : '#172d50';
+          document.getElementById('kalTab1').style.background = idx===1 ? 'rgb(33,103,204)' : '#f8fafc';
+          document.getElementById('kalTab1').style.borderColor = idx===1 ? 'rgb(33,103,204)' : '#e2e8f0';
+          document.getElementById('kalTab1').style.color = idx===1 ? '#fff' : '#172d50';
+          var el = document.getElementById('kalInline');
+          el.innerHTML = '';
+          if (window.Calendly) {
+            Calendly.initInlineWidget({ url: _kalUrls[idx], parentElement: el });
+          }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+          if (window.Calendly) { switchKalTab(0); }
+          else {
+            var s = document.querySelector('script[src*="calendly"]');
+            if (s) s.addEventListener('load', function() { switchKalTab(0); });
+          }
+        });
+      </script>
     </div>
   </section>
 
