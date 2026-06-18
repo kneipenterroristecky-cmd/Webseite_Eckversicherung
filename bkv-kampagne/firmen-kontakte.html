@@ -811,6 +811,183 @@
   initEditableCells();
   initCSVAutoSave();
 
+  // ── CSV Auto-Save via File System Access API ──────────────────────────────
+  var csvFileHandle = null;
+
+  function openIDB() {
+    return new Promise(function(resolve, reject) {
+      var req = indexedDB.open('bkv_csv_v1', 1);
+      req.onupgradeneeded = function(e) { e.target.result.createObjectStore('h'); };
+      req.onsuccess = function(e) { resolve(e.target.result); };
+      req.onerror = reject;
+    });
+  }
+
+  async function saveHandleIDB(handle) {
+    try {
+      var db = await openIDB();
+      var tx = db.transaction('h', 'readwrite');
+      tx.objectStore('h').put(handle, 'csv');
+    } catch(e) {}
+  }
+
+  async function loadHandleIDB() {
+    try {
+      var db = await openIDB();
+      return new Promise(function(resolve) {
+        var tx = db.transaction('h', 'readonly');
+        var req = tx.objectStore('h').get('csv');
+        req.onsuccess = function(e) { resolve(e.target.result || null); };
+        req.onerror = function() { resolve(null); };
+      });
+    } catch(e) { return null; }
+  }
+
+  async function linkCSV() {
+    if (!window.showOpenFilePicker) {
+      alert('File System Access API wird von diesem Browser nicht unterstützt.\nBitte Chrome oder Edge verwenden.');
+      return;
+    }
+    try {
+      var picks = await window.showOpenFilePicker({
+        types: [{ description: 'CSV-Datei', accept: { 'text/csv': ['.csv'] } }],
+        multiple: false
+      });
+      csvFileHandle = picks[0];
+      await saveHandleIDB(csvFileHandle);
+      setCSVButtonLinked(csvFileHandle.name);
+      showCSVStatus('✓ Verknüpft: ' + csvFileHandle.name, '#86efac');
+      await autoSaveCSV();
+    } catch(e) {}
+  }
+
+  function setCSVButtonLinked(name) {
+    var btn = document.getElementById('btn-csv');
+    if (!btn) return;
+    btn.textContent = '✓ ' + (name || 'CSV');
+    btn.classList.add('linked');
+    btn.title = 'CSV verknüpft – klicken zum Wechseln';
+  }
+
+  function buildCSVContent() {
+    var lines = ['Anrede,Vorname,Nachname,Firma,Position,Email,Mitarbeiter,Ort'];
+    document.querySelectorAll('#tb tr').forEach(function(row) {
+      var nr = row.cells[1] && row.cells[1].textContent.trim();
+      if (!nr || isNaN(nr)) return;
+
+      var firmaCell    = row.cells[2];
+      var ortCell      = row.cells[3];
+      var maCell       = row.cells[4];
+      var contactCell  = row.cells[5];
+      var posCell      = row.cells[6];
+      var emailCell    = row.cells[7];
+
+      var firma = (firmaCell.querySelector('.firma-name') || firmaCell).textContent.trim().split('\n')[0].trim();
+      var ort   = ortCell.textContent.trim();
+      var ma    = maCell.textContent.replace(/[^0-9]/g, '');
+
+      var anrede = 'Sehr geehrte Damen und Herren,';
+      var vorname = '', nachname = '';
+
+      var nameEl = contactCell.querySelector('.contact-name');
+      var rawText = contactCell.textContent.trim();
+
+      if (nameEl) {
+        rawText = nameEl.textContent.trim();
+      } else if (rawText.includes('per Tel') || rawText.includes('erfragen') || rawText.length < 3) {
+        rawText = '';
+      }
+
+      if (rawText) {
+        // Handle "Name / Dr. Name" → take first person only
+        rawText = rawText.split('/')[0].trim();
+        // Remove titles
+        rawText = rawText.replace(/^(Dr\.|Prof\.|Dipl\.-\w+)/g, '').trim();
+        var parts = rawText.split(' ').filter(Boolean);
+        if (parts.length >= 2) {
+          nachname = parts[parts.length - 1];
+          vorname  = parts.slice(0, -1).join(' ');
+        } else if (parts.length === 1) {
+          vorname = parts[0];
+        }
+        // Anrede from position
+        var pos = posCell.textContent.trim().toLowerCase();
+        if (pos.match(/(führerin|leiterin|partnerin|direktorin|chefin|vorsitzende|managerin)/)) {
+          anrede = 'Sehr geehrte Frau,';
+        } else {
+          anrede = 'Sehr geehrter Herr,';
+        }
+      }
+
+      var email = '';
+      var emailLink = emailCell.querySelector('a.email-link');
+      if (emailLink) {
+        email = emailLink.getAttribute('href').replace('mailto:', '');
+      } else {
+        var txt = emailCell.textContent.trim();
+        if (txt.includes('@')) email = txt;
+      }
+
+      var position = posCell.textContent.trim();
+
+      var vals = [anrede, vorname, nachname, firma, position, email, ma, ort];
+      lines.push(vals.map(function(v) {
+        return (v.indexOf(',') > -1 || v.indexOf('"') > -1) ? '"' + v.replace(/"/g, '""') + '"' : v;
+      }).join(','));
+    });
+    return lines.join('\r\n');
+  }
+
+  async function autoSaveCSV() {
+    if (!csvFileHandle) return;
+    try {
+      var perm = await csvFileHandle.queryPermission({ mode: 'readwrite' });
+      if (perm !== 'granted') {
+        perm = await csvFileHandle.requestPermission({ mode: 'readwrite' });
+      }
+      if (perm !== 'granted') return;
+      var content = buildCSVContent();
+      var writable = await csvFileHandle.createWritable();
+      await writable.write(new TextEncoder().encode('﻿' + content)); // UTF-8 BOM für Excel
+      await writable.close();
+      showCSVStatus('✓ CSV gespeichert', '#86efac');
+    } catch(e) {
+      showCSVStatus('⚠ Speichern fehlgeschlagen', '#fca5a5');
+    }
+  }
+
+  function showCSVStatus(msg, color) {
+    var el = document.getElementById('csv-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.style.color = color || '#86efac';
+    clearTimeout(el._t);
+    el._t = setTimeout(function() { el.textContent = ''; }, 3000);
+  }
+
+  async function initCSVAutoSave() {
+    // Restore file handle from last session
+    var handle = await loadHandleIDB();
+    if (handle) {
+      csvFileHandle = handle;
+      setCSVButtonLinked(handle.name);
+    }
+    // Hook into all future cell edits (after a short debounce)
+    var saveTimer = null;
+    document.getElementById('tb').addEventListener('input', function() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(autoSaveCSV, 800);
+    });
+    // Also hook into checkbox changes (sent-status)
+    document.getElementById('tb').addEventListener('change', function(e) {
+      if (e.target.type === 'checkbox') {
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(autoSaveCSV, 800);
+      }
+    });
+  }
+  // ── Ende CSV Auto-Save ────────────────────────────────────────────────────
+
   let sortDir = {};
   function sortTable(col) {
     const tbody = document.getElementById('tb');
