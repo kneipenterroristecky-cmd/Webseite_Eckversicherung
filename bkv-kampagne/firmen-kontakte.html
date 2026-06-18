@@ -853,6 +853,7 @@
   }
 
   initEditableCells();
+  document.getElementById('cnt-sent').textContent = document.querySelectorAll('#tb input:checked').length;
   initCSVAutoSave();
 
   // ── CSV Auto-Save via File System Access API ──────────────────────────────
