@@ -83,7 +83,10 @@
   </div>
   <div class="header-logo">ECK</div>
 </header>
-<div class="edit-bar">✎ Ansprechpartner, E-Mail und Telefon direkt in der Tabelle klicken und bearbeiten &nbsp;·&nbsp; Änderungen werden automatisch gespeichert</div>
+<div class="edit-bar">
+  <span class="edit-bar-hint">✎ Alle Felder direkt anklicken und bearbeiten – wird automatisch gespeichert &nbsp;·&nbsp; 🗑️ Zeilen mit dem Papierkorb-Button löschen</span>
+  <button class="btn-restore" onclick="restoreDeleted()">↩ Gelöschte wiederherstellen</button>
+</div>
 <div class="container">
   <div class="stats">
     <div class="stat"><div class="num">50</div><div class="label">Ziel-Firmen</div></div>
