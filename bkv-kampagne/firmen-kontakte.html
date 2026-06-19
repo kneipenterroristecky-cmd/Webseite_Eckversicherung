@@ -959,13 +959,15 @@
         } else if (parts.length === 1) {
           vorname = parts[0];
         }
-        // Anrede from position
+        // Anrede from position (kein Komma)
         var pos = posCell.textContent.trim().toLowerCase();
         if (pos.match(/(führerin|leiterin|partnerin|direktorin|chefin|vorsitzende|managerin)/)) {
-          anrede = 'Sehr geehrte Frau,';
+          anrede = 'Sehr geehrte Frau';
         } else {
-          anrede = 'Sehr geehrter Herr,';
+          anrede = 'Sehr geehrter Herr';
         }
+      } else {
+        anrede = 'Sehr geehrte Damen und Herren';
       }
 
       var email = '';
