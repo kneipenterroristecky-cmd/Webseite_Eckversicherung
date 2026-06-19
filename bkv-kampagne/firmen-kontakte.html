@@ -917,7 +917,7 @@
 
   function buildCSVContent() {
     var SEP = ';';
-    var lines = ['Anrede;Vorname;Nachname;Firma;Position;Email;Mitarbeiter;Ort'];
+    var lines = ['Anschrift;Anrede;Vorname;Nachname;Firma;Position;Email;Mitarbeiter;Ort'];
     var deleted = JSON.parse(localStorage.getItem('bkv_deleted') || '[]');
     document.querySelectorAll('#tb tr').forEach(function(row) {
       var nr = row.cells[1] && row.cells[1].textContent.trim();
