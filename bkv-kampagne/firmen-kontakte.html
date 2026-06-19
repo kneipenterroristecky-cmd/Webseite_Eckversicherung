@@ -981,8 +981,7 @@
 
       var position = posCell.textContent.trim();
 
-      var anschrift = nachname ? anrede + ' ' + nachname : anrede;
-      var vals = [anschrift, anrede, vorname, nachname, firma, position, email, ma, ort];
+      var vals = [anrede, vorname, nachname, firma, position, email, ma, ort];
       lines.push(vals.join(SEP));
     });
     return lines.join('\r\n');
