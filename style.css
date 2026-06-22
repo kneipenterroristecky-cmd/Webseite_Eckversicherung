@@ -1341,25 +1341,44 @@ p   { line-height: 1.7; }
 
 /* ---- TABLET (769px – 1024px) ---- */
 @media (min-width: 769px) and (max-width: 1024px) {
-  /* Navbar – kompakter */
+  /* Containers */
   .topbar-container,
   .navbar-container,
-  .section-container { padding: 0 20px; }
+  .section-container { padding: 0 24px; }
 
-  /* Logo margin korrigieren: 20px padding – 16px margin = 4px Abstand (wie Desktop) */
-  .logo { margin-left: -16px; }
+  /* Navbar: Hamburger wie auf Mobile, Logo korrekt */
+  .navbar { position: sticky; top: 38px; background: #fff !important; overflow: visible; }
+  .navbar-container { height: 72px; padding: 0 24px; }
+  .logo { margin-left: -12px; }
+  .logo-img { height: 100px; }
 
-  .nav-link { font-size: 12px; padding: 8px 5px; }
-  .btn-nav { width: 140px !important; font-size: 12px !important; padding: 0 10px !important; margin-left: 4px; }
+  /* Nav-Links als Dropdown (gleich wie Mobile) */
+  .hamburger { display: flex; position: relative; z-index: 203; }
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 110px; left: 0; right: 0;
+    background: #ffffff;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 20px 20px;
+    gap: 0;
+    box-shadow: 0 12px 32px rgba(0,0,0,.12);
+    z-index: 201;
+  }
+  .nav-links.open { display: flex; }
+  .nav-link { padding: 15px 12px; border-radius: 0; border-bottom: 1px solid #f1f5f9; font-size: 15px; color: var(--navy); }
+  .btn-nav { margin: 12px 0 0; text-align: center; justify-content: center; width: 100% !important; }
+  .nav-links .btn-nav:not(.btn-online-abschluss) { display: none; }
 
   /* Hero */
   .hero { padding: 80px 0 200px; }
-  .hero-container { gap: 28px; padding: 0 20px; }
+  .hero-container { gap: 28px; padding: 0 24px; }
   .hero-content { padding: 24px 28px; }
   .hero-title { font-size: clamp(28px, 3.5vw, 44px); }
   .hero-desc { font-size: 14px; margin-bottom: 24px; }
 
-  /* Name-Badge: nicht außerhalb des Containers überstehen */
+  /* Name-Badge */
   .hero-name-badge { right: 8px; bottom: 32px; padding: 12px 18px; }
   .hero-name-badge-name { font-size: 16px; }
   .hero-name-badge-role { font-size: 11px; }
