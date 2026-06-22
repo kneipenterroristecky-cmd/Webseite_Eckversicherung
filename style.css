@@ -2562,6 +2562,12 @@ body.nav-open .social-peek { display: none !important; }
 .cookie-toggle-disabled .cookie-toggle-slider { background: var(--blue); }
 .cookie-toggle-disabled .cookie-toggle-slider::before { transform: translateX(20px); }
 
+/* Grid-overflow fix: kfz-makler items müssen min-width: 0 haben
+   damit 1fr Spalten nicht durch Inhalts-min-width verdrängt werden */
+.kfz-makler-left,
+.kfz-makler-advantages { min-width: 0; }
+.adv-text { min-width: 0; flex: 1; }
+
 .cookie-settings-footer {
   display: flex;
   gap: 10px;
