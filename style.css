@@ -1346,6 +1346,9 @@ p   { line-height: 1.7; }
   .navbar-container,
   .section-container { padding: 0 20px; }
 
+  /* Logo margin korrigieren: 20px padding – 16px margin = 4px Abstand (wie Desktop) */
+  .logo { margin-left: -16px; }
+
   .nav-link { font-size: 12px; padding: 8px 5px; }
   .btn-nav { width: 140px !important; font-size: 12px !important; padding: 0 10px !important; margin-left: 4px; }
 
