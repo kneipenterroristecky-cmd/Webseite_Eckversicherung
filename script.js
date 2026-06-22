@@ -331,7 +331,7 @@ var _calOpenParams = '';
 function _calTabsHtml() {
   return '<div class="cal-tabs">' +
     '<button class="cal-tab active" onclick="switchCalTab(0,this)">' +
-      '<img class="cal-tab-photo" src="' + _basePath + 'Dummybild 1_rund.png" alt="Daniel Eck">' +
+      '<img class="cal-tab-photo" src="' + _basePath + 'Dummybild%201_rund.png" alt="Daniel Eck">' +
       '<div class="cal-tab-info"><span class="cal-tab-name">Daniel Eck</span><span class="cal-tab-role">Ihr Makler</span></div>' +
       '<i class="cal-tab-check fas fa-circle-check"></i>' +
     '</button>' +
@@ -410,7 +410,7 @@ function _openCalendlyFallback() {
   header.innerHTML =
     '<div class="cal-tabs" style="margin:0">' +
       '<button class="cal-tab active" id="_calTabDaniel" onclick="_calFallbackSwitch(0,this)">' +
-        '<img class="cal-tab-photo" src="' + _basePath + 'Dummybild 1_rund.png" alt="Daniel Eck">' +
+        '<img class="cal-tab-photo" src="' + _basePath + 'Dummybild%201_rund.png" alt="Daniel Eck">' +
         '<div class="cal-tab-info"><span class="cal-tab-name">Daniel Eck</span><span class="cal-tab-role">Ihr Makler</span></div>' +
         '<i class="cal-tab-check fas fa-circle-check"></i>' +
       '</button>' +
