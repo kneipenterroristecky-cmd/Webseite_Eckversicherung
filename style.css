@@ -1339,6 +1339,39 @@ p   { line-height: 1.7; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
 }
 
+/* ---- TABLET (769px – 1024px) ---- */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Navbar – kompakter */
+  .topbar-container,
+  .navbar-container,
+  .section-container { padding: 0 20px; }
+
+  .nav-link { font-size: 12px; padding: 8px 5px; }
+  .btn-nav { width: 140px !important; font-size: 12px !important; padding: 0 10px !important; margin-left: 4px; }
+
+  /* Hero */
+  .hero { padding: 80px 0 200px; }
+  .hero-container { gap: 28px; padding: 0 20px; }
+  .hero-content { padding: 24px 28px; }
+  .hero-title { font-size: clamp(28px, 3.5vw, 44px); }
+  .hero-desc { font-size: 14px; margin-bottom: 24px; }
+
+  /* Name-Badge: nicht außerhalb des Containers überstehen */
+  .hero-name-badge { right: 8px; bottom: 32px; padding: 12px 18px; }
+  .hero-name-badge-name { font-size: 16px; }
+  .hero-name-badge-role { font-size: 11px; }
+
+  /* Sections */
+  .section { padding: 72px 0; }
+  #leistungen { padding-top: 130px; }
+
+  /* About */
+  .about-grid { gap: 48px; }
+
+  /* Grids */
+  .cards-row-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 900px) {
   .hero-container { grid-template-columns: 1fr; gap: 48px; }
   .hero-visual { order: -1; }
