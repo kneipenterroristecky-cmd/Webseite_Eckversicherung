@@ -28,6 +28,28 @@ gh_headers = {
 errors = []
 
 
+def _resolve_filter_cat(label, title):
+    """Mappt Label + Titel auf eine der Blog-Filter-Kategorien."""
+    t = (title + " " + label).lower()
+    if any(k in t for k in ["reise", "urlaub", "ausland", "kranken im ausland", "gepäck", "reiserück"]):
+        return "reise"
+    if any(k in t for k in ["rente", "altersvorsorge", "riester", "rürup", "pension", "ruhestand"]):
+        return "rente"
+    if any(k in t for k in ["wohngebäude", "gebäude", "haus", "elementar", "hausrat", "photovoltaik", "bauherr"]):
+        return "wohngebäude"
+    if any(k in t for k in ["kfz", "auto", "fahrzeug", "pkw", "kraftfahrzeug", "fuhrpark"]):
+        return "kfz"
+    if any(k in t for k in ["gewerbe", "betrieb", "unternehmen", "firma", "haftpflicht betrieb", "cyber"]):
+        return "gewerbe"
+    if any(k in t for k in ["kranken", "zahn", "pflege", "heilpraktiker", "krankengeld", "hospital"]):
+        return "kranken"
+    if any(k in t for k in ["vorsorge", "berufsunfähigkeit", "bu ", "leben", "risikoleben", "invalidität"]):
+        return "vorsorge"
+    # Fallback: Label direkt nutzen wenn es passt
+    label_map = {"kranken": "kranken", "vorsorge": "vorsorge", "kfz": "kfz", "gewerbe": "gewerbe"}
+    return label_map.get(label.lower(), "")
+
+
 def _update_blog_index(meta, repo, headers):
     """Fügt den neuen Beitrag oben in blog/index.html ein."""
     index_url = f"https://api.github.com/repos/{repo}/contents/blog/index.html"
