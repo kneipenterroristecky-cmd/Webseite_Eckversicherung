@@ -317,8 +317,8 @@
 
     function getCardText(card) {
       var title = (card.querySelector('.blog-card-title') || {}).textContent || '';
-      var label = (card.querySelector('.blog-card-label') || {}).textContent || '';
-      return (title + ' ' + label).toLowerCase();
+      var cat = card.dataset.cat || '';
+      return (title + ' ' + cat).toLowerCase();
     }
 
     function updateCount(visible) {
