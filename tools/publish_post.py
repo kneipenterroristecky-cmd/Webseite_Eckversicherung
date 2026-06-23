@@ -64,7 +64,8 @@ def _update_blog_index(meta, repo, headers):
         '\n      <div class="blog-empty">\n        <i class="fas fa-pen-to-square" style="font-size:32px; display:block; margin-bottom:12px;"></i>\n        Die ersten Beiträge erscheinen in Kürze.\n      </div>', ""
     )
 
-    new_card = f"""      <a href="posts/{meta['filename']}" class="blog-card reveal" data-cat="{meta['label'].lower()}">
+    filter_cat = _resolve_filter_cat(meta.get('label', ''), meta.get('title', ''))
+    new_card = f"""      <a href="posts/{meta['filename']}" class="blog-card reveal" data-cat="{filter_cat}">
         <h2 class="blog-card-title">{meta['title']}</h2>
         <p class="blog-card-date">{meta['date_de']}</p>
         <span class="blog-card-more">Weiterlesen <i class="fas fa-arrow-right"></i></span>
