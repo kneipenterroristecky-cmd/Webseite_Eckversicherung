@@ -309,6 +309,72 @@
 
   <script src="../script.js?v=10"></script>
   <script src="../cookie.js"></script>
+  <script>
+  (function() {
+    var searchInput = document.getElementById('blogSearch');
+    var clearBtn = document.getElementById('blogSearchClear');
+    var filterTags = document.getElementById('blogFilterTags');
+    var countEl = document.getElementById('blogCount');
+    var cards = Array.from(document.querySelectorAll('.blog-card'));
+    var activecat = '';
+
+    function getCardText(card) {
+      var title = (card.querySelector('.blog-card-title') || {}).textContent || '';
+      var label = (card.querySelector('.blog-card-label') || {}).textContent || '';
+      return (title + ' ' + label).toLowerCase();
+    }
+
+    function updateCount(visible) {
+      if (searchInput.value.trim() || activecat) {
+        countEl.textContent = visible + ' Beitrag' + (visible !== 1 ? 'e' : '') + ' gefunden';
+      } else {
+        countEl.textContent = '';
+      }
+    }
+
+    function filter() {
+      var q = searchInput.value.toLowerCase().trim();
+      clearBtn.classList.toggle('visible', q.length > 0);
+      var visible = 0;
+      cards.forEach(function(card) {
+        var text = getCardText(card);
+        var labelText = ((card.querySelector('.blog-card-label') || {}).textContent || '').toLowerCase();
+        var matchSearch = !q || text.includes(q);
+        var matchCat = !activecat || labelText.includes(activecat);
+        var show = matchSearch && matchCat;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      // Leermeldung
+      var empty = document.querySelector('.blog-empty');
+      if (!empty) {
+        empty = document.createElement('div');
+        empty.className = 'blog-empty';
+        empty.textContent = 'Kein Beitrag gefunden.';
+        document.querySelector('.blog-grid').appendChild(empty);
+      }
+      empty.style.display = visible === 0 ? '' : 'none';
+      updateCount(visible);
+    }
+
+    searchInput.addEventListener('input', filter);
+
+    clearBtn.addEventListener('click', function() {
+      searchInput.value = '';
+      filter();
+      searchInput.focus();
+    });
+
+    filterTags.addEventListener('click', function(e) {
+      var btn = e.target.closest('.blog-filter-tag');
+      if (!btn) return;
+      document.querySelectorAll('.blog-filter-tag').forEach(function(t) { t.classList.remove('active'); });
+      btn.classList.add('active');
+      activecat = btn.dataset.cat;
+      filter();
+    });
+  })();
+  </script>
   <div class="mobile-cta-bar">
     <a href="tel:+491743225885" class="mobile-cta-call"><i class="fas fa-phone"></i><span>Anrufen</span></a>
     <a href="https://calendly.com/eckversicherung/30min" class="mobile-cta-termin"><i class="fas fa-calendar-check"></i><span>Termin buchen</span></a>
