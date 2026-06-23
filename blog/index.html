@@ -335,7 +335,7 @@
       var visible = 0;
       cards.forEach(function(card) {
         var text = getCardText(card);
-        var labelText = ((card.querySelector('.blog-card-label') || {}).textContent || '').toLowerCase();
+        var labelText = (card.dataset.cat || '').toLowerCase();
         var matchSearch = !q || text.includes(q);
         var matchCat = !activecat || labelText.includes(activecat);
         var show = matchSearch && matchCat;
