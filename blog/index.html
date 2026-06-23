@@ -102,6 +102,80 @@
       color: #94a3b8;
       font-size: 16px;
     }
+    .blog-search-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .blog-search-input-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+    .blog-search-input-wrap i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 15px;
+      pointer-events: none;
+    }
+    .blog-search-input {
+      width: 100%;
+      padding: 12px 40px 12px 42px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--navy);
+      outline: none;
+      transition: border-color .2s;
+      box-sizing: border-box;
+    }
+    .blog-search-input:focus { border-color: var(--blue); }
+    .blog-search-clear {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      font-size: 14px;
+      padding: 4px;
+      display: none;
+    }
+    .blog-search-clear.visible { display: block; }
+    .blog-filter-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .blog-filter-tag {
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #64748b;
+      cursor: pointer;
+      transition: all .15s;
+      font-family: inherit;
+    }
+    .blog-filter-tag:hover { border-color: var(--blue); color: var(--blue); }
+    .blog-filter-tag.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .blog-count {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
     @media (max-width: 640px) {
       .page-hero { padding-top: 150px; }
       .blog-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -110,6 +184,8 @@
       .blog-card-title { hyphens: auto; -webkit-hyphens: auto; }
       .blog-card-more { display: block; text-align: center; margin-top: 4px; }
       .page-hero-sub { hyphens: auto; -webkit-hyphens: auto; }
+      .blog-search-bar { flex-direction: column; align-items: stretch; }
+      .blog-filter-tags { gap: 6px; }
     }
   </style>
 </head>
