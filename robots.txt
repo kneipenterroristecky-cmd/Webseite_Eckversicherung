@@ -1,4 +1,4 @@
-User-agent: *
+﻿User-agent: *
 Allow: /
 
 # Interne Tools und Kampagnen
@@ -12,4 +12,5 @@ Disallow: /produkte/
 Disallow: /bkv-kampagne/
 Disallow: /tools/
 
+Disallow: /test-logo-stempel.html
 Sitemap: https://www.eckversicherung.de/sitemap.xml
