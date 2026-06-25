@@ -1,9 +1,15 @@
 User-agent: *
 Allow: /
 
+# Interne Tools und Kampagnen
 Disallow: /dashboard.html
 Disallow: /email-preview.html
 Disallow: /hero-badge-varianten.html
-Disallow: /test-logo-stempel.html
+Disallow: /foto-storyboard.html
+Disallow: /google-bewertungskarte.html
+Disallow: /social/
+Disallow: /produkte/
+Disallow: /bkv-kampagne/
+Disallow: /tools/
 
 Sitemap: https://www.eckversicherung.de/sitemap.xml
