@@ -140,11 +140,11 @@ jobs:
           PYEOF
 
       - name: Playwright Chromium installieren
-        if: ${{ inputs.new_topic == '' && (inputs.new_unsplash_id != '' || inputs.suggest_new_image == true) }}
+        if: ${{ inputs.new_topic == '' && (inputs.new_unsplash_id != '' || inputs.suggest_new_image == true || inputs.new_title != '') }}
         run: playwright install chromium --with-deps
 
       - name: Social-Bild neu rendern
-        if: ${{ inputs.new_topic == '' && (inputs.new_unsplash_id != '' || inputs.suggest_new_image == true) }}
+        if: ${{ inputs.new_topic == '' && (inputs.new_unsplash_id != '' || inputs.suggest_new_image == true || inputs.new_title != '') }}
         run: python tools/generate_social_image.py
 
       - name: Änderungen committen
