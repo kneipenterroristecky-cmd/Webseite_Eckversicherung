@@ -124,10 +124,30 @@ jobs:
             blog_html = re.sub(r'<title>[^<]*</title>',
               f'<title>{new_title} | Daniel Eck - Versicherungsmakler</title>', blog_html)
             blog_html = blog_html.replace(f'>{old}<', f'>{new_title}<', 2)
+            h1_html = f'<h1>{new_title}</h1>'
+            anthropic_key = os.environ.get('ANTHROPIC_API_KEY', '').strip()
+            if anthropic_key:
+              try:
+                import anthropic as ac
+                client = ac.Anthropic(api_key=anthropic_key)
+                msg = client.messages.create(
+                  model="claude-haiku-4-5-20251001",
+                  max_tokens=150,
+                  messages=[{"role": "user", "content":
+                    f'Formatiere diesen Blog-Titel als HTML h1 fuer ein Instagram-Bild. '
+                    f'Titel: "{new_title}". '
+                    f'Waehle das wichtigste Hauptwort (1-2 Woerter) und umschliesse es mit <span>. '
+                    f'Setze sinnvolle <br>-Umbrueche (max 3 Zeilen, je ~3-4 Woerter). '
+                    f'Antworte NUR mit dem h1-Tag. Beispiel: <h1>Fuer Ihre<br><span>Familie</span><br>abgesichert</h1>'}]
+                )
+                h1_html = msg.content[0].text.strip()
+                print(f"h1 generiert: {h1_html}")
+              except Exception as e:
+                print(f"⚠️ h1-Formatierung fehlgeschlagen: {e}")
             for sf in ['social/latest-ig.html', 'social/latest-ig-heiko.html', 'social/latest-ig-beide.html']:
               if os.path.exists(sf):
                 s = open(sf, encoding='utf-8').read()
-                s = re.sub(r'<h1>.*?</h1>', f'<h1>{new_title}</h1>', s, flags=re.DOTALL)
+                s = re.sub(r'<h1>.*?</h1>', h1_html, s, flags=re.DOTALL)
                 open(sf, 'w', encoding='utf-8').write(s)
             changed.append(f"Titel -> {new_title}")
           if new_summary:
