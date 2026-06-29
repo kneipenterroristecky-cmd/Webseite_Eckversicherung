@@ -123,6 +123,11 @@ jobs:
             blog_html = re.sub(r'<title>[^<]*</title>',
               f'<title>{new_title} | Daniel Eck - Versicherungsmakler</title>', blog_html)
             blog_html = blog_html.replace(f'>{old}<', f'>{new_title}<', 2)
+            for sf in ['social/latest-ig.html', 'social/latest-ig-heiko.html', 'social/latest-ig-beide.html']:
+              if os.path.exists(sf):
+                s = open(sf, encoding='utf-8').read()
+                s = re.sub(r'<h1>.*?</h1>', f'<h1>{new_title}</h1>', s, flags=re.DOTALL)
+                open(sf, 'w', encoding='utf-8').write(s)
             changed.append(f"Titel -> {new_title}")
           if new_summary:
             meta['social_summary'] = new_summary
