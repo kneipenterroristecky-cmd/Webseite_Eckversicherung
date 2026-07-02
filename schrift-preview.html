@@ -2,146 +2,440 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Topbar Ideen – Runde 2</title>
+<title>Header Konzepte – Vorschau</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Outfit:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,500&family=DM+Sans:wght@400;500;600&family=Outfit:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', sans-serif; background: #e8edf4; padding: 48px 32px; }
-  h1 { font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 36px; letter-spacing: .14em; text-transform: uppercase; }
-  .cards { display: flex; flex-direction: column; gap: 28px; max-width: 980px; }
-  .card { border-radius: 12px; overflow: hidden; box-shadow: 0 6px 28px rgba(0,0,0,.11); }
-  .card-label { background: #fff; padding: 10px 24px; font-size: 11px; font-weight: 600; color: #64748b; letter-spacing: .1em; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; }
-  .card-desc  { background: #fff; padding: 8px 24px 14px; font-size: 13px; color: #94a3b8; border-bottom: 2px solid #e2e8f0; }
-  .bar { padding: 0 36px; display: flex; align-items: center; justify-content: flex-end; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #cbd5e1; padding: 40px 24px; display: flex; flex-direction: column; gap: 10px; }
 
-  /* ── IDEE 1: Monospace – Zahlen wirken wie Display-Anzeige ── */
-  .o1 .bar { background: #172d50; height: 42px; gap: 32px; }
-  .o1 .bar a {
-    display: flex; align-items: center; gap: 9px;
-    text-decoration: none;
-    color: rgba(255,255,255,.9);
-  }
-  .o1 .bar a i { font-size: 10px; color: #2e68de; }
-  .o1 .bar a span {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: .04em;
-  }
+.section-title {
+  font-size: 11px; font-weight: 700; color: #64748b;
+  letter-spacing: .14em; text-transform: uppercase;
+  margin: 20px 0 4px;
+}
+.section-title:first-child { margin-top: 0; }
 
-  /* ── IDEE 2: Uppercase Spaced – sehr clean & designorientiert ── */
-  .o2 .bar { background: #172d50; height: 42px; gap: 36px; }
-  .o2 .bar a {
-    display: flex; align-items: center; gap: 10px;
-    text-decoration: none;
-    color: rgba(255,255,255,.75);
-  }
-  .o2 .bar a i { font-size: 9px; color: #2e68de; }
-  .o2 .bar a span {
-    font-family: 'Inter', sans-serif;
-    font-size: 10.5px;
-    font-weight: 600;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-  }
+/* ── shared shell ── */
+.preview { border-radius: 10px; overflow: hidden; box-shadow: 0 6px 32px rgba(0,0,0,.18); max-width: 1100px; }
+.preview-label { background: #1e293b; color: rgba(255,255,255,.5); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: 6px 18px; }
 
-  /* ── IDEE 3: Blauer Akzent auf Zahl/Mail, zweiton ── */
-  .o3 .bar { background: #172d50; height: 42px; gap: 32px; }
-  .o3 .bar a {
-    display: flex; align-items: center; gap: 8px;
-    text-decoration: none;
-  }
-  .o3 .bar a i { font-size: 10px; color: rgba(255,255,255,.35); }
-  .o3 .label-tag {
-    font-family: 'Inter', sans-serif;
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,.35);
-    margin-right: 2px;
-  }
-  .o3 .val {
-    font-family: 'Outfit', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: #2e68de;
-    letter-spacing: -.01em;
-  }
+/* shared logo mock */
+.logo-mock { display: flex; align-items: center; gap: 10px; }
+.logo-circle { width: 46px; height: 46px; border-radius: 50%; border: 2px solid #1a50c8; display: flex; align-items: center; justify-content: center; }
+.logo-circle span { font-size: 12px; font-weight: 800; color: #1a50c8; }
+.logo-text-mock { display: flex; flex-direction: column; }
+.logo-text-mock b { font-size: 15px; font-weight: 800; color: #172d50; letter-spacing: -.3px; }
+.logo-text-mock small { font-size: 10px; color: #94a3b8; font-weight: 500; }
+.logo-text-mock-w b { color: #fff; }
+.logo-text-mock-w small { color: rgba(255,255,255,.45); }
 
-  /* ── IDEE 4: DM Sans, Trennlinie, klar & luftig ── */
-  .o4 .bar { background: #0f1f3a; height: 44px; gap: 0; }
-  .o4 .bar a {
-    display: flex; align-items: center; gap: 8px;
-    text-decoration: none;
-    color: rgba(255,255,255,.8);
-    padding: 0 24px;
-    height: 100%;
-    border-right: 1px solid rgba(255,255,255,.08);
-    transition: background .2s;
-  }
-  .o4 .bar a:first-child { border-left: 1px solid rgba(255,255,255,.08); }
-  .o4 .bar a i { font-size: 11px; color: #2e68de; }
-  .o4 .bar a span {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13.5px;
-    font-weight: 500;
-    letter-spacing: .01em;
-  }
+/* nav items mock */
+.nav-items { display: flex; align-items: center; gap: 2px; }
+.ni { font-size: 13px; font-weight: 500; color: #64748b; padding: 7px 10px; border-radius: 6px; white-space: nowrap; }
+.ni-w { color: rgba(255,255,255,.65); }
+.ni-active { color: #1a50c8; background: rgba(26,80,200,.06); font-weight: 600; }
+.ni-active-w { color: #fff; background: rgba(255,255,255,.1); font-weight: 600; }
+
+/* CTA buttons */
+.btn-p { background: #1a50c8; color: #fff; font-size: 13px; font-weight: 600; padding: 9px 18px; border-radius: 8px; white-space: nowrap; display: flex; align-items: center; gap: 7px; }
+.btn-s { background: transparent; color: #172d50; font-size: 13px; font-weight: 600; padding: 9px 18px; border-radius: 8px; border: 1.5px solid #172d50; white-space: nowrap; display: flex; align-items: center; gap: 7px; }
+.btn-sw { border-color: rgba(255,255,255,.3); color: #fff; }
+
+
+/* ════════════════════════════════════════
+   KONZEPT 1 – Alles in einer dunklen Zeile
+   ════════════════════════════════════════ */
+.c1-bar {
+  background: #172d50;
+  display: flex; align-items: center;
+  padding: 0 28px; height: 64px; gap: 6px;
+}
+.c1-bar .logo-mock { margin-right: auto; }
+.c1-bar .logo-circle { border-color: rgba(255,255,255,.3); }
+.c1-bar .logo-circle span { color: #fff; }
+.c1-contact { display: flex; align-items: center; gap: 20px; padding: 0 20px; margin-right: 16px; border-right: 1px solid rgba(255,255,255,.1); }
+.c1-contact a { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.75); text-decoration: none; white-space: nowrap; }
+.c1-contact a i { font-size: 10px; color: #2e68de; }
+
+
+/* ════════════════════════════════════════
+   KONZEPT 2 – Topbar gradient + weiße Navbar
+   ════════════════════════════════════════ */
+.c2-top {
+  background: linear-gradient(90deg, #172d50 0%, #1a50c8 100%);
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 28px; height: 34px; gap: 28px;
+}
+.c2-top a { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,.85); text-decoration: none; white-space: nowrap; }
+.c2-top a i { font-size: 10px; color: rgba(255,255,255,.6); }
+.c2-nav { background: #fff; display: flex; align-items: center; padding: 0 28px; height: 64px; gap: 6px; border-bottom: 1px solid #e2e8f0; }
+.c2-nav .logo-mock { margin-right: auto; }
+
+
+/* ════════════════════════════════════════
+   KONZEPT 3 – Ultraminimal: nur Linie oben
+   ════════════════════════════════════════ */
+.c3-top {
+  background: #fff;
+  border-top: 3px solid #1a50c8;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 28px; height: 30px; gap: 28px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.c3-top a { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: #94a3b8; text-decoration: none; white-space: nowrap; letter-spacing: .01em; }
+.c3-top a i { font-size: 9px; color: #1a50c8; }
+.c3-nav { background: #fff; display: flex; align-items: center; padding: 0 28px; height: 68px; gap: 6px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+.c3-nav .logo-mock { margin-right: auto; }
+
+
+/* ════════════════════════════════════════
+   KONZEPT 4 – Kontakt rechts in Navbar, kein Topbar
+   ════════════════════════════════════════ */
+.c4-nav { background: #fff; display: flex; align-items: center; padding: 0 28px; height: 68px; gap: 4px; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
+.c4-nav .logo-mock { margin-right: 24px; flex-shrink: 0; }
+.c4-nav .spacer { flex: 1; }
+.c4-contact { display: flex; align-items: center; gap: 16px; padding: 0 16px; margin: 0 8px; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; }
+.c4-contact a { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; color: #64748b; text-decoration: none; white-space: nowrap; }
+.c4-contact a i { font-size: 10px; color: #1a50c8; }
+
+
+/* ════════════════════════════════════════
+   KONZEPT 5 – Chips in dunklem Topbar
+   ════════════════════════════════════════ */
+.c5-top {
+  background: #0f1e38;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 28px; height: 38px; gap: 10px;
+}
+.c5-chip {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 100px;
+  padding: 4px 12px 4px 9px;
+  font-size: 12px; font-weight: 500;
+  color: rgba(255,255,255,.8);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.c5-chip i { font-size: 9px; color: #2e68de; }
+.c5-nav { background: #fff; display: flex; align-items: center; padding: 0 28px; height: 64px; gap: 6px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+.c5-nav .logo-mock { margin-right: auto; }
+
+
+/* ════════════════════════════════════════
+   KONZEPT 6 – Dunkle Navbar mit allem drin + Trennstrich
+   ════════════════════════════════════════ */
+.c6-nav {
+  background: #172d50;
+  display: flex; align-items: center;
+  padding: 0 28px; height: 68px; gap: 4px;
+  border-bottom: 2px solid #1a50c8;
+}
+.c6-nav .logo-mock { margin-right: auto; }
+.c6-sep { width: 1px; height: 24px; background: rgba(255,255,255,.12); margin: 0 12px; flex-shrink: 0; }
+.c6-contact { display: flex; align-items: center; gap: 18px; }
+.c6-contact a { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.7); text-decoration: none; white-space: nowrap; }
+.c6-contact a i { font-size: 10px; color: #2e68de; }
+
+
+/* ════════════════════════════════════════
+   KONZEPT 7 – Zweifarbig geteilt
+   ════════════════════════════════════════ */
+.c7-nav { display: flex; align-items: stretch; height: 68px; }
+.c7-left { background: #172d50; display: flex; align-items: center; padding: 0 28px; gap: 6px; flex: 1; }
+.c7-right { background: #fff; display: flex; align-items: center; padding: 0 28px; gap: 12px; border-left: 3px solid #1a50c8; box-shadow: -8px 0 24px rgba(0,0,0,.1); }
+.c7-right a { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: #172d50; text-decoration: none; white-space: nowrap; }
+.c7-right a i { font-size: 10px; color: #1a50c8; }
+
+
+/* ════════════════════════════════════════
+   KONZEPT 8 – Superminimal, kein Topbar, Kontakt als Text
+   ════════════════════════════════════════ */
+.c8-nav { background: #fff; display: flex; align-items: center; padding: 0 28px; height: 68px; gap: 4px; border-bottom: 1px solid #e2e8f0; }
+.c8-nav .logo-mock { margin-right: auto; }
+.c8-contact { display: flex; align-items: center; gap: 6px; margin: 0 12px 0 6px; }
+.c8-contact span { font-size: 13px; color: #94a3b8; }
+.c8-num { font-size: 14px; font-weight: 700; color: #172d50; letter-spacing: -.3px; }
+.c8-divider { color: #e2e8f0; font-size: 16px; margin: 0 4px; }
+
+
+/* ════════════════════════════════════════
+   KONZEPT 9 – Glasmorphismus Topbar über dunklem Hero
+   ════════════════════════════════════════ */
+.c9-wrap { background: linear-gradient(160deg, #172d50, #0f1e38); padding: 12px 28px 0; }
+.c9-top {
+  background: rgba(255,255,255,.07);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  display: flex; align-items: center;
+  padding: 10px 22px; gap: 6px;
+  margin-bottom: 0;
+}
+.c9-top .logo-mock { margin-right: auto; }
+.c9-top .logo-circle { border-color: rgba(255,255,255,.4); }
+.c9-top .logo-circle span { color: #fff; }
+.c9-contact { display: flex; align-items: center; gap: 20px; padding-right: 16px; margin-right: 12px; border-right: 1px solid rgba(255,255,255,.12); }
+.c9-contact a { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.8); text-decoration: none; white-space: nowrap; }
+.c9-contact a i { font-size: 10px; color: #2e68de; }
+.c9-spacer { height: 28px; background: transparent; }
+
+
+/* ════════════════════════════════════════
+   KONZEPT 10 – Accent-Banner oben, Inhalt mittig
+   ════════════════════════════════════════ */
+.c10-top {
+  background: #1a50c8;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 28px; height: 32px; gap: 32px;
+}
+.c10-top a { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; color: #fff; text-decoration: none; white-space: nowrap; opacity: .9; }
+.c10-top a i { font-size: 10px; opacity: .75; }
+.c10-top .c10-dot { color: rgba(255,255,255,.3); font-size: 18px; line-height: 1; }
+.c10-nav { background: #fff; display: flex; align-items: center; padding: 0 28px; height: 68px; gap: 6px; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
+.c10-nav .logo-mock { margin-right: auto; }
 </style>
 </head>
 <body>
-<h1>4 weitere Konzepte – kein Handschrift</h1>
 
-<div class="cards">
-
-  <div class="card o1">
-    <div class="card-label">Idee 5 – Monospace (JetBrains Mono)</div>
-    <div class="card-desc">Die Zahlen wirken wie eine digitale Anzeige – modern, technisch, trotzdem warm auf dem dunklen Hintergrund.</div>
-    <div class="bar">
+<!-- 1 -->
+<div class="section-title">Konzept 1 – Alles in einer dunklen Zeile, kein Topbar</div>
+<div class="preview">
+  <div class="preview-label">1 · Unified Dark Navbar</div>
+  <div class="c1-bar">
+    <div class="logo-mock">
+      <div class="logo-circle"><span>ECK</span></div>
+      <div class="logo-text-mock logo-text-mock-w"><b>Daniel Eck</b><small>Versicherungsmakler</small></div>
+    </div>
+    <div class="nav-items">
+      <div class="ni ni-w">Private Vers.</div>
+      <div class="ni ni-w">Gewerbliche</div>
+      <div class="ni ni-w">Über uns</div>
+      <div class="ni ni-w ni-active-w">FAQ</div>
+      <div class="ni ni-w">Ratgeber</div>
+    </div>
+    <div class="c1-contact">
       <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
       <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
     </div>
+    <div class="btn-p"><i class="fas fa-calendar-check"></i> Termin buchen</div>
   </div>
-
-  <div class="card o2">
-    <div class="card-label">Idee 6 – Uppercase Spaced (sehr clean)</div>
-    <div class="card-desc">Alles in Großbuchstaben mit weitem Zeichenabstand – minimalistisch, macht Eindruck, wirkt wie ein Markenzeichen.</div>
-    <div class="bar">
-      <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
-      <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
-    </div>
-  </div>
-
-  <div class="card o3">
-    <div class="card-label">Idee 7 – Zweiton: Label + blauer Wert</div>
-    <div class="card-desc">Kleines graues "TEL" / "MAIL" Label, dahinter die Nummer/Mail in kräftigem Blau – strukturiert und klar.</div>
-    <div class="bar">
-      <a href="#">
-        <i class="fas fa-phone"></i>
-        <span class="label-tag">Tel</span>
-        <span class="val">0174 / 322 58 85</span>
-      </a>
-      <a href="#">
-        <i class="fas fa-envelope"></i>
-        <span class="label-tag">Mail</span>
-        <span class="val">daniel@eckversicherung.de</span>
-      </a>
-    </div>
-  </div>
-
-  <div class="card o4">
-    <div class="card-label">Idee 8 – DM Sans + getrennte Felder</div>
-    <div class="card-desc">Jeder Kontakt in einem eigenen Feld mit vertikalen Trennlinien – strukturiert wie ein Menü, sehr professionell.</div>
-    <div class="bar">
-      <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
-      <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
-    </div>
-  </div>
-
 </div>
+
+<!-- 2 -->
+<div class="section-title">Konzept 2 – Gradient Topbar + weiße Navbar</div>
+<div class="preview">
+  <div class="preview-label">2 · Gradient Top + White Nav</div>
+  <div class="c2-top">
+    <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+    <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+  </div>
+  <div class="c2-nav">
+    <div class="logo-mock" style="margin-right:auto">
+      <div class="logo-circle"><span>ECK</span></div>
+      <div class="logo-text-mock"><b>Daniel Eck</b><small>Versicherungsmakler</small></div>
+    </div>
+    <div class="nav-items">
+      <div class="ni">Private Vers.</div><div class="ni">Gewerbliche</div>
+      <div class="ni">Über uns</div><div class="ni ni-active">FAQ</div><div class="ni">Ratgeber</div>
+    </div>
+    <div style="width:12px"></div>
+    <div class="btn-s"><i class="fas fa-laptop"></i> Onlineabschluss</div>
+    <div style="width:8px"></div>
+    <div class="btn-p"><i class="fas fa-calendar-check"></i> Termin buchen</div>
+  </div>
+</div>
+
+<!-- 3 -->
+<div class="section-title">Konzept 3 – Blauer Akzentstreifen oben, heller Topbar</div>
+<div class="preview">
+  <div class="preview-label">3 · Blue Accent Line</div>
+  <div class="c3-top">
+    <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+    <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+  </div>
+  <div class="c3-nav">
+    <div class="logo-mock" style="margin-right:auto">
+      <div class="logo-circle"><span>ECK</span></div>
+      <div class="logo-text-mock"><b>Daniel Eck</b><small>Versicherungsmakler</small></div>
+    </div>
+    <div class="nav-items">
+      <div class="ni">Private Vers.</div><div class="ni">Gewerbliche</div>
+      <div class="ni">Über uns</div><div class="ni ni-active">FAQ</div><div class="ni">Ratgeber</div>
+    </div>
+    <div style="width:12px"></div>
+    <div class="btn-s"><i class="fas fa-laptop"></i> Onlineabschluss</div>
+    <div style="width:8px"></div>
+    <div class="btn-p"><i class="fas fa-calendar-check"></i> Termin buchen</div>
+  </div>
+</div>
+
+<!-- 4 -->
+<div class="section-title">Konzept 4 – Kein Topbar, Kontakt direkt in der Navbar</div>
+<div class="preview">
+  <div class="preview-label">4 · Contact in Navbar</div>
+  <div class="c4-nav">
+    <div class="logo-mock">
+      <div class="logo-circle"><span>ECK</span></div>
+      <div class="logo-text-mock"><b>Daniel Eck</b><small>Versicherungsmakler</small></div>
+    </div>
+    <div class="nav-items" style="margin: 0 8px;">
+      <div class="ni">Private Vers.</div><div class="ni">Gewerbliche</div>
+      <div class="ni">Über uns</div><div class="ni ni-active">FAQ</div><div class="ni">Ratgeber</div>
+    </div>
+    <div class="c4-contact">
+      <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+      <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+    </div>
+    <div class="btn-p" style="margin-left:8px"><i class="fas fa-calendar-check"></i> Termin buchen</div>
+  </div>
+</div>
+
+<!-- 5 -->
+<div class="section-title">Konzept 5 – Pill-Chips im dunklen Topbar</div>
+<div class="preview">
+  <div class="preview-label">5 · Pill Chips Dark</div>
+  <div class="c5-top">
+    <a href="#" class="c5-chip"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+    <a href="#" class="c5-chip"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+  </div>
+  <div class="c5-nav">
+    <div class="logo-mock" style="margin-right:auto">
+      <div class="logo-circle"><span>ECK</span></div>
+      <div class="logo-text-mock"><b>Daniel Eck</b><small>Versicherungsmakler</small></div>
+    </div>
+    <div class="nav-items">
+      <div class="ni">Private Vers.</div><div class="ni">Gewerbliche</div>
+      <div class="ni">Über uns</div><div class="ni ni-active">FAQ</div><div class="ni">Ratgeber</div>
+    </div>
+    <div style="width:12px"></div>
+    <div class="btn-s"><i class="fas fa-laptop"></i> Onlineabschluss</div>
+    <div style="width:8px"></div>
+    <div class="btn-p"><i class="fas fa-calendar-check"></i> Termin buchen</div>
+  </div>
+</div>
+
+<!-- 6 -->
+<div class="section-title">Konzept 6 – Eine dunkle Navbar mit blauem Unterstrich</div>
+<div class="preview">
+  <div class="preview-label">6 · Dark Navbar + Blue Underline</div>
+  <div class="c6-nav">
+    <div class="logo-mock">
+      <div class="logo-circle" style="border-color:rgba(255,255,255,.3)"><span style="color:#fff">ECK</span></div>
+      <div class="logo-text-mock logo-text-mock-w"><b>Daniel Eck</b><small>Versicherungsmakler</small></div>
+    </div>
+    <div class="nav-items" style="margin:0 auto">
+      <div class="ni ni-w">Private Vers.</div><div class="ni ni-w">Gewerbliche</div>
+      <div class="ni ni-w">Über uns</div><div class="ni ni-w ni-active-w">FAQ</div><div class="ni ni-w">Ratgeber</div>
+    </div>
+    <div class="c6-contact">
+      <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+      <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+    </div>
+    <div class="c6-sep"></div>
+    <div class="btn-p"><i class="fas fa-calendar-check"></i> Termin buchen</div>
+  </div>
+</div>
+
+<!-- 7 -->
+<div class="section-title">Konzept 7 – Zweigeteilt: links dunkel (Nav), rechts hell (Kontakt + CTA)</div>
+<div class="preview">
+  <div class="preview-label">7 · Split Dark / Light</div>
+  <div class="c7-nav">
+    <div class="c7-left">
+      <div class="logo-mock" style="margin-right:16px">
+        <div class="logo-circle" style="border-color:rgba(255,255,255,.3)"><span style="color:#fff">ECK</span></div>
+        <div class="logo-text-mock logo-text-mock-w"><b>Daniel Eck</b><small>Versicherungsmakler</small></div>
+      </div>
+      <div class="nav-items">
+        <div class="ni ni-w">Private Vers.</div><div class="ni ni-w">Gewerbliche</div>
+        <div class="ni ni-w">Über uns</div><div class="ni ni-w ni-active-w">FAQ</div><div class="ni ni-w">Ratgeber</div>
+      </div>
+    </div>
+    <div class="c7-right">
+      <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+      <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+      <div style="width:10px"></div>
+      <div class="btn-p"><i class="fas fa-calendar-check"></i> Termin buchen</div>
+    </div>
+  </div>
+</div>
+
+<!-- 8 -->
+<div class="section-title">Konzept 8 – Superminimal: Telefonnummer fett, kein Icon, kein Topbar</div>
+<div class="preview">
+  <div class="preview-label">8 · Minimal Bold Number</div>
+  <div class="c8-nav">
+    <div class="logo-mock" style="margin-right:auto">
+      <div class="logo-circle"><span>ECK</span></div>
+      <div class="logo-text-mock"><b>Daniel Eck</b><small>Versicherungsmakler</small></div>
+    </div>
+    <div class="nav-items">
+      <div class="ni">Private Vers.</div><div class="ni">Gewerbliche</div>
+      <div class="ni">Über uns</div><div class="ni ni-active">FAQ</div><div class="ni">Ratgeber</div>
+    </div>
+    <div style="width:16px"></div>
+    <div class="c8-contact">
+      <span class="c8-num">0174 / 322 58 85</span>
+      <span class="c8-divider">·</span>
+      <span style="font-size:13px;color:#64748b;font-weight:500">daniel@eckversicherung.de</span>
+    </div>
+    <div class="btn-p"><i class="fas fa-calendar-check"></i> Termin buchen</div>
+  </div>
+</div>
+
+<!-- 9 -->
+<div class="section-title">Konzept 9 – Glasmorphismus: schwebende Navbar über dunklem Hero</div>
+<div class="preview">
+  <div class="preview-label">9 · Glassmorphism Floating</div>
+  <div class="c9-wrap">
+    <div class="c9-top">
+      <div class="logo-mock">
+        <div class="logo-circle"><span style="color:#fff">ECK</span></div>
+        <div class="logo-text-mock logo-text-mock-w"><b>Daniel Eck</b><small>Versicherungsmakler</small></div>
+      </div>
+      <div class="nav-items" style="margin:0 auto">
+        <div class="ni ni-w">Private Vers.</div><div class="ni ni-w">Gewerbliche</div>
+        <div class="ni ni-w">Über uns</div><div class="ni ni-w ni-active-w">FAQ</div><div class="ni ni-w">Ratgeber</div>
+      </div>
+      <div class="c9-contact">
+        <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+        <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+      </div>
+      <div class="btn-p"><i class="fas fa-calendar-check"></i> Termin buchen</div>
+    </div>
+    <div class="c9-spacer"></div>
+  </div>
+</div>
+
+<!-- 10 -->
+<div class="section-title">Konzept 10 – Blauer Accent-Banner (Kontakt zentriert) + weiße Navbar</div>
+<div class="preview">
+  <div class="preview-label">10 · Blue Centered Banner</div>
+  <div class="c10-top">
+    <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+    <span class="c10-dot">·</span>
+    <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+  </div>
+  <div class="c10-nav">
+    <div class="logo-mock" style="margin-right:auto">
+      <div class="logo-circle"><span>ECK</span></div>
+      <div class="logo-text-mock"><b>Daniel Eck</b><small>Versicherungsmakler</small></div>
+    </div>
+    <div class="nav-items">
+      <div class="ni">Private Vers.</div><div class="ni">Gewerbliche</div>
+      <div class="ni">Über uns</div><div class="ni ni-active">FAQ</div><div class="ni">Ratgeber</div>
+    </div>
+    <div style="width:12px"></div>
+    <div class="btn-s"><i class="fas fa-laptop"></i> Onlineabschluss</div>
+    <div style="width:8px"></div>
+    <div class="btn-p"><i class="fas fa-calendar-check"></i> Termin buchen</div>
+  </div>
+</div>
+
 </body>
 </html>
