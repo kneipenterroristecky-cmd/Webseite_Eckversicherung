@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Schrift-Vorschau – Topbar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Great+Vibes&family=Pacifico&family=Sacramento&family=Inter:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f1f5f9; padding: 40px 24px; }
+
+  h1 { font-size: 15px; font-weight: 500; color: #64748b; margin-bottom: 28px; letter-spacing: .04em; text-transform: uppercase; }
+
+  .options { display: flex; flex-direction: column; gap: 20px; max-width: 900px; }
+
+  .option {
+    background: #172d50;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,.15);
+  }
+
+  .option-label {
+    background: rgba(255,255,255,.07);
+    padding: 8px 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,.45);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+
+  .topbar-demo {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 28px;
+    padding: 12px 28px;
+  }
+
+  .topbar-demo a {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+    color: rgba(255,255,255,.9);
+    transition: color .2s;
+  }
+
+  .topbar-demo a i {
+    font-size: 11px;
+    color: #2e68de;
+  }
+
+  /* Option 1 – Dancing Script */
+  .opt1 .topbar-demo a { font-family: 'Dancing Script', cursive; font-weight: 600; font-size: 17px; letter-spacing: .01em; }
+
+  /* Option 2 – Great Vibes */
+  .opt2 .topbar-demo a { font-family: 'Great Vibes', cursive; font-size: 20px; letter-spacing: .02em; }
+
+  /* Option 3 – Pacifico */
+  .opt3 .topbar-demo a { font-family: 'Pacifico', cursive; font-size: 14px; letter-spacing: -.01em; }
+
+  /* Option 4 – Sacramento */
+  .opt4 .topbar-demo a { font-family: 'Sacramento', cursive; font-size: 22px; letter-spacing: .02em; }
+
+  .note {
+    margin-top: 6px;
+    font-size: 12px;
+    color: rgba(255,255,255,.35);
+    padding: 0 20px 12px;
+  }
+</style>
+</head>
+<body>
+<h1>4 Schrift-Varianten – Topbar Handynummer &amp; Mail</h1>
+
+<div class="options">
+
+  <div class="option opt1">
+    <div class="option-label">Option 1 – Dancing Script (elegant, lesbar)</div>
+    <div class="topbar-demo">
+      <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+      <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+    </div>
+    <div class="note">Schwungvoll aber klar lesbar · passt gut zu seriösen Seiten</div>
+  </div>
+
+  <div class="option opt2">
+    <div class="option-label">Option 2 – Great Vibes (edel, dünn)</div>
+    <div class="topbar-demo">
+      <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+      <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+    </div>
+    <div class="note">Sehr elegant und fein · wirkt exklusiv / Premium</div>
+  </div>
+
+  <div class="option opt3">
+    <div class="option-label">Option 3 – Pacifico (freundlich, rund)</div>
+    <div class="topbar-demo">
+      <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+      <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+    </div>
+    <div class="note">Modern &amp; sympathisch · wirkt nahbar und persönlich</div>
+  </div>
+
+  <div class="option opt4">
+    <div class="option-label">Option 4 – Sacramento (filigran, handschriftlich)</div>
+    <div class="topbar-demo">
+      <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+      <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+    </div>
+    <div class="note">Handschrift-nah und persönlich · zart und luftig</div>
+  </div>
+
+</div>
+</body>
+</html>
