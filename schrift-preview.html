@@ -2,130 +2,105 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Topbar Ideen</title>
+<title>Topbar Ideen – Runde 2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Outfit:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Inter', sans-serif; background: #e8edf4; padding: 48px 32px; }
+  h1 { font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 36px; letter-spacing: .14em; text-transform: uppercase; }
+  .cards { display: flex; flex-direction: column; gap: 28px; max-width: 980px; }
+  .card { border-radius: 12px; overflow: hidden; box-shadow: 0 6px 28px rgba(0,0,0,.11); }
+  .card-label { background: #fff; padding: 10px 24px; font-size: 11px; font-weight: 600; color: #64748b; letter-spacing: .1em; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; }
+  .card-desc  { background: #fff; padding: 8px 24px 14px; font-size: 13px; color: #94a3b8; border-bottom: 2px solid #e2e8f0; }
+  .bar { padding: 0 36px; display: flex; align-items: center; justify-content: flex-end; }
 
-  h1 { font-size: 12px; font-weight: 600; color: #94a3b8; margin-bottom: 36px; letter-spacing: .12em; text-transform: uppercase; }
+  /* ── IDEE 1: Monospace – Zahlen wirken wie Display-Anzeige ── */
+  .o1 .bar { background: #172d50; height: 42px; gap: 32px; }
+  .o1 .bar a {
+    display: flex; align-items: center; gap: 9px;
+    text-decoration: none;
+    color: rgba(255,255,255,.9);
+  }
+  .o1 .bar a i { font-size: 10px; color: #2e68de; }
+  .o1 .bar a span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .04em;
+  }
 
-  .cards { display: flex; flex-direction: column; gap: 32px; max-width: 960px; }
-
-  .card { border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,.12); }
-
-  .card-label {
-    background: #fff;
-    padding: 10px 24px;
-    font-size: 11px;
+  /* ── IDEE 2: Uppercase Spaced – sehr clean & designorientiert ── */
+  .o2 .bar { background: #172d50; height: 42px; gap: 36px; }
+  .o2 .bar a {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+    color: rgba(255,255,255,.75);
+  }
+  .o2 .bar a i { font-size: 9px; color: #2e68de; }
+  .o2 .bar a span {
+    font-family: 'Inter', sans-serif;
+    font-size: 10.5px;
     font-weight: 600;
-    color: #64748b;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  /* ── IDEE 3: Blauer Akzent auf Zahl/Mail, zweiton ── */
+  .o3 .bar { background: #172d50; height: 42px; gap: 32px; }
+  .o3 .bar a {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none;
+  }
+  .o3 .bar a i { font-size: 10px; color: rgba(255,255,255,.35); }
+  .o3 .label-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
     letter-spacing: .1em;
     text-transform: uppercase;
-    border-bottom: 1px solid #e2e8f0;
+    color: rgba(255,255,255,.35);
+    margin-right: 2px;
   }
-  .card-desc {
-    background: #fff;
-    padding: 8px 24px 14px;
-    font-size: 13px;
-    color: #94a3b8;
-    border-bottom: 2px solid #e2e8f0;
+  .o3 .val {
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2e68de;
+    letter-spacing: -.01em;
   }
 
-  .bar { padding: 0 32px; display: flex; align-items: center; justify-content: flex-end; }
-
-  /* ── OPTION 1: Caveat – "Handschrift, aber hip" ── */
-  .o1 .bar {
-    background: #172d50;
-    height: 42px;
-    gap: 32px;
-  }
-  .o1 .bar a {
+  /* ── IDEE 4: DM Sans, Trennlinie, klar & luftig ── */
+  .o4 .bar { background: #0f1f3a; height: 44px; gap: 0; }
+  .o4 .bar a {
     display: flex; align-items: center; gap: 8px;
-    font-family: 'Caveat', cursive;
-    font-size: 19px;
-    font-weight: 500;
-    color: rgba(255,255,255,.9);
     text-decoration: none;
-    letter-spacing: .02em;
-  }
-  .o1 .bar a i { font-size: 11px; color: #2e68de; font-family: 'Font Awesome 6 Free'; }
-
-  /* ── OPTION 2: Kein Topbar – Kontakt als subtile Chips ── */
-  .o2 .bar {
-    background: #172d50;
-    height: 42px;
-    gap: 12px;
-  }
-  .o2 .bar a {
-    display: flex; align-items: center; gap: 7px;
-    background: rgba(255,255,255,.09);
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 20px;
-    padding: 4px 14px 4px 10px;
-    font-family: 'Inter', sans-serif;
-    font-size: 12.5px;
-    font-weight: 500;
-    color: rgba(255,255,255,.85);
-    text-decoration: none;
+    color: rgba(255,255,255,.8);
+    padding: 0 24px;
+    height: 100%;
+    border-right: 1px solid rgba(255,255,255,.08);
     transition: background .2s;
   }
-  .o2 .bar a i { font-size: 10px; color: #2e68de; }
-
-  /* ── OPTION 3: Heller Topbar, blauer Akzent-Strich ── */
-  .o3 .bar {
-    background: #f8fafc;
-    height: 38px;
-    gap: 28px;
-    border-bottom: 2px solid #1a50c8;
-  }
-  .o3 .bar a {
-    display: flex; align-items: center; gap: 7px;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: #172d50;
-    text-decoration: none;
-  }
-  .o3 .bar a i { font-size: 11px; color: #1a50c8; }
-
-  /* ── OPTION 4: Caveat + Icon in Kreis ── */
-  .o4 .bar {
-    background: #172d50;
-    height: 46px;
-    gap: 28px;
-  }
-  .o4 .bar a {
-    display: flex; align-items: center; gap: 10px;
-    font-family: 'Caveat', cursive;
-    font-size: 20px;
-    font-weight: 600;
-    color: #fff;
-    text-decoration: none;
+  .o4 .bar a:first-child { border-left: 1px solid rgba(255,255,255,.08); }
+  .o4 .bar a i { font-size: 11px; color: #2e68de; }
+  .o4 .bar a span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
     letter-spacing: .01em;
   }
-  .o4 .icon-circle {
-    width: 24px; height: 24px;
-    background: #1a50c8;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .o4 .icon-circle i { font-size: 10px; color: #fff; }
-
 </style>
 </head>
 <body>
-<h1>4 Konzepte – Topbar Kontaktinfo</h1>
+<h1>4 weitere Konzepte – kein Handschrift</h1>
 
 <div class="cards">
 
   <div class="card o1">
-    <div class="card-label">Idee 1 – Caveat (Handschrift, modern &amp; hip)</div>
-    <div class="card-desc">Caveat ist die Handschrift-Schrift die auf modernen Webseiten funktioniert – locker, menschlich, trotzdem lesbar.</div>
+    <div class="card-label">Idee 5 – Monospace (JetBrains Mono)</div>
+    <div class="card-desc">Die Zahlen wirken wie eine digitale Anzeige – modern, technisch, trotzdem warm auf dem dunklen Hintergrund.</div>
     <div class="bar">
       <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
       <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
@@ -133,8 +108,8 @@
   </div>
 
   <div class="card o2">
-    <div class="card-label">Idee 2 – Pill-Chips (kein Font-Wechsel, aber modernes Design)</div>
-    <div class="card-desc">Kontaktdaten in kleinen halbtransparenten Badges verpackt – sauber, modern, fühlt sich nicht nach "90er" an.</div>
+    <div class="card-label">Idee 6 – Uppercase Spaced (sehr clean)</div>
+    <div class="card-desc">Alles in Großbuchstaben mit weitem Zeichenabstand – minimalistisch, macht Eindruck, wirkt wie ein Markenzeichen.</div>
     <div class="bar">
       <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
       <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
@@ -142,26 +117,28 @@
   </div>
 
   <div class="card o3">
-    <div class="card-label">Idee 3 – Heller Topbar mit blauem Akzent</div>
-    <div class="card-desc">Statt dunklem Navy: heller Streifen mit blauem Unterstrich – moderner SaaS-Look, passt zum Rest der Seite.</div>
+    <div class="card-label">Idee 7 – Zweiton: Label + blauer Wert</div>
+    <div class="card-desc">Kleines graues "TEL" / "MAIL" Label, dahinter die Nummer/Mail in kräftigem Blau – strukturiert und klar.</div>
     <div class="bar">
-      <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
-      <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
+      <a href="#">
+        <i class="fas fa-phone"></i>
+        <span class="label-tag">Tel</span>
+        <span class="val">0174 / 322 58 85</span>
+      </a>
+      <a href="#">
+        <i class="fas fa-envelope"></i>
+        <span class="label-tag">Mail</span>
+        <span class="val">daniel@eckversicherung.de</span>
+      </a>
     </div>
   </div>
 
   <div class="card o4">
-    <div class="card-label">Idee 4 – Caveat + Icon in blauem Kreis</div>
-    <div class="card-desc">Caveat-Schrift kombiniert mit kleinen gefüllten Icon-Kreisen – persönlicher Charakter, aber strukturiert und klar.</div>
+    <div class="card-label">Idee 8 – DM Sans + getrennte Felder</div>
+    <div class="card-desc">Jeder Kontakt in einem eigenen Feld mit vertikalen Trennlinien – strukturiert wie ein Menü, sehr professionell.</div>
     <div class="bar">
-      <a href="#">
-        <div class="icon-circle"><i class="fas fa-phone"></i></div>
-        <span>0174 / 322 58 85</span>
-      </a>
-      <a href="#">
-        <div class="icon-circle"><i class="fas fa-envelope"></i></div>
-        <span>daniel@eckversicherung.de</span>
-      </a>
+      <a href="#"><i class="fas fa-phone"></i><span>0174 / 322 58 85</span></a>
+      <a href="#"><i class="fas fa-envelope"></i><span>daniel@eckversicherung.de</span></a>
     </div>
   </div>
 
