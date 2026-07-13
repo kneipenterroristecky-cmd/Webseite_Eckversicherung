@@ -1,0 +1,37 @@
+name: Social-Beitrag korrigieren (Bild austauschen)
+
+on:
+  workflow_dispatch:
+    inputs:
+      fb_post_id:
+        description: 'Facebook Post-ID, die gelöscht werden soll (leer = FB nicht löschen)'
+        required: false
+        default: ''
+      ig_media_id:
+        description: 'Instagram Media-ID, die gelöscht werden soll (leer = IG nicht löschen)'
+        required: false
+        default: ''
+
+jobs:
+  korrigieren:
+    name: Alten Beitrag löschen und mit aktuellem Bild neu posten
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Abhängigkeiten installieren
+        run: pip install requests
+
+      - name: Alten Beitrag löschen und neu posten
+        env:
+          FB_POST_ID: ${{ inputs.fb_post_id }}
+          IG_MEDIA_ID: ${{ inputs.ig_media_id }}
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+        run: python tools/fix_social_post.py
