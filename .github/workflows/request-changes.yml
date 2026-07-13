@@ -66,6 +66,8 @@ jobs:
         run: |
           python3 - <<'PYEOF'
           import json, os, re, sys, requests as req
+          sys.path.insert(0, 'tools')
+          from image_search import find_best_image
           if not os.path.exists('tools/draft_meta.json'):
             print("Kein Entwurf gefunden – zuerst Workflow 1 ausfuehren.")
             sys.exit(1)
@@ -78,27 +80,25 @@ jobs:
           new_summary  = os.environ.get('NEW_SUMMARY', '').strip()
           suggest      = os.environ.get('SUGGEST_IMAGE', '').lower() == 'true'
           unsplash_key = os.environ.get('UNSPLASH_ACCESS_KEY', '').strip()
+          anthropic_key_img = os.environ.get('ANTHROPIC_API_KEY', '').strip()
           if suggest and not new_id:
-            if not unsplash_key:
-              print("⚠️  UNSPLASH_ACCESS_KEY nicht gesetzt – Bildvorschlag uebersprungen.")
+            if not unsplash_key or not anthropic_key_img:
+              print("⚠️  UNSPLASH_ACCESS_KEY oder ANTHROPIC_API_KEY nicht gesetzt – Bildvorschlag uebersprungen.")
             else:
               try:
-                query = meta.get('unsplash_query', 'insurance finance business')
-                resp = req.get(
-                  'https://api.unsplash.com/photos/random',
-                  params={'query': query, 'orientation': 'landscape', 'content_filter': 'high'},
-                  headers={'Authorization': f"Client-ID {unsplash_key}"},
-                  timeout=15
+                import anthropic as ac
+                img_client = ac.Anthropic(api_key=anthropic_key_img)
+                # Aktuellen Titel (ggf. neuer Titel aus diesem Lauf) als Suchgrundlage nehmen,
+                # nicht die veraltete unsplash_query aus dem urspruenglichen Entwurf.
+                topic_title = new_title or meta.get('title', '')
+                fallback = meta.get('og_image') or "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
+                new_id = find_best_image(
+                  topic_title, meta.get('label', 'Ratgeber'),
+                  meta.get('unsplash_query', topic_title),
+                  img_client, fallback, unsplash_key
                 )
-                if resp.status_code == 200:
-                  photo = resp.json()
-                  raw_url = photo['urls']['raw'].split('?')[0]
-                  new_id = f"{raw_url}?w=1200&h=630&fit=crop&auto=format"
-                  print(f"✅ Neues Bild: {photo.get('id','')} von {photo.get('user',{}).get('name','')}")
-                else:
-                  print(f"⚠️  Unsplash {resp.status_code}: {resp.text[:200]}")
               except Exception as e:
-                print(f"⚠️  Unsplash-Fehler: {e}")
+                print(f"⚠️  Bildauswahl-Fehler: {e}")
           if new_id:
             new_url = new_id if new_id.startswith('https://') else f"https://images.unsplash.com/{new_id}?w=1200&h=630&fit=crop&auto=format"
             meta['og_image'] = new_url
