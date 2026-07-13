@@ -73,6 +73,9 @@ jobs:
             sys.exit(1)
           meta = json.load(open('tools/draft_meta.json', encoding='utf-8'))
           html_path = f"blog/posts/{meta['filename']}"
+          if not os.path.exists(html_path):
+            print(f"Entwurf '{meta['filename']}' existiert nicht mehr (bereits veroeffentlicht oder zurueckgezogen) – zuerst Workflow 1 ausfuehren.")
+            sys.exit(1)
           blog_html = open(html_path, encoding='utf-8').read()
           changed = []
           new_id       = os.environ.get('NEW_UNSPLASH_ID', '').strip()
