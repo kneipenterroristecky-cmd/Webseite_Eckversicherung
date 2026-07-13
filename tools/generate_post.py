@@ -3,6 +3,7 @@
 Erstellt einen wöchentlichen Blog-Beitrag mit Claude (KI) im Stil von Daniel Eck.
 """
 import os, json, re, datetime, base64, requests, anthropic
+from image_search import find_best_image
 
 SITE_URL = os.environ.get("SITE_URL", "https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung")
 
