@@ -86,6 +86,8 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
             "✓ Scharf und klar fokussiert ist – KEIN verschwommenes/unscharfes Hauptmotiv, "
             "kein starker Bokeh-/Weichzeichner-Effekt, kein Bewegungsunschärfe\n"
             "✓ Hell und freundlich wirkt – kein düsteres Stimmungsbild\n"
+            "✓ Ein gepflegtes, intaktes Haus/Zuhause zeigt – KEINE verlassene, heruntergekommene "
+            "oder verwahrloste Ruine, auch wenn das Thema Einbruch/Schaden ist\n"
             "✓ Keinen englischen Text enthält\n"
             "✓ Echten Alltag zeigt – keine Hologramme, keine abstrakten Grafiken\n"
             "✓ Europäischen/deutschen Kontext hat\n\n"
