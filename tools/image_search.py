@@ -78,10 +78,14 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
             "Welches Bild passt am BESTEN zu diesem deutschen Versicherungsthema?\n"
             "Wähle das Bild das:\n"
             "✓ Das Thema direkt und konkret zeigt (z.B. echtes Auto für KFZ, Arzt für Kranken)\n"
+            "✓ Scharf und klar fokussiert ist – KEIN verschwommenes/unscharfes Hauptmotiv, "
+            "kein starker Bokeh-/Weichzeichner-Effekt, kein Bewegungsunschärfe\n"
             "✓ Hell und freundlich wirkt – kein düsteres Stimmungsbild\n"
             "✓ Keinen englischen Text enthält\n"
             "✓ Echten Alltag zeigt – keine Hologramme, keine abstrakten Grafiken\n"
             "✓ Europäischen/deutschen Kontext hat\n\n"
+            "Ein professioneller Versicherungsmakler nutzt dieses Bild für seine Social-Media-Werbung – "
+            "es muss gestochen scharf sein.\n\n"
             f"Antworte NUR mit einer Zahl (1–{len(candidates)}). Kein weiterer Text."
         )})
 
