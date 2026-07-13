@@ -231,6 +231,8 @@ jobs:
       - name: Aktualisierte Vorschau-E-Mail senden
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          APPROVE_WORKER_URL: ${{ secrets.APPROVE_WORKER_URL }}
+          APPROVE_TOKEN: ${{ secrets.APPROVE_TOKEN }}
         run: |
           python3 - <<'PYEOF'
           import os, html as hl, requests as req, json, re, io, base64 as b64m
