@@ -120,9 +120,20 @@ jobs:
           date_de     = meta.get("date_de", "")
           fb_text     = meta.get("social_summary", "")
           ig_text     = meta.get("instagram_caption", "")
-          repo        = os.environ.get("GITHUB_REPOSITORY", "")
-          approve_url = f"https://github.com/{repo}/actions/workflows/publish-blog-post.yml"
-          change_url  = f"https://github.com/{repo}/actions/workflows/request-changes.yml"
+          repo         = os.environ.get("GITHUB_REPOSITORY", "")
+          worker_url   = os.environ.get("APPROVE_WORKER_URL", "").strip().rstrip("/")
+          approve_tok  = os.environ.get("APPROVE_TOKEN", "").strip()
+          if worker_url and approve_tok:
+            # Ein-Klick-Links (siehe tools/approve-worker.js) – funktionieren ohne GitHub-Login,
+            # ideal am Handy: kein Tab-Wechsel, kein "Run workflow"-Dropdown.
+            approve_url      = f"{worker_url}/approve?token={approve_tok}"
+            change_url       = f"{worker_url}/change?token={approve_tok}"
+            suggest_img_url  = f"{worker_url}/suggest-image?token={approve_tok}"
+          else:
+            # Fallback, solange der Worker noch nicht eingerichtet ist.
+            approve_url      = f"https://github.com/{repo}/actions/workflows/publish-blog-post.yml"
+            change_url       = f"https://github.com/{repo}/actions/workflows/request-changes.yml"
+            suggest_img_url  = change_url
           api_key     = os.environ.get("BREVO_API_KEY", "").strip()
           d_src = thumb("social/latest-ig.png")
           h_src = thumb("social/latest-ig-heiko.png")
