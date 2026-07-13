@@ -21,7 +21,12 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
             messages=[{"role": "user", "content": (
                 f'Deutsche Versicherungs-Website. Blog-Thema: "{topic_title}".\n'
                 "Gib einen englischen Foto-Suchbegriff (max 4 Wörter) für ein echtes, "
-                "helles, alltagsnahes Foto passend zum Thema. "
+                "helles, alltagsnahes Foto passend zum Thema – so wie es ein seriöser "
+                "Versicherungsmakler für Werbung nutzen würde. "
+                "Zeige gepflegte, normale Häuser/Situationen – KEINE verlassenen, "
+                "heruntergekommenen oder verwahrlosten Gebäude/Ruinen, auch wenn das Thema "
+                "Einbruch/Schaden ist (z.B. lieber eine gepflegte Haustür mit Schloss als ein "
+                "kaputtes Fenster an einer Ruine). "
                 "Kein Geld/Münzen/Dollar/Sparschwein. Keine abstrakten Grafiken.\n"
                 "Nur der Suchbegriff, kein anderer Text."
             )}]
