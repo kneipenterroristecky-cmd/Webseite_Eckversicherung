@@ -6,6 +6,13 @@ on:
     - cron: '*/5 9-16 * * 1'  # Jeden Montag alle 5 Min von 10:00–17:00 Uhr DE (Winter)
   workflow_dispatch:            # Auch manuell startbar
 
+concurrency:
+  # Alle Cron-Läufe teilen sich eine Gruppe und laufen nacheinander (nicht parallel),
+  # damit die Duplikat-Prüfung unten zuverlässig greift und nur EINE Freigabe-Mail verschickt wird.
+  # Manuelle Läufe (workflow_dispatch) bekommen ihre eigene Gruppe und werden nicht blockiert.
+  group: weekly-blog-post-${{ github.event_name == 'schedule' && 'cron' || github.run_id }}
+  cancel-in-progress: false
+
 jobs:
   duplikat-check:
     name: Bereits heute gelaufen?
