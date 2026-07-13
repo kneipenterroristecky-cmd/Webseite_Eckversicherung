@@ -83,15 +83,29 @@ jobs:
           done
 
       - name: Metadaten für Benachrichtigung vorbereiten
+        env:
+          APPROVE_WORKER_URL: ${{ secrets.APPROVE_WORKER_URL }}
+          APPROVE_TOKEN: ${{ secrets.APPROVE_TOKEN }}
         run: |
           TITLE=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['title'])")
           DATE=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['date_de'])")
-          APPROVE_URL="https://github.com/${GITHUB_REPOSITORY}/actions/workflows/publish-blog-post.yml"
-          CHANGE_URL="https://github.com/${GITHUB_REPOSITORY}/actions/workflows/request-changes.yml"
+          if [ -n "$APPROVE_WORKER_URL" ] && [ -n "$APPROVE_TOKEN" ]; then
+            # Ein-Klick-Links (siehe tools/approve-worker.js) – funktionieren ohne GitHub-Login,
+            # ideal am Handy.
+            APPROVE_URL="${APPROVE_WORKER_URL%/}/approve?token=${APPROVE_TOKEN}"
+            CHANGE_URL="${APPROVE_WORKER_URL%/}/change?token=${APPROVE_TOKEN}"
+            SUGGEST_IMAGE_URL="${APPROVE_WORKER_URL%/}/suggest-image?token=${APPROVE_TOKEN}"
+          else
+            # Fallback, solange der Worker (siehe tools/approve-worker.js) noch nicht eingerichtet ist.
+            APPROVE_URL="https://github.com/${GITHUB_REPOSITORY}/actions/workflows/publish-blog-post.yml"
+            CHANGE_URL="https://github.com/${GITHUB_REPOSITORY}/actions/workflows/request-changes.yml"
+            SUGGEST_IMAGE_URL="$CHANGE_URL"
+          fi
           echo "POST_TITLE=$TITLE" >> $GITHUB_ENV
           echo "POST_DATE=$DATE" >> $GITHUB_ENV
           echo "APPROVE_URL=$APPROVE_URL" >> $GITHUB_ENV
           echo "CHANGE_URL=$CHANGE_URL" >> $GITHUB_ENV
+          echo "SUGGEST_IMAGE_URL=$SUGGEST_IMAGE_URL" >> $GITHUB_ENV
           INSTA=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['instagram_caption'])")
           INSTA_SAFE=$(echo "$INSTA" | tr -d '\n\r' | sed 's/"/\\"/g')
           echo "POST_INSTA=$INSTA_SAFE" >> $GITHUB_ENV
