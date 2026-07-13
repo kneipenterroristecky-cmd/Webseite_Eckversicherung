@@ -44,9 +44,12 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
             print(f"   ⚠️  Unsplash API {r.status_code} – nutze Fallback")
             return fallback_url
 
-        photos = r.json().get("results", [])[:6]
+        photos = r.json().get("results", [])
+        # Zu kleine Originale ausschliessen – sonst skaliert Unsplash beim Zuschnitt
+        # auf 1080x1920 hoch, was das Bild unscharf/verwaschen macht.
+        photos = [p for p in photos if p.get("width", 0) >= 1080 and p.get("height", 0) >= 1080][:6]
         if not photos:
-            print("   ⚠️  Keine Unsplash-Ergebnisse – nutze Fallback")
+            print("   ⚠️  Keine ausreichend hochaufgelösten Unsplash-Ergebnisse – nutze Fallback")
             return fallback_url
 
         # Schritt 3: Vorschaubilder laden
