@@ -963,6 +963,17 @@ window.addEventListener('load', function() {
       container.classList.add('has-ticker');
       var right = container.querySelector('.topbar-right');
       container.insertBefore(link, right);
+
+      function alignTickerToNav() {
+        var navLink = document.querySelector('.nav-link');
+        if (!navLink || navLink.offsetWidth === 0) return;
+        var navRect = navLink.getBoundingClientRect();
+        var containerRect = container.getBoundingClientRect();
+        link.style.left = Math.round(navRect.left - containerRect.left) + 'px';
+      }
+      alignTickerToNav();
+      window.addEventListener('resize', alignTickerToNav);
+      window.addEventListener('load', alignTickerToNav);
     })
     .catch(function() { /* kein Ticker, kein Problem */ });
 })();
