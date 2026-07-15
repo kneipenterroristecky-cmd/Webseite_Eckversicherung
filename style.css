@@ -55,10 +55,9 @@ p   { line-height: 1.7; }
   position: sticky;
   top: 0;
   z-index: 199;
-  height: 38px;
 }
 .topbar-container { display: flex; align-items: center; justify-content: flex-end; padding-right: 40px; flex-wrap: nowrap; }
-.topbar-container.has-ticker { justify-content: center; gap: 14px; padding-left: 28px; padding-right: 28px; }
+.topbar-container.has-ticker { justify-content: flex-end; gap: 20px; }
 .topbar-right { flex-shrink: 0; white-space: nowrap; }
 .topbar-right a { white-space: nowrap; }
 .topbar-ticker {
