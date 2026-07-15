@@ -61,15 +61,17 @@ p   { line-height: 1.7; }
 .topbar-right { display: flex; gap: 28px; }
 .topbar-right a {
   color: #fff;
-  font-style: italic;
-  font-weight: 600;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: -.3px;
   display: flex;
   align-items: center;
   gap: 8px;
   transition: opacity .2s;
 }
 .topbar-right a:hover { opacity: .75; }
-.topbar-right a i { font-size: 11px; font-style: normal; opacity: .7; }
+.topbar-right a i { font-size: 16px; font-style: normal; opacity: .95; }
 
 /* ================================================
    NAVBAR
