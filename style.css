@@ -187,7 +187,8 @@ p   { line-height: 1.7; }
 .footer-logo .logo-subtitle { color: rgba(255,255,255,.6); }
 
 /* Nav links */
-.nav-links { display: flex; align-items: center; justify-content: center; flex: 1; gap: 4px; flex-wrap: nowrap; white-space: nowrap; }
+.nav-links { display: flex; align-items: center; flex: 1; gap: 4px; flex-wrap: nowrap; white-space: nowrap; }
+.nav-links-center-group { display: flex; align-items: center; justify-content: center; flex: 1; gap: 4px; }
 .nav-link {
   font-size: 13px;
   font-weight: 500;
