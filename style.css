@@ -100,6 +100,15 @@ p   { line-height: 1.7; }
   .topbar-ticker-track { animation: none; }
 }
 .topbar-ticker-arrow { flex-shrink: 0; opacity: .8; }
+.topbar-ticker-turndown {
+  position: absolute;
+  bottom: 1px;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 13px;
+  opacity: .8;
+  pointer-events: none;
+}
 @media (max-width: 1200px) {
   .topbar-ticker-viewport { width: 320px; }
 }
