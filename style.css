@@ -98,12 +98,15 @@ p   { line-height: 1.7; }
   min-width: 0;
 }
 .topbar-ticker-arrow { flex-shrink: 0; opacity: .8; }
+@media (max-width: 1024px) {
+  .topbar-container.has-ticker { padding-left: 150px; }
+}
 @media (max-width: 900px) {
   .topbar-ticker-text { max-width: 180px; }
 }
 @media (max-width: 720px) {
   .topbar-ticker { display: none; }
-  .topbar-container.has-ticker { justify-content: flex-end; }
+  .topbar-container.has-ticker { justify-content: flex-end; padding-left: 0; }
 }
 .topbar-right { display: flex; gap: 28px; }
 .topbar-right a {
