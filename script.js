@@ -931,6 +931,10 @@ window.addEventListener('load', function() {
     .then(function(post) {
       if (!post || !post.teaser || !post.url) return;
 
+      var label = document.createElement('span');
+      label.className = 'topbar-ticker-label';
+      label.textContent = 'Neuster Ratgeberbeitrag:';
+
       var link = document.createElement('a');
       link.className = 'topbar-ticker';
       link.href = _basePath + 'blog/index.html';
