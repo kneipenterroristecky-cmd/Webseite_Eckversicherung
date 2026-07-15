@@ -98,8 +98,11 @@ p   { line-height: 1.7; }
   .topbar-ticker-track { animation: none; }
 }
 .topbar-ticker-arrow { flex-shrink: 0; opacity: .8; }
+@media (max-width: 1200px) {
+  .topbar-ticker-viewport { width: 320px; }
+}
 @media (max-width: 900px) {
-  .topbar-ticker-viewport { width: 150px; }
+  .topbar-ticker-viewport { width: 190px; }
 }
 @media (max-width: 720px) {
   .topbar-ticker { display: none; }
