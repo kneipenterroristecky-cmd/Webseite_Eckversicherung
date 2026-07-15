@@ -58,55 +58,53 @@ p   { line-height: 1.7; }
   height: 38px;
 }
 .topbar-container { display: flex; align-items: center; justify-content: flex-end; padding-right: 40px; flex-wrap: nowrap; }
-.topbar-container.has-ticker { justify-content: space-between; gap: 20px; padding-left: 175px; }
+.topbar-container.has-ticker { justify-content: center; gap: 14px; padding-left: 28px; padding-right: 28px; }
 .topbar-right { flex-shrink: 0; white-space: nowrap; }
 .topbar-right a { white-space: nowrap; }
 .topbar-ticker {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-width: 0;
-  flex: 1 1 auto;
+  gap: 8px;
+  flex-shrink: 0;
   color: #fff;
   font-size: 12.5px;
   font-weight: 500;
   text-decoration: none;
-  white-space: nowrap;
   background: rgba(255,255,255,.12);
-  padding: 5px 14px 5px 5px;
+  padding: 5px 12px;
   border-radius: 999px;
   opacity: .95;
   transition: opacity .2s, background .2s;
 }
 .topbar-ticker:hover { opacity: 1; background: rgba(255,255,255,.2); }
-.topbar-ticker-tag {
-  flex-shrink: 0;
-  background: rgba(255,255,255,.22);
-  color: #fff;
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-.topbar-ticker-text {
+.topbar-ticker-viewport {
+  width: 230px;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
-  min-width: 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+}
+.topbar-ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: topbar-ticker-scroll 16s linear infinite;
+}
+.topbar-ticker:hover .topbar-ticker-track { animation-play-state: paused; }
+.topbar-ticker-run { padding-right: 48px; }
+@keyframes topbar-ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .topbar-ticker-track { animation: none; }
 }
 .topbar-ticker-arrow { flex-shrink: 0; opacity: .8; }
-@media (max-width: 1024px) {
-  .topbar-container.has-ticker { padding-left: 150px; }
-}
 @media (max-width: 900px) {
-  .topbar-ticker-text { max-width: 180px; }
+  .topbar-ticker-viewport { width: 150px; }
 }
 @media (max-width: 720px) {
   .topbar-ticker { display: none; }
-  .topbar-container.has-ticker { justify-content: flex-end; padding-left: 0; }
+  .topbar-container.has-ticker { justify-content: flex-end; }
 }
 .topbar-right { display: flex; gap: 28px; }
 .topbar-right a {
