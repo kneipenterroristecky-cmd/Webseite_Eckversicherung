@@ -921,3 +921,38 @@ window.addEventListener('load', function() {
   }
 });
 
+/* ---- Blog-Ticker in der Topbar (zeigt den neuesten Beitrag) ---- */
+(function initBlogTicker() {
+  var container = document.querySelector('.topbar-container');
+  if (!container) return;
+
+  fetch(_basePath + 'latest-post.json', { cache: 'no-store' })
+    .then(function(res) { return res.ok ? res.json() : null; })
+    .then(function(post) {
+      if (!post || !post.teaser || !post.url) return;
+
+      var link = document.createElement('a');
+      link.className = 'topbar-ticker';
+      link.href = _basePath + 'blog/index.html';
+
+      var tag = document.createElement('span');
+      tag.className = 'topbar-ticker-tag';
+      tag.textContent = 'Neu im Blog';
+
+      var text = document.createElement('span');
+      text.className = 'topbar-ticker-text';
+      text.textContent = post.teaser;
+
+      var arrow = document.createElement('i');
+      arrow.className = 'fas fa-arrow-right topbar-ticker-arrow';
+
+      link.appendChild(tag);
+      link.appendChild(text);
+      link.appendChild(arrow);
+
+      container.classList.add('has-ticker');
+      container.insertBefore(link, container.firstChild);
+    })
+    .catch(function() { /* kein Ticker, kein Problem */ });
+})();
+
