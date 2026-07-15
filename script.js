@@ -921,7 +921,7 @@ window.addEventListener('load', function() {
   }
 });
 
-/* ---- Blog-Ticker in der Topbar (zeigt den neuesten Beitrag) ---- */
+/* ---- Blog-Ticker in der Topbar (durchlaufender Text zum neuesten Beitrag) ---- */
 (function initBlogTicker() {
   var container = document.querySelector('.topbar-container');
   if (!container) return;
@@ -935,23 +935,33 @@ window.addEventListener('load', function() {
       link.className = 'topbar-ticker';
       link.href = _basePath + 'blog/index.html';
 
-      var tag = document.createElement('span');
-      tag.className = 'topbar-ticker-tag';
-      tag.textContent = 'Neu im Blog';
+      var fullText = post.title ? (post.title + ' – ' + post.teaser) : post.teaser;
 
-      var text = document.createElement('span');
-      text.className = 'topbar-ticker-text';
-      text.textContent = post.teaser;
+      var viewport = document.createElement('span');
+      viewport.className = 'topbar-ticker-viewport';
+
+      var track = document.createElement('span');
+      track.className = 'topbar-ticker-track';
+
+      var run1 = document.createElement('span');
+      run1.className = 'topbar-ticker-run';
+      run1.textContent = fullText;
+      var run2 = document.createElement('span');
+      run2.className = 'topbar-ticker-run';
+      run2.textContent = fullText;
+      track.appendChild(run1);
+      track.appendChild(run2);
+      viewport.appendChild(track);
 
       var arrow = document.createElement('i');
       arrow.className = 'fas fa-arrow-right topbar-ticker-arrow';
 
-      link.appendChild(tag);
-      link.appendChild(text);
+      link.appendChild(viewport);
       link.appendChild(arrow);
 
       container.classList.add('has-ticker');
-      container.insertBefore(link, container.firstChild);
+      var right = container.querySelector('.topbar-right');
+      container.insertBefore(link, right);
     })
     .catch(function() { /* kein Ticker, kein Problem */ });
 })();
