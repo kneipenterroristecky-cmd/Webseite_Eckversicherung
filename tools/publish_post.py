@@ -86,6 +86,30 @@ def _update_blog_index(meta, repo, headers):
     })
 
 
+def _update_latest_ticker(meta, repo, headers):
+    """Aktualisiert latest-post.json – Datenquelle für den Blog-Ticker in der Topbar."""
+    ticker = {
+        "title": meta["title"],
+        "teaser": meta.get("social_summary", meta["title"])[:120].strip(),
+        "url": f"blog/posts/{meta['filename']}",
+        "date_de": meta["date_de"]
+    }
+    content_b64 = base64.b64encode(
+        json.dumps(ticker, ensure_ascii=False, indent=2).encode("utf-8")
+    ).decode()
+
+    ticker_url = f"https://api.github.com/repos/{repo}/contents/latest-post.json"
+    check = requests.get(ticker_url, headers=headers)
+    payload = {
+        "message": f"Blog-Ticker: {meta['title']}",
+        "content": content_b64,
+        "branch": "master"
+    }
+    if check.status_code == 200:
+        payload["sha"] = check.json()["sha"]
+    requests.put(ticker_url, headers=headers, json=payload)
+
+
 # ════════════════════════════════════════════════════════════════════════════════
 # 1. WEBSEITE – Blog-Post committen
 # ════════════════════════════════════════════════════════════════════════════════
