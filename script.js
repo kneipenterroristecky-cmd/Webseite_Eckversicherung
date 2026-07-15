@@ -956,12 +956,11 @@ window.addEventListener('load', function() {
       var arrow = document.createElement('i');
       arrow.className = 'fas fa-arrow-right topbar-ticker-arrow';
 
-      link.appendChild(viewport);
       link.appendChild(arrow);
+      link.appendChild(viewport);
 
       container.classList.add('has-ticker');
       var right = container.querySelector('.topbar-right');
-      container.insertBefore(label, right);
       container.insertBefore(link, right);
     })
     .catch(function() { /* kein Ticker, kein Problem */ });
