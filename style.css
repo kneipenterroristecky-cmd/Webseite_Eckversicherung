@@ -60,14 +60,6 @@ p   { line-height: 1.7; }
 .topbar-container.has-ticker { justify-content: flex-end; gap: 20px; }
 .topbar-right { flex-shrink: 0; white-space: nowrap; }
 .topbar-right a { white-space: nowrap; }
-.topbar-ticker-label {
-  flex-shrink: 0;
-  color: #fff;
-  font-size: 12.5px;
-  font-weight: 600;
-  white-space: nowrap;
-  opacity: .85;
-}
 .topbar-ticker {
   display: flex;
   align-items: center;
