@@ -134,6 +134,7 @@ try:
     print(f"   ✅ Webseite: {meta['post_url']}")
 
     _update_blog_index(meta, REPO, gh_headers)
+    _update_latest_ticker(meta, REPO, gh_headers)
 
 except Exception as e:
     errors.append(f"Webseite: {e}")
