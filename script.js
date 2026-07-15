@@ -965,6 +965,7 @@ window.addEventListener('load', function() {
 
       container.classList.add('has-ticker');
       var right = container.querySelector('.topbar-right');
+      container.insertBefore(label, right);
       container.insertBefore(link, right);
     })
     .catch(function() { /* kein Ticker, kein Problem */ });
