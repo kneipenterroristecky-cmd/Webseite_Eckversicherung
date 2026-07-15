@@ -935,7 +935,8 @@ window.addEventListener('load', function() {
       link.className = 'topbar-ticker';
       link.href = _basePath + 'blog/index.html';
 
-      var fullText = (post.title ? (post.title + ' – ' + post.teaser) : post.teaser) + ' · Jetzt im Ratgeber lesen';
+      var teaser = post.teaser.trim();
+      var fullText = 'Neu im Ratgeber: ' + teaser + (/[.!?]$/.test(teaser) ? '' : '.') + ' Jetzt lesen im Blog.';
 
       var viewport = document.createElement('span');
       viewport.className = 'topbar-ticker-viewport';
