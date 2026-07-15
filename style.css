@@ -57,40 +57,49 @@ p   { line-height: 1.7; }
   z-index: 199;
   height: 38px;
 }
-.topbar-container { display: flex; align-items: center; justify-content: flex-end; padding-right: 40px; }
-.topbar-container.has-ticker { justify-content: space-between; }
+.topbar-container { display: flex; align-items: center; justify-content: flex-end; padding-right: 40px; flex-wrap: nowrap; }
+.topbar-container.has-ticker { justify-content: space-between; gap: 20px; }
+.topbar-right { flex-shrink: 0; white-space: nowrap; }
+.topbar-right a { white-space: nowrap; }
 .topbar-ticker {
   display: flex;
   align-items: center;
   gap: 10px;
   min-width: 0;
+  flex: 1 1 auto;
   color: #fff;
   font-size: 12.5px;
   font-weight: 500;
   text-decoration: none;
+  white-space: nowrap;
+  background: rgba(255,255,255,.12);
+  padding: 5px 14px 5px 5px;
+  border-radius: 999px;
   opacity: .95;
-  transition: opacity .2s;
+  transition: opacity .2s, background .2s;
 }
-.topbar-ticker:hover { opacity: 1; }
+.topbar-ticker:hover { opacity: 1; background: rgba(255,255,255,.2); }
 .topbar-ticker-tag {
   flex-shrink: 0;
-  background: rgba(255,255,255,.18);
+  background: rgba(255,255,255,.22);
   color: #fff;
   font-size: 10.5px;
   font-weight: 800;
   letter-spacing: .04em;
   text-transform: uppercase;
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 999px;
+  white-space: nowrap;
 }
 .topbar-ticker-text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
 }
 .topbar-ticker-arrow { flex-shrink: 0; opacity: .8; }
 @media (max-width: 900px) {
-  .topbar-ticker-text { max-width: 220px; }
+  .topbar-ticker-text { max-width: 180px; }
 }
 @media (max-width: 720px) {
   .topbar-ticker { display: none; }
