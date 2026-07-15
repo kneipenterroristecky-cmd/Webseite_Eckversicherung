@@ -969,11 +969,14 @@ window.addEventListener('load', function() {
         if (!navLink || navLink.offsetWidth === 0) return;
         var navRect = navLink.getBoundingClientRect();
         var containerRect = container.getBoundingClientRect();
-        link.style.left = Math.round(navRect.left - containerRect.left) + 'px';
+        var padLeft = parseFloat(window.getComputedStyle(navLink).paddingLeft) || 0;
+        link.style.left = Math.round(navRect.left - containerRect.left + padLeft) + 'px';
       }
       alignTickerToNav();
       window.addEventListener('resize', alignTickerToNav);
       window.addEventListener('load', alignTickerToNav);
+      setTimeout(alignTickerToNav, 300);
+      setTimeout(alignTickerToNav, 1000);
     })
     .catch(function() { /* kein Ticker, kein Problem */ });
 })();
