@@ -108,7 +108,6 @@ p   { line-height: 1.7; }
 }
 @media (max-width: 720px) {
   .topbar-ticker { display: none; }
-  .topbar-ticker-turndown { display: none; }
   .topbar-container.has-ticker { justify-content: flex-end; }
 }
 .topbar-right { display: flex; gap: 28px; }
