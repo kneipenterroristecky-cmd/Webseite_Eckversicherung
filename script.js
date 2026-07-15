@@ -977,10 +977,6 @@ window.addEventListener('load', function() {
       var right = container.querySelector('.topbar-right');
       container.insertBefore(link, right);
 
-      var turnDown = document.createElement('i');
-      turnDown.className = 'fas fa-turn-down topbar-ticker-turndown';
-      container.appendChild(turnDown);
-
       function alignTickerToNav() {
         var navLink = document.querySelector('.nav-link');
         if (!navLink || navLink.offsetWidth === 0) return;
@@ -989,24 +985,11 @@ window.addEventListener('load', function() {
         var padLeft = parseFloat(window.getComputedStyle(navLink).paddingLeft) || 0;
         link.style.left = Math.round(navRect.left - containerRect.left + padLeft) + 'px';
       }
-
-      function alignTurnDownToRatgeber() {
-        var navLinks = document.querySelectorAll('.nav-link');
-        if (!navLinks.length) return;
-        var ratgeberLink = navLinks[navLinks.length - 1];
-        if (!ratgeberLink.offsetWidth) return;
-        var navRect = ratgeberLink.getBoundingClientRect();
-        var containerRect = container.getBoundingClientRect();
-        var centerX = navRect.left + navRect.width / 2 - containerRect.left;
-        turnDown.style.left = Math.round(centerX) + 'px';
-      }
-
-      function alignAll() { alignTickerToNav(); alignTurnDownToRatgeber(); }
-      alignAll();
-      window.addEventListener('resize', alignAll);
-      window.addEventListener('load', alignAll);
-      setTimeout(alignAll, 300);
-      setTimeout(alignAll, 1000);
+      alignTickerToNav();
+      window.addEventListener('resize', alignTickerToNav);
+      window.addEventListener('load', alignTickerToNav);
+      setTimeout(alignTickerToNav, 300);
+      setTimeout(alignTickerToNav, 1000);
     })
     .catch(function() { /* kein Ticker, kein Problem */ });
 })();
