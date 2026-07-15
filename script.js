@@ -13,6 +13,19 @@ var _basePath = (function() {
   return '';
 })();
 
+/* ---- Nav-Links zentrieren, Buttons bleiben an der alten Stelle rechts ---- */
+(function centerNavLinks() {
+  var navLinks = document.querySelector('.nav-links');
+  if (!navLinks) return;
+  var links = navLinks.querySelectorAll('.nav-link');
+  if (!links.length) return;
+
+  var group = document.createElement('div');
+  group.className = 'nav-links-center-group';
+  links[0].parentNode.insertBefore(group, links[0]);
+  links.forEach(function(el) { group.appendChild(el); });
+})();
+
 /* ---- Navbar scroll shadow + Hamburger Farbe ---- */
 const navbar = document.getElementById('navbar');
 
