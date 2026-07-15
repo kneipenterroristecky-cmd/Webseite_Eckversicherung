@@ -936,7 +936,7 @@ window.addEventListener('load', function() {
       link.href = _basePath + 'blog/index.html';
 
       var teaser = post.teaser.trim();
-      var fullText = 'Neu im Ratgeber: ' + teaser + (/[.!?]$/.test(teaser) ? '' : '.') + ' Jetzt lesen bei Ratgeber & Tipps.';
+      var fullText = 'Neuer Artikel: ' + teaser + (/[.!?]$/.test(teaser) ? '' : '.') + ' Jetzt lesen bei Ratgeber & Tipps.';
 
       var viewport = document.createElement('span');
       viewport.className = 'topbar-ticker-viewport';
