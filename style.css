@@ -57,7 +57,7 @@ p   { line-height: 1.7; }
   z-index: 199;
   height: 38px;
 }
-.topbar-container { display: flex; align-items: center; justify-content: flex-end; }
+.topbar-container { display: flex; align-items: center; justify-content: flex-end; padding-right: 40px; }
 .topbar-right { display: flex; gap: 28px; }
 .topbar-right a {
   color: #fff;
