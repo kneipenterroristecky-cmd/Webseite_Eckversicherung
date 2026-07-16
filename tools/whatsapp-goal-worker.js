@@ -161,6 +161,10 @@ export default {
 };
 
 async function sendWhatsApp(env, message) {
+  await sendWhatsAppTo(env, env.WHATSAPP_TO_NUMBER, message);
+}
+
+async function sendWhatsAppTo(env, to, message) {
   await fetch(
     `https://graph.facebook.com/v19.0/${env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
     {
@@ -171,10 +175,72 @@ async function sendWhatsApp(env, message) {
       },
       body: JSON.stringify({
         messaging_product: 'whatsapp',
-        to: env.WHATSAPP_TO_NUMBER,
+        to: to,
         type: 'text',
         text: { body: message }
       })
     }
   );
+}
+
+// ── Kunden-Dokument herunterladen und per Mail weiterleiten ──────────────
+async function handleCustomerDocument(env, message, from) {
+  try {
+    const mediaId  = message.document.id;
+    const filename = message.document.filename || `whatsapp-dokument-${mediaId}.pdf`;
+
+    // 1. Media-URL bei Meta abrufen
+    const metaResp = await fetch(`https://graph.facebook.com/v19.0/${mediaId}`, {
+      headers: { 'Authorization': `Bearer ${env.WHATSAPP_ACCESS_TOKEN}` }
+    });
+    const metaData = await metaResp.json();
+    if (!metaData.url) {
+      throw new Error('Keine Media-URL von Meta erhalten: ' + JSON.stringify(metaData));
+    }
+
+    // 2. Datei herunterladen
+    const fileResp = await fetch(metaData.url, {
+      headers: { 'Authorization': `Bearer ${env.WHATSAPP_ACCESS_TOKEN}` }
+    });
+    const buffer = await fileResp.arrayBuffer();
+    const base64 = arrayBufferToBase64(buffer);
+
+    // 3. An die Apps-Script-Web-App weiterleiten - die verschickt die Mail
+    const relayResp = await fetch(env.DOCUMENT_RELAY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action:    'whatsapp_pdf',
+        secret:    env.DOCUMENT_RELAY_SECRET,
+        filename:  filename,
+        pdfBase64: base64,
+        from:      from
+      })
+    });
+    if (!relayResp.ok) {
+      throw new Error('Weiterleitung an Apps Script fehlgeschlagen: ' + relayResp.status);
+    }
+
+    // 4. Kunden per WhatsApp bestaetigen (nicht bei Nachrichten von dir selbst)
+    const myNumber = env.WHATSAPP_TO_NUMBER.replace(/^\+/, '');
+    if (from !== myNumber) {
+      await sendWhatsAppTo(
+        env,
+        from,
+        'Vielen Dank, wir haben Ihr Dokument erhalten und ordnen es zeitnah Ihrem Vertrag zu.'
+      );
+    }
+  } catch (ex) {
+    console.error('Fehler bei WhatsApp-Dokument-Weiterleitung:', ex);
+  }
+}
+
+function arrayBufferToBase64(buffer) {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const chunkSize = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
 }
