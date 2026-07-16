@@ -31,6 +31,11 @@ var LEADS_SHEET  = 'Anruf-Leads';
 var DASHBOARD_PW = 'Defekt102!';
 var NOTIFY_EMAIL = 'daniel@eckversicherung.de';
 
+// ── WHATSAPP-DOKUMENTEN-WEITERLEITUNG ────────────────────────────
+// Muss exakt mit DOCUMENT_RELAY_SECRET im Cloudflare Worker uebereinstimmen
+// (tools/whatsapp-goal-worker.js)
+var DOCUMENT_RELAY_SECRET = 'BITTE_EIGENES_GEHEIMNIS_EINTRAGEN';
+
 // ── VAPI VOICE AGENT KONFIGURATION ───────────────────────────────
 var VAPI_API_KEY         = 'DEIN_VAPI_API_KEY';          // ← nach vapi.ai Setup eintragen
 var VAPI_PHONE_NUMBER_ID = 'DEINE_VAPI_PHONE_NUMBER_ID'; // ← Vapi Phone Number ID eintragen
