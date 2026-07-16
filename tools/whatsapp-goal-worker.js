@@ -1,5 +1,5 @@
 /**
- * Cloudflare Worker: WhatsApp → GitHub Goal Trigger
+ * Cloudflare Worker: WhatsApp → GitHub Goal Trigger + Kunden-Dokumenten-Weiterleitung
  *
  * Secrets (im Cloudflare Dashboard unter Workers → Settings → Variables eintragen):
  *   WHATSAPP_VERIFY_TOKEN   – frei wählbarer String, z.B. "mein-geheimer-token-2025"
@@ -8,6 +8,13 @@
  *   WHATSAPP_TO_NUMBER      – deine WhatsApp-Nummer mit Ländervorwahl, OHNE +, z.B. "4917432258850"
  *   GITHUB_PAT              – der PAT_WORKFLOW Token aus GitHub Secrets
  *   GITHUB_REPO             – "kneipenterroristecky-cmd/Webseite_Eckversicherung"
+ *   DOCUMENT_RELAY_URL      – die Apps-Script-Web-App-URL (siehe Code.gs, dashboard.html Zeile 231)
+ *   DOCUMENT_RELAY_SECRET   – frei wählbarer String, MUSS mit DOCUMENT_RELAY_SECRET in Code.gs übereinstimmen
+ *
+ * Schickt ein Kunde eine WhatsApp-Nachricht mit PDF-Anhang (unabhängig von der
+ * Absender-Nummer), wird das Dokument heruntergeladen und per Mail an Daniels
+ * Postfach weitergeleitet - dort übernimmt die Büro-Automation (classify-inbox.ps1)
+ * die Erkennung von Kunde/Vertrag und legt es in die PW-Warteschlange.
  */
 
 export default {
