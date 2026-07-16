@@ -220,16 +220,6 @@ async function handleCustomerDocument(env, message, from) {
     if (!relayResp.ok) {
       throw new Error('Weiterleitung an Apps Script fehlgeschlagen: ' + relayResp.status);
     }
-
-    // 4. Kunden per WhatsApp bestaetigen (nicht bei Nachrichten von dir selbst)
-    const myNumber = env.WHATSAPP_TO_NUMBER.replace(/^\+/, '');
-    if (from !== myNumber) {
-      await sendWhatsAppTo(
-        env,
-        from,
-        'Vielen Dank, wir haben Ihr Dokument erhalten und ordnen es zeitnah Ihrem Vertrag zu.'
-      );
-    }
   } catch (ex) {
     console.error('Fehler bei WhatsApp-Dokument-Weiterleitung:', ex);
   }
