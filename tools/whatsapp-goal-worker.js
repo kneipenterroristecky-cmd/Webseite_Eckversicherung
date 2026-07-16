@@ -246,6 +246,7 @@ async function handleCustomerMedia(env, message, from, kind) {
         action:    'whatsapp_pdf',
         secret:    env.DOCUMENT_RELAY_SECRET,
         filename:  filename,
+        mimeType:  mimeType,
         pdfBase64: base64,
         from:      from
       })
