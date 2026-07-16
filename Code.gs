@@ -122,6 +122,31 @@ function save_(p) {
 }
 
 // ----------------------------------------------------------------
+// WhatsApp-Kundendokument per Mail an Daniels Postfach weiterleiten
+// (landet dort, wo classify-inbox.ps1 der Buero-Automation es findet)
+// ----------------------------------------------------------------
+function relayWhatsAppDocument_(data) {
+  var bytes    = Utilities.base64Decode(data.pdfBase64);
+  var filename = data.filename || 'whatsapp-dokument.pdf';
+  var blob     = Utilities.newBlob(bytes, 'application/pdf', filename);
+  var absender = data.from || 'unbekannt';
+
+  MailApp.sendEmail({
+    to:      NOTIFY_EMAIL,
+    subject: '📎 WhatsApp-Dokument von ' + absender,
+    body:
+      'Ein Kunde hat per WhatsApp ein Dokument geschickt.\n\n' +
+      'Absender-Nummer: ' + absender + '\n' +
+      'Dateiname: ' + filename + '\n\n' +
+      'Das Dokument haengt an dieser Mail an und wird von der Buero-Automation ' +
+      'automatisch geprueft (Kunde/Vertrag erkennen, in die PW-Warteschlange legen).',
+    attachments: [blob]
+  });
+
+  return 'ok';
+}
+
+// ----------------------------------------------------------------
 // Voice-Lead speichern
 // ----------------------------------------------------------------
 function storeLead_(data) {
