@@ -50,8 +50,21 @@ export default {
       const from = message.from; // Absender-Nummer ohne +
       const myNumber = env.WHATSAPP_TO_NUMBER.replace(/^\+/, '');
 
-      // ── Kunden-Dokument (PDF) - unabhaengig vom Absender ────────────────
+      // ── Gruppen-Nachrichten NIE verarbeiten ──────────────────────────────
+      // Diese Nummer ist keine reine Business-Nummer, sondern kann auch in
+      // WhatsApp-Gruppen sein. Nachrichten aus Gruppen sollen niemals in die
+      // Kunden-Dokumenten-Pipeline gelangen. Da uns noch kein echtes Gruppen-
+      // Payload von Meta vorliegt, pruefen wir auf das dokumentierte
+      // 'group_id'-Feld und loggen den Rohdaten zur Kontrolle/Verfeinerung.
+      const isGroupMessage = !!(message.group_id || body?.entry?.[0]?.changes?.[0]?.value?.metadata?.group_id);
+      if (isGroupMessage) {
+        console.log('Gruppen-Nachricht erkannt und ignoriert:', JSON.stringify(message));
+        return new Response('OK', { status: 200 });
+      }
+
+      // ── Kunden-Dokument (PDF) - unabhaengig vom Absender, aber nie aus Gruppen ──
       if (message.type === 'document' && message.document?.mime_type === 'application/pdf') {
+        console.log('Eingehendes Dokument (zur Gruppen-Kontrolle):', JSON.stringify(message));
         await handleCustomerDocument(env, message, from);
         return new Response('OK', { status: 200 });
       }
