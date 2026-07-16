@@ -46,18 +46,6 @@ var LEAD_SECRET          = 'ECK_VOICE_2024'; // Spam-Schutz für Lead-Endpoint
 // ─────────────────────────────────────────────────────────────────
 
 // ----------------------------------------------------------------
-// Einmalig manuell ausführen, um die Mail-Berechtigung freizugeben
-// (danach kann diese Funktion wieder gelöscht werden)
-// ----------------------------------------------------------------
-function autorisierungFuerMailversand() {
-  MailApp.sendEmail({
-    to:      NOTIFY_EMAIL,
-    subject: 'Autorisierung erfolgreich',
-    body:    'Die Mail-Berechtigung für das Apps-Script-Projekt wurde erteilt.'
-  });
-}
-
-// ----------------------------------------------------------------
 // GET-Handler: Tracking + Dashboard-Daten
 // ----------------------------------------------------------------
 function doGet(e) {
