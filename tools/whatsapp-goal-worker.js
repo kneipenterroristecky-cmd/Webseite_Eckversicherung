@@ -43,20 +43,25 @@ export default {
       }
 
       const message = body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+      if (!message) {
+        return new Response('OK', { status: 200 });
+      }
 
-      // Nur Text-Nachrichten verarbeiten
-      if (!message || message.type !== 'text') {
+      const from = message.from; // Absender-Nummer ohne +
+      const myNumber = env.WHATSAPP_TO_NUMBER.replace(/^\+/, '');
+
+      // ── Kunden-Dokument (PDF) - unabhaengig vom Absender ────────────────
+      if (message.type === 'document' && message.document?.mime_type === 'application/pdf') {
+        await handleCustomerDocument(env, message, from);
+        return new Response('OK', { status: 200 });
+      }
+
+      // Ab hier: nur noch der interne /goal-Bot - nur Text von der eigenen Nummer
+      if (message.type !== 'text' || from !== myNumber) {
         return new Response('OK', { status: 200 });
       }
 
       const text = message.text.body.trim();
-      const from = message.from; // Absender-Nummer ohne +
-
-      // Nur Nachrichten von deiner eigenen Nummer
-      const myNumber = env.WHATSAPP_TO_NUMBER.replace(/^\+/, '');
-      if (from !== myNumber) {
-        return new Response('OK', { status: 200 });
-      }
 
       // ── /goal Befehl ───────────────────────────────────────────────────
       if (text.startsWith('/goal')) {
