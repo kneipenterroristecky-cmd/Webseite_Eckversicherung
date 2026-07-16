@@ -128,7 +128,8 @@ function save_(p) {
 function relayWhatsAppDocument_(data) {
   var bytes    = Utilities.base64Decode(data.pdfBase64);
   var filename = data.filename || 'whatsapp-dokument.pdf';
-  var blob     = Utilities.newBlob(bytes, 'application/pdf', filename);
+  var mimeType = data.mimeType || 'application/pdf';
+  var blob     = Utilities.newBlob(bytes, mimeType, filename);
   var absender = data.from || 'unbekannt';
 
   MailApp.sendEmail({
