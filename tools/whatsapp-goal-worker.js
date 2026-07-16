@@ -68,10 +68,13 @@ export default {
         return new Response('OK', { status: 200 });
       }
 
-      // ── Kunden-Dokument (PDF) - unabhaengig vom Absender, aber nie aus Gruppen ──
-      if (message.type === 'document' && message.document?.mime_type === 'application/pdf') {
-        console.log('Eingehendes Dokument (zur Gruppen-Kontrolle):', JSON.stringify(message));
-        await handleCustomerDocument(env, message, from);
+      // ── Kunden-Dokument (PDF/Bild) - unabhaengig vom Absender, aber nie aus Gruppen ──
+      const isPdfDocument = message.type === 'document' && message.document?.mime_type === 'application/pdf';
+      const isImage = message.type === 'image' && ['image/jpeg', 'image/png', 'image/webp'].includes(message.image?.mime_type);
+
+      if (isPdfDocument || isImage) {
+        console.log('Eingehendes Dokument/Bild (zur Gruppen-Kontrolle):', JSON.stringify(message));
+        await handleCustomerMedia(env, message, from, isPdfDocument ? 'document' : 'image');
         return new Response('OK', { status: 200 });
       }
 
