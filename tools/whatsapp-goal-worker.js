@@ -205,11 +205,14 @@ async function sendWhatsAppTo(env, to, message) {
   );
 }
 
-// ── Kunden-Dokument herunterladen und per Mail weiterleiten ──────────────
-async function handleCustomerDocument(env, message, from) {
+// ── Kunden-Dokument/Bild pruefen, herunterladen und per Mail weiterleiten ──
+async function handleCustomerMedia(env, message, from, kind) {
   try {
-    const mediaId  = message.document.id;
-    const filename = message.document.filename || `whatsapp-dokument-${mediaId}.pdf`;
+    const mediaObj  = kind === 'document' ? message.document : message.image;
+    const mediaId   = mediaObj.id;
+    const mimeType  = mediaObj.mime_type;
+    const extension = kind === 'document' ? 'pdf' : (mimeType.split('/')[1] || 'jpg');
+    const filename  = mediaObj.filename || `whatsapp-${kind === 'document' ? 'dokument' : 'bild'}-${mediaId}.${extension}`;
 
     // 1. Media-URL bei Meta abrufen
     const metaResp = await fetch(`https://graph.facebook.com/v19.0/${mediaId}`, {
@@ -227,7 +230,15 @@ async function handleCustomerDocument(env, message, from) {
     const buffer = await fileResp.arrayBuffer();
     const base64 = arrayBufferToBase64(buffer);
 
-    // 3. An die Apps-Script-Web-App weiterleiten - die verschickt die Mail
+    // 3. Versicherungskontext pruefen - private Nummer bekommt auch private
+    //    PDFs/Bilder ohne jeden Bezug, die nie weiterverarbeitet werden sollen.
+    const relevant = await hatVersicherungsbezug(env, base64, mimeType, kind);
+    if (!relevant) {
+      console.log(`Kein Versicherungsbezug erkannt, verworfen: ${filename} von ${from}`);
+      return;
+    }
+
+    // 4. An die Apps-Script-Web-App weiterleiten - die verschickt die Mail
     const relayResp = await fetch(env.DOCUMENT_RELAY_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -244,6 +255,76 @@ async function handleCustomerDocument(env, message, from) {
     }
   } catch (ex) {
     console.error('Fehler bei WhatsApp-Dokument-Weiterleitung:', ex);
+  }
+}
+
+// ── Per Claude pruefen, ob Inhalt einen Versicherungs-/Maklerbezug hat ────
+// Bei Klassifizierungs-Fehlern (API-Problem etc.) wird sicherheitshalber
+// WEITERGELEITET (fail-open), damit nie ein echtes Kundendokument verloren
+// geht - die Buero-Automation (classify-inbox.ps1) klassifiziert ohnehin
+// nochmal nach und sortiert echten Muell dort als "irrelevant" aus.
+async function hatVersicherungsbezug(env, base64, mimeType, kind) {
+  try {
+    const contentBlock = kind === 'document'
+      ? { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64 } }
+      : { type: 'image', source: { type: 'base64', media_type: mimeType, data: base64 } };
+
+    const body = {
+      model: 'claude-haiku-4-5',
+      max_tokens: 200,
+      messages: [{
+        role: 'user',
+        content: [
+          contentBlock,
+          {
+            type: 'text',
+            text: 'Pruefe, ob dieses Dokument/Bild einen Bezug zu Versicherungen, Vertraegen, ' +
+                  'Schaeden oder der Taetigkeit eines Versicherungsmaklers hat (z.B. Vertragsunterlagen, ' +
+                  'Schadenmeldung, Risikofragen, Rechnung einer Versicherungsgesellschaft, ' +
+                  'Kundenkorrespondenz zu Versicherungen). Privater Inhalt ohne jeden solchen Bezug ' +
+                  '(z.B. Urlaubsfotos, private Chats, Memes, Werbung) zaehlt NICHT. ' +
+                  'Antworte ausschliesslich im vorgegebenen JSON-Format.'
+          }
+        ]
+      }],
+      output_config: {
+        format: {
+          type: 'json_schema',
+          schema: {
+            type: 'object',
+            properties: { versicherungsbezug: { type: 'boolean' } },
+            required: ['versicherungsbezug'],
+            additionalProperties: false
+          }
+        }
+      }
+    };
+
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!resp.ok) {
+      throw new Error('Claude-API-Fehler: ' + resp.status + ' ' + (await resp.text()));
+    }
+
+    const data = await resp.json();
+    const textBlock = (data.content || []).find(b => b.type === 'text');
+    if (!textBlock) {
+      throw new Error('Keine Text-Antwort von Claude erhalten: ' + JSON.stringify(data));
+    }
+
+    const parsed = JSON.parse(textBlock.text);
+    return !!parsed.versicherungsbezug;
+  } catch (ex) {
+    console.error('Fehler bei Versicherungsbezug-Pruefung, leite sicherheitshalber weiter:', ex);
+    return true;
   }
 }
 
