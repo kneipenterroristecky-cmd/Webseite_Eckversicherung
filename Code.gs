@@ -73,6 +73,12 @@ function doPost(e) {
       return out_({ ok: true, id: id });
     }
 
+    if (data.action === 'whatsapp_pdf') {
+      if (data.secret !== DOCUMENT_RELAY_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      var relayId = relayWhatsAppDocument_(data);
+      return out_({ ok: true, id: relayId });
+    }
+
     save_(data);
     return out_({ ok: true });
   } catch (ex) {
