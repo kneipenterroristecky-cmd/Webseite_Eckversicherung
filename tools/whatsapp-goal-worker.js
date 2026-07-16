@@ -10,11 +10,17 @@
  *   GITHUB_REPO             – "kneipenterroristecky-cmd/Webseite_Eckversicherung"
  *   DOCUMENT_RELAY_URL      – die Apps-Script-Web-App-URL (siehe Code.gs, dashboard.html Zeile 231)
  *   DOCUMENT_RELAY_SECRET   – frei wählbarer String, MUSS mit DOCUMENT_RELAY_SECRET in Code.gs übereinstimmen
+ *   ANTHROPIC_API_KEY       – fuer die Versicherungskontext-Pruefung von PDFs/Bildern (Modell claude-haiku-4-5)
  *
- * Schickt ein Kunde eine WhatsApp-Nachricht mit PDF-Anhang (unabhängig von der
- * Absender-Nummer), wird das Dokument heruntergeladen und per Mail an Daniels
- * Postfach weitergeleitet - dort übernimmt die Büro-Automation (classify-inbox.ps1)
- * die Erkennung von Kunde/Vertrag und legt es in die PW-Warteschlange.
+ * Schickt ein Kunde/Kontakt eine WhatsApp-Nachricht mit PDF- oder Bild-Anhang
+ * (unabhängig von der Absender-Nummer, aber NIE aus Gruppen), wird zunaechst per
+ * Claude geprueft, ob der Inhalt ueberhaupt einen Versicherungs-/Maklerbezug hat
+ * (diese Nummer ist die private Nummer von Daniel, Kontakte schicken auch mal
+ * private PDFs/Bilder ohne jeden Bezug - die sollen nie weiterverarbeitet werden).
+ * Nur bei erkanntem Bezug wird das Dokument heruntergeladen und per Mail an
+ * Daniels Postfach weitergeleitet - dort übernimmt die Büro-Automation
+ * (classify-inbox.ps1) die Erkennung von Kunde/Vertrag und legt es in die
+ * PW-Warteschlange.
  */
 
 export default {
