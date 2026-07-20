@@ -66,6 +66,19 @@ export default {
         return new Response('Bad Request', { status: 400 });
       }
 
+      // ── Admin: Selin per teach.ps1 etwas dauerhaft beibringen ────────────
+      // Kein WhatsApp-Webhook-Payload, sondern ein direkter Aufruf von teach.ps1.
+      if (body.action === 'teach') {
+        if (body.secret !== env.WORKER_ADMIN_SECRET) {
+          return new Response(JSON.stringify({ ok: false, error: 'Unauthorized' }), { status: 403 });
+        }
+        const bestehend = (await env.SELIN_MEMORY.get('selin')) || '';
+        const datum = new Date().toISOString().slice(0, 10);
+        const neu = bestehend + `- [${datum}] ${body.notiz}\n`;
+        await env.SELIN_MEMORY.put('selin', neu);
+        return new Response(JSON.stringify({ ok: true }), { status: 200 });
+      }
+
       const message = body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
       if (!message) {
         return new Response('OK', { status: 200 });
