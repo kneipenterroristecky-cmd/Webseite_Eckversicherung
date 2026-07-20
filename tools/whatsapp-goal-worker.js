@@ -38,6 +38,21 @@
  *                             wenn beide Nummern im selben Meta-Business-Konto liegen)
  *   SOPHIE_SECRET           – MUSS mit SOPHIE_SECRET in Code.gs uebereinstimmen
  *
+ * ── SOPHIE PER SPRACHNACHRICHT (kostenlos statt Vapi/Twilio/ElevenLabs) ──
+ * Kein echter Telefonanruf (der kostet immer etwas, egal welcher Anbieter),
+ * stattdessen: Daniel schickt Sophie eine WhatsApp-Sprachnachricht, der
+ * Worker transkribiert sie direkt in der Cloud ueber Cloudflare Workers AI
+ * (Modell '@cf/openai/whisper-large-v3-turbo', mehrsprachig, auch Deutsch;
+ * Binding 'AI' in wrangler.toml, im Cloudflare-Workers-Gratiskontingent
+ * enthalten, kein zusaetzlicher Account noetig). Der erkannte Text laeuft
+ * danach exakt durch dieselbe handleSophieMessage()-Pipeline wie normaler
+ * WhatsApp-Text. Sophie antwortet als Text zurueck (keine Sprachausgabe -
+ * TTS gibt es bei Workers AI nicht, und lokale TTS auf dem Arbeits-PC waere
+ * nur so aktuell wie der naechste Task-Scheduler-Lauf, also kein Echtzeit-
+ * Gespraech). tools/sophie-vapi-assistant.md bleibt als Referenz liegen,
+ * falls spaeter doch ein echter Anruf gewuenscht wird - wird aber aktuell
+ * NICHT genutzt.
+ *
  * Schickt ein Kunde/Kontakt eine WhatsApp-Nachricht mit PDF- oder Bild-Anhang
  * (unabhängig von der Absender-Nummer, aber NIE aus Gruppen), wird zunaechst per
  * Claude geprueft, ob der Inhalt ueberhaupt einen Versicherungs-/Maklerbezug hat
