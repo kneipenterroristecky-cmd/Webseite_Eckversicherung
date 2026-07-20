@@ -301,6 +301,11 @@ async function hatVersicherungsbezug(env, base64, mimeType, kind) {
       ? { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64 } }
       : { type: 'image', source: { type: 'base64', media_type: mimeType, data: base64 } };
 
+    const memory = (await env.SELIN_MEMORY.get('selin')) || '';
+    const memoryBlock = memory
+      ? `Bisherige Anweisungen von Daniel, die du IMMER befolgen musst:\n${memory}\n\n`
+      : '';
+
     const body = {
       model: 'claude-haiku-4-5',
       max_tokens: 200,
@@ -310,7 +315,8 @@ async function hatVersicherungsbezug(env, base64, mimeType, kind) {
           contentBlock,
           {
             type: 'text',
-            text: 'Pruefe, ob dieses Dokument/Bild einen Bezug zu Versicherungen, Vertraegen, ' +
+            text: memoryBlock +
+                  'Pruefe, ob dieses Dokument/Bild einen Bezug zu Versicherungen, Vertraegen, ' +
                   'Schaeden oder der Taetigkeit eines Versicherungsmaklers hat (z.B. Vertragsunterlagen, ' +
                   'Schadenmeldung, Risikofragen, Rechnung einer Versicherungsgesellschaft, ' +
                   'Kundenkorrespondenz zu Versicherungen). Privater Inhalt ohne jeden solchen Bezug ' +
