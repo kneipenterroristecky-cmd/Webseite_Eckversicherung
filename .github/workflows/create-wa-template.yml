@@ -56,6 +56,60 @@ jobs:
               }
             )
 
+          # blog_entwurf_freigabe (neuer Entwurf zur Freigabe – ersetzt die Brevo-Mail aus WF1)
+          if "blog_entwurf_freigabe" in templates:
+            st = templates["blog_entwurf_freigabe"].get("status","?")
+            print(f"✅ blog_entwurf_freigabe: {st}")
+          else:
+            print("\n⚠️  blog_entwurf_freigabe fehlt – wird erstellt …")
+            r3 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "blog_entwurf_freigabe",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [{
+                  "type": "BODY",
+                  "text": "📝 Neuer Blog-Entwurf: {{1}}\nDatum: {{2}}\n\n✅ Freigeben & veröffentlichen:\n{{3}}\n\n🖼️ Neues Bild vorschlagen:\n{{4}}\n\n✏️ Änderung beantragen:\n{{5}}",
+                  "example": {"body_text": [[
+                    "Sterbegeldversicherung: Würdevoll vorsorgen", "20.07.2026",
+                    "https://example.com/approve?token=abc",
+                    "https://example.com/suggest-image?token=abc",
+                    "https://example.com/change?token=abc"
+                  ]]}
+                }]
+              }
+            )
+            print(f"blog_entwurf_freigabe erstellt: {r3.status_code} – {r3.text[:300]}")
+
+          # blog_entwurf_aktualisiert (aktualisierte Vorschau – ersetzt die Brevo-Mail aus WF3)
+          if "blog_entwurf_aktualisiert" in templates:
+            st = templates["blog_entwurf_aktualisiert"].get("status","?")
+            print(f"✅ blog_entwurf_aktualisiert: {st}")
+          else:
+            print("\n⚠️  blog_entwurf_aktualisiert fehlt – wird erstellt …")
+            r4 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "blog_entwurf_aktualisiert",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [{
+                  "type": "BODY",
+                  "text": "✏️ Entwurf aktualisiert: {{1}}\nDatum: {{2}}\n\n✅ Freigeben & veröffentlichen:\n{{3}}\n\n🖼️ Neues Bild vorschlagen:\n{{4}}\n\n✏️ Nochmal ändern:\n{{5}}",
+                  "example": {"body_text": [[
+                    "Sterbegeldversicherung: Würdevoll vorsorgen", "20.07.2026",
+                    "https://example.com/approve?token=abc",
+                    "https://example.com/suggest-image?token=abc",
+                    "https://example.com/change?token=abc"
+                  ]]}
+                }]
+              }
+            )
+            print(f"blog_entwurf_aktualisiert erstellt: {r4.status_code} – {r4.text[:300]}")
+
           # social_bild (Bild-Template – das eigentliche Haupt-Template)
           if "social_bild" in templates:
             st = templates["social_bild"].get("status","?")
