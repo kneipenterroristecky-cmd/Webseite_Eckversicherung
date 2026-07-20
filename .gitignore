@@ -19,3 +19,6 @@ screenshots/
 
 # Lokale Konfiguration mit API-Keys (niemals pushen)
 dashboard-config.js
+
+# Wrangler lokaler Cache
+.wrangler/
