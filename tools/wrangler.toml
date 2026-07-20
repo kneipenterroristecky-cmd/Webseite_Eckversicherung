@@ -1,0 +1,7 @@
+name = "tight-wave-a6ed"
+main = "whatsapp-goal-worker.js"
+compatibility_date = "2026-07-16"
+
+[[kv_namespaces]]
+binding = "SELIN_MEMORY"
+id = "c9e07497d728460da708feaa9148190e"
