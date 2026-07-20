@@ -92,37 +92,24 @@ jobs:
           INSTA_SAFE=$(echo "$INSTA" | tr -d '\n\r' | sed 's/"/\\"/g')
           echo "POST_INSTA=$INSTA_SAFE" >> $GITHUB_ENV
 
-      - name: Freigabe-E-Mail an Daniel senden
+      - name: Freigabe-Nachricht per WhatsApp senden
         env:
-          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          WA_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WA_TO: ${{ secrets.WHATSAPP_TO_NUMBER }}
           APPROVE_WORKER_URL: ${{ secrets.APPROVE_WORKER_URL }}
           APPROVE_TOKEN: ${{ secrets.APPROVE_TOKEN }}
         run: |
           python3 - <<'PYEOF'
-          import os, html as hl, requests as req, json, re, io, base64 as b64m
-          from PIL import Image
+          import os, json, requests as req, sys
 
-          def thumb(path, w=240, h=427):
-            try:
-              img = Image.open(path).convert("RGB")
-              img = img.resize((w, h), Image.Resampling.LANCZOS)
-              buf = io.BytesIO()
-              img.save(buf, "JPEG", quality=55, optimize=True)
-              data = b64m.b64encode(buf.getvalue()).decode()
-              print(f"Thumbnail {path}: {len(data)//1024}KB (base64)")
-              return "data:image/jpeg;base64," + data
-            except Exception as e:
-              print(f"Thumbnail-Fehler {path}: {e}")
-              return ""
+          meta    = json.load(open("tools/draft_meta.json", encoding="utf-8"))
+          title   = meta.get("title", "")
+          date_de = meta.get("date_de", "")
 
-          meta        = json.load(open("tools/draft_meta.json", encoding="utf-8"))
-          title       = meta.get("title", "")
-          date_de     = meta.get("date_de", "")
-          fb_text     = meta.get("social_summary", "")
-          ig_text     = meta.get("instagram_caption", "")
-          repo         = os.environ.get("GITHUB_REPOSITORY", "")
-          worker_url   = os.environ.get("APPROVE_WORKER_URL", "").strip().rstrip("/")
-          approve_tok  = os.environ.get("APPROVE_TOKEN", "").strip()
+          repo        = os.environ.get("GITHUB_REPOSITORY", "")
+          worker_url  = os.environ.get("APPROVE_WORKER_URL", "").strip().rstrip("/")
+          approve_tok = os.environ.get("APPROVE_TOKEN", "").strip()
           if worker_url and approve_tok:
             # Ein-Klick-Links (siehe tools/approve-worker.js) – funktionieren ohne GitHub-Login,
             # ideal am Handy: kein Tab-Wechsel, kein "Run workflow"-Dropdown.
@@ -134,86 +121,37 @@ jobs:
             approve_url      = f"https://github.com/{repo}/actions/workflows/publish-blog-post.yml"
             change_url       = f"https://github.com/{repo}/actions/workflows/request-changes.yml"
             suggest_img_url  = change_url
-          api_key     = os.environ.get("BREVO_API_KEY", "").strip()
-          d_src = thumb("social/latest-ig.png")
-          h_src = thumb("social/latest-ig-heiko.png")
-          b_src = thumb("social/latest-ig-beide.png")
-          excerpt = ""
-          try:
-            raw = open(f"blog/posts/{meta['filename']}", encoding="utf-8").read()
-            m = re.search(r'<div class="blog-content">(.*?)</div>\s*<div class="blog-author', raw, re.DOTALL)
-            if m:
-              text = re.sub(r'<[^>]+>', ' ', m.group(1))
-              text = re.sub(r'\s+', ' ', text).strip()
-              excerpt = hl.escape(text)
-          except Exception:
-            pass
-          t  = hl.escape(title)
-          d  = hl.escape(date_de)
-          fb = hl.escape(fb_text)
-          ig = hl.escape(ig_text).replace("\n", "<br>")
-          img_d = f'<img src="{d_src}" width="140" height="249" style="display:block;border-radius:5px">' if d_src else '<table width="140" height="249" cellpadding="0" cellspacing="0"><tr><td style="background:#cbd5e1;border-radius:5px;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:11px;color:#94a3b8">Bild</td></tr></table>'
-          img_h = f'<img src="{h_src}" width="140" height="249" style="display:block;border-radius:5px">' if h_src else '<table width="140" height="249" cellpadding="0" cellspacing="0"><tr><td style="background:#cbd5e1;border-radius:5px;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:11px;color:#94a3b8">Bild</td></tr></table>'
-          img_b = f'<img src="{b_src}" width="140" height="249" style="display:block;border-radius:5px">' if b_src else '<table width="140" height="249" cellpadding="0" cellspacing="0"><tr><td style="background:#cbd5e1;border-radius:5px;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:11px;color:#94a3b8">Bild</td></tr></table>'
-          body = (
-            '<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#f1f5f9" border="0"><tr><td align="center" style="padding:16px 8px">'
-            '<table width="500" align="center" cellpadding="0" cellspacing="0" border="0">'
-            # Header
-            '<tr><td width="500" bgcolor="#172d50" style="padding:16px 18px;border-radius:10px 10px 0 0">'
-            '<p style="color:rgba(255,255,255,.5);margin:0 0 3px;font-family:Arial,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Neuer Blog-Entwurf</p>'
-            f'<p style="color:#ffffff;margin:0 0 2px;font-family:Arial,sans-serif;font-size:15px;font-weight:800;line-height:1.35;word-break:break-word">{t}</p>'
-            f'<p style="color:rgba(255,255,255,.45);margin:0;font-family:Arial,sans-serif;font-size:11px">{d}</p>'
-            '</td></tr>'
-            # Buttons oben
-            '<tr><td width="500" bgcolor="#ffffff" style="padding:10px 14px 12px;border-top:3px solid #f1f5f9">'
-            f'<a href="{approve_url}" style="display:block;background:#16a34a;color:#ffffff;text-align:center;padding:12px 16px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:14px;font-weight:700;margin-bottom:7px">&#9989; Freigeben &amp; ver&ouml;ffentlichen</a>'
-            f'<a href="{suggest_img_url}" style="display:block;background:#3b82f6;color:#ffffff;text-align:center;padding:12px 16px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:14px;font-weight:700;margin-bottom:7px">&#128247; Neues Bild vorschlagen</a>'
-            f'<a href="{change_url}" style="display:block;background:#f59e0b;color:#ffffff;text-align:center;padding:12px 16px;border-radius:6px;text-decoration:none;font-family:Arial,sans-serif;font-size:14px;font-weight:700">&#9999;&#65039; &Auml;nderung beantragen</a>'
-            '</td></tr>'
-            # Bilder nebeneinander
-            '<tr><td width="500" bgcolor="#ffffff" style="padding:12px 14px 14px;border-top:3px solid #f1f5f9">'
-            '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:0 0 8px">WhatsApp-Bilder</p>'
-            '<table cellpadding="0" cellspacing="0" border="0"><tr>'
-            '<td valign="top" style="padding-right:10px">'
-            '<p style="font-family:Arial,sans-serif;font-size:10px;color:#94a3b8;margin:0 0 4px;font-weight:600;text-align:center">Daniel</p>'
-            f'{img_d}</td>'
-            '<td valign="top">'
-            '<p style="font-family:Arial,sans-serif;font-size:10px;color:#94a3b8;margin:0 0 4px;font-weight:600;text-align:center">Heiko</p>'
-            f'{img_h}</td>'
-            '<td valign="top" style="padding-left:10px">'
-            '<p style="font-family:Arial,sans-serif;font-size:10px;color:#94a3b8;margin:0 0 4px;font-weight:600;text-align:center">Beide</p>'
-            f'{img_b}</td>'
-            '</tr></table>'
-            '</td></tr>'
-            # Beitrags-Auszug
-            '<tr><td width="500" bgcolor="#ffffff" style="padding:10px 14px;border-top:3px solid #f1f5f9">'
-            '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px">Beitrags-Auszug</p>'
-            f'<p style="font-family:Arial,sans-serif;font-size:13px;color:#374151;line-height:1.55;margin:0;word-break:break-word">{excerpt}</p>'
-            '</td></tr>'
-            # Facebook
-            '<tr><td width="500" bgcolor="#ffffff" style="padding:10px 14px;border-top:3px solid #f1f5f9;word-break:break-word">'
-            '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px">&#128216; Facebook</p>'
-            f'<p style="font-family:Arial,sans-serif;font-size:13px;color:#1e3a5f;line-height:1.55;background:#eff6ff;padding:9px 11px;border-radius:5px;border-left:3px solid #3b82f6;margin:0;word-break:break-word">{fb}</p>'
-            '</td></tr>'
-            # Instagram
-            '<tr><td width="500" bgcolor="#ffffff" style="padding:10px 14px;border-top:3px solid #f1f5f9;word-break:break-word">'
-            '<p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px">&#128248; Instagram</p>'
-            f'<p style="font-family:Arial,sans-serif;font-size:13px;color:#374151;line-height:1.55;background:#fefce8;padding:9px 11px;border-radius:5px;border-left:3px solid #eab308;margin:0;word-break:break-word">{ig}</p>'
-            '</td></tr>'
-            '</table>'
-            '</td></tr></table>'
-          )
-          print(f"E-Mail Body: {len(body)//1024}KB")
-          payload = {
-            "sender": {"name": "Daniel Eck Webseite", "email": "kneipenterroristecky@googlemail.com"},
-            "to": [{"email": "daniel@eckversicherung.de", "name": "Daniel Eck"}],
-            "subject": f"Neuer Blog-Entwurf zur Freigabe: {title}",
-            "htmlContent": body
-          }
-          r = req.post("https://api.brevo.com/v3/smtp/email",
-            headers={"api-key": api_key, "Content-Type": "application/json"},
-            json=payload)
-          print(f"E-Mail Status: {r.status_code}")
+
+          token    = os.environ.get("WA_TOKEN", "").strip()
+          phone_id = os.environ.get("WA_PHONE_ID", "").strip()
+          wa_to    = os.environ.get("WA_TO", "").strip()
+          if not all([token, phone_id, wa_to]):
+            print("❌ Fehlende WhatsApp-Secrets!"); sys.exit(1)
+
+          r = req.post(
+            f"https://graph.facebook.com/v19.0/{phone_id}/messages",
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+            json={
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "template",
+              "template": {
+                "name": "blog_entwurf_freigabe",
+                "language": {"code": "de"},
+                "components": [{
+                  "type": "body",
+                  "parameters": [
+                    {"type": "text", "text": title},
+                    {"type": "text", "text": date_de},
+                    {"type": "text", "text": approve_url},
+                    {"type": "text", "text": suggest_img_url},
+                    {"type": "text", "text": change_url},
+                  ]
+                }]
+              }
+            })
+          print(f"WhatsApp Status: {r.status_code}")
           if r.status_code >= 300:
             print(f"Fehler: {r.text[:500]}")
+            sys.exit(1)
           PYEOF
