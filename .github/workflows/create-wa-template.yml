@@ -71,7 +71,7 @@ jobs:
                 "category": "UTILITY",
                 "components": [{
                   "type": "BODY",
-                  "text": "📝 Neuer Blog-Entwurf: {{1}}\nDatum: {{2}}\n\n✅ Freigeben & veröffentlichen:\n{{3}}\n\n🖼️ Neues Bild vorschlagen:\n{{4}}\n\n✏️ Änderung beantragen:\n{{5}}",
+                  "text": "📝 Neuer Blog-Entwurf: {{1}}\nDatum: {{2}}\n\n✅ Freigeben & veröffentlichen:\n{{3}}\n\n🖼️ Neues Bild vorschlagen:\n{{4}}\n\n✏️ Änderung beantragen:\n{{5}}\n\n(Automatische Nachricht)",
                   "example": {"body_text": [[
                     "Sterbegeldversicherung: Würdevoll vorsorgen", "20.07.2026",
                     "https://example.com/approve?token=abc",
