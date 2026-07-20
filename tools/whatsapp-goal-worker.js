@@ -21,6 +21,15 @@
  * Daniels Postfach weitergeleitet - dort übernimmt die Büro-Automation
  * (classify-inbox.ps1) die Erkennung von Kunde/Vertrag und legt es in die
  * PW-Warteschlange.
+ *
+ * FESTER GRUNDSATZ: Dieser Worker antwortet NIEMALS selbststaendig auf
+ * WhatsApp-Nachrichten von Kunden/Kontakten - weder mit einer Bestaetigung
+ * noch sonst irgendeiner automatischen Antwort. handleCustomerMedia() sendet
+ * bewusst keine Antwort an "from". Die /goal-, /status- und /hilfe-Befehle
+ * (die einzigen Stellen, die ueberhaupt eine WhatsApp-Antwort verschicken)
+ * sind hart auf "from === myNumber" beschraenkt, koennen also nur von Daniels
+ * eigener Nummer ausgeloest werden. Dieser Grundsatz darf ohne ausdrueckliche
+ * neue Anweisung von Daniel nicht aufgeweicht werden.
  */
 
 export default {
