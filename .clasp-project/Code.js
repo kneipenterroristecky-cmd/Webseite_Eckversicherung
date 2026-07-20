@@ -36,6 +36,20 @@ var NOTIFY_EMAIL = 'daniel@eckversicherung.de';
 // (tools/whatsapp-goal-worker.js)
 var DOCUMENT_RELAY_SECRET = 'Sr6kqDZLNqfXzfjCmkgcCw-h_Oa--vRk';
 
+// ── SOPHIE (persoenliche Assistentin) - Bruecke zur lokalen Buero-Automation ──
+// Muss exakt mit SOPHIE_SECRET im Cloudflare Worker und in config.json
+// (buero-automation, workerTeach/sophieBridge) uebereinstimmen. Sophie laeuft
+// als WhatsApp-Worker/Vapi-Assistent in der Cloud, die echten Firmendaten
+// (Warteschlangen, Mitarbeiter-Einstellungen) liegen aber lokal auf dem
+// Arbeits-PC. publish-status.ps1 veroeffentlicht hier regelmaessig eine
+// Status-Zusammenfassung (Script Properties: SOPHIE_STATUS), Sophie liest sie
+// per sophie_get_status. Aenderungswuensche, die Daniel im Gespraech
+// bestaetigt hat, werden per sophie_request_change hier abgelegt (Script
+// Properties: SOPHIE_PENDING_CHANGES) - apply-pending-changes.ps1 holt sie
+// per sophie_get_pending ab, trägt sie in config.json ein und bestaetigt mit
+// sophie_mark_applied.
+var SOPHIE_SECRET = '8AhfJGpRtVjEoPSWdmn7Cb-9LiGQ30lq';
+
 // ── VAPI VOICE AGENT KONFIGURATION ───────────────────────────────
 var VAPI_API_KEY         = 'DEIN_VAPI_API_KEY';          // ← nach vapi.ai Setup eintragen
 var VAPI_PHONE_NUMBER_ID = 'DEINE_VAPI_PHONE_NUMBER_ID'; // ← Vapi Phone Number ID eintragen
@@ -77,6 +91,36 @@ function doPost(e) {
       if (data.secret !== DOCUMENT_RELAY_SECRET) return out_({ ok: false, err: 'Unauthorized' });
       var relayId = relayWhatsAppDocument_(data);
       return out_({ ok: true, id: relayId });
+    }
+
+    // ── Sophie-Aktionen (siehe Kommentar bei SOPHIE_SECRET) ──────────────
+    if (data.action === 'sophie_publish_status') {
+      if (data.secret !== SOPHIE_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      PropertiesService.getScriptProperties().setProperty('SOPHIE_STATUS', JSON.stringify(data.status || {}));
+      return out_({ ok: true });
+    }
+
+    if (data.action === 'sophie_get_status') {
+      if (data.secret !== SOPHIE_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      var statusRaw = PropertiesService.getScriptProperties().getProperty('SOPHIE_STATUS');
+      return out_({ ok: true, status: statusRaw ? JSON.parse(statusRaw) : null });
+    }
+
+    if (data.action === 'sophie_request_change') {
+      if (data.secret !== SOPHIE_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      var changeId = sophieAddPendingChange_(data.change || {});
+      return out_({ ok: true, id: changeId });
+    }
+
+    if (data.action === 'sophie_get_pending') {
+      if (data.secret !== SOPHIE_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      return out_({ ok: true, changes: sophieGetPendingChanges_().filter(function(c) { return !c.applied; }) });
+    }
+
+    if (data.action === 'sophie_mark_applied') {
+      if (data.secret !== SOPHIE_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      sophieMarkChangeApplied_(data.id);
+      return out_({ ok: true });
     }
 
     save_(data);
@@ -145,6 +189,40 @@ function relayWhatsAppDocument_(data) {
   });
 
   return 'ok';
+}
+
+// ----------------------------------------------------------------
+// Sophies Aenderungsantraege (Script Properties: SOPHIE_PENDING_CHANGES)
+// ----------------------------------------------------------------
+function sophieGetPendingChanges_() {
+  var raw = PropertiesService.getScriptProperties().getProperty('SOPHIE_PENDING_CHANGES');
+  return raw ? JSON.parse(raw) : [];
+}
+
+function sophieSavePendingChanges_(changes) {
+  PropertiesService.getScriptProperties().setProperty('SOPHIE_PENDING_CHANGES', JSON.stringify(changes));
+}
+
+function sophieAddPendingChange_(change) {
+  var changes = sophieGetPendingChanges_();
+  var id = 'CHG_' + new Date().getTime();
+  changes.push({
+    id: id,
+    employee: change.employee || null,
+    path: change.path || null,
+    value: change.value,
+    description: change.description || '',
+    requestedAt: Utilities.formatDate(new Date(), 'Europe/Berlin', 'yyyy-MM-dd HH:mm:ss'),
+    applied: false
+  });
+  sophieSavePendingChanges_(changes);
+  return id;
+}
+
+function sophieMarkChangeApplied_(id) {
+  var changes = sophieGetPendingChanges_();
+  changes.forEach(function(c) { if (c.id === id) c.applied = true; });
+  sophieSavePendingChanges_(changes);
 }
 
 // ----------------------------------------------------------------
