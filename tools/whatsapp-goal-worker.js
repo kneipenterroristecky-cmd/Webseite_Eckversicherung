@@ -492,6 +492,48 @@ async function sendSophieReply(env, message) {
   await sendWhatsAppTo(env, env.WHATSAPP_TO_NUMBER, message, env.SOPHIE_PHONE_NUMBER_ID, env.SOPHIE_ACCESS_TOKEN || env.WHATSAPP_ACCESS_TOKEN);
 }
 
+// ── Sprachnachricht von Daniel: kostenlos in der Cloud transkribieren ──────
+// Nutzt Cloudflare Workers AI (Binding 'AI', siehe wrangler.toml) statt eines
+// echten Telefonanrufs - keine Kosten, kein zusaetzlicher Account, laeuft
+// direkt im selben Worker. Der erkannte Text geht danach normal durch
+// handleSophieMessage(), Sophie antwortet wie gewohnt als WhatsApp-Text.
+async function handleSophieVoiceNote(env, audioObj) {
+  try {
+    const accessToken = env.SOPHIE_ACCESS_TOKEN || env.WHATSAPP_ACCESS_TOKEN;
+
+    const metaResp = await fetch(`https://graph.facebook.com/v19.0/${audioObj.id}`, {
+      headers: { 'Authorization': `Bearer ${accessToken}` }
+    });
+    const metaData = await metaResp.json();
+    if (!metaData.url) {
+      throw new Error('Keine Media-URL von Meta erhalten: ' + JSON.stringify(metaData));
+    }
+
+    const fileResp = await fetch(metaData.url, {
+      headers: { 'Authorization': `Bearer ${accessToken}` }
+    });
+    const buffer = await fileResp.arrayBuffer();
+    const base64 = arrayBufferToBase64(buffer);
+
+    const result = await env.AI.run('@cf/openai/whisper-large-v3-turbo', {
+      audio: base64,
+      task: 'transcribe',
+      language: 'de'
+    });
+
+    const transcript = (result.text || '').trim();
+    if (!transcript) {
+      await sendSophieReply(env, 'Hab die Sprachnachricht leider nicht verstanden - magst du es nochmal versuchen oder kurz schreiben?');
+      return;
+    }
+
+    await handleSophieMessage(env, transcript);
+  } catch (ex) {
+    console.error('Fehler bei Sophies Sprachnachrichten-Transkription:', ex);
+    await sendSophieReply(env, 'Sorry, deine Sprachnachricht kam gerade technisch nicht an - magst du es nochmal versuchen?');
+  }
+}
+
 async function sophieClassifyConfirmation(env, text, pending) {
   const body = {
     model: 'claude-haiku-4-5',
