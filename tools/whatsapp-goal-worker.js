@@ -127,6 +127,9 @@ export default {
         if (message.type === 'text' && from === myNumber) {
           await handleSophieMessage(env, message.text.body.trim());
         }
+        if (message.type === 'audio' && from === myNumber) {
+          await handleSophieVoiceNote(env, message.audio);
+        }
         return new Response('OK', { status: 200 });
       }
 
