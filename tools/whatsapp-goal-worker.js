@@ -20,6 +20,23 @@
  *                  POST { action: 'teach', secret: WORKER_ADMIN_SECRET, mitarbeiter: 'selin',
  *                  notiz: '...' } an diese selbe Worker-URL hinzu - kein wrangler auf dem
  *                  Arbeits-PC noetig.
+ *   SOPHIE_MEMORY – dauerhaftes Gedaechtnis + Gespraechsstatus fuer Sophie (Daniels
+ *                  persoenliche Assistentin, siehe unten). Gleicher teach.ps1-Mechanismus,
+ *                  mitarbeiter: 'sophie'.
+ *
+ * ── SOPHIE (persoenliche Assistentin) ────────────────────────────────────
+ * Zweite WhatsApp-Nummer, eigener Charakter (warmherzig, direkt, leichter Witz),
+ * antwortet NUR Daniel (from === myNumber), NIE Kunden/Kontakten. Beantwortet
+ * Fragen zum aktuellen Firmenstatus (ueber die Apps-Script-Bruecke, siehe
+ * SOPHIE_SECRET/Code.gs) und kann Aenderungen an der Firmenstruktur (z.B.
+ * Mitarbeiter pausieren) vorschlagen - fuehrt aber NIE selbststaendig aus,
+ * sondern fragt IMMER erst nach Bestaetigung, bevor sie einen Aenderungsantrag
+ * stellt (den apply-pending-changes.ps1 dann lokal umsetzt).
+ * Zusaetzliche Secrets:
+ *   SOPHIE_PHONE_NUMBER_ID  – Metas phone_number_id von Sophies eigener WhatsApp-Nummer
+ *   SOPHIE_ACCESS_TOKEN     – Access Token fuer Sophies Nummer (meist gleich WHATSAPP_ACCESS_TOKEN,
+ *                             wenn beide Nummern im selben Meta-Business-Konto liegen)
+ *   SOPHIE_SECRET           – MUSS mit SOPHIE_SECRET in Code.gs uebereinstimmen
  *
  * Schickt ein Kunde/Kontakt eine WhatsApp-Nachricht mit PDF- oder Bild-Anhang
  * (unabhängig von der Absender-Nummer, aber NIE aus Gruppen), wird zunaechst per
@@ -66,26 +83,37 @@ export default {
         return new Response('Bad Request', { status: 400 });
       }
 
-      // ── Admin: Selin per teach.ps1 etwas dauerhaft beibringen ────────────
+      // ── Admin: Selin/Sophie per teach.ps1 etwas dauerhaft beibringen ─────
       // Kein WhatsApp-Webhook-Payload, sondern ein direkter Aufruf von teach.ps1.
       if (body.action === 'teach') {
         if (body.secret !== env.WORKER_ADMIN_SECRET) {
           return new Response(JSON.stringify({ ok: false, error: 'Unauthorized' }), { status: 403 });
         }
-        const bestehend = (await env.SELIN_MEMORY.get('selin')) || '';
+        const kv = body.mitarbeiter === 'sophie' ? env.SOPHIE_MEMORY : env.SELIN_MEMORY;
+        const memKey = body.mitarbeiter === 'sophie' ? 'sophie' : 'selin';
+        const bestehend = (await kv.get(memKey)) || '';
         const datum = new Date().toISOString().slice(0, 10);
         const neu = bestehend + `- [${datum}] ${body.notiz}\n`;
-        await env.SELIN_MEMORY.put('selin', neu);
+        await kv.put(memKey, neu);
         return new Response(JSON.stringify({ ok: true }), { status: 200 });
       }
 
-      const message = body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+      const value = body?.entry?.[0]?.changes?.[0]?.value;
+      const message = value?.messages?.[0];
       if (!message) {
         return new Response('OK', { status: 200 });
       }
 
       const from = message.from; // Absender-Nummer ohne +
       const myNumber = env.WHATSAPP_TO_NUMBER.replace(/^\+/, '');
+
+      // ── Sophie (persoenliche Assistentin) - eigene Nummer, eigene Logik ──
+      if (value?.metadata?.phone_number_id === env.SOPHIE_PHONE_NUMBER_ID) {
+        if (message.type === 'text' && from === myNumber) {
+          await handleSophieMessage(env, message.text.body.trim());
+        }
+        return new Response('OK', { status: 200 });
+      }
 
       // ── Gruppen-Nachrichten NIE verarbeiten ──────────────────────────────
       // Diese Nummer ist keine reine Business-Nummer, sondern kann auch in
@@ -214,16 +242,16 @@ export default {
 };
 
 async function sendWhatsApp(env, message) {
-  await sendWhatsAppTo(env, env.WHATSAPP_TO_NUMBER, message);
+  await sendWhatsAppTo(env, env.WHATSAPP_TO_NUMBER, message, env.WHATSAPP_PHONE_NUMBER_ID, env.WHATSAPP_ACCESS_TOKEN);
 }
 
-async function sendWhatsAppTo(env, to, message) {
+async function sendWhatsAppTo(env, to, message, phoneNumberId, accessToken) {
   await fetch(
-    `https://graph.facebook.com/v19.0/${env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
+    `https://graph.facebook.com/v19.0/${phoneNumberId}/messages`,
     {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${env.WHATSAPP_ACCESS_TOKEN}`,
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -374,4 +402,177 @@ function arrayBufferToBase64(buffer) {
     binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
   }
   return btoa(binary);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SOPHIE - Daniels persoenliche Assistentin
+// ══════════════════════════════════════════════════════════════════════
+
+const SOPHIE_PERSONALITY =
+  'Du bist Sophie, die persoenliche Assistentin von Daniel Eck, unabhaengigem ' +
+  'Versicherungsmakler in Schmalkalden. Du bist warmherzig, direkt und hast einen ' +
+  'leichten, sympathischen Witz - wie eine erfahrene, geschaetzte Buero-Managerin, ' +
+  'die genau weiss was los ist und Daniel den Ruecken freihaelt. Du sprichst ihn ' +
+  'locker aber respektvoll an, keine Floskeln, keine Business-Phrasen. Du bist die ' +
+  'einzige Ansprechpartnerin, die er direkt anrufen oder anschreiben kann, um sich ' +
+  'einen Ueberblick ueber seine digitale Firma zu verschaffen (Petra, Bilal, Uwe, ' +
+  'Rita, Herbert, Selin und ihre Abteilungsleiter) oder etwas daran zu aendern.\n\n' +
+  'FESTER GRUNDSATZ: Du fuehrst NIEMALS selbststaendig eine Aenderung an der ' +
+  'Firmenstruktur aus (Mitarbeiter pausieren/aktivieren, Einstellungen aendern). ' +
+  'Du schlaegst die Aenderung konkret vor und fragst explizit nach Bestaetigung. ' +
+  'Nur wenn Daniel in einer SEPARATEN, folgenden Nachricht eindeutig bestaetigt ' +
+  '("ja", "mach das", "genau" o.ae.), gilt die Aenderung als bestaetigt.';
+
+async function sophieBridgeCall(env, action, extra) {
+  const resp = await fetch(env.DOCUMENT_RELAY_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action, secret: env.SOPHIE_SECRET, ...extra })
+  });
+  return await resp.json();
+}
+
+async function handleSophieMessage(env, text) {
+  try {
+    const pendingRaw = await env.SOPHIE_MEMORY.get('sophie_pending');
+    const pending = pendingRaw ? JSON.parse(pendingRaw) : null;
+
+    if (pending) {
+      const entscheidung = await sophieClassifyConfirmation(env, text, pending);
+      if (entscheidung === 'confirm') {
+        await sophieBridgeCall(env, 'sophie_request_change', { change: pending });
+        await env.SOPHIE_MEMORY.delete('sophie_pending');
+        await sendSophieReply(env, `Erledigt: ${pending.description}. Sobald der Arbeits-PC das naechste Mal laeuft, ist es aktiv.`);
+        return;
+      }
+      if (entscheidung === 'reject') {
+        await env.SOPHIE_MEMORY.delete('sophie_pending');
+        await sendSophieReply(env, 'Alles klar, hab ich verworfen.');
+        return;
+      }
+      // 'other': veraltete/abgebrochene Rueckfrage - loeschen und normal weitermachen
+      await env.SOPHIE_MEMORY.delete('sophie_pending');
+    }
+
+    const memory = (await env.SOPHIE_MEMORY.get('sophie')) || '';
+    const statusResult = await sophieBridgeCall(env, 'sophie_get_status', {});
+    const status = statusResult.ok ? statusResult.status : null;
+
+    const antwort = await sophieRespond(env, text, memory, status);
+
+    if (antwort.proposedChange) {
+      await env.SOPHIE_MEMORY.put('sophie_pending', JSON.stringify(antwort.proposedChange));
+    }
+    await sendSophieReply(env, antwort.reply);
+  } catch (ex) {
+    console.error('Fehler bei Sophie:', ex);
+    await sendSophieReply(env, 'Sorry, da ist gerade technisch etwas schiefgelaufen. Magst du das nochmal schreiben?');
+  }
+}
+
+async function sendSophieReply(env, message) {
+  await sendWhatsAppTo(env, env.WHATSAPP_TO_NUMBER, message, env.SOPHIE_PHONE_NUMBER_ID, env.SOPHIE_ACCESS_TOKEN || env.WHATSAPP_ACCESS_TOKEN);
+}
+
+async function sophieClassifyConfirmation(env, text, pending) {
+  const body = {
+    model: 'claude-haiku-4-5',
+    max_tokens: 100,
+    messages: [{
+      role: 'user',
+      content: `Du hast Daniel vorgeschlagen: "${pending.description}". Seine Antwort darauf: "${text}". ` +
+        `Bestaetigt er das (confirm), lehnt er ab (reject), oder redet er ueber etwas anderes (other)? ` +
+        `Antworte ausschliesslich im vorgegebenen JSON-Format.`
+    }],
+    output_config: {
+      format: {
+        type: 'json_schema',
+        schema: {
+          type: 'object',
+          properties: { entscheidung: { type: 'string', enum: ['confirm', 'reject', 'other'] } },
+          required: ['entscheidung'],
+          additionalProperties: false
+        }
+      }
+    }
+  };
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    const textBlock = (data.content || []).find(b => b.type === 'text');
+    return JSON.parse(textBlock.text).entscheidung;
+  } catch (ex) {
+    console.error('Fehler bei Sophies Bestaetigungs-Einordnung:', ex);
+    return 'other';
+  }
+}
+
+async function sophieRespond(env, text, memory, status) {
+  const memoryBlock = memory ? `Was du dir bisher gemerkt hast:\n${memory}\n\n` : '';
+  const statusBlock = status
+    ? `Aktueller Firmenstatus (Stand ${status.stand || 'unbekannt'}):\n${JSON.stringify(status, null, 2)}\n\n`
+    : 'Firmenstatus liegt gerade nicht vor (noch nicht veroeffentlicht oder Verbindung fehlt).\n\n';
+
+  const body = {
+    model: 'claude-haiku-4-5',
+    max_tokens: 500,
+    messages: [{
+      role: 'user',
+      content: SOPHIE_PERSONALITY + '\n\n' + memoryBlock + statusBlock +
+        `Daniel schreibt dir gerade per WhatsApp: "${text}"\n\n` +
+        'Antworte ihm direkt (reply). Falls er eine Aenderung an der Firmenstruktur ' +
+        'wuenscht (z.B. einen Mitarbeiter pausieren/aktivieren), fuelle proposedChange ' +
+        'aus und formuliere in reply eine klare Rueckfrage zur Bestaetigung - fuehre ' +
+        'NICHTS direkt aus. employee ist der Mitarbeiter-Kuerzelname (z.B. "rita"), ' +
+        'path ist der config.json-Pfad (fuer Pausieren: "employees.<name>.active", ' +
+        'value dann false; zum Wiederaktivieren value true). Wenn keine Aenderung ' +
+        'gewuenscht ist, lass proposedChange weg. Antworte ausschliesslich im ' +
+        'vorgegebenen JSON-Format.'
+    }],
+    output_config: {
+      format: {
+        type: 'json_schema',
+        schema: {
+          type: 'object',
+          properties: {
+            reply: { type: 'string' },
+            proposedChange: {
+              anyOf: [
+                {
+                  type: 'object',
+                  properties: {
+                    employee:    { type: 'string' },
+                    path:        { type: 'string' },
+                    value:       { type: 'boolean' },
+                    description: { type: 'string' }
+                  },
+                  required: ['employee', 'path', 'value', 'description'],
+                  additionalProperties: false
+                },
+                { type: 'null' }
+              ]
+            }
+          },
+          required: ['reply', 'proposedChange'],
+          additionalProperties: false
+        }
+      }
+    }
+  };
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!resp.ok) {
+    throw new Error('Claude-API-Fehler (Sophie): ' + resp.status + ' ' + (await resp.text()));
+  }
+  const data = await resp.json();
+  const textBlock = (data.content || []).find(b => b.type === 'text');
+  return JSON.parse(textBlock.text);
 }
