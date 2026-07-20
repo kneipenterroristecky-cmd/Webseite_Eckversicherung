@@ -519,7 +519,7 @@ async function sophieRespond(env, text, memory, status) {
 
   const body = {
     model: 'claude-haiku-4-5',
-    max_tokens: 500,
+    max_tokens: 1000,
     messages: [{
       role: 'user',
       content: SOPHIE_PERSONALITY + '\n\n' + memoryBlock + statusBlock +
