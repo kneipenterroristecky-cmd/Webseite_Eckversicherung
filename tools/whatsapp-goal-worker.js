@@ -11,6 +11,15 @@
  *   DOCUMENT_RELAY_URL      – die Apps-Script-Web-App-URL (siehe Code.gs, dashboard.html Zeile 231)
  *   DOCUMENT_RELAY_SECRET   – frei wählbarer String, MUSS mit DOCUMENT_RELAY_SECRET in Code.gs übereinstimmen
  *   ANTHROPIC_API_KEY       – fuer die Versicherungskontext-Pruefung von PDFs/Bildern (Modell claude-haiku-4-5)
+ *   WORKER_ADMIN_SECRET     – frei waehlbarer String, schuetzt die 'teach'-Aktion (siehe unten)
+ *
+ * KV-Namespace-Bindung (siehe tools/wrangler.toml):
+ *   SELIN_MEMORY – dauerhaftes Gedaechtnis fuer Selin (analog zu memory/*.md in der
+ *                  Buero-Automation, aber Cloudflare-KV statt Datei, weil dieser Worker
+ *                  ausserhalb des Arbeits-PCs laeuft). teach.ps1 fuegt Notizen per
+ *                  POST { action: 'teach', secret: WORKER_ADMIN_SECRET, mitarbeiter: 'selin',
+ *                  notiz: '...' } an diese selbe Worker-URL hinzu - kein wrangler auf dem
+ *                  Arbeits-PC noetig.
  *
  * Schickt ein Kunde/Kontakt eine WhatsApp-Nachricht mit PDF- oder Bild-Anhang
  * (unabhängig von der Absender-Nummer, aber NIE aus Gruppen), wird zunaechst per
