@@ -9,3 +9,6 @@ id = "c9e07497d728460da708feaa9148190e"
 [[kv_namespaces]]
 binding = "SOPHIE_MEMORY"
 id = "1ca656309cb44ec8b8852a3a1d46e9d0"
+
+[ai]
+binding = "AI"
