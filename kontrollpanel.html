@@ -198,6 +198,13 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e
   </div>
 </div>
 
+<div class="modal-overlay" id="orgModal" onclick="if(event.target===this) closeOrgDetail()">
+  <div class="modal-box">
+    <h4><span id="orgModalTitel"></span><button class="modal-close" onclick="closeOrgDetail()">✕</button></h4>
+    <div id="orgModalBody"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
