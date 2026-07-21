@@ -192,6 +192,13 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e
   </div>
 </div>
 
+<div class="modal-overlay" id="statModal" onclick="if(event.target===this) closeStatDetail()">
+  <div class="modal-box">
+    <h4><span id="statModalTitel"></span><button class="modal-close" onclick="closeStatDetail()">✕</button></h4>
+    <div id="statModalBody"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
