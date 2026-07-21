@@ -488,12 +488,14 @@ function pauseEmployee(key) {
   const pausedUntil = dateEl && dateEl.value ? dateEl.value : null;
   sendCommand("pauseEmployee", { name: key, pausedUntil }).then(() => {
     toast((ALLE_NAMEN[key] || key) + " wird pausiert (wirkt innerhalb von ~2 Minuten).");
+    closeOrgDetail();
   });
 }
 
 function reactivateEmployee(key) {
   sendCommand("reactivateEmployee", { name: key }).then(() => {
     toast((ALLE_NAMEN[key] || key) + " wird reaktiviert (wirkt innerhalb von ~2 Minuten).");
+    closeOrgDetail();
   });
 }
 
@@ -503,7 +505,7 @@ function addNote(key) {
   if (!note) return;
   sendCommand("addEmployeeNote", { employee: key, note }).then(() => {
     el.value = "";
-    toast("Notiz für " + (ALLE_NAMEN[key] || key) + " wird übernommen.");
+    toast("Notiz für " + (ALLE_NAMEN[key] || key) + " wird übernommen (erscheint nach dem nächsten Sync).");
   });
 }
 
