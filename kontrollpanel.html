@@ -385,6 +385,54 @@ function renderStatDetail(key) {
   document.getElementById("statModal").classList.add("show");
 }
 
+function escHtml(s) {
+  return String(s || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+let fehlerArchivModus = false;
+
+function renderFehlerListe() {
+  const quelle = fehlerArchivModus ? (currentStatus.fehlerArchiv || []) : (currentStatus.fehlerListe || []);
+  const liste = quelle.slice().reverse();
+  document.getElementById("statModalTitel").textContent = fehlerArchivModus ? "Fehler-Archiv (gesamter Verlauf)" : "Fehler (letzte 24h)";
+  const toggleBtn = '<button class="small-btn sec" style="margin-bottom:14px" onclick="toggleFehlerArchiv()">' +
+    (fehlerArchivModus ? "Nur letzte 24h anzeigen" : "Komplettes Archiv anzeigen") + '</button>';
+  const inhalt = liste.length === 0
+    ? '<div class="stat-detail-empty">Keine Fehler ' + (fehlerArchivModus ? "im Archiv" : "in den letzten 24 Stunden") + '.</div>'
+    : liste.map(f => {
+        const zeile = escHtml(f.zeile);
+        const diagnose = escHtml(f.diagnose);
+        return '<div class="fehler-eintrag">' +
+          '<div class="log-line fehler">' + zeile + '</div>' +
+          (diagnose ? '<div class="fehler-diagnose">💡 ' + diagnose + '</div>' : '') +
+          '<button class="small-btn sec" style="margin-top:6px" onclick="requestFix(this)" data-zeile="' + encodeURIComponent(f.zeile || "") + '">🔧 Frank: Fix vorschlagen lassen</button>' +
+          '</div>';
+      }).join("");
+  document.getElementById("statModalBody").innerHTML = toggleBtn + inhalt;
+  document.getElementById("statModal").classList.add("show");
+}
+
+function toggleFehlerArchiv() {
+  fehlerArchivModus = !fehlerArchivModus;
+  renderFehlerListe();
+}
+
+function requestFix(btn) {
+  const zeile = decodeURIComponent(btn.dataset.zeile);
+  btn.disabled = true;
+  btn.textContent = "Frank arbeitet daran…";
+  sendCommand("requestFix", { zeile }).then(() => {
+    toast("Frank erstellt einen Fix-Vorschlag (erscheint gleich bei den Fix-Vorschlägen).");
+  });
+}
+
+function confirmFix(id) {
+  sendCommand("confirmFix", { id }).then(() => {
+    toast("Fix bestätigt - wird in der nächsten Claude-Code-Sitzung umgesetzt.");
+    renderStatDetail("fixe");
+  });
+}
+
 function toggleLogFilter() {
   logNurFehler = !logNurFehler;
   document.getElementById("logFilterBtn").textContent = logNurFehler ? "Alle Zeilen anzeigen" : "Nur Fehler anzeigen";
