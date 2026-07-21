@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Kontrollpanel – Daniel Eck – Versicherungsmakler</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e293b;font-size:14px;min-height:100vh}
+
+/* ── Login ── */
+#loginWrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-card{background:#fff;border-radius:20px;padding:48px 44px;width:100%;max-width:420px;box-shadow:0 8px 40px rgba(23,45,80,.15)}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.login-logo-icon{width:44px;height:44px;background:#172d50;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px}
+.login-logo h1{font-size:18px;font-weight:800;color:#172d50;line-height:1.2}
+.login-logo span{font-size:12px;color:#64748b;font-weight:400}
+.login-label{font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
+.login-input{width:100%;padding:11px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;margin-bottom:16px}
+.login-input:focus{border-color:#1a50c8}
+.login-btn{width:100%;padding:13px;background:#1a50c8;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;margin-top:4px}
+.login-btn:hover{background:#1540a0}
+.login-err{color:#dc2626;font-size:13px;margin-top:10px;display:none}
+
+/* ── Panel ── */
+#panelWrap{display:none;flex-direction:column;min-height:100vh}
+.pnl-nav{background:#172d50;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:8px}
+.pnl-nav-left{display:flex;align-items:center;gap:12px}
+.pnl-nav-icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+.pnl-nav h2{color:#fff;font-size:15px;font-weight:700}
+.pnl-nav-right{display:flex;align-items:center;gap:10px}
+.pnl-nav-live{display:flex;align-items:center;gap:6px;color:#86efac;font-size:12px;font-weight:600}
+.pnl-nav-live span{width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pnl-btn{background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s}
+.pnl-btn:hover{background:rgba(255,255,255,.2)}
+.pnl-btn-accent{background:#1a50c8}
+.pnl-btn-accent:hover{background:#1540a0}
+.pnl-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.pnl-main{flex:1;padding:24px;max-width:1200px;margin:0 auto;width:100%}
+
+.toast{position:fixed;top:16px;right:16px;background:#172d50;color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:999;opacity:0;transform:translateY(-8px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* Stat-Karten */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.stat-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.stat-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:8px}
+.stat-val{font-size:28px;font-weight:800;color:#172d50;line-height:1}
+.stat-card.warn .stat-val{color:#b45309}
+.stat-card.err .stat-val{color:#dc2626}
+
+/* Karten allgemein */
+.card{background:#fff;border-radius:14px;padding:22px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
+.card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+.card h3 small{font-size:11px;font-weight:600;color:#94a3b8;text-transform:none;letter-spacing:0}
+
+/* Organigramm */
+.org-level{display:flex;justify-content:center;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.org-connector{height:20px;display:flex;justify-content:center}
+.org-connector::before{content:'';width:2px;background:#cbd5e1}
+.org-node{background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:12px 16px;min-width:140px;text-align:center;cursor:pointer;transition:all .15s;position:relative}
+.org-node:hover{border-color:#1a50c8}
+.org-node.chef{background:#172d50;border-color:#172d50}
+.org-node.chef .org-name{color:#fff}
+.org-node.chef .org-role{color:#93c5fd}
+.org-node.lead{background:#eff6ff;border-color:#bfdbfe}
+.org-name{font-weight:700;color:#1e293b;font-size:13px}
+.org-role{font-size:11px;color:#64748b;margin-top:2px}
+.org-badge{position:absolute;top:-8px;right:-8px;width:16px;height:16px;border-radius:50%;border:2px solid #fff}
+.org-badge.active{background:#22c55e}
+.org-badge.paused{background:#f59e0b}
+.org-badge.unknown{background:#cbd5e1}
+.org-dept{display:flex;flex-direction:column;align-items:center}
+.org-team{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;justify-content:center}
+.org-team .org-node{min-width:100px;padding:9px 12px}
+
+.org-detail{max-width:420px;margin:16px auto 0;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px;display:none}
+.org-detail.show{display:block}
+.org-detail-name{font-weight:800;color:#172d50;font-size:15px;margin-bottom:2px}
+.org-detail-role{font-size:12px;color:#64748b;margin-bottom:14px}
+.org-detail-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.org-detail input[type=date]{padding:8px 10px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit}
+.org-detail textarea{width:100%;padding:8px 10px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;min-height:50px;margin-bottom:8px}
+.small-btn{padding:8px 14px;background:#1a50c8;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.small-btn.sec{background:#fff;color:#475569;border:2px solid #e2e8f0}
+.small-btn.warn{background:#f59e0b}
+.small-btn.danger{background:#dc2626}
+.small-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* Slider */
+.slider-row{display:flex;align-items:center;gap:16px}
+.slider-row input[type=range]{flex:1;accent-color:#1a50c8;height:6px}
+.slider-val{font-size:22px;font-weight:800;color:#172d50;min-width:60px;text-align:right}
+
+/* Log */
+.log-table-wrap{overflow-x:auto;max-height:420px;overflow-y:auto;border:1px solid #f1f5f9;border-radius:10px}
+.log-line{font-family:ui-monospace,Consolas,monospace;font-size:12px;padding:6px 12px;border-bottom:1px solid #f8fafc;white-space:pre-wrap;word-break:break-word;color:#334155}
+.log-line.fehler{background:#fef2f2;color:#b91c1c}
+.log-line:last-child{border-bottom:none}
+
+@media(max-width:800px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .org-team{flex-direction:column;align-items:stretch}
+}
+</style>
+</head>
+<body>
+
+<div id="loginWrap">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">🏢</div>
+      <div>
+        <h1>Kontrollpanel<br><span>Versicherungsmakler Eck</span></h1>
+      </div>
+    </div>
+    <label class="login-label">Passwort</label>
+    <input class="login-input" id="loginPw" type="password" autofocus />
+    <button class="login-btn" onclick="login()">Anmelden</button>
+    <div class="login-err" id="loginErr">Falsches Passwort.</div>
+  </div>
+</div>
+
+<div id="panelWrap">
+  <div class="pnl-nav">
+    <div class="pnl-nav-left">
+      <div class="pnl-nav-icon">🏢</div>
+      <h2>Büro-Kontrollpanel</h2>
+    </div>
+    <div class="pnl-nav-right">
+      <div class="pnl-nav-live"><span></span><span id="lastSync">–</span></div>
+      <button class="pnl-btn pnl-btn-accent" id="runBtn" onclick="triggerRun()">▶ Jetzt ausführen</button>
+      <button class="pnl-btn" onclick="logout()">Abmelden</button>
+    </div>
+  </div>
+
+  <div class="pnl-main">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Wartet auf PW-Upload</div><div class="stat-val" id="statUploads">–</div></div>
+      <div class="stat-card warn"><div class="stat-label">Manuelle Prüfung</div><div class="stat-val" id="statManuell">–</div></div>
+      <div class="stat-card"><div class="stat-label">Offene Befunde</div><div class="stat-val" id="statBefunde">–</div></div>
+      <div class="stat-card err"><div class="stat-label">Fehler heute</div><div class="stat-val" id="statFehler">–</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Organigramm <small>Klick auf einen Mitarbeiter für Details</small></h3>
+      <div id="orgChart"></div>
+      <div class="org-detail" id="orgDetail"></div>
+    </div>
+
+    <div class="card">
+      <h3>Auto-Apply-Schwellenwert <small>ab wieviel % Beitragsänderung automatisch übernommen wird</small></h3>
+      <div class="slider-row">
+        <input type="range" id="thresholdSlider" min="0" max="100" step="1" oninput="onThresholdInput()">
+        <div class="slider-val" id="thresholdVal">–%</div>
+        <button class="small-btn" id="thresholdSaveBtn" onclick="saveThreshold()" disabled>Übernehmen</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Log <small id="logCount"></small></h3>
+      <div class="log-table-wrap" id="logWrap"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Worker-URL fest hinterlegt (keine geheime Information - das Passwort schuetzt
+// den Zugriff, nicht die URL selbst). Nach dem Deploy hier eintragen.
+const WORKER_URL = "https://buero-panel-api.DEINE-SUBDOMAIN.workers.dev";
+
+const ORG = [
+  { key: "nowak", name: "Frau Nowak", role: "Gesamt-Abteilungsleitung", cls: "lead" },
+];
+const ABTEILUNGEN = [
+  { leiter: { key: "berger", name: "Frau Berger", role: "Post & Dokumente" },
+    team: [
+      { key: "petra", name: "Petra", role: "Posteingang-Klassifizierung" },
+      { key: "bilal", name: "Bilal", role: "Bild-/WhatsApp-Klassifizierung" },
+      { key: "uwe", name: "Uwe", role: "PW-Upload" },
+    ] },
+  { leiter: { key: "wagner", name: "Herr Wagner", role: "Finanzen & Steuern" },
+    team: [
+      { key: "rita", name: "Rita", role: "Abrechnungen" },
+      { key: "herbert", name: "Herbert", role: "Steuerunterlagen" },
+    ] },
+  { leiter: { key: "klein", name: "Herr Klein", role: "Kundenkommunikation" },
+    team: [
+      { key: "selin", name: "Selin", role: "WhatsApp (in Vorbereitung)" },
+    ] },
+];
+
+let PW = "";
+let currentStatus = null;
+let pollTimer = null;
+let openDetailKey = null;
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 3200);
+}
+
+function login() {
+  const pw = document.getElementById("loginPw").value;
+  fetch(WORKER_URL + "/api/status?pw=" + encodeURIComponent(pw))
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) {
+        document.getElementById("loginErr").style.display = "block";
+        return;
+      }
+      PW = pw;
+      localStorage.setItem("_panelPw", pw);
+      showPanel(data.status);
+    })
+    .catch(() => { document.getElementById("loginErr").style.display = "block"; });
+}
+
+function logout() {
+  localStorage.removeItem("_panelPw");
+  PW = "";
+  clearInterval(pollTimer);
+  document.getElementById("panelWrap").style.display = "none";
+  document.getElementById("loginWrap").style.display = "flex";
+}
+
+function showPanel(status) {
+  document.getElementById("loginWrap").style.display = "none";
+  document.getElementById("panelWrap").style.display = "flex";
+  render(status);
+  pollTimer = setInterval(refreshStatus, 30000);
+}
+
+function refreshStatus() {
+  fetch(WORKER_URL + "/api/status?pw=" + encodeURIComponent(PW))
+    .then(r => r.json())
+    .then(data => { if (!data.error) render(data.status); })
+    .catch(() => {});
+}
+
+function render(status) {
+  currentStatus = status;
+  if (!status) return;
+
+  document.getElementById("lastSync").textContent = "Stand " + (status.zeitstempel || "–");
+  document.getElementById("statUploads").textContent = status.pendingUploads ?? "–";
+  document.getElementById("statManuell").textContent = status.manuellePruefung ?? "–";
+  document.getElementById("statBefunde").textContent = status.offeneFindings ?? "–";
+  document.getElementById("statFehler").textContent = status.fehlerHeute ?? "–";
+
+  if (!document.getElementById("thresholdSlider").dataset.touched) {
+    document.getElementById("thresholdSlider").value = status.autoApplyThresholdPercent ?? 10;
+    document.getElementById("thresholdVal").textContent = (status.autoApplyThresholdPercent ?? 10) + "%";
+  }
+
+  renderOrg(status.mitarbeiter || []);
+  renderLog(status.logTail || []);
+}
+
+function findEmployee(list, key) {
+  return list.find(m => m.name === key);
+}
+
+function badgeClass(emp) {
+  if (!emp) return "unknown";
+  return emp.active ? "active" : "paused";
+}
+
+function nodeHtml(key, name, role, mitarbeiter, extraCls) {
+  const emp = findEmployee(mitarbeiter, key);
+  return '<div class="org-node ' + (extraCls || '') + '" onclick="toggleDetail(\'' + key + '\')">' +
+    '<span class="org-badge ' + badgeClass(emp) + '"></span>' +
+    '<div class="org-name">' + name + '</div>' +
+    '<div class="org-role">' + role + (emp && emp.active === false ? (emp.pausedUntil ? ' · pausiert bis ' + emp.pausedUntil : ' · pausiert') : '') + '</div>' +
+    '</div>';
+}
+
+function renderOrg(mitarbeiter) {
+  let html = '<div class="org-level">';
+  html += '<div class="org-node chef"><div class="org-name">Daniel Eck</div><div class="org-role">Inhaber</div></div>';
+  html += nodeHtml("sophie", "Sophie", "Persönliche Assistentin (E-Mail)", mitarbeiter);
+  html += '</div><div class="org-connector"></div>';
+  html += '<div class="org-level">';
+  html += nodeHtml("nowak", "Frau Nowak", "Gesamt-Abteilungsleitung", mitarbeiter, "lead");
+  html += '</div><div class="org-connector"></div>';
+  html += '<div class="org-level">';
+  ABTEILUNGEN.forEach(abt => {
+    html += '<div class="org-dept">';
+    html += nodeHtml(abt.leiter.key, abt.leiter.name, abt.leiter.role, mitarbeiter, "lead");
+    html += '<div class="org-team">';
+    abt.team.forEach(m => { html += nodeHtml(m.key, m.name, m.role, mitarbeiter); });
+    html += '</div></div>';
+  });
+  html += '</div>';
+  document.getElementById("orgChart").innerHTML = html;
+
+  if (openDetailKey) renderDetail(openDetailKey);
+}
+
+const ALLE_NAMEN = { sophie:"Sophie", nowak:"Frau Nowak", berger:"Frau Berger", wagner:"Herr Wagner", klein:"Herr Klein",
+  petra:"Petra", bilal:"Bilal", uwe:"Uwe", rita:"Rita", herbert:"Herbert", selin:"Selin" };
+
+function toggleDetail(key) {
+  if (key === "chef") return;
+  openDetailKey = (openDetailKey === key) ? null : key;
+  renderDetail(openDetailKey);
+}
+
+function renderDetail(key) {
+  const box = document.getElementById("orgDetail");
+  if (!key) { box.classList.remove("show"); box.innerHTML = ""; return; }
+  const emp = findEmployee(currentStatus ? currentStatus.mitarbeiter : [], key);
+  const name = ALLE_NAMEN[key] || key;
+
+  if (!emp) {
+    box.innerHTML = '<div class="org-detail-name">' + name + '</div>' +
+      '<div class="org-detail-role">Noch nicht als steuerbarer Mitarbeiter eingerichtet.</div>';
+    box.classList.add("show");
+    return;
+  }
+
+  const istAktiv = emp.active !== false;
+  box.innerHTML =
+    '<div class="org-detail-name">' + name + '</div>' +
+    '<div class="org-detail-role">' + (istAktiv ? 'Aktiv' : ('Pausiert' + (emp.pausedUntil ? ' bis ' + emp.pausedUntil : ''))) + '</div>' +
+    '<div class="org-detail-row">' +
+      (istAktiv
+        ? '<input type="date" id="pauseDate_' + key + '"><button class="small-btn warn" onclick="pauseEmployee(\'' + key + '\')">Pausieren</button>'
+        : '<button class="small-btn" onclick="reactivateEmployee(\'' + key + '\')">Reaktivieren</button>') +
+    '</div>' +
+    '<textarea id="noteText_' + key + '" placeholder="Neue Notiz/Regel für ' + name + '..."></textarea>' +
+    '<button class="small-btn sec" onclick="addNote(\'' + key + '\')">Notiz hinzufügen</button>';
+  box.classList.add("show");
+}
+
+function sendCommand(type, payload) {
+  return fetch(WORKER_URL + "/api/command", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ pw: PW, type, payload }),
+  }).then(r => r.json());
+}
+
+function pauseEmployee(key) {
+  const dateEl = document.getElementById("pauseDate_" + key);
+  const pausedUntil = dateEl && dateEl.value ? dateEl.value : null;
+  sendCommand("pauseEmployee", { name: key, pausedUntil }).then(() => {
+    toast((ALLE_NAMEN[key] || key) + " wird pausiert (wirkt innerhalb von ~2 Minuten).");
+  });
+}
+
+function reactivateEmployee(key) {
+  sendCommand("reactivateEmployee", { name: key }).then(() => {
+    toast((ALLE_NAMEN[key] || key) + " wird reaktiviert (wirkt innerhalb von ~2 Minuten).");
+  });
+}
+
+function addNote(key) {
+  const el = document.getElementById("noteText_" + key);
+  const note = el.value.trim();
+  if (!note) return;
+  sendCommand("addEmployeeNote", { employee: key, note }).then(() => {
+    el.value = "";
+    toast("Notiz für " + (ALLE_NAMEN[key] || key) + " wird übernommen.");
+  });
+}
+
+function onThresholdInput() {
+  const slider = document.getElementById("thresholdSlider");
+  slider.dataset.touched = "1";
+  document.getElementById("thresholdVal").textContent = slider.value + "%";
+  document.getElementById("thresholdSaveBtn").disabled = false;
+}
+
+function saveThreshold() {
+  const val = parseInt(document.getElementById("thresholdSlider").value, 10);
+  sendCommand("setThreshold", { value: val }).then(() => {
+    toast("Schwellenwert wird auf " + val + "% gesetzt (wirkt innerhalb von ~2 Minuten).");
+    document.getElementById("thresholdSaveBtn").disabled = true;
+    delete document.getElementById("thresholdSlider").dataset.touched;
+  });
+}
+
+function triggerRun() {
+  const btn = document.getElementById("runBtn");
+  btn.disabled = true;
+  sendCommand("triggerRun", {}).then(() => {
+    toast("Manueller Lauf wird gestartet (kann einige Minuten dauern).");
+    setTimeout(() => { btn.disabled = false; }, 15000);
+  });
+}
+
+function renderLog(lines) {
+  document.getElementById("logCount").textContent = lines.length + " Zeilen (neueste zuerst)";
+  const html = lines.slice().reverse().map(line => {
+    const istFehler = /FEHLER|Fehler/.test(line);
+    return '<div class="log-line' + (istFehler ? ' fehler' : '') + '">' +
+      line.replace(/</g, "&lt;").replace(/>/g, "&gt;") + '</div>';
+  }).join("");
+  document.getElementById("logWrap").innerHTML = html || '<div class="log-line">Keine Log-Einträge.</div>';
+}
+
+document.getElementById("loginPw").addEventListener("keydown", e => { if (e.key === "Enter") login(); });
+
+// Auto-Login aus localStorage
+(function () {
+  const savedPw = localStorage.getItem("_panelPw");
+  if (!savedPw) return;
+  fetch(WORKER_URL + "/api/status?pw=" + encodeURIComponent(savedPw))
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) return;
+      PW = savedPw;
+      showPanel(data.status);
+    })
+    .catch(() => {});
+})();
+</script>
+</body>
+</html>
