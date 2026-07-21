@@ -40,6 +40,8 @@ const ERLAUBTE_KOMMANDOS = new Set([
   "triggerRun",
   "requestFix",
   "confirmFix",
+  "archiveFehler",
+  "restoreFehler",
 ]);
 
 export default {
