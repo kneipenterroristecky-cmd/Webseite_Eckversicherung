@@ -347,7 +347,7 @@ function renderStatDetail(key) {
     document.getElementById("statModalBody").innerHTML = liste.length === 0
       ? '<div class="stat-detail-empty">Noch keine Fix-Vorschläge angefordert.</div>'
       : liste.map(f => {
-          const statusLabel = { vorgeschlagen: "wartet auf deine Bestätigung", bestaetigt: "bestätigt – wird in der nächsten Claude-Code-Sitzung umgesetzt" }[f.status] || f.status;
+          const statusLabel = { vorgeschlagen: "wartet auf deine Bestätigung", bestaetigt: "bestätigt – wird in der nächsten Claude-Code-Sitzung umgesetzt", umgesetzt: "✅ umgesetzt" }[f.status] || f.status;
           return '<div class="fehler-eintrag">' +
             '<div class="stat-detail-row"><div class="primary">' + escHtml(f.betroffeneDatei || "Datei unbekannt") + '</div>' +
             '<div class="secondary">' + escHtml(f.zeitpunkt || "") + ' · ' + escHtml(statusLabel) + '</div></div>' +
