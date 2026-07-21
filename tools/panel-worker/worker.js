@@ -38,6 +38,8 @@ const ERLAUBTE_KOMMANDOS = new Set([
   "setThreshold",
   "addEmployeeNote",
   "triggerRun",
+  "requestFix",
+  "confirmFix",
 ]);
 
 export default {
