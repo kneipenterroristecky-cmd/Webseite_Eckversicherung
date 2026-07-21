@@ -407,9 +407,10 @@ function renderOrg(mitarbeiter) {
   html += '<div class="org-level">';
   html += nodeHtml("nowak", "Frau Nowak", "Gesamt-Abteilungsleitung", mitarbeiter, "lead");
   html += '</div><div class="org-connector"></div>';
-  html += '<div class="org-level">';
+  html += '<div class="org-level" style="align-items:flex-start">';
   ABTEILUNGEN.forEach(abt => {
-    html += '<div class="org-dept">';
+    html += '<div class="org-dept" style="--dept-color:' + abt.farbe + ';--dept-bg:' + abt.bg + '">';
+    html += '<div class="org-dept-label">' + abt.name + '</div>';
     html += nodeHtml(abt.leiter.key, abt.leiter.name, abt.leiter.role, mitarbeiter, "lead");
     html += '<div class="org-team">';
     abt.team.forEach(m => { html += nodeHtml(m.key, m.name, m.role, mitarbeiter); });
