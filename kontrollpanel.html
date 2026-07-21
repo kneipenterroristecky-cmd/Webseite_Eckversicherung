@@ -283,6 +283,7 @@ function render(status) {
 
   renderOrg(status.mitarbeiter || []);
   renderLog(status.logTail || []);
+  if (openStatKey) renderStatDetail(openStatKey);
 }
 
 function findEmployee(list, key) {
