@@ -301,13 +301,17 @@ let openStatKey = null;
 let logNurFehler = false;
 
 function toggleStatDetail(key) {
-  openStatKey = (openStatKey === key) ? null : key;
-  renderStatDetail(openStatKey);
+  openStatKey = key;
+  renderStatDetail(key);
+}
+
+function closeStatDetail() {
+  openStatKey = null;
+  document.getElementById("statModal").classList.remove("show");
 }
 
 function renderStatDetail(key) {
-  const box = document.getElementById("statDetail");
-  if (!key || !currentStatus) { box.classList.remove("show"); box.innerHTML = ""; return; }
+  if (!key || !currentStatus) return;
 
   const konfig = {
     uploads: { titel: "Wartet auf PW-Upload", liste: currentStatus.pendingUploadsListe || [],
@@ -319,18 +323,19 @@ function renderStatDetail(key) {
   }[key];
   if (!konfig) return;
 
-  let html = '<h4>' + konfig.titel + '</h4>';
+  document.getElementById("statModalTitel").textContent = konfig.titel;
+  let html;
   if (konfig.liste.length === 0) {
-    html += '<div class="stat-detail-empty">Aktuell nichts offen.</div>';
+    html = '<div class="stat-detail-empty">Aktuell nichts offen.</div>';
   } else {
-    html += konfig.liste.map(e => {
+    html = konfig.liste.map(e => {
       const z = konfig.zeile(e);
       return '<div class="stat-detail-row"><div class="primary">' + z.primary + '</div>' +
         (z.secondary ? '<div class="secondary">' + z.secondary + '</div>' : '') + '</div>';
     }).join("");
   }
-  box.innerHTML = html;
-  box.classList.add("show");
+  document.getElementById("statModalBody").innerHTML = html;
+  document.getElementById("statModal").classList.add("show");
 }
 
 function goToLogErrors() {
