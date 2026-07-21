@@ -394,18 +394,24 @@ let fehlerArchivModus = false;
 function renderFehlerListe() {
   const quelle = fehlerArchivModus ? (currentStatus.fehlerArchiv || []) : (currentStatus.fehlerListe || []);
   const liste = quelle.slice().reverse();
-  document.getElementById("statModalTitel").textContent = fehlerArchivModus ? "Fehler-Archiv (gesamter Verlauf)" : "Fehler (letzte 24h)";
+  document.getElementById("statModalTitel").textContent = fehlerArchivModus ? "Archiv" : "Fehler (letzte 24h)";
   const toggleBtn = '<button class="small-btn sec" style="margin-bottom:14px" onclick="toggleFehlerArchiv()">' +
-    (fehlerArchivModus ? "Nur letzte 24h anzeigen" : "Komplettes Archiv anzeigen") + '</button>';
+    (fehlerArchivModus ? "← Zurück zu aktuellen Fehlern" : "🗄️ Archiv anzeigen") + '</button>';
   const inhalt = liste.length === 0
-    ? '<div class="stat-detail-empty">Keine Fehler ' + (fehlerArchivModus ? "im Archiv" : "in den letzten 24 Stunden") + '.</div>'
+    ? '<div class="stat-detail-empty">' + (fehlerArchivModus ? "Noch nichts archiviert." : "Keine Fehler in den letzten 24 Stunden.") + '</div>'
     : liste.map(f => {
         const zeile = escHtml(f.zeile);
         const diagnose = escHtml(f.diagnose);
+        const zeileAttr = 'data-zeile="' + encodeURIComponent(f.zeile || "") + '"';
+        const archivInfo = fehlerArchivModus && f.archiviertAm ? '<div class="secondary" style="margin-top:4px">Archiviert am ' + escHtml(f.archiviertAm) + '</div>' : '';
+        const aktionen = fehlerArchivModus
+          ? '<button class="small-btn sec" style="margin-top:6px" onclick="restoreFehler(this)" ' + zeileAttr + '">↩️ Wiederherstellen</button>'
+          : '<button class="small-btn sec" style="margin-top:6px;margin-right:6px" onclick="requestFix(this)" ' + zeileAttr + '">🔧 Frank: Fix vorschlagen</button>' +
+            '<button class="small-btn sec" style="margin-top:6px" onclick="archiveFehler(this)" ' + zeileAttr + '">🗄️ Archivieren</button>';
         return '<div class="fehler-eintrag">' +
           '<div class="log-line fehler">' + zeile + '</div>' +
           (diagnose ? '<div class="fehler-diagnose">💡 ' + diagnose + '</div>' : '') +
-          '<button class="small-btn sec" style="margin-top:6px" onclick="requestFix(this)" data-zeile="' + encodeURIComponent(f.zeile || "") + '">🔧 Frank: Fix vorschlagen lassen</button>' +
+          archivInfo + '<div>' + aktionen + '</div>' +
           '</div>';
       }).join("");
   document.getElementById("statModalBody").innerHTML = toggleBtn + inhalt;
@@ -423,6 +429,24 @@ function requestFix(btn) {
   btn.textContent = "Frank arbeitet daran…";
   sendCommand("requestFix", { zeile }).then(() => {
     toast("Frank erstellt einen Fix-Vorschlag (erscheint gleich bei den Fix-Vorschlägen).");
+  });
+}
+
+function archiveFehler(btn) {
+  const zeile = decodeURIComponent(btn.dataset.zeile);
+  btn.disabled = true;
+  sendCommand("archiveFehler", { zeile }).then(() => {
+    toast("Fehler wird ins Archiv verschoben.");
+    btn.closest(".fehler-eintrag").style.opacity = "0.4";
+  });
+}
+
+function restoreFehler(btn) {
+  const zeile = decodeURIComponent(btn.dataset.zeile);
+  btn.disabled = true;
+  sendCommand("restoreFehler", { zeile }).then(() => {
+    toast("Fehler wiederhergestellt - erscheint wieder bei den aktuellen Fehlern.");
+    btn.closest(".fehler-eintrag").style.opacity = "0.4";
   });
 }
 
