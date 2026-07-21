@@ -47,10 +47,21 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e
 /* Stat-Karten */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
 .stat-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.stat-card.clickable{cursor:pointer;transition:transform .12s,box-shadow .12s}
+.stat-card.clickable:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(23,45,80,.12)}
 .stat-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:8px}
 .stat-val{font-size:28px;font-weight:800;color:#172d50;line-height:1}
 .stat-card.warn .stat-val{color:#b45309}
 .stat-card.err .stat-val{color:#dc2626}
+
+.stat-detail{display:none;background:#fff;border-radius:14px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
+.stat-detail.show{display:block}
+.stat-detail h4{font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.stat-detail-row{padding:9px 0;border-bottom:1px solid #f1f5f9;font-size:13px}
+.stat-detail-row:last-child{border-bottom:none}
+.stat-detail-row .primary{font-weight:700;color:#1e293b}
+.stat-detail-row .secondary{color:#64748b;font-size:12px;margin-top:1px}
+.stat-detail-empty{color:#94a3b8;font-size:13px;padding:6px 0}
 
 /* Karten allgemein */
 .card{background:#fff;border-radius:14px;padding:22px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
