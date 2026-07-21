@@ -403,7 +403,7 @@ function renderOrg(mitarbeiter) {
   html += '</div>';
   document.getElementById("orgChart").innerHTML = html;
 
-  if (openDetailKey) renderDetail(openDetailKey);
+  if (openDetailKey) renderOrgDetail(openDetailKey);
 }
 
 const ALLE_NAMEN = { sophie:"Sophie", nowak:"Frau Nowak", berger:"Frau Berger", wagner:"Herr Wagner", klein:"Herr Klein",
@@ -411,35 +411,68 @@ const ALLE_NAMEN = { sophie:"Sophie", nowak:"Frau Nowak", berger:"Frau Berger", 
 
 function toggleDetail(key) {
   if (key === "chef") return;
-  openDetailKey = (openDetailKey === key) ? null : key;
-  renderDetail(openDetailKey);
+  openDetailKey = key;
+  renderOrgDetail(key);
 }
 
-function renderDetail(key) {
-  const box = document.getElementById("orgDetail");
-  if (!key) { box.classList.remove("show"); box.innerHTML = ""; return; }
-  const emp = findEmployee(currentStatus ? currentStatus.mitarbeiter : [], key);
+function closeOrgDetail() {
+  openDetailKey = null;
+  document.getElementById("orgModal").classList.remove("show");
+}
+
+function togglePauseForm(key) {
+  const form = document.getElementById("pauseForm_" + key);
+  if (form) form.style.display = form.style.display === "none" ? "flex" : "none";
+}
+
+function renderOrgDetail(key) {
   const name = ALLE_NAMEN[key] || key;
+  document.getElementById("orgModalTitel").textContent = name;
+  const emp = findEmployee(currentStatus ? currentStatus.mitarbeiter : [], key);
+  const body = document.getElementById("orgModalBody");
 
   if (!emp) {
-    box.innerHTML = '<div class="org-detail-name">' + name + '</div>' +
-      '<div class="org-detail-role">Noch nicht als steuerbarer Mitarbeiter eingerichtet.</div>';
-    box.classList.add("show");
+    body.innerHTML = '<div class="stat-detail-empty">Noch nicht als steuerbarer Mitarbeiter eingerichtet.</div>';
+    document.getElementById("orgModal").classList.add("show");
     return;
   }
 
   const istAktiv = emp.active !== false;
-  box.innerHTML =
-    '<div class="org-detail-name">' + name + '</div>' +
-    '<div class="org-detail-role">' + (istAktiv ? 'Aktiv' : ('Pausiert' + (emp.pausedUntil ? ' bis ' + emp.pausedUntil : ''))) + '</div>' +
-    '<div class="org-detail-row">' +
-      (istAktiv
-        ? '<input type="date" id="pauseDate_' + key + '"><button class="small-btn warn" onclick="pauseEmployee(\'' + key + '\')">Pausieren</button>'
-        : '<button class="small-btn" onclick="reactivateEmployee(\'' + key + '\')">Reaktivieren</button>') +
-    '</div>' +
-    '<textarea id="noteText_' + key + '" placeholder="Neue Notiz/Regel für ' + name + '..."></textarea>' +
+  const notizen = emp.notizen || [];
+
+  let html = '<div class="org-detail-role" style="margin-bottom:12px">' +
+    (istAktiv ? 'Aktiv' : ('Pausiert' + (emp.pausedUntil ? ' bis ' + emp.pausedUntil : ''))) + '</div>';
+
+  // Kleine, zurueckhaltende Pausier-/Reaktivier-Steuerung - der Fokus dieses
+  // Fensters soll das Gedaechtnis sein, nicht das Abschalten.
+  if (istAktiv) {
+    html += '<div style="margin-bottom:18px">' +
+      '<span class="tiny-link" onclick="togglePauseForm(\'' + key + '\')">Pausieren…</span>' +
+      '<div class="tiny-row" id="pauseForm_' + key + '" style="display:none">' +
+        '<input type="date" id="pauseDate_' + key + '" class="tiny-date">' +
+        '<button class="tiny-btn" onclick="pauseEmployee(\'' + key + '\')">Bestätigen</button>' +
+      '</div>' +
+    '</div>';
+  } else {
+    html += '<div style="margin-bottom:18px">' +
+      '<button class="tiny-btn" onclick="reactivateEmployee(\'' + key + '\')">Reaktivieren</button>' +
+    '</div>';
+  }
+
+  html += '<div class="memory-label">Gedächtnis <span class="memory-count">' + notizen.length + '</span></div>';
+  if (notizen.length === 0) {
+    html += '<div class="stat-detail-empty">Noch keine Notizen hinterlegt.</div>';
+  } else {
+    html += '<div class="memory-list">' + notizen.map(n =>
+      '<div class="memory-item">' + n.replace(/</g, "&lt;").replace(/>/g, "&gt;") + '</div>'
+    ).join("") + '</div>';
+  }
+
+  html += '<textarea id="noteText_' + key + '" placeholder="Neue Notiz/Regel für ' + name + '..."></textarea>' +
     '<button class="small-btn sec" onclick="addNote(\'' + key + '\')">Notiz hinzufügen</button>';
-  box.classList.add("show");
+
+  body.innerHTML = html;
+  document.getElementById("orgModal").classList.add("show");
 }
 
 function sendCommand(type, payload) {
