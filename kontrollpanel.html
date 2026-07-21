@@ -286,6 +286,55 @@ function render(status) {
   if (openStatKey) renderStatDetail(openStatKey);
 }
 
+let openStatKey = null;
+let logNurFehler = false;
+
+function toggleStatDetail(key) {
+  openStatKey = (openStatKey === key) ? null : key;
+  renderStatDetail(openStatKey);
+}
+
+function renderStatDetail(key) {
+  const box = document.getElementById("statDetail");
+  if (!key || !currentStatus) { box.classList.remove("show"); box.innerHTML = ""; return; }
+
+  const konfig = {
+    uploads: { titel: "Wartet auf PW-Upload", liste: currentStatus.pendingUploadsListe || [],
+      zeile: e => ({ primary: e.kunde || "(unbekannt)", secondary: [e.datei, e.vertragsnummer ? "Vertrag " + e.vertragsnummer : null, e.erkanntAm].filter(Boolean).join(" · ") }) },
+    manuell: { titel: "Manuelle Prüfung", liste: currentStatus.manuellePruefungListe || [],
+      zeile: e => ({ primary: e.kunde || "(unbekannt)", secondary: [e.datei, e.vertragsnummer ? "Vertrag " + e.vertragsnummer : null, e.status].filter(Boolean).join(" · ") }) },
+    befunde: { titel: "Offene Befunde", liste: currentStatus.offeneFindingsListe || [],
+      zeile: e => ({ primary: e.befund || "(kein Text)", secondary: [e.abteilung, e.zeitpunkt].filter(Boolean).join(" · ") }) },
+  }[key];
+  if (!konfig) return;
+
+  let html = '<h4>' + konfig.titel + '</h4>';
+  if (konfig.liste.length === 0) {
+    html += '<div class="stat-detail-empty">Aktuell nichts offen.</div>';
+  } else {
+    html += konfig.liste.map(e => {
+      const z = konfig.zeile(e);
+      return '<div class="stat-detail-row"><div class="primary">' + z.primary + '</div>' +
+        (z.secondary ? '<div class="secondary">' + z.secondary + '</div>' : '') + '</div>';
+    }).join("");
+  }
+  box.innerHTML = html;
+  box.classList.add("show");
+}
+
+function goToLogErrors() {
+  logNurFehler = true;
+  document.getElementById("logFilterBtn").textContent = "Alle Zeilen anzeigen";
+  renderLog(currentStatus ? currentStatus.logTail || [] : []);
+  document.getElementById("logCard").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function toggleLogFilter() {
+  logNurFehler = !logNurFehler;
+  document.getElementById("logFilterBtn").textContent = logNurFehler ? "Alle Zeilen anzeigen" : "Nur Fehler anzeigen";
+  renderLog(currentStatus ? currentStatus.logTail || [] : []);
+}
+
 function findEmployee(list, key) {
   return list.find(m => m.name === key);
 }
