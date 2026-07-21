@@ -469,8 +469,9 @@ function triggerRun() {
 }
 
 function renderLog(lines) {
-  document.getElementById("logCount").textContent = lines.length + " Zeilen (neueste zuerst)";
-  const html = lines.slice().reverse().map(line => {
+  const gefiltert = logNurFehler ? lines.filter(l => /FEHLER|Fehler/.test(l)) : lines;
+  document.getElementById("logCount").textContent = gefiltert.length + " Zeilen (neueste zuerst)" + (logNurFehler ? " · gefiltert" : "");
+  const html = gefiltert.slice().reverse().map(line => {
     const istFehler = /FEHLER|Fehler/.test(line);
     return '<div class="log-line' + (istFehler ? ' fehler' : '') + '">' +
       line.replace(/</g, "&lt;").replace(/>/g, "&gt;") + '</div>';
