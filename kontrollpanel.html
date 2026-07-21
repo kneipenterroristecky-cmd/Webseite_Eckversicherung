@@ -313,6 +313,22 @@ function closeStatDetail() {
 function renderStatDetail(key) {
   if (!key || !currentStatus) return;
 
+  if (key === "fehler") {
+    const heute = (currentStatus.zeitstempel || "").slice(0, 10);
+    const fehlerZeilen = (currentStatus.logTail || []).filter(l =>
+      /FEHLER|Fehler/.test(l) && (!heute || l.startsWith("[" + heute))
+    );
+    document.getElementById("statModalTitel").textContent = "Fehler heute";
+    document.getElementById("statModalBody").innerHTML = fehlerZeilen.length === 0
+      ? '<div class="stat-detail-empty">Keine Fehler-Zeilen im sichtbaren Log-Ausschnitt.</div>'
+      : fehlerZeilen.slice().reverse().map(l =>
+          '<div class="log-line fehler" style="border-radius:8px;margin-bottom:6px">' +
+          l.replace(/</g, "&lt;").replace(/>/g, "&gt;") + '</div>'
+        ).join("");
+    document.getElementById("statModal").classList.add("show");
+    return;
+  }
+
   const konfig = {
     uploads: { titel: "Wartet auf PW-Upload", liste: currentStatus.pendingUploadsListe || [],
       zeile: e => ({ primary: e.kunde || "(unbekannt)", secondary: [e.datei, e.vertragsnummer ? "Vertrag " + e.vertragsnummer : null, e.erkanntAm].filter(Boolean).join(" · ") }) },
@@ -336,13 +352,6 @@ function renderStatDetail(key) {
   }
   document.getElementById("statModalBody").innerHTML = html;
   document.getElementById("statModal").classList.add("show");
-}
-
-function goToLogErrors() {
-  logNurFehler = true;
-  document.getElementById("logFilterBtn").textContent = "Alle Zeilen anzeigen";
-  renderLog(currentStatus ? currentStatus.logTail || [] : []);
-  document.getElementById("logCard").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function toggleLogFilter() {
