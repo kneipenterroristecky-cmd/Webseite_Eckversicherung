@@ -306,7 +306,7 @@ function render(status) {
   document.getElementById("statUploads").textContent = status.pendingUploads ?? "–";
   document.getElementById("statManuell").textContent = status.manuellePruefung ?? "–";
   document.getElementById("statBefunde").textContent = status.offeneFindings ?? "–";
-  document.getElementById("statFehler").textContent = status.fehlerHeute ?? "–";
+  document.getElementById("statFehler").textContent = status.fehlerAnzahl ?? "–";
 
   if (!document.getElementById("thresholdSlider").dataset.touched) {
     document.getElementById("thresholdSlider").value = status.autoApplyThresholdPercent ?? 10;
