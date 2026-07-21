@@ -89,7 +89,8 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e
 .org-badge.active{background:#22c55e}
 .org-badge.paused{background:#f59e0b}
 .org-badge.unknown{background:#cbd5e1}
-.org-dept{display:flex;flex-direction:column;align-items:center}
+.org-dept{display:flex;flex-direction:column;align-items:center;border:2px dashed var(--dept-color,#cbd5e1);border-radius:16px;padding:16px 14px 14px;position:relative;background:var(--dept-bg,transparent)}
+.org-dept-label{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#fff;padding:0 10px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--dept-color,#64748b);white-space:nowrap}
 .org-team{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;justify-content:center}
 .org-team .org-node{min-width:100px;padding:9px 12px}
 
