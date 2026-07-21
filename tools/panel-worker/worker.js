@@ -23,9 +23,12 @@ const CORS_HEADERS = {
 };
 
 function json(data, status = 200) {
+  // charset=utf-8 explizit im Content-Type: ohne das dekodiert Invoke-RestMethod
+  // in Windows PowerShell 5.1 UTF-8-Antworten falsch (Mojibake bei Umlauten/ss)
+  // - dieselbe Falle wie bei Invoke-ClaudeMessages in common.ps1.
   return new Response(JSON.stringify(data), {
     status,
-    headers: { "Content-Type": "application/json", ...CORS_HEADERS },
+    headers: { "Content-Type": "application/json; charset=utf-8", ...CORS_HEADERS },
   });
 }
 
