@@ -228,18 +228,21 @@ const ORG = [
   { key: "nowak", name: "Frau Nowak", role: "Gesamt-Abteilungsleitung", cls: "lead" },
 ];
 const ABTEILUNGEN = [
-  { leiter: { key: "berger", name: "Frau Berger", role: "Post & Dokumente" },
+  { name: "Post & Dokumente", farbe: "#1a50c8", bg: "#f5f9ff",
+    leiter: { key: "berger", name: "Frau Berger", role: "Abteilungsleitung" },
     team: [
       { key: "petra", name: "Petra", role: "Posteingang-Klassifizierung" },
       { key: "bilal", name: "Bilal", role: "Bild-/WhatsApp-Klassifizierung" },
       { key: "uwe", name: "Uwe", role: "PW-Upload" },
     ] },
-  { leiter: { key: "wagner", name: "Herr Wagner", role: "Finanzen & Steuern" },
+  { name: "Finanzen & Steuern", farbe: "#b45309", bg: "#fffaf3",
+    leiter: { key: "wagner", name: "Herr Wagner", role: "Abteilungsleitung" },
     team: [
       { key: "rita", name: "Rita", role: "Abrechnungen" },
       { key: "herbert", name: "Herbert", role: "Steuerunterlagen" },
     ] },
-  { leiter: { key: "klein", name: "Herr Klein", role: "Kundenkommunikation" },
+  { name: "Kundenkommunikation", farbe: "#9333ea", bg: "#fdf9ff",
+    leiter: { key: "klein", name: "Herr Klein", role: "Abteilungsleitung" },
     team: [
       { key: "selin", name: "Selin", role: "WhatsApp (in Vorbereitung)" },
     ] },
