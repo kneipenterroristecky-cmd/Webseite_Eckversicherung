@@ -93,18 +93,29 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e
 .org-team{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;justify-content:center}
 .org-team .org-node{min-width:100px;padding:9px 12px}
 
-.org-detail{max-width:420px;margin:16px auto 0;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px;display:none}
-.org-detail.show{display:block}
-.org-detail-name{font-weight:800;color:#172d50;font-size:15px;margin-bottom:2px}
-.org-detail-role{font-size:12px;color:#64748b;margin-bottom:14px}
+.org-detail-role{font-size:12px;color:#64748b}
 .org-detail-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.org-detail input[type=date]{padding:8px 10px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit}
-.org-detail textarea{width:100%;padding:8px 10px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;min-height:50px;margin-bottom:8px}
 .small-btn{padding:8px 14px;background:#1a50c8;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
 .small-btn.sec{background:#fff;color:#475569;border:2px solid #e2e8f0}
 .small-btn.warn{background:#f59e0b}
 .small-btn.danger{background:#dc2626}
 .small-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* Kleine, zurueckhaltende Pausier-Steuerung im Organigramm-Modal - bewusst
+   unauffaellig, damit das Gedaechtnis der eigentliche Fokus bleibt. */
+.tiny-link{font-size:12px;color:#64748b;text-decoration:underline;cursor:pointer;user-select:none}
+.tiny-link:hover{color:#1a50c8}
+.tiny-row{display:flex;gap:6px;margin-top:8px}
+.tiny-date{padding:5px 8px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;font-family:inherit}
+.tiny-btn{padding:5px 10px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.tiny-btn:hover{background:#e2e8f0}
+
+/* Gedaechtnis-Uebersicht - der eigentliche Schwerpunkt des Modals */
+.memory-label{font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.memory-count{background:#eff6ff;color:#1a50c8;border-radius:999px;padding:1px 8px;font-size:11px}
+.memory-list{max-height:220px;overflow-y:auto;margin-bottom:14px;display:flex;flex-direction:column;gap:6px}
+.memory-item{background:#f8fafc;border:1px solid #f1f5f9;border-radius:8px;padding:8px 10px;font-size:12.5px;color:#334155;line-height:1.4}
+#orgModalBody textarea{width:100%;padding:8px 10px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;min-height:50px;margin-bottom:8px}
 
 /* Slider */
 .slider-row{display:flex;align-items:center;gap:16px}
