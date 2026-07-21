@@ -311,6 +311,7 @@ function render(status) {
   document.getElementById("statManuell").textContent = status.manuellePruefung ?? "–";
   document.getElementById("statBefunde").textContent = status.offeneFindings ?? "–";
   document.getElementById("statFehler").textContent = status.fehlerAnzahl ?? "–";
+  document.getElementById("statFixe").textContent = (status.fixVorschlaege || []).filter(f => f.status === "vorgeschlagen").length;
 
   if (!document.getElementById("thresholdSlider").dataset.touched) {
     document.getElementById("thresholdSlider").value = status.autoApplyThresholdPercent ?? 10;
