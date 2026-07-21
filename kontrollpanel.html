@@ -54,9 +54,14 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e
 .stat-card.warn .stat-val{color:#b45309}
 .stat-card.err .stat-val{color:#dc2626}
 
-.stat-detail{display:none;background:#fff;border-radius:14px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
-.stat-detail.show{display:block}
-.stat-detail h4{font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+/* Modal-Overlay statt Inline-Reflow - Organigramm/restliche Seite bleiben an
+   Ort und Stelle, wenn eine Kachel-Detailansicht geoeffnet wird. */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:900;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal-box{background:#fff;border-radius:16px;padding:26px 28px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;box-shadow:0 8px 40px rgba(23,45,80,.25)}
+.modal-box h4{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:#f1f5f9;border:none;border-radius:8px;width:26px;height:26px;cursor:pointer;color:#64748b;font-size:14px;line-height:1}
+.modal-close:hover{background:#e2e8f0}
 .stat-detail-row{padding:9px 0;border-bottom:1px solid #f1f5f9;font-size:13px}
 .stat-detail-row:last-child{border-bottom:none}
 .stat-detail-row .primary{font-weight:700;color:#1e293b}
