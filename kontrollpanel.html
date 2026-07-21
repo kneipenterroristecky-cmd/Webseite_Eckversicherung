@@ -339,17 +339,21 @@ function closeStatDetail() {
 function renderStatDetail(key) {
   if (!key || !currentStatus) return;
 
-  if (key === "fehler") {
-    const fehlerListe = (currentStatus.fehlerListe || []).slice().reverse();
-    document.getElementById("statModalTitel").textContent = "Fehler (letzte 24h)";
-    document.getElementById("statModalBody").innerHTML = fehlerListe.length === 0
-      ? '<div class="stat-detail-empty">Keine Fehler in den letzten 24 Stunden.</div>'
-      : fehlerListe.map(f => {
-          const zeile = (f.zeile || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-          const diagnose = (f.diagnose || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  if (key === "fehler") { renderFehlerListe(); return; }
+
+  if (key === "fixe") {
+    const liste = (currentStatus.fixVorschlaege || []).slice().reverse();
+    document.getElementById("statModalTitel").textContent = "Fix-Vorschläge von Frank";
+    document.getElementById("statModalBody").innerHTML = liste.length === 0
+      ? '<div class="stat-detail-empty">Noch keine Fix-Vorschläge angefordert.</div>'
+      : liste.map(f => {
+          const statusLabel = { vorgeschlagen: "wartet auf deine Bestätigung", bestaetigt: "bestätigt – wird in der nächsten Claude-Code-Sitzung umgesetzt" }[f.status] || f.status;
           return '<div class="fehler-eintrag">' +
-            '<div class="log-line fehler">' + zeile + '</div>' +
-            (diagnose ? '<div class="fehler-diagnose">💡 ' + diagnose + '</div>' : '') +
+            '<div class="stat-detail-row"><div class="primary">' + escHtml(f.betroffeneDatei || "Datei unbekannt") + '</div>' +
+            '<div class="secondary">' + escHtml(f.zeitpunkt || "") + ' · ' + escHtml(statusLabel) + '</div></div>' +
+            '<div class="fehler-diagnose">📋 Ursache: ' + escHtml(f.ursache || "-") + '</div>' +
+            '<div class="fehler-diagnose">🔧 Vorschlag: ' + escHtml(f.vorschlag || "-") + '</div>' +
+            (f.status === "vorgeschlagen" ? '<button class="small-btn" style="margin-top:6px" onclick="confirmFix(\'' + f.id + '\')">Bestätigen</button>' : '') +
             '</div>';
         }).join("");
     document.getElementById("statModal").classList.add("show");
