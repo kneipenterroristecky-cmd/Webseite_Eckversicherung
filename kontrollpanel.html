@@ -145,11 +145,12 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e
 
   <div class="pnl-main">
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label">Wartet auf PW-Upload</div><div class="stat-val" id="statUploads">–</div></div>
-      <div class="stat-card warn"><div class="stat-label">Manuelle Prüfung</div><div class="stat-val" id="statManuell">–</div></div>
-      <div class="stat-card"><div class="stat-label">Offene Befunde</div><div class="stat-val" id="statBefunde">–</div></div>
-      <div class="stat-card err"><div class="stat-label">Fehler heute</div><div class="stat-val" id="statFehler">–</div></div>
+      <div class="stat-card clickable" onclick="toggleStatDetail('uploads')"><div class="stat-label">Wartet auf PW-Upload</div><div class="stat-val" id="statUploads">–</div></div>
+      <div class="stat-card warn clickable" onclick="toggleStatDetail('manuell')"><div class="stat-label">Manuelle Prüfung</div><div class="stat-val" id="statManuell">–</div></div>
+      <div class="stat-card clickable" onclick="toggleStatDetail('befunde')"><div class="stat-label">Offene Befunde</div><div class="stat-val" id="statBefunde">–</div></div>
+      <div class="stat-card err clickable" onclick="goToLogErrors()"><div class="stat-label">Fehler heute</div><div class="stat-val" id="statFehler">–</div></div>
     </div>
+    <div class="stat-detail" id="statDetail"></div>
 
     <div class="card">
       <h3>Organigramm <small>Klick auf einen Mitarbeiter für Details</small></h3>
