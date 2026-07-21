@@ -1,0 +1,7 @@
+name = "buero-panel-api"
+main = "worker.js"
+compatibility_date = "2026-07-16"
+
+[[kv_namespaces]]
+binding = "PANEL_DATA"
+id = "REPLACE_AFTER_KV_CREATE"
