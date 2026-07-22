@@ -1,7 +1,0 @@
-name = "buero-panel-api"
-main = "worker.js"
-compatibility_date = "2026-07-16"
-
-[[kv_namespaces]]
-binding = "PANEL_DATA"
-id = "54d731f9ef6e4803a78f63eb55967a97"

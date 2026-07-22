@@ -3,7 +3,6 @@ Allow: /
 
 # Interne Tools und Kampagnen
 Disallow: /dashboard.html
-Disallow: /kontrollpanel.html
 Disallow: /email-preview.html
 Disallow: /hero-badge-varianten.html
 Disallow: /foto-storyboard.html
