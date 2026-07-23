@@ -417,6 +417,7 @@ function renderDash() {
 
   var main = document.getElementById('dashMain');
   main.innerHTML =
+    '<h1 class="page-title" id="pageTitle"></h1>' +
     renderFilterBar() +
     '<div class="tab-panel" id="tab-overview">' +
       renderStats() +
