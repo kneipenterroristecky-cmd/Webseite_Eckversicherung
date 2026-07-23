@@ -26,6 +26,10 @@ PANEL_WORKER_URL = os.environ.get("PANEL_WORKER_URL", "").rstrip("/")
 PANEL_SYNC_SECRET = os.environ.get("PANEL_SYNC_SECRET", "")
 ABTEILUNG = "Herr Brandt (PR & Social Media)"
 
+WA_TOKEN = os.environ.get("WHATSAPP_ACCESS_TOKEN", "").strip()
+WA_PHONE_ID = os.environ.get("WHATSAPP_PHONE_NUMBER_ID", "").strip()
+WA_TO = os.environ.get("WHATSAPP_TO_NUMBER", "").strip()
+
 
 def melde_befund(text):
     print(f"  Befund: {text}")
@@ -40,6 +44,41 @@ def melde_befund(text):
         )
     except Exception as e:
         print(f"  (Befund konnte nicht ans Panel gemeldet werden: {e})")
+
+
+def sende_wa_sofortmeldung(probleme_liste):
+    """Informiert Daniel unverzueglich per WhatsApp - im Gegensatz zum
+    Panel-Befund (der erst bei Frau Nowaks naechster Tagespruefung landet)
+    passiert das hier sofort, noch im selben Workflow-Lauf. Braucht das
+    Template 'pr_befund' (einmalig per create-wa-template.yml anlegen)."""
+    if not all([WA_TOKEN, WA_PHONE_ID, WA_TO]):
+        print("  (WhatsApp-Sofortmeldung uebersprungen - Secrets nicht vollstaendig gesetzt.)")
+        return
+    text = "\n".join(f"• {p}" for p in probleme_liste)
+    if len(text) > 900:
+        text = text[:900] + "…"
+    try:
+        r = requests.post(
+            f"https://graph.facebook.com/v19.0/{WA_PHONE_ID}/messages",
+            headers={"Authorization": f"Bearer {WA_TOKEN}", "Content-Type": "application/json"},
+            json={
+                "messaging_product": "whatsapp",
+                "to": WA_TO,
+                "type": "template",
+                "template": {
+                    "name": "pr_befund",
+                    "language": {"code": "de"},
+                    "components": [{"type": "body", "parameters": [{"type": "text", "text": text}]}],
+                },
+            },
+            timeout=15,
+        )
+        if r.status_code >= 300:
+            print(f"  ❌ WhatsApp-Sofortmeldung fehlgeschlagen ({r.status_code}): {r.text[:300]}")
+        else:
+            print("  ✅ WhatsApp-Sofortmeldung an Daniel verschickt.")
+    except Exception as e:
+        print(f"  ❌ WhatsApp-Sofortmeldung fehlgeschlagen: {e}")
 
 
 probleme = []
