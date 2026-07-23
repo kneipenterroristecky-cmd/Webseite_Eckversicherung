@@ -111,7 +111,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f6fb;color:#1e
 
 /* Tabellen-Reihe */
 .tables-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
-.table-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden}
+.table-card{background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 10px rgba(23,45,80,.06);overflow:hidden}
 .table-card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
 .mini-table{width:100%;border-collapse:collapse}
 .mini-table th{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;padding:6px 8px;text-align:left;border-bottom:2px solid #f1f5f9}
@@ -130,7 +130,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f6fb;color:#1e
 .badge-funnel{background:#fff1f2;color:#e11d48}
 
 /* Log-Tabelle */
-.log-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
+.log-card{background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 10px rgba(23,45,80,.06);margin-bottom:20px}
 .log-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .log-header h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em}
 .log-count{font-size:12px;color:#94a3b8}
@@ -155,7 +155,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f6fb;color:#1e
 .archive-select{margin-bottom:4px}
 
 /* ── Conversion-Trichter ── */
-.funnel-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
+.funnel-card{background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 10px rgba(23,45,80,.06);margin-bottom:20px}
 .funnel-card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:20px}
 .funnel-steps{display:flex;align-items:stretch;gap:0}
 .funnel-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
@@ -172,7 +172,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f6fb;color:#1e
 .funnel-conv.bad{background:#fee2e2;color:#dc2626}
 
 /* ── Brevo Leads ── */
-.leads-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
+.leads-card{background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 10px rgba(23,45,80,.06);margin-bottom:20px}
 .leads-card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
 .leads-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
 .lead-list-card{border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px}
@@ -216,7 +216,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f6fb;color:#1e
 @media(max-width:768px){.leads-grid{grid-template-columns:1fr}}
 
 /* ── Tageszeit-Heatmap ── */
-.heatmap-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
+.heatmap-card{background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 10px rgba(23,45,80,.06);margin-bottom:20px}
 .heatmap-card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
 .heatmap-grid{display:grid;grid-template-columns:repeat(24,1fr);gap:4px}
 .heatmap-col{display:flex;flex-direction:column;align-items:center;gap:3px}
@@ -646,30 +646,57 @@ function renderStats() {
   var uAll   = uniqueSessions(allRows);
   var uToday = uniqueSessions(today);
 
-  var t7 = new Date(); t7.setDate(t7.getDate() - 7);
+  var yesterdayStr = fmtDate(shiftDays(-1));
+  var pvYesterday = countPV(allRows.filter(function (r) { return r['Datum'] === yesterdayStr; }));
+
+  var t7 = shiftDays(-7);
   var rows7 = allRows.filter(function (r) { var d = parseDate(r['Datum']); return d && d >= t7; });
   var pv7 = countPV(rows7);
+  var t14 = shiftDays(-14);
+  var rowsPrev7 = allRows.filter(function (r) { var d = parseDate(r['Datum']); return d && d >= t14 && d < t7; });
+  var pvPrev7 = countPV(rowsPrev7);
 
-  var t30 = new Date(); t30.setDate(t30.getDate() - 30);
+  var t30 = shiftDays(-30);
   var rows30 = allRows.filter(function (r) { var d = parseDate(r['Datum']); return d && d >= t30; });
   var pv30 = countPV(rows30);
+  var t60 = shiftDays(-60);
+  var rowsPrev30 = allRows.filter(function (r) { var d = parseDate(r['Datum']); return d && d >= t60 && d < t30; });
+  var pvPrev30 = countPV(rowsPrev30);
 
   var ret  = returningVisitors(allRows);
   var vtot = uniqueVisitors(allRows);
   var retPct = vtot > 0 ? Math.round(ret / vtot * 100) : 0;
 
   return '<div class="stats-grid" id="statsGrid">' +
-    statCard('Heute', pvToday + ' Aufrufe', uToday + ' Sessions', false) +
-    statCard('7 Tage', pv7 + ' Aufrufe', uniqueSessions(rows7) + ' Sessions', false) +
-    statCard('30 Tage', pv30 + ' Aufrufe', uniqueSessions(rows30) + ' Sessions', false) +
-    statCard('Gesamt', pvAll + ' Aufrufe', uAll + ' Sessions', true) +
-    statCard('Wiederkehrend', ret + ' Besucher', retPct + ' % aller Besucher', false) +
-    statCard('Neu', (vtot - ret) + ' Besucher', (100 - retPct) + ' % Erstbesucher', false) +
+    statCard('fa-calendar-day', 'Heute', pvToday + ' Aufrufe', uToday + ' Sessions', false, trend(pvToday, pvYesterday)) +
+    statCard('fa-chart-line', '7 Tage', pv7 + ' Aufrufe', uniqueSessions(rows7) + ' Sessions', false, trend(pv7, pvPrev7)) +
+    statCard('fa-chart-column', '30 Tage', pv30 + ' Aufrufe', uniqueSessions(rows30) + ' Sessions', false, trend(pv30, pvPrev30)) +
+    statCard('fa-globe', 'Gesamt', pvAll + ' Aufrufe', uAll + ' Sessions', true, null) +
+    statCard('fa-user-check', 'Wiederkehrend', ret + ' Besucher', retPct + ' % aller Besucher', false, {pct: retPct, dir: retPct >= 50 ? 'up' : 'flat'}) +
+    statCard('fa-user-plus', 'Neu', (vtot - ret) + ' Besucher', (100 - retPct) + ' % Erstbesucher', false, {pct: 100 - retPct, dir: 'flat'}) +
   '</div>';
 }
 
-function statCard(label, val, sub, accent) {
+function shiftDays(n) { var d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() + n); return d; }
+function fmtDate(d) { return ('0'+d.getDate()).slice(-2) + '.' + ('0'+(d.getMonth()+1)).slice(-2) + '.' + d.getFullYear(); }
+
+function trend(cur, prev) {
+  if (!prev) return cur > 0 ? { pct: 100, dir: 'up' } : { pct: 0, dir: 'flat' };
+  var pct = Math.round((cur - prev) / prev * 100);
+  return { pct: Math.abs(pct), dir: pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat' };
+}
+
+function statCard(icon, label, val, sub, accent, tr) {
+  var trendHtml = '';
+  if (tr) {
+    var arrow = tr.dir === 'up' ? 'fa-arrow-up' : tr.dir === 'down' ? 'fa-arrow-down' : 'fa-minus';
+    trendHtml = '<span class="trend-pill ' + tr.dir + '"><i class="fas ' + arrow + '"></i> ' + tr.pct + '%</span>';
+  }
   return '<div class="stat-card' + (accent ? ' accent' : '') + '">' +
+    '<div class="stat-card-top">' +
+      '<div class="stat-icon"><i class="fas ' + icon + '"></i></div>' +
+      trendHtml +
+    '</div>' +
     '<div class="stat-label">' + label + '</div>' +
     '<div class="stat-val">' + val + '</div>' +
     '<div class="stat-sub">' + sub + '</div>' +
