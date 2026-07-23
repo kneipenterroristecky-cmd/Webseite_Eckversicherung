@@ -73,28 +73,39 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f6fb;color:#1e
 
 /* Filter-Bar */
 .filter-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px}
-.filter-bar select,.filter-bar input[type=date],.filter-bar input[type=text]{padding:8px 12px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#fff;cursor:pointer;color:#1e293b}
+.filter-bar select,.filter-bar input[type=date],.filter-bar input[type=text]{padding:9px 13px;border:1.5px solid #eef1f6;border-radius:10px;font-size:13px;font-family:inherit;outline:none;background:#fff;cursor:pointer;color:#1e293b;box-shadow:0 1px 2px rgba(23,45,80,.04)}
 .filter-bar select:focus,.filter-bar input:focus{border-color:#1a50c8}
 .filter-search{flex:1;min-width:180px;max-width:280px}
-.filter-btn{padding:8px 16px;background:#1a50c8;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
-.filter-btn-sec{background:#fff;color:#475569;border:2px solid #e2e8f0}
+.filter-btn{padding:9px 16px;background:#1a50c8;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.filter-btn-sec{background:#fff;color:#475569;border:1.5px solid #eef1f6}
 .filter-btn-sec:hover{border-color:#94a3b8}
-.export-btn{margin-left:auto;padding:8px 16px;background:#172d50;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px}
+.export-btn{margin-left:auto;padding:9px 18px;background:#172d50;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(23,45,80,.18)}
 
 /* Stat-Karten */
-.stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:20px}
-.stat-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:22px}
+.stat-card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 10px rgba(23,45,80,.06);transition:transform .15s,box-shadow .15s}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(23,45,80,.1)}
+.stat-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.stat-icon{width:38px;height:38px;border-radius:11px;background:#eef2ff;color:#1a50c8;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.trend-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:700}
+.trend-pill.up{background:#dcfce7;color:#16a34a}
+.trend-pill.down{background:#fee2e2;color:#dc2626}
+.trend-pill.flat{background:#f1f5f9;color:#64748b}
 .stat-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:8px}
-.stat-val{font-size:28px;font-weight:800;color:#172d50;line-height:1}
+.stat-val{font-size:26px;font-weight:800;color:#172d50;line-height:1}
 .stat-sub{font-size:12px;color:#94a3b8;margin-top:4px}
-.stat-card.accent{background:#172d50}
+.stat-card.accent{background:linear-gradient(135deg,#1a50c8,#172d50)}
+.stat-card.accent .stat-icon{background:rgba(255,255,255,.15);color:#fff}
 .stat-card.accent .stat-label{color:#93c5fd}
 .stat-card.accent .stat-val{color:#fff}
 .stat-card.accent .stat-sub{color:#93c5fd}
+.stat-card.accent .trend-pill.up{background:rgba(255,255,255,.18);color:#86efac}
+.stat-card.accent .trend-pill.down{background:rgba(255,255,255,.18);color:#fca5a5}
+.stat-card.accent .trend-pill.flat{background:rgba(255,255,255,.18);color:#dbeafe}
 
 /* Charts */
-.charts-row{display:grid;grid-template-columns:1fr 320px;gap:16px;margin-bottom:20px}
-.chart-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.charts-row{display:grid;grid-template-columns:1fr 320px;gap:16px;margin-bottom:22px}
+.chart-card{background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 10px rgba(23,45,80,.06)}
 .chart-card h3{font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
 .chart-wrap{position:relative;height:220px}
 
