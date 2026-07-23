@@ -112,6 +112,9 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
           PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+          WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WHATSAPP_TO_NUMBER: ${{ secrets.WHATSAPP_TO_NUMBER }}
         run: python tools/pr_review.py
 
       - name: "Panel: Status leeren"
