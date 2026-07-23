@@ -56,6 +56,29 @@ jobs:
               }
             )
 
+          # pr_befund (Herr Brandt meldet ein Problem VOR der Freigabe-Anfrage - sofortige
+          # Info an Daniel, statt bis zu Frau Nowaks naechster Tagespruefung zu warten)
+          if "pr_befund" in templates:
+            st = templates["pr_befund"].get("status","?")
+            print(f"✅ pr_befund: {st}")
+          else:
+            print("\n⚠️  pr_befund fehlt – wird erstellt …")
+            r5 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "pr_befund",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [{
+                  "type": "BODY",
+                  "text": "⚠️ Herr Brandt hat beim PR-Team einen Befund gemeldet:\n\n{{1}}\n\nDie WhatsApp-Freigabe-Anfrage wurde deshalb zurückgehalten.",
+                  "example": {"body_text": [["Blog-Datei nicht gefunden: blog/posts/beispiel.html"]]}
+                }]
+              }
+            )
+            print(f"pr_befund erstellt: {r5.status_code} – {r5.text[:300]}")
+
           # blog_entwurf_freigabe (neuer Entwurf zur Freigabe – ersetzt die Brevo-Mail aus WF1)
           if "blog_entwurf_freigabe" in templates:
             st = templates["blog_entwurf_freigabe"].get("status","?")
