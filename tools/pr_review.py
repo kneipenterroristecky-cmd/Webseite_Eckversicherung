@@ -170,6 +170,7 @@ if probleme:
     print(f"❌ Herr Brandt hat {len(probleme)} Problem(e) gefunden - Freigabe-Anfrage an Daniel wird NICHT verschickt:")
     for p in probleme:
         melde_befund(p)
+    sende_wa_sofortmeldung(probleme)
     sys.exit(1)
 
 print("✅ Herr Brandt: keine Probleme gefunden, Entwurf wird zur Freigabe an Daniel geschickt.")
