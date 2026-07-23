@@ -544,8 +544,8 @@ function renderFilterBar() {
     }).join('');
 
   return '<div class="filter-bar">' +
-    '<input type="date" id="fFrom" title="Von" />' +
-    '<input type="date" id="fTo"   title="Bis" />' +
+    '<div class="filter-date-group"><label for="fFrom">Von</label><input type="date" id="fFrom" /></div>' +
+    '<div class="filter-date-group"><label for="fTo">Bis</label><input type="date" id="fTo" /></div>' +
     '<select id="fType">' +
       '<option value="all">Alle Typen</option>' +
       '<option value="pageview">Seitenaufruf</option>' +
