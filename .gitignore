@@ -22,3 +22,8 @@ dashboard-config.js
 
 # Wrangler lokaler Cache
 .wrangler/
+
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
