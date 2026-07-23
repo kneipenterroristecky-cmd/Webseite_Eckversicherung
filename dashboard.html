@@ -290,8 +290,17 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f6fb;color:#1e
   <div class="main-col">
     <div class="top-header">
       <h2 id="topHeaderTitle">Übersicht</h2>
+      <div class="header-search">
+        <i class="fas fa-magnifying-glass"></i>
+        <input type="text" id="headerSearch" placeholder="Protokoll durchsuchen …" />
+      </div>
       <div class="dash-nav-right">
         <div class="dash-nav-live"><span></span>Live</div>
+        <button class="header-bell" title="Benachrichtigungen"><i class="fas fa-bell"></i><span class="dot" id="headerBellDot" style="display:none"></span></button>
+        <div class="header-profile">
+          <div class="header-profile-avatar">DE</div>
+          <div class="header-profile-text"><strong>Daniel Eck</strong><span>Versicherungsmakler</span></div>
+        </div>
       </div>
     </div>
     <div class="dash-main" id="dashMain">
