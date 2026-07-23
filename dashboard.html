@@ -259,19 +259,33 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e
 
 <!-- ── DASHBOARD ── -->
 <div id="dashWrap">
-  <nav class="dash-nav">
-    <div class="dash-nav-left">
-      <div class="dash-nav-icon"><i class="fas fa-chart-line"></i></div>
-      <h2>Analytics &nbsp;·&nbsp; Daniel Eck – Versicherungsmakler</h2>
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon"><i class="fas fa-shield-halved"></i></div>
+      <div class="sidebar-logo-text">Daniel Eck<span>Versicherungsmakler</span></div>
     </div>
-    <div class="dash-nav-right">
-      <div class="dash-nav-live"><span></span>Live</div>
+    <div class="sidebar-section-label">Menü</div>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <button class="sidebar-item" data-tab="overview" onclick="switchTab('overview')"><i class="fas fa-gauge"></i> Übersicht</button>
+      <button class="sidebar-item" data-tab="stats" onclick="switchTab('stats')"><i class="fas fa-chart-pie"></i> Statistiken</button>
+      <button class="sidebar-item" data-tab="log" onclick="switchTab('log')"><i class="fas fa-list-ul"></i> Besucherprotokoll</button>
+      <button class="sidebar-item" data-tab="leads" onclick="switchTab('leads')"><i class="fas fa-envelope"></i> Kontakte</button>
+    </nav>
+    <div class="sidebar-footer">
       <button class="dash-logout" onclick="doLogout()"><i class="fas fa-right-from-bracket"></i> Abmelden</button>
     </div>
-  </nav>
+  </aside>
 
-  <div class="dash-main" id="dashMain">
-    <div class="loading"><div class="spinner"></div> Daten werden geladen …</div>
+  <div class="main-col">
+    <div class="top-header">
+      <h2 id="topHeaderTitle">Übersicht</h2>
+      <div class="dash-nav-right">
+        <div class="dash-nav-live"><span></span>Live</div>
+      </div>
+    </div>
+    <div class="dash-main" id="dashMain">
+      <div class="loading"><div class="spinner"></div> Daten werden geladen …</div>
+    </div>
   </div>
 </div>
 
