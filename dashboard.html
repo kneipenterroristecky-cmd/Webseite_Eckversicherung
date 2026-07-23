@@ -483,6 +483,26 @@ function renderDash() {
   renderLogRows();
   loadBrevoData();
   switchTab(currentTab);
+  bindHeaderSearch();
+  updateBellDot();
+}
+
+function bindHeaderSearch() {
+  var hs = document.getElementById('headerSearch');
+  if (!hs) return;
+  hs.addEventListener('input', function () {
+    var fs = document.getElementById('fSearch');
+    if (fs) fs.value = hs.value;
+    applyFilters(); renderLogRows();
+    if (hs.value && currentTab !== 'log') switchTab('log');
+  });
+}
+
+function updateBellDot() {
+  var dot = document.getElementById('headerBellDot');
+  if (!dot) return;
+  var todayCount = countPV(allRows.filter(function (r) { return r['Datum'] === todayStr(); }));
+  dot.style.display = todayCount > 0 ? 'block' : 'none';
 }
 
 function switchTab(name) {
