@@ -101,6 +101,26 @@ jobs:
             sleep 15
           done
 
+      - name: "Panel: Herr Brandt prüft den Entwurf"
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py brandt "prüft Text, Bilder und Meta-Daten vor der Freigabe-Anfrage"
+
+      - name: Qualitätsprüfung (Herr Brandt)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/pr_review.py
+
+      - name: "Panel: Status leeren"
+        if: always()
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py clear
+
       - name: Metadaten für Benachrichtigung vorbereiten
         run: |
           TITLE=$(python3 -c "import json; m=json.load(open('tools/draft_meta.json')); print(m['title'])")
