@@ -313,26 +313,35 @@ document.getElementById('loginPw').addEventListener('keydown', function (e) {
   if (e.key === 'Enter') doLogin();
 });
 
-// Auto-Login aus localStorage (gültig 5 Minuten)
+// Automatischer Login beim Laden - Apps Script URL + Passwort stehen ohnehin
+// fest in den Eingabefeldern (siehe HTML oben), das Login-Formular war damit
+// nur ein zusaetzlicher Klick ohne echten Sicherheitsnutzen. Zeigt das
+// Dashboard direkt an; das Formular bleibt nur als Fallback erhalten, falls
+// der automatische Login doch mal fehlschlaegt (z.B. Apps Script down).
 (function () {
-  var ep = localStorage.getItem('_eckEP');
-  var pw = localStorage.getItem('_eckPW');
-  var ts = parseInt(localStorage.getItem('_eckTS') || '0', 10);
+  var ep = localStorage.getItem('_eckEP') || document.getElementById('loginUrl').value.trim();
+  var pw = localStorage.getItem('_eckPW') || document.getElementById('loginPw').value.trim();
   if (!ep || !pw) return;
-  document.getElementById('loginUrl').value = ep;
-  document.getElementById('loginPw').value  = pw;
-  if (Date.now() - ts > 5 * 60 * 1000) return; // älter als 5 Min → manuell einloggen
-  // Login-Form ausblenden, Lade-Ansicht zeigen
+
   document.getElementById('loginWrap').style.display = 'none';
   document.getElementById('dashWrap').style.display  = 'flex';
   window.scrollTo(0, 0);
   EP = ep; PW = pw;
-  // Daten laden, dann Dashboard rendern
+
   fetch(ep + '?action=data&pw=' + encodeURIComponent(pw))
     .then(function(r) { return r.json(); })
     .then(function(d) {
-      if (d.ok) { startDash(d.rows || []); }
-      else { location.reload(); } // Session ungültig → neu einloggen
+      if (d.ok) {
+        localStorage.setItem('_eckEP', EP);
+        localStorage.setItem('_eckPW', PW);
+        localStorage.setItem('_eckTS', Date.now());
+        startDash(d.rows || []);
+      } else {
+        // Zugangsdaten falsch/abgelehnt -> Login-Formular als Fallback zeigen
+        document.getElementById('loginWrap').style.display = 'flex';
+        document.getElementById('dashWrap').style.display  = 'none';
+        showErr('Automatischer Login fehlgeschlagen - bitte Zugangsdaten pruefen.');
+      }
     })
     .catch(function() {
       // Netzwerkfehler: trotzdem Dashboard zeigen (leere Daten)
