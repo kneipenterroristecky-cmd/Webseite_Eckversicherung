@@ -392,7 +392,7 @@ function reload() {
     .then(function (d) {
       if (d.ok) {
         allRows = d.rows || [];
-        localStorage.setItem('_eckTS', Date.now()); // Session verlängern
+        lsSet('_eckTS', Date.now()); // Session verlängern
         applyFilters();
         refreshStats();
         renderLogRows();
