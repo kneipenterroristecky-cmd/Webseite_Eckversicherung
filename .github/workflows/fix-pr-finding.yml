@@ -1,0 +1,152 @@
+name: 4 – Verursacher behebt PR-Befund (Nadine)
+
+on:
+  workflow_dispatch:
+    inputs:
+      finding:
+        description: 'Befund von Herrn Brandt, den Nadine beheben soll (kommt vom Panel-Button "Nadine soll ändern")'
+        required: true
+        type: string
+
+jobs:
+  beheben:
+    name: Nadine überarbeitet, Herr Brandt prüft erneut
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Abhängigkeiten installieren
+        run: pip install anthropic requests
+
+      - name: "Panel: Nadine startet"
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py nadine "überarbeitet den Text laut Rückmeldung von Herrn Brandt"
+
+      - name: Entwurf überarbeiten
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FINDING: ${{ inputs.finding }}
+        run: python tools/fix_post.py
+
+      - name: "Panel: Status leeren"
+        if: always()
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py clear
+
+      - name: Änderungen committen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git stash --include-untracked
+            STASHED=1
+          else
+            STASHED=0
+          fi
+          git pull --rebase origin master
+          if [ "$STASHED" -eq 1 ]; then
+            git stash pop
+          fi
+          git add blog/posts/ tools/draft_meta.json
+          TITLE=$(python3 -c "import json; print(json.load(open('tools/draft_meta.json'))['title'])")
+          git diff --staged --quiet || git commit -m "Entwurf überarbeitet (Befund behoben): $TITLE"
+          for i in 1 2 3 4 5; do
+            git push && break
+            echo "Push-Versuch $i fehlgeschlagen, warte 15 Sekunden..."
+            sleep 15
+          done
+
+      - name: "Panel: Herr Brandt prüft erneut"
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py brandt "prüft den überarbeiteten Entwurf erneut"
+
+      - name: Qualitätsprüfung (Herr Brandt)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+          WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WHATSAPP_TO_NUMBER: ${{ secrets.WHATSAPP_TO_NUMBER }}
+        run: python tools/pr_review.py
+
+      - name: "Panel: Status leeren"
+        if: always()
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py clear
+
+      - name: Freigabe-Nachricht per WhatsApp senden
+        env:
+          WA_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WA_TO: ${{ secrets.WHATSAPP_TO_NUMBER }}
+          APPROVE_WORKER_URL: ${{ secrets.APPROVE_WORKER_URL }}
+          APPROVE_TOKEN: ${{ secrets.APPROVE_TOKEN }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, json, requests as req, sys
+
+          meta    = json.load(open("tools/draft_meta.json", encoding="utf-8"))
+          title   = meta.get("title", "")
+          date_de = meta.get("date_de", "")
+
+          repo        = os.environ.get("GITHUB_REPOSITORY", "")
+          worker_url  = os.environ.get("APPROVE_WORKER_URL", "").strip().rstrip("/")
+          approve_tok = os.environ.get("APPROVE_TOKEN", "").strip()
+          if worker_url and approve_tok:
+            approve_url      = f"{worker_url}/approve?token={approve_tok}"
+            change_url       = f"{worker_url}/change?token={approve_tok}"
+            suggest_img_url  = f"{worker_url}/suggest-image?token={approve_tok}"
+          else:
+            approve_url      = f"https://github.com/{repo}/actions/workflows/publish-blog-post.yml"
+            change_url       = f"https://github.com/{repo}/actions/workflows/request-changes.yml"
+            suggest_img_url  = change_url
+
+          token    = os.environ.get("WA_TOKEN", "").strip()
+          phone_id = os.environ.get("WA_PHONE_ID", "").strip()
+          wa_to    = os.environ.get("WA_TO", "").strip()
+          if not all([token, phone_id, wa_to]):
+            print("❌ Fehlende WhatsApp-Secrets!"); sys.exit(1)
+
+          r = req.post(
+            f"https://graph.facebook.com/v19.0/{phone_id}/messages",
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+            json={
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "template",
+              "template": {
+                "name": "blog_entwurf_aktualisiert",
+                "language": {"code": "de"},
+                "components": [{
+                  "type": "body",
+                  "parameters": [
+                    {"type": "text", "text": title},
+                    {"type": "text", "text": date_de},
+                    {"type": "text", "text": approve_url},
+                    {"type": "text", "text": suggest_img_url},
+                    {"type": "text", "text": change_url},
+                  ]
+                }]
+              }
+            })
+          print(f"WhatsApp Status: {r.status_code}")
+          if r.status_code >= 300:
+            print(f"Fehler: {r.text[:500]}")
+            sys.exit(1)
+          PYEOF
