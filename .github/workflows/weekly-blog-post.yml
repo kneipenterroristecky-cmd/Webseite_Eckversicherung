@@ -101,13 +101,7 @@ jobs:
             sleep 15
           done
 
-      - name: "Panel: Herr Brandt prüft den Entwurf"
-        env:
-          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
-          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
-        run: python tools/panel_heartbeat.py brandt "prüft Text, Bilder und Meta-Daten vor der Freigabe-Anfrage"
-
-      - name: Qualitätsprüfung (Herr Brandt)
+      - name: Regelkreis - Herr Brandt prüft, Nadine bessert bei Bedarf nach (max. 3 Versuche)
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
@@ -115,7 +109,7 @@ jobs:
           WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           WHATSAPP_TO_NUMBER: ${{ secrets.WHATSAPP_TO_NUMBER }}
-        run: python tools/pr_review.py
+        run: python tools/pr_loop.py
 
       - name: "Panel: Status leeren"
         if: always()
@@ -123,6 +117,29 @@ jobs:
           PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
           PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
         run: python tools/panel_heartbeat.py clear
+
+      - name: Änderungen aus der Nachbesserung committen
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git stash --include-untracked
+            STASHED=1
+          else
+            STASHED=0
+          fi
+          git pull --rebase origin master
+          if [ "$STASHED" -eq 1 ]; then
+            git stash pop
+          fi
+          git add blog/posts/ tools/draft_meta.json
+          git diff --staged --quiet || git commit -m "Entwurf von Herrn Brandts Regelkreis nachgebessert"
+          for i in 1 2 3 4 5; do
+            git push && break
+            echo "Push-Versuch $i fehlgeschlagen, warte 15 Sekunden..."
+            sleep 15
+          done
 
       - name: Metadaten für Benachrichtigung vorbereiten
         run: |
