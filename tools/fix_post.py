@@ -83,7 +83,7 @@ raw = resp.content[0].text
 
 
 def extract_section(name, text):
-    m = re.search(rf'==={name}===\s*(.*?)\s*(?===[A-Z]+===)', text, re.DOTALL)
+    m = re.search(rf'==={name}===\s*(.*?)\s*(?====[A-Z]+===)', text, re.DOTALL)
     return m.group(1).strip() if m else None
 
 
