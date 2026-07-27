@@ -271,6 +271,20 @@ var chartLine   = null;
 var chartDonut  = null;
 
 // ================================================================
+//  Sicherer localStorage-Zugriff
+// ================================================================
+// Das Dashboard laeuft auch eingebettet als Cross-Origin-<iframe> im
+// Buero-Kontrollpanel (github.io-Seite in einer workers.dev-Seite). In diesem
+// Kontext blockieren manche Browser (Storage-Partitionierung/Tracking-Schutz)
+// den Zugriff auf localStorage komplett - ein direkter Aufruf wirft dann eine
+// Exception statt null zurueckzugeben, was den automatischen Login weiter
+// unten sofort abbrechen liess (Login-Formular blieb sichtbar). Deshalb hier
+// ueberall ueber diese Wrapper statt direkt auf localStorage zugreifen.
+function lsGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+function lsSet(key, val) { try { localStorage.setItem(key, val); } catch (e) {} }
+function lsRemove(key) { try { localStorage.removeItem(key); } catch (e) {} }
+
+// ================================================================
 //  Login
 // ================================================================
 function doLogin() {
@@ -290,9 +304,9 @@ function doLogin() {
         return;
       }
       EP = url; PW = pw;
-      localStorage.setItem('_eckEP', EP);
-      localStorage.setItem('_eckPW', PW);
-      localStorage.setItem('_eckTS', Date.now());
+      lsSet('_eckEP', EP);
+      lsSet('_eckPW', PW);
+      lsSet('_eckTS', Date.now());
       startDash(d.rows || []);
     })
     .catch(function (err) {
@@ -319,8 +333,8 @@ document.getElementById('loginPw').addEventListener('keydown', function (e) {
 // Dashboard direkt an; das Formular bleibt nur als Fallback erhalten, falls
 // der automatische Login doch mal fehlschlaegt (z.B. Apps Script down).
 (function () {
-  var ep = localStorage.getItem('_eckEP') || document.getElementById('loginUrl').value.trim();
-  var pw = localStorage.getItem('_eckPW') || document.getElementById('loginPw').value.trim();
+  var ep = lsGet('_eckEP') || document.getElementById('loginUrl').value.trim();
+  var pw = lsGet('_eckPW') || document.getElementById('loginPw').value.trim();
   if (!ep || !pw) return;
 
   document.getElementById('loginWrap').style.display = 'none';
@@ -332,9 +346,9 @@ document.getElementById('loginPw').addEventListener('keydown', function (e) {
     .then(function(r) { return r.json(); })
     .then(function(d) {
       if (d.ok) {
-        localStorage.setItem('_eckEP', EP);
-        localStorage.setItem('_eckPW', PW);
-        localStorage.setItem('_eckTS', Date.now());
+        lsSet('_eckEP', EP);
+        lsSet('_eckPW', PW);
+        lsSet('_eckTS', Date.now());
         startDash(d.rows || []);
       } else {
         // Zugangsdaten falsch/abgelehnt -> Login-Formular als Fallback zeigen
@@ -350,9 +364,9 @@ document.getElementById('loginPw').addEventListener('keydown', function (e) {
 })();
 
 function doLogout() {
-  localStorage.removeItem('_eckEP');
-  localStorage.removeItem('_eckPW');
-  localStorage.removeItem('_eckTS');
+  lsRemove('_eckEP');
+  lsRemove('_eckPW');
+  lsRemove('_eckTS');
   location.reload();
 }
 
