@@ -165,6 +165,8 @@ jobs:
           meta    = json.load(open("tools/draft_meta.json", encoding="utf-8"))
           title   = meta.get("title", "")
           date_de = meta.get("date_de", "")
+          summary = meta.get("social_summary", "")[:300].replace("\n", " ").strip()
+          og_image = meta.get("og_image", "")
 
           repo        = os.environ.get("GITHUB_REPOSITORY", "")
           worker_url  = os.environ.get("APPROVE_WORKER_URL", "").strip().rstrip("/")
@@ -187,28 +189,58 @@ jobs:
           if not all([token, phone_id, wa_to]):
             print("❌ Fehlende WhatsApp-Secrets!"); sys.exit(1)
 
-          r = req.post(
-            f"https://graph.facebook.com/v19.0/{phone_id}/messages",
-            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
-            json={
+          msg_api = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          auth_headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+
+          # Vorschau-Bild vorab senden (bereits freigegebenes Template, kein neues Approval noetig) –
+          # per "link" statt Upload, da og_image bereits eine oeffentliche Unsplash-URL ist.
+          if og_image:
+            r_img = req.post(msg_api, headers=auth_headers, json={
               "messaging_product": "whatsapp",
               "to": wa_to,
               "type": "template",
               "template": {
-                "name": "blog_entwurf_freigabe",
+                "name": "social_bild",
                 "language": {"code": "de"},
-                "components": [{
-                  "type": "body",
-                  "parameters": [
-                    {"type": "text", "text": title},
-                    {"type": "text", "text": date_de},
-                    {"type": "text", "text": approve_url},
-                    {"type": "text", "text": suggest_img_url},
-                    {"type": "text", "text": change_url},
-                  ]
-                }]
+                "components": [{"type": "header", "parameters": [
+                  {"type": "image", "image": {"link": og_image}}
+                ]}]
               }
             })
+            print(f"Vorschau-Bild Status: {r_img.status_code}")
+            if r_img.status_code >= 300:
+              print(f"  (kein Abbruch) Fehler: {r_img.text[:300]}")
+
+          def sende_freigabe(template_name, mit_summary):
+            params = [
+              {"type": "text", "text": title},
+              {"type": "text", "text": date_de},
+            ]
+            if mit_summary:
+              params.append({"type": "text", "text": summary})
+            params += [
+              {"type": "text", "text": approve_url},
+              {"type": "text", "text": suggest_img_url},
+              {"type": "text", "text": change_url},
+            ]
+            return req.post(msg_api, headers=auth_headers, json={
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "template",
+              "template": {
+                "name": template_name,
+                "language": {"code": "de"},
+                "components": [{"type": "body", "parameters": params}]
+              }
+            })
+
+          # Neues Template (mit FB/IG-Text) versuchen, bei Meta evtl. noch nicht freigegeben
+          # (1-2 Std. Pruefzeit) -> dann automatisch auf das alte Template zurueckfallen.
+          r = sende_freigabe("blog_entwurf_freigabe_v2", mit_summary=True)
+          if r.status_code >= 300:
+            print(f"blog_entwurf_freigabe_v2 noch nicht nutzbar ({r.status_code}: {r.text[:200]}) – falle auf v1 zurueck.")
+            r = sende_freigabe("blog_entwurf_freigabe", mit_summary=False)
+
           print(f"WhatsApp Status: {r.status_code}")
           if r.status_code >= 300:
             print(f"Fehler: {r.text[:500]}")
