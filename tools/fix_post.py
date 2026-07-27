@@ -64,8 +64,15 @@ Herr Brandt (Abteilungsleitung PR & Social Media) hat bei der Pruefung folgenden
 
 Korrigiere GENAU das, was der Befund beschreibt - alles andere (Stil, Laenge, uebrige Inhalte) bleibt unveraendert. Halte dich an dieselben Regeln wie beim ersten Entwurf: Ich-Perspektive, Sie-Anrede (immer gross: Sie/Ihnen/Ihre), keine Behauptung jahrzehntelanger eigener Erfahrung, Artikeltext nur als h2/p/ul/li-HTML-Fragment (keine komplette Seite, kein html/head/body).
 
-Antworte NUR als JSON, kein Text davor/danach:
-{{"content_html": "...", "social_summary": "...", "instagram_caption": "..."}}"""
+Antworte in GENAU diesem Format (kein JSON, kein Markdown-Codeblock, nichts davor/danach), auch wenn ein Abschnitt inhaltlich unveraendert bleibt - dann diesen Abschnitt einfach identisch wiederholen:
+
+===ARTIKELTEXT===
+(hier der vollstaendige, korrigierte Artikeltext als HTML-Fragment)
+===FACEBOOK===
+(hier der Facebook-Text, eine Zeile)
+===INSTAGRAM===
+(hier die Instagram-Caption)
+===ENDE==="""
 
 resp = client.messages.create(
     model="claude-opus-4-5",
@@ -73,26 +80,30 @@ resp = client.messages.create(
     messages=[{"role": "user", "content": prompt}],
 )
 raw = resp.content[0].text
-match = re.search(r'\{.*\}', raw, re.DOTALL)
-if not match:
-    print("Fehler: keine JSON-Antwort erhalten.")
-    print(raw[:500])
-    sys.exit(1)
-ergebnis = json.loads(match.group())
 
-new_content_html = (ergebnis.get("content_html") or "").strip()
+
+def extract_section(name, text):
+    m = re.search(rf'==={name}===\s*(.*?)\s*(?===[A-Z]+===)', text, re.DOTALL)
+    return m.group(1).strip() if m else None
+
+
+new_content_html = extract_section("ARTIKELTEXT", raw)
+new_facebook = extract_section("FACEBOOK", raw)
+new_instagram = extract_section("INSTAGRAM", raw)
+
 if not new_content_html:
-    print("Fehler: leerer Artikeltext in der Antwort.")
+    print("Fehler: kein Artikeltext im erwarteten Format erhalten.")
+    print(raw[:500])
     sys.exit(1)
 
 blog_html = blog_html[:content_start] + "\n\n    " + new_content_html + "\n\n    " + blog_html[end_idx:]
 with open(blog_pfad, "w", encoding="utf-8") as f:
     f.write(blog_html)
 
-if ergebnis.get("social_summary"):
-    meta["social_summary"] = ergebnis["social_summary"].strip()
-if ergebnis.get("instagram_caption"):
-    meta["instagram_caption"] = ergebnis["instagram_caption"].strip()
+if new_facebook:
+    meta["social_summary"] = new_facebook
+if new_instagram:
+    meta["instagram_caption"] = new_instagram
 with open("tools/draft_meta.json", "w", encoding="utf-8") as f:
     json.dump(meta, f, ensure_ascii=False, indent=2)
 
