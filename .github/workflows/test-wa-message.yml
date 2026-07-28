@@ -78,19 +78,20 @@ jobs:
             else:
               print(f"Vorschau-Bild Download fehlgeschlagen: {img_r.status_code}")
 
-          # 2) Info-Text: neues Template mit 5 getrennten Feldern versuchen, sonst Fallback
+          # 2) Info-Text: neues Template mit 6 getrennten Feldern versuchen, sonst Fallback
           r_info = req.post(msg_api, headers=auth_headers, json={
             "messaging_product": "whatsapp", "to": wa_to, "type": "template",
-            "template": {"name": "blog_entwurf_info_v2", "language": {"code": "de"},
+            "template": {"name": "blog_entwurf_info_v3", "language": {"code": "de"},
               "components": [{"type": "body", "parameters": [
                 {"type": "text", "text": title},
                 {"type": "text", "text": date_de},
                 {"type": "text", "text": excerpt or "(keine Zusammenfassung verfügbar)"},
+                {"type": "text", "text": image_text or "(kein Bildtext verfügbar)"},
                 {"type": "text", "text": fb_preview or "(kein Facebook-Text verfügbar)"},
                 {"type": "text", "text": ig_preview or "(kein Instagram-Text verfügbar)"},
               ]}]}
           })
-          print(f"Info-Nachricht (v2, 5 getrennte Felder) Status: {r_info.status_code}")
+          print(f"Info-Nachricht (v3, 6 getrennte Felder) Status: {r_info.status_code}")
           if r_info.status_code >= 300:
             print(f"  {r_info.text[:300]}")
             print("  -> falle auf altes kombiniertes Template zurueck …")
