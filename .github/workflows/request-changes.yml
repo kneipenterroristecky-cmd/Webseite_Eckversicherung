@@ -245,7 +245,7 @@ jobs:
           meta    = json.load(open("tools/draft_meta.json", encoding="utf-8"))
           title   = meta.get("title", "")
           date_de = meta.get("date_de", "")
-          summary = meta.get("social_summary", "")[:300].replace("\n", " ").strip()
+          summary = (meta.get("blog_excerpt") or meta.get("social_summary", ""))[:300].replace("\n", " ").strip()
           og_image = meta.get("og_image", "")
 
           repo        = os.environ.get("GITHUB_REPOSITORY", "")
