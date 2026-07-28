@@ -208,11 +208,18 @@ WICHTIG: Die Social-Media-Texte müssen inhaltlich EXAKT zum folgenden Artikel p
 Artikelinhalt:
 {content_html}
 
+Facebook und Instagram haben unterschiedliches Publikum – die beiden Texte unten sollen sich
+spürbar unterscheiden, nicht nur in der Länge:
+- Facebook-Publikum ist im Schnitt älter, sachlicher, will direkt den konkreten Nutzen/die Zahl sehen.
+- Instagram-Publikum ist im Schnitt jünger, visueller, reagiert besser auf einen persönlichen,
+  bildhaften Einstiegssatz statt auf trockene Fakten zuerst.
+
 Ausgabe als JSON (keine weiteren Erklärungen):
 {{
   "title": "Überschrift max 60 Zeichen",
-  "social_summary": "Facebook-Post: max 120 Zeichen, Ich-Form, ein einziger Satz mit Mehrwert. IMMER Sie/Ihnen/Ihre (niemals du/dich)",
-  "instagram_caption": "Instagram-Caption mit echtem Mehrwert – da kein direkter Link möglich ist, muss der Text alleine überzeugen. Aufbau: 1 starker Einstiegssatz, dann 3-4 konkrete Punkte oder Tipps aus dem Artikel (als kurze Absätze mit Zeilenumbrüchen), abschließend ein Satz der zum Handeln einlädt (z.B. 'Schreiben Sie mir einfach.' oder 'Ich schaue das gerne für Sie durch.'). Danach Leerzeile + 7-10 passende Hashtags. Gesamtlänge: 600-900 Zeichen. IMMER Sie/Ihnen/Ihre (niemals du/dich). Hashtags NUR korrekte deutsche Wörter, keine Abkürzungen. z.B. #Versicherung #Elementarschutz #Schmalkalden #Versicherungsmakler",
+  "blog_excerpt": "Sachlicher 2-3 Satz Auszug, der wiedergibt worum es im Artikel inhaltlich geht (keine Marketing-Anmache, sondern eine ehrliche Kurzfassung des Inhalts, wie ein Klappentext). Max 220 Zeichen. IMMER Sie/Ihnen/Ihre (niemals du/dich)",
+  "social_summary": "Facebook-Post: max 120 Zeichen, Ich-Form, ein einziger Satz mit Mehrwert – sachlich, konkreter Nutzen/Zahl zuerst. IMMER Sie/Ihnen/Ihre (niemals du/dich)",
+  "instagram_caption": "Instagram-Caption mit echtem Mehrwert – da kein direkter Link möglich ist, muss der Text alleine überzeugen. Aufbau: 1 starker, persönlicher/bildhafter Einstiegssatz (bewusst anders als der Facebook-Text formuliert), dann 3-4 konkrete Punkte oder Tipps aus dem Artikel (als kurze Absätze mit Zeilenumbrüchen), abschließend ein Satz der zum Handeln einlädt (z.B. 'Schreiben Sie mir einfach.' oder 'Ich schaue das gerne für Sie durch.'). Danach Leerzeile + 7-10 passende Hashtags. Gesamtlänge: 600-900 Zeichen. IMMER Sie/Ihnen/Ihre (niemals du/dich). Hashtags NUR korrekte deutsche Wörter, keine Abkürzungen. z.B. #Versicherung #Elementarschutz #Schmalkalden #Versicherungsmakler",
   "slug": "url-freundlicher-dateiname-ohne-umlaute-nur-bindestriche",
   "ig_before": "Schlagzeile vor dem Highlight, max 20 Zeichen, kann leer sein",
   "ig_highlight": "Ein markantes Wort oder kurze Phrase die blau hervorgehoben wird, max 15 Zeichen",
