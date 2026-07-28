@@ -246,10 +246,12 @@ jobs:
           title   = meta.get("title", "")
           date_de = meta.get("date_de", "")
           # WhatsApp-Template-Parameter duerfen KEINE Zeilenumbrueche enthalten (Meta lehnt den
-          # Versand sonst mit Fehler 132018 ab) - deshalb hier alles auf einer Zeile mit " • " getrennt.
-          excerpt    = meta.get("blog_excerpt", "")[:150].replace("\n", " ").strip()
-          fb_preview = meta.get("social_summary", "")[:120].replace("\n", " ").strip()
-          ig_preview = meta.get("instagram_caption", "").split("\n\n")[0][:120].replace("\n", " ").strip()
+          # Versand sonst mit Fehler 132018 ab) - deshalb excerpt/fb/ig als 3 GETRENNTE Parameter
+          # (jeweils eigene Zeile im STATISCHEN Vorlagentext, nicht im Parameterwert selbst).
+          excerpt    = meta.get("blog_excerpt", "")[:220].replace("\n", " ").strip()
+          fb_preview = meta.get("social_summary", "")[:180].replace("\n", " ").strip()
+          ig_preview = meta.get("instagram_caption", "").split("\n\n")[0][:180].replace("\n", " ").strip()
+          # Fallback fuer das alte kombinierte Template, falls blog_entwurf_info_v2 noch nicht freigegeben ist.
           summary = f"📄 {excerpt} • 📘 FB: {fb_preview} • 📸 IG: {ig_preview}"[:420]
           og_image = meta.get("og_image", "")
 
