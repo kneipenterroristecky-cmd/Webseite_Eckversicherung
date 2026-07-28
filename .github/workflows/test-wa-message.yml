@@ -42,9 +42,10 @@ jobs:
           meta = json.load(open("tools/draft_meta.json", encoding="utf-8"))
           title   = "[TEST] " + meta.get("title", "")
           date_de = meta.get("date_de", "")
-          excerpt    = trunc(meta.get("blog_excerpt", ""), 220)
-          fb_preview = trunc(meta.get("social_summary", ""), 180)
-          ig_preview = trunc(meta.get("instagram_caption", "").split("\n\n")[0], 180)
+          excerpt    = trunc(meta.get("blog_excerpt", ""), 160)
+          image_text = trunc(meta.get("wa_image_text", ""), 80)
+          fb_preview = trunc(meta.get("social_summary", ""), 170)
+          ig_preview = trunc(meta.get("instagram_caption", "").split("\n\n")[0], 170)
           summary = f"📘 Facebook: {fb_preview} • 📸 Instagram: {ig_preview}"
           og_image = meta.get("og_image", "")
 
