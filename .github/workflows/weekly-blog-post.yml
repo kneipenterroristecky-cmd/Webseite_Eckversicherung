@@ -253,12 +253,58 @@ jobs:
               }
             })
 
-          # Neues Template (mit FB/IG-Text) versuchen, bei Meta evtl. noch nicht freigegeben
-          # (1-2 Std. Pruefzeit) -> dann automatisch auf das alte Template zurueckfallen.
-          r = sende_freigabe("blog_entwurf_freigabe_v2", mit_summary=True)
-          if r.status_code >= 300:
-            print(f"blog_entwurf_freigabe_v2 noch nicht nutzbar ({r.status_code}: {r.text[:200]}) – falle auf v1 zurueck.")
-            r = sende_freigabe("blog_entwurf_freigabe", mit_summary=False)
+          def sende_aktion_button(label, url_suffix):
+            return req.post(msg_api, headers=auth_headers, json={
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "template",
+              "template": {
+                "name": "blog_aktion",
+                "language": {"code": "de"},
+                "components": [
+                  {"type": "body", "parameters": [{"type": "text", "text": label}]},
+                  {"type": "button", "sub_type": "url", "index": "0",
+                   "parameters": [{"type": "text", "text": url_suffix}]}
+                ]
+              }
+            })
+
+          # Neues Template (Info-Text ohne Links + 3 eigene Nachrichten mit echtem Button)
+          # versuchen, bei Meta evtl. noch nicht freigegeben -> dann auf die bewaehrte
+          # Text-Link-Version zurueckfallen, damit immer ein Weg zum Handeln da ist.
+          r_info = req.post(msg_api, headers=auth_headers, json={
+            "messaging_product": "whatsapp",
+            "to": wa_to,
+            "type": "template",
+            "template": {
+              "name": "blog_entwurf_info",
+              "language": {"code": "de"},
+              "components": [{"type": "body", "parameters": [
+                {"type": "text", "text": title},
+                {"type": "text", "text": date_de},
+                {"type": "text", "text": summary},
+              ]}]
+            }
+          })
+          print(f"Info-Nachricht Status: {r_info.status_code}")
+
+          if r_info.status_code < 300:
+            for label, suffix in [
+              ("✅ Freigeben & veröffentlichen", f"approve?token={approve_tok}"),
+              ("🖼️ Neues Bild vorschlagen", f"suggest-image?token={approve_tok}"),
+              ("✏️ Änderung beantragen (Titel/Text ändern)", f"change?token={approve_tok}"),
+            ]:
+              r_btn = sende_aktion_button(label, suffix)
+              print(f"Aktion '{label}': {r_btn.status_code}")
+              if r_btn.status_code >= 300:
+                print(f"  Fehler: {r_btn.text[:200]}")
+            r = r_info
+          else:
+            print(f"  blog_entwurf_info noch nicht nutzbar: {r_info.text[:200]} – falle auf altes Template zurueck.")
+            r = sende_freigabe("blog_entwurf_freigabe_v2", mit_summary=True)
+            if r.status_code >= 300:
+              print(f"blog_entwurf_freigabe_v2 noch nicht nutzbar ({r.status_code}: {r.text[:200]}) – falle auf v1 zurueck.")
+              r = sende_freigabe("blog_entwurf_freigabe", mit_summary=False)
 
           print(f"WhatsApp Status: {r.status_code}")
           if r.status_code >= 300:
