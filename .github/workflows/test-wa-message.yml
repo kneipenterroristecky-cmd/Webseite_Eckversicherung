@@ -30,15 +30,23 @@ jobs:
           if not all([token, phone_id, wa_to]):
             print("❌ Fehlende WhatsApp-Secrets!"); sys.exit(1)
 
+          def trunc(s, n):
+            s = (s or "").replace("\n", " ").strip()
+            if len(s) <= n:
+              return s
+            cut = s[:n].rsplit(" ", 1)[0].rstrip(",.;:–-")
+            return cut + "…"
+
           if not os.path.exists("tools/draft_meta.json"):
             print("❌ Kein tools/draft_meta.json vorhanden - erst Workflow 1 laufen lassen."); sys.exit(1)
           meta = json.load(open("tools/draft_meta.json", encoding="utf-8"))
           title   = "[TEST] " + meta.get("title", "")
           date_de = meta.get("date_de", "")
-          excerpt    = meta.get("blog_excerpt", "")[:220].replace("\n", " ").strip()
-          fb_preview = meta.get("social_summary", "")[:180].replace("\n", " ").strip()
-          ig_preview = meta.get("instagram_caption", "").split("\n\n")[0][:180].replace("\n", " ").strip()
-          summary = f"📄 {excerpt} • 📘 FB: {fb_preview} • 📸 IG: {ig_preview}"[:420]
+          excerpt    = trunc(meta.get("blog_excerpt", ""), 220)
+          fb_preview = trunc(meta.get("social_summary", ""), 180)
+          ig_preview = trunc(meta.get("instagram_caption", "").split("\n\n")[0], 180)
+          summary = (f"📄 {trunc(excerpt, 150)} • 📘 FB: {trunc(fb_preview, 110)} "
+                     f"• 📸 IG: {trunc(ig_preview, 110)}")
           og_image = meta.get("og_image", "")
 
           worker_url  = os.environ.get("APPROVE_WORKER_URL", "").strip().rstrip("/")
