@@ -191,31 +191,34 @@ jobs:
             )
             print(f"blog_entwurf_aktualisiert_v2 erstellt: {r7.status_code} – {r7.text[:300]}")
 
-          # blog_entwurf_info (Titel/Datum/Vorschau-Text OHNE Links im Fliesstext - die 3 Aktionen
-          # kommen stattdessen als eigene Nachrichten mit echtem Button ueber blog_aktion, siehe unten)
-          if "blog_entwurf_info" in templates:
-            st = templates["blog_entwurf_info"].get("status","?")
-            print(f"✅ blog_entwurf_info: {st}")
+          # blog_entwurf_info_v2 (Titel/Datum + Zusammenfassung/Facebook/Instagram als 3 GETRENNTE,
+          # eigenstaendig beschriftete Felder statt einer zusammengequetschten Zeile - Links/Buttons
+          # kommen als eigene Nachrichten ueber blog_aktion, siehe unten)
+          if "blog_entwurf_info_v2" in templates:
+            st = templates["blog_entwurf_info_v2"].get("status","?")
+            print(f"✅ blog_entwurf_info_v2: {st}")
           else:
-            print("\n⚠️  blog_entwurf_info fehlt – wird erstellt …")
+            print("\n⚠️  blog_entwurf_info_v2 fehlt – wird erstellt …")
             r8 = requests.post(
               f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
               headers=headers,
               json={
-                "name": "blog_entwurf_info",
+                "name": "blog_entwurf_info_v2",
                 "language": "de",
                 "category": "UTILITY",
                 "components": [{
                   "type": "BODY",
-                  "text": "📝 Neuer Blog-Entwurf zur Prüfung: {{1}}\nVeröffentlichungsdatum: {{2}}\n\nÜbersicht zum Inhalt und den Social-Media-Texten:\n{{3}}\n\nDie Freigabe-Optionen folgen als nächste Nachricht mit Buttons.\n\n(Automatische Nachricht von der Blog-Automatisierung)",
+                  "text": "📝 Neuer Blog-Entwurf zur Prüfung: {{1}}\nGeplantes Veröffentlichungsdatum: {{2}}\n\nHier die Zusammenfassung des Artikelinhalts:\n{{3}}\n\nDies ist der vorgesehene Text für den Facebook-Beitrag:\n{{4}}\n\nUnd dies ist der vorgesehene Text für den Instagram-Beitrag:\n{{5}}\n\nDie Freigabe-Optionen folgen gleich als eigene Nachricht mit Buttons zum Antippen.\n\n(Automatische Nachricht von der Blog-Automatisierung)",
                   "example": {"body_text": [[
                     "Sterbegeldversicherung: Würdevoll vorsorgen", "20.07.2026",
-                    "📄 Was die Sterbegeldversicherung leistet. • 📘 FB: Kurzer Text. • 📸 IG: Persönlicher Einstieg."
+                    "Die Sterbegeldversicherung deckt die Bestattungskosten und entlastet die Angehörigen im Trauerfall finanziell.",
+                    "Bestattungskosten liegen oft bei 8.000 bis 10.000 Euro. Mit der richtigen Vorsorge belasten Sie Ihre Familie im Ernstfall nicht.",
+                    "Wer trägt die Kosten, wenn Sie einmal nicht mehr da sind? Ein unbequemes Thema – aber eines, das sich lohnt anzugehen."
                   ]]}
                 }]
               }
             )
-            print(f"blog_entwurf_info erstellt: {r8.status_code} – {r8.text[:300]}")
+            print(f"blog_entwurf_info_v2 erstellt: {r8.status_code} – {r8.text[:300]}")
 
           # blog_aktion (eine Aktion = ein echter Button statt Link im Fliesstext - wird 3x mit
           # unterschiedlichem Body-Text und Button-Ziel-Suffix wiederverwendet: Freigeben,
