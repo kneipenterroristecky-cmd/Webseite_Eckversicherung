@@ -45,8 +45,7 @@ jobs:
           excerpt    = trunc(meta.get("blog_excerpt", ""), 220)
           fb_preview = trunc(meta.get("social_summary", ""), 180)
           ig_preview = trunc(meta.get("instagram_caption", "").split("\n\n")[0], 180)
-          summary = (f"📄 {trunc(excerpt, 150)} • 📘 FB: {trunc(fb_preview, 110)} "
-                     f"• 📸 IG: {trunc(ig_preview, 110)}")
+          summary = f"📘 Facebook: {fb_preview} • 📸 Instagram: {ig_preview}"
           og_image = meta.get("og_image", "")
 
           worker_url  = os.environ.get("APPROVE_WORKER_URL", "").strip().rstrip("/")
