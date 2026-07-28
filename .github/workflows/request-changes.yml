@@ -360,12 +360,13 @@ jobs:
             "to": wa_to,
             "type": "template",
             "template": {
-              "name": "blog_entwurf_info_v2",
+              "name": "blog_entwurf_info_v3",
               "language": {"code": "de"},
               "components": [{"type": "body", "parameters": [
                 {"type": "text", "text": title},
                 {"type": "text", "text": date_de},
                 {"type": "text", "text": excerpt or "(keine Zusammenfassung verfügbar)"},
+                {"type": "text", "text": image_text or "(kein Bildtext verfügbar)"},
                 {"type": "text", "text": fb_preview or "(kein Facebook-Text verfügbar)"},
                 {"type": "text", "text": ig_preview or "(kein Instagram-Text verfügbar)"},
               ]}]
