@@ -360,6 +360,8 @@ jobs:
             }
           })
           print(f"Info-Nachricht Status: {r_info.status_code}")
+          if r_info.status_code >= 300:
+            print(f"  {r_info.text[:300]}")
 
           if r_info.status_code < 300:
             for label, suffix in [
