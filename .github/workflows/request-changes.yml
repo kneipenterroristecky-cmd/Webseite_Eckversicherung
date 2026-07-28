@@ -325,10 +325,55 @@ jobs:
               }
             })
 
-          r = sende_aktualisiert("blog_entwurf_aktualisiert_v2", mit_summary=True)
-          if r.status_code >= 300:
-            print(f"blog_entwurf_aktualisiert_v2 noch nicht nutzbar ({r.status_code}: {r.text[:200]}) – falle auf v1 zurueck.")
-            r = sende_aktualisiert("blog_entwurf_aktualisiert", mit_summary=False)
+          def sende_aktion_button(label, url_suffix):
+            return req.post(msg_api, headers=auth_headers, json={
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "template",
+              "template": {
+                "name": "blog_aktion",
+                "language": {"code": "de"},
+                "components": [
+                  {"type": "body", "parameters": [{"type": "text", "text": label}]},
+                  {"type": "button", "sub_type": "url", "index": "0",
+                   "parameters": [{"type": "text", "text": url_suffix}]}
+                ]
+              }
+            })
+
+          r_info = req.post(msg_api, headers=auth_headers, json={
+            "messaging_product": "whatsapp",
+            "to": wa_to,
+            "type": "template",
+            "template": {
+              "name": "blog_entwurf_info",
+              "language": {"code": "de"},
+              "components": [{"type": "body", "parameters": [
+                {"type": "text", "text": title},
+                {"type": "text", "text": date_de},
+                {"type": "text", "text": summary},
+              ]}]
+            }
+          })
+          print(f"Info-Nachricht Status: {r_info.status_code}")
+
+          if r_info.status_code < 300:
+            for label, suffix in [
+              ("✅ Freigeben & veröffentlichen", f"approve?token={approve_tok}"),
+              ("🖼️ Neues Bild vorschlagen", f"suggest-image?token={approve_tok}"),
+              ("✏️ Nochmal ändern", f"change?token={approve_tok}"),
+            ]:
+              r_btn = sende_aktion_button(label, suffix)
+              print(f"Aktion '{label}': {r_btn.status_code}")
+              if r_btn.status_code >= 300:
+                print(f"  Fehler: {r_btn.text[:200]}")
+            r = r_info
+          else:
+            print(f"  blog_entwurf_info noch nicht nutzbar: {r_info.text[:200]} – falle auf altes Template zurueck.")
+            r = sende_aktualisiert("blog_entwurf_aktualisiert_v2", mit_summary=True)
+            if r.status_code >= 300:
+              print(f"blog_entwurf_aktualisiert_v2 noch nicht nutzbar ({r.status_code}: {r.text[:200]}) – falle auf v1 zurueck.")
+              r = sende_aktualisiert("blog_entwurf_aktualisiert", mit_summary=False)
 
           print(f"WhatsApp Status: {r.status_code}")
           if r.status_code >= 300:
