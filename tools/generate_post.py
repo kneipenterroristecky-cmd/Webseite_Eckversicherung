@@ -196,7 +196,7 @@ Gib NUR den HTML-Inhalt aus (h2, p, ul, li Tags). Kein html/head/body."""
 content_html = beitrag.content[0].text
 
 # ── Meta-Daten für Social Media generieren ────────────────────────────────────
-meta_msg = client.messages.create(
+meta_msg = create_with_retry(client,
     model="claude-haiku-4-5-20251001",
     max_tokens=1200,
     messages=[{
