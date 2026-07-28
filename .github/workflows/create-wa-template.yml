@@ -207,10 +207,10 @@ jobs:
                 "category": "UTILITY",
                 "components": [{
                   "type": "BODY",
-                  "text": "📝 Blog-Entwurf: {{1}}\nDatum: {{2}}\n\n{{3}}\n\n(Automatische Nachricht)",
+                  "text": "📝 Neuer Blog-Entwurf zur Prüfung: {{1}}\nVeröffentlichungsdatum: {{2}}\n\nÜbersicht zum Inhalt und den Social-Media-Texten:\n{{3}}\n\nDie Freigabe-Optionen folgen als nächste Nachricht mit Buttons.\n\n(Automatische Nachricht von der Blog-Automatisierung)",
                   "example": {"body_text": [[
                     "Sterbegeldversicherung: Würdevoll vorsorgen", "20.07.2026",
-                    "📄 Was die Sterbegeldversicherung leistet und wann sie sich lohnt. • 📘 FB: Kurzer Facebook-Text. • 📸 IG: Persönlicher Instagram-Einstieg."
+                    "📄 Was die Sterbegeldversicherung leistet. • 📘 FB: Kurzer Text. • 📸 IG: Persönlicher Einstieg."
                   ]]}
                 }]
               }
