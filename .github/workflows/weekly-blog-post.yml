@@ -194,24 +194,38 @@ jobs:
           msg_api = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
           auth_headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
-          # Vorschau-Bild vorab senden (bereits freigegebenes Template, kein neues Approval noetig) –
-          # per "link" statt Upload, da og_image bereits eine oeffentliche Unsplash-URL ist.
+          # Vorschau-Bild vorab senden (bereits freigegebenes Template, kein neues Approval noetig).
+          # Erst hochladen und per media-id senden statt per "link" - "link" wird von Meta
+          # asynchron nachgeladen und schlaegt dabei manchmal unbemerkt fehl (Status bleibt trotzdem
+          # 200); der Upload-Weg ist derselbe zuverlaessige Mechanismus wie bei den Social-Bildern
+          # in publish-blog-post.yml/wa-images.yml.
           if og_image:
-            r_img = req.post(msg_api, headers=auth_headers, json={
-              "messaging_product": "whatsapp",
-              "to": wa_to,
-              "type": "template",
-              "template": {
-                "name": "social_bild",
-                "language": {"code": "de"},
-                "components": [{"type": "header", "parameters": [
-                  {"type": "image", "image": {"link": og_image}}
-                ]}]
-              }
-            })
-            print(f"Vorschau-Bild Status: {r_img.status_code}")
-            if r_img.status_code >= 300:
-              print(f"  (kein Abbruch) Fehler: {r_img.text[:300]}")
+            img_r = req.get(og_image, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
+            if img_r.ok:
+              up = req.post(f"https://graph.facebook.com/v19.0/{phone_id}/media",
+                headers={"Authorization": f"Bearer {token}"},
+                data={"messaging_product": "whatsapp"},
+                files={"file": ("vorschau.jpg", img_r.content, img_r.headers.get("content-type", "image/jpeg"))})
+              media_id = up.json().get("id") if up.status_code < 300 else None
+              print(f"Vorschau-Bild Upload: {up.status_code}{' (' + str(len(img_r.content)//1024) + ' KB)' if media_id else ' ' + up.text[:200]}")
+              if media_id:
+                r_img = req.post(msg_api, headers=auth_headers, json={
+                  "messaging_product": "whatsapp",
+                  "to": wa_to,
+                  "type": "template",
+                  "template": {
+                    "name": "social_bild",
+                    "language": {"code": "de"},
+                    "components": [{"type": "header", "parameters": [
+                      {"type": "image", "image": {"id": media_id}}
+                    ]}]
+                  }
+                })
+                print(f"Vorschau-Bild Status: {r_img.status_code}")
+                if r_img.status_code >= 300:
+                  print(f"  (kein Abbruch) Fehler: {r_img.text[:300]}")
+            else:
+              print(f"Vorschau-Bild Download fehlgeschlagen: {img_r.status_code}")
 
           def sende_freigabe(template_name, mit_summary):
             params = [
