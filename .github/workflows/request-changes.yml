@@ -256,10 +256,11 @@ jobs:
           # WhatsApp-Template-Parameter duerfen KEINE Zeilenumbrueche enthalten (Meta lehnt den
           # Versand sonst mit Fehler 132018 ab) - deshalb excerpt/fb/ig als 3 GETRENNTE Parameter
           # (jeweils eigene Zeile im STATISCHEN Vorlagentext, nicht im Parameterwert selbst).
-          excerpt    = trunc(meta.get("blog_excerpt", ""), 220)
-          fb_preview = trunc(meta.get("social_summary", ""), 180)
-          ig_preview = trunc(meta.get("instagram_caption", "").split("\n\n")[0], 180)
-          # Fallback fuer das alte kombinierte Template: nur solange nutzen, bis blog_entwurf_info_v2
+          excerpt    = trunc(meta.get("blog_excerpt", ""), 160)
+          image_text = trunc(meta.get("wa_image_text", ""), 80)
+          fb_preview = trunc(meta.get("social_summary", ""), 170)
+          ig_preview = trunc(meta.get("instagram_caption", "").split("\n\n")[0], 170)
+          # Fallback fuer das alte kombinierte Template: nur solange nutzen, bis blog_entwurf_info_v3
           # freigegeben ist. Dort ist wegen der 3 mit reingepackten Link-URLs nicht genug Platz fuer
           # excerpt+FB+IG komplett - FB/IG muessen laut Vorgabe VOLLSTAENDIG erscheinen, deshalb faellt
           # hier der Excerpt weg statt FB/IG anzuschneiden.
