@@ -1,0 +1,56 @@
+name: Test – WhatsApp-Testnachricht (mit Links)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-message:
+    name: Testnachricht senden
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Testnachricht per WhatsApp senden
+        env:
+          WA_TOKEN:   ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WA_TO:      ${{ secrets.WHATSAPP_TO_NUMBER }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, requests as req, sys
+
+          token    = os.environ.get("WA_TOKEN", "").strip()
+          phone_id = os.environ.get("WA_PHONE_ID", "").strip()
+          wa_to    = os.environ.get("WA_TO", "").strip()
+          if not all([token, phone_id, wa_to]):
+            print("❌ Fehlende WhatsApp-Secrets!"); sys.exit(1)
+
+          msg_api = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+
+          r = req.post(msg_api, headers=headers, json={
+            "messaging_product": "whatsapp",
+            "to": wa_to,
+            "type": "template",
+            "template": {
+              "name": "blog_entwurf_freigabe_v2",
+              "language": {"code": "de"},
+              "components": [{
+                "type": "body",
+                "parameters": [
+                  {"type": "text", "text": "Testnachricht – kein echter Entwurf"},
+                  {"type": "text", "text": "28.07.2026"},
+                  {"type": "text", "text": "Dies ist nur ein Test der Nachrichtenformatierung inkl. Links."},
+                  {"type": "text", "text": "https://example.com/test-freigeben"},
+                  {"type": "text", "text": "https://example.com/test-neues-bild"},
+                  {"type": "text", "text": "https://example.com/test-aendern"},
+                ]
+              }]
+            }
+          })
+          print(f"Status: {r.status_code}")
+          if r.status_code >= 300:
+            print(f"Fehler: {r.text[:500]}")
+            sys.exit(1)
+          PYEOF
