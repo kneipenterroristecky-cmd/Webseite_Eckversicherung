@@ -235,8 +235,8 @@ jobs:
                 "components": [
                   {
                     "type": "BODY",
-                    "text": "{{1}}",
-                    "example": {"body_text": [["✅ Freigeben & veröffentlichen"]]}
+                    "text": "👉 Nächster Schritt: {{1}}\n\nTippen Sie auf den Button unten.",
+                    "example": {"body_text": [["Freigeben & veröffentlichen"]]}
                   },
                   {
                     "type": "BUTTONS",
