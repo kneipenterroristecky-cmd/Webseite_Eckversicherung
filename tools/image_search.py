@@ -110,7 +110,11 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
         pick = int(pick_match.group()) - 1
         pick = max(0, min(pick, len(candidates) - 1))
         chosen = candidates[pick]
-        result_url = f"{chosen['raw']}?w=1200&h=630&fit=crop&auto=format"
+        # chosen['raw'] enthaelt bei Unsplash bereits einen Query-String (ixid/ixlib) -
+        # ein zweites "?" wuerde die URL kaputt machen (w/h landen dann in ixlib statt
+        # als eigene Parameter, das Bild kommt unskaliert/zu gross zurueck).
+        sep = "&" if "?" in chosen['raw'] else "?"
+        result_url = f"{chosen['raw']}{sep}w=1200&h=630&fit=crop&auto=format"
         print(f"   ✅ KI wählte Bild {pick + 1}/{len(candidates)} (Unsplash-ID: {chosen['id']})")
         return result_url
 
