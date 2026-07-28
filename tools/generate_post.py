@@ -353,6 +353,7 @@ draft_meta = {
     "date_de": date_de,
     "date_iso": date_iso,
     "slug": meta['slug'],
+    "blog_excerpt": meta.get('blog_excerpt', ''),
     "social_summary": meta['social_summary'],
     "instagram_caption": meta['instagram_caption'],
     "post_url": post_url,
