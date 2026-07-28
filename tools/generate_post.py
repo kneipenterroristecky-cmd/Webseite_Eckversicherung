@@ -2,10 +2,24 @@
 """
 Erstellt einen wöchentlichen Blog-Beitrag mit Claude (KI) im Stil von Daniel Eck.
 """
-import os, json, re, datetime, base64, requests, anthropic
+import os, json, re, time, datetime, base64, requests, anthropic
 from image_search import find_best_image
 
 SITE_URL = os.environ.get("SITE_URL", "https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung")
+
+
+def create_with_retry(client, **kwargs):
+    """Wie client.messages.create(), aber mit Wiederholung bei temporaerer
+    Serverueberlastung (z.B. 529 Overloaded) statt sofortigem Abbruch."""
+    delays = [15, 45, 90]
+    for i in range(len(delays) + 1):
+        try:
+            return client.messages.create(**kwargs)
+        except anthropic.APIStatusError as e:
+            if e.status_code not in (429, 500, 502, 503, 529) or i == len(delays):
+                raise
+            print(f"   ⏳ Anthropic-API überlastet ({e.status_code}) – warte {delays[i]}s und versuche erneut …")
+            time.sleep(delays[i])
 
 # ── Thema der Woche bestimmen ─────────────────────────────────────────────────
 today_preview = datetime.date.today()
