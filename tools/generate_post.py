@@ -155,7 +155,7 @@ else:
 ig_img_url_global = f"{_og_base}?w=1080&h=1920&fit=crop&{_ig_crop}&auto=format"
 
 # ── Blog-Beitrag schreiben ────────────────────────────────────────────────────
-beitrag = client.messages.create(
+beitrag = create_with_retry(client,
     model="claude-opus-4-5",
     max_tokens=4000,
     messages=[{
