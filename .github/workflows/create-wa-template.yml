@@ -191,6 +191,67 @@ jobs:
             )
             print(f"blog_entwurf_aktualisiert_v2 erstellt: {r7.status_code} – {r7.text[:300]}")
 
+          # blog_entwurf_info (Titel/Datum/Vorschau-Text OHNE Links im Fliesstext - die 3 Aktionen
+          # kommen stattdessen als eigene Nachrichten mit echtem Button ueber blog_aktion, siehe unten)
+          if "blog_entwurf_info" in templates:
+            st = templates["blog_entwurf_info"].get("status","?")
+            print(f"✅ blog_entwurf_info: {st}")
+          else:
+            print("\n⚠️  blog_entwurf_info fehlt – wird erstellt …")
+            r8 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "blog_entwurf_info",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [{
+                  "type": "BODY",
+                  "text": "📝 Blog-Entwurf: {{1}}\nDatum: {{2}}\n\n{{3}}\n\n(Automatische Nachricht)",
+                  "example": {"body_text": [[
+                    "Sterbegeldversicherung: Würdevoll vorsorgen", "20.07.2026",
+                    "📄 Was die Sterbegeldversicherung leistet und wann sie sich lohnt. • 📘 FB: Kurzer Facebook-Text. • 📸 IG: Persönlicher Instagram-Einstieg."
+                  ]]}
+                }]
+              }
+            )
+            print(f"blog_entwurf_info erstellt: {r8.status_code} – {r8.text[:300]}")
+
+          # blog_aktion (eine Aktion = ein echter Button statt Link im Fliesstext - wird 3x mit
+          # unterschiedlichem Body-Text und Button-Ziel-Suffix wiederverwendet: Freigeben,
+          # Neues Bild vorschlagen, Aenderung beantragen. Domain ist fest der Approve-Worker.)
+          if "blog_aktion" in templates:
+            st = templates["blog_aktion"].get("status","?")
+            print(f"✅ blog_aktion: {st}")
+          else:
+            print("\n⚠️  blog_aktion fehlt – wird erstellt …")
+            r9 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "blog_aktion",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [
+                  {
+                    "type": "BODY",
+                    "text": "{{1}}",
+                    "example": {"body_text": [["✅ Freigeben & veröffentlichen"]]}
+                  },
+                  {
+                    "type": "BUTTONS",
+                    "buttons": [{
+                      "type": "URL",
+                      "text": "Öffnen",
+                      "url": "https://blog-approve.kneipenterroristecky.workers.dev/{{1}}",
+                      "example": ["approve?token=abcdef123456"]
+                    }]
+                  }
+                ]
+              }
+            )
+            print(f"blog_aktion erstellt: {r9.status_code} – {r9.text[:300]}")
+
           # social_bild (Bild-Template – das eigentliche Haupt-Template)
           if "social_bild" in templates:
             st = templates["social_bild"].get("status","?")
