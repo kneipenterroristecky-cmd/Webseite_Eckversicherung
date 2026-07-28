@@ -245,9 +245,12 @@ jobs:
           meta    = json.load(open("tools/draft_meta.json", encoding="utf-8"))
           title   = meta.get("title", "")
           date_de = meta.get("date_de", "")
-          fb_preview = meta.get("social_summary", "")[:180].replace("\n", " ").strip()
-          ig_preview = meta.get("instagram_caption", "").split("\n\n")[0][:180].replace("\n", " ").strip()
-          summary = f"📘 Facebook: {fb_preview}\n📸 Instagram: {ig_preview}"[:450]
+          # WhatsApp-Template-Parameter duerfen KEINE Zeilenumbrueche enthalten (Meta lehnt den
+          # Versand sonst mit Fehler 132018 ab) - deshalb hier alles auf einer Zeile mit " • " getrennt.
+          excerpt    = meta.get("blog_excerpt", "")[:150].replace("\n", " ").strip()
+          fb_preview = meta.get("social_summary", "")[:120].replace("\n", " ").strip()
+          ig_preview = meta.get("instagram_caption", "").split("\n\n")[0][:120].replace("\n", " ").strip()
+          summary = f"📄 {excerpt} • 📘 FB: {fb_preview} • 📸 IG: {ig_preview}"[:420]
           og_image = meta.get("og_image", "")
 
           repo        = os.environ.get("GITHUB_REPOSITORY", "")
