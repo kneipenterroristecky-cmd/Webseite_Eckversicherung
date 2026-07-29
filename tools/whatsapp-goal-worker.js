@@ -3,8 +3,10 @@
  *
  * Secrets (im Cloudflare Dashboard unter Workers → Settings → Variables eintragen):
  *   WHATSAPP_VERIFY_TOKEN   – frei wählbarer String, z.B. "mein-geheimer-token-2025"
- *   WHATSAPP_ACCESS_TOKEN   – aus Meta Developer Console (bereits als GitHub Secret vorhanden)
- *   WHATSAPP_PHONE_NUMBER_ID – aus Meta Developer Console (bereits als GitHub Secret vorhanden)
+ *   WHATSAPP_ACCESS_TOKEN   – aus Meta Developer Console (bereits als GitHub Secret vorhanden) -
+ *                             dient nur noch als FALLBACK, siehe getWaConnection() unten
+ *   WHATSAPP_PHONE_NUMBER_ID – aus Meta Developer Console (bereits als GitHub Secret vorhanden) -
+ *                             dient nur noch als FALLBACK, siehe getWaConnection() unten
  *   WHATSAPP_TO_NUMBER      – deine WhatsApp-Nummer mit Ländervorwahl, OHNE +, z.B. "4917432258850"
  *   GITHUB_PAT              – der PAT_WORKFLOW Token aus GitHub Secrets
  *   GITHUB_REPO             – "kneipenterroristecky-cmd/Webseite_Eckversicherung"
@@ -12,6 +14,28 @@
  *   DOCUMENT_RELAY_SECRET   – frei wählbarer String, MUSS mit DOCUMENT_RELAY_SECRET in Code.gs übereinstimmen
  *   ANTHROPIC_API_KEY       – fuer die Versicherungskontext-Pruefung von PDFs/Bildern (Modell claude-haiku-4-5)
  *   WORKER_ADMIN_SECRET     – frei waehlbarer String, schuetzt die 'teach'-Aktion (siehe unten)
+ *
+ * ── /connect: WhatsApp Coexistence Embedded Signup ──────────────────────
+ * Verbindet Daniels EINE bestehende private Nummer per "Coexistence" mit
+ * dieser Business-Plattform - die normale WhatsApp-Business-App bleibt dabei
+ * voll nutzbar, NICHTS an der Nummer selbst wird migriert/geloescht/verschoben.
+ * Das ist bewusst NICHT der normale "Telefonnummer hinzufuegen"-Dialog im
+ * Meta Business Manager (der wuerde die Nummer exklusiv uebernehmen wollen
+ * und mit der bestehenden App-Nutzung kollidieren) - stattdessen ein per
+ * Facebook-Login-Popup eingebetteter "Embedded Signup"-Flow, der explizit die
+ * "bestehende WhatsApp-Business-App-Nummer weiterverwenden"-Option anbietet.
+ * Drei zusaetzliche Secrets dafuer noetig (siehe GET /connect unten):
+ *   WHATSAPP_APP_ID              – App Dashboard -> Einstellungen -> Basis -> App-ID
+ *   WHATSAPP_APP_SECRET          – App Dashboard -> Einstellungen -> Basis -> App-Geheimnis ("Anzeigen")
+ *   WHATSAPP_EMBEDDED_CONFIG_ID  – App Dashboard -> Facebook Login for Business -> Configurations ->
+ *                                  neue Konfiguration aus WhatsApp-Vorlage, dabei die Option fuer
+ *                                  bestehende WhatsApp-Business-App-Nutzer/Coexistence aktivieren
+ * Nach einem erfolgreichen Klick auf der /connect-Seite werden phone_number_id/
+ * waba_id/access_token automatisch in SELIN_MEMORY (KV) gespeichert und ab
+ * dann von getWaConnection() bevorzugt genutzt - die GitHub-Secrets
+ * WHATSAPP_PHONE_NUMBER_ID/WHATSAPP_ACCESS_TOKEN muessen dafuer NICHT
+ * angefasst werden (bleiben nur als Fallback/fuer die GitHub-Actions-Skripte
+ * bestehen, die direkt auf diese Secrets zugreifen).
  *
  * KV-Namespace-Bindung (siehe tools/wrangler.toml):
  *   SELIN_MEMORY – dauerhaftes Gedaechtnis fuer Selin (analog zu memory/*.md in der
