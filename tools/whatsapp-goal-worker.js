@@ -688,3 +688,170 @@ async function sophieRespond(env, text, memory, status) {
   const textBlock = (data.content || []).find(b => b.type === 'text');
   return JSON.parse(textBlock.text);
 }
+
+// ══════════════════════════════════════════════════════════════════════
+// WHATSAPP COEXISTENCE - EMBEDDED SIGNUP ("/connect")
+// ══════════════════════════════════════════════════════════════════════
+//
+// Diese Seite ersetzt bewusst NICHT den normalen Meta-Business-Manager-Dialog
+// ("Telefonnummer hinzufuegen") - der wuerde die Nummer exklusiv fuer die
+// Cloud-API beanspruchen und mit der laufenden WhatsApp-Business-App-Nutzung
+// kollidieren ("Diese Telefonnummer ist bereits einem WhatsApp-Konto
+// zugeordnet"). Stattdessen der von Meta vorgesehene Weg fuer genau diesen
+// Fall: ein per Facebook-Login-Popup eingebetteter "Embedded Signup"-Flow mit
+// einer speziell dafuer eingerichteten Configuration (WHATSAPP_EMBEDDED_CONFIG_ID),
+// die explizit die Option "bestehende WhatsApp-Business-App-Nummer
+// weiterverwenden" (Coexistence) anbietet. Die App-/Nummern-Verwaltung selbst
+// bleibt dabei komplett bei Meta - dieser Worker loest nur den Login-Flow aus
+// und verarbeitet danach den Autorisierungscode.
+function renderConnectPage(env) {
+  const missing = ['WHATSAPP_APP_ID', 'WHATSAPP_EMBEDDED_CONFIG_ID'].filter((k) => !env[k]);
+  if (missing.length) {
+    return `<!doctype html><html lang="de"><meta charset="utf-8">
+      <body style="font-family:sans-serif;max-width:640px;margin:40px auto;line-height:1.5">
+      <h1>WhatsApp verbinden</h1>
+      <p style="color:#b00">Fehlende Konfiguration: ${missing.join(', ')}.</p>
+      <p>Diese Secrets muessen zuerst im Cloudflare Worker gesetzt sein
+      (App Dashboard von Meta &rarr; Einstellungen/Facebook Login for Business),
+      bevor diese Seite funktioniert.</p>
+      </body></html>`;
+  }
+
+  return `<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhatsApp verbinden</title>
+</head>
+<body style="font-family:sans-serif;max-width:640px;margin:40px auto;line-height:1.5">
+  <h1>WhatsApp-Nummer verbinden (Coexistence)</h1>
+  <p>Verbindet deine bestehende WhatsApp-Business-App-Nummer mit dieser
+  Business-Plattform. Die App bleibt danach ganz normal nutzbar - deine Nummer
+  wird dabei <strong>nicht</strong> migriert, geloescht oder verschoben.</p>
+  <p>Voraussetzung: Die Nummer muss bereits in der WhatsApp Business App aktiv
+  sein (nicht in der normalen WhatsApp-App).</p>
+  <button id="launch" style="font-size:1.1em;padding:10px 20px;cursor:pointer">
+    Verbindung herstellen
+  </button>
+  <pre id="log" style="white-space:pre-wrap;background:#f4f4f4;padding:12px;margin-top:20px;min-height:60px"></pre>
+
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({ appId: '${env.WHATSAPP_APP_ID}', autoLogAppEvents: true, xfbml: false, version: 'v23.0' });
+    };
+  </script>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/de_DE/sdk.js"></script>
+
+  <script>
+    const logEl = document.getElementById('log');
+    function log(msg) { logEl.textContent += msg + "\\n"; }
+
+    let sessionInfo = null;
+    window.addEventListener('message', (event) => {
+      if (!event.origin.endsWith('facebook.com')) return;
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'WA_EMBEDDED_SIGNUP') {
+          log('Signup-Ereignis: ' + data.event);
+          if (data.data && (data.data.waba_id || data.data.phone_number_id)) {
+            sessionInfo = data.data;
+          }
+        }
+      } catch (e) { /* keine WA_EMBEDDED_SIGNUP-Nachricht, ignorieren */ }
+    });
+
+    document.getElementById('launch').addEventListener('click', function () {
+      log('Starte Facebook-Login...');
+      FB.login(function (response) {
+        if (!response.authResponse || !response.authResponse.code) {
+          log('Abgebrochen oder keine Berechtigung erteilt.');
+          return;
+        }
+        log('Autorisierung erhalten, verbinde mit dem Worker...');
+        fetch('/connect/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: response.authResponse.code, session: sessionInfo })
+        })
+          .then((r) => r.json())
+          .then((result) => {
+            if (result.ok) {
+              log('Fertig! Nummer erfolgreich verbunden (phone_number_id: ' + result.phone_number_id + ').');
+              log('Du kannst WhatsApp jetzt ganz normal weiter nutzen.');
+            } else {
+              log('Fehler: ' + result.error);
+            }
+          })
+          .catch((e) => log('Netzwerkfehler: ' + e));
+      }, {
+        config_id: '${env.WHATSAPP_EMBEDDED_CONFIG_ID}',
+        response_type: 'code',
+        override_default_response_type: true,
+        extras: { setup: {} }
+      });
+    });
+  </script>
+</body>
+</html>`;
+}
+
+async function handleConnectComplete(request, env) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ ok: false, error: 'Ungueltiges JSON' }, 400);
+  }
+
+  const { code, session } = body;
+  if (!code) {
+    return json({ ok: false, error: 'Kein Autorisierungscode erhalten' }, 400);
+  }
+  if (!env.WHATSAPP_APP_SECRET || !env.WHATSAPP_APP_ID) {
+    return json({ ok: false, error: 'WHATSAPP_APP_ID/WHATSAPP_APP_SECRET fehlen als Worker-Secret' }, 500);
+  }
+
+  try {
+    // 1. Autorisierungscode gegen ein Access Token tauschen
+    const tokenUrl = new URL('https://graph.facebook.com/v23.0/oauth/access_token');
+    tokenUrl.searchParams.set('client_id', env.WHATSAPP_APP_ID);
+    tokenUrl.searchParams.set('client_secret', env.WHATSAPP_APP_SECRET);
+    tokenUrl.searchParams.set('code', code);
+    const tokenResp = await fetch(tokenUrl.toString());
+    const tokenData = await tokenResp.json();
+    if (!tokenData.access_token) {
+      throw new Error('Token-Tausch fehlgeschlagen: ' + JSON.stringify(tokenData));
+    }
+    const accessToken = tokenData.access_token;
+
+    const wabaId = session && session.waba_id;
+    const phoneNumberId = session && session.phone_number_id;
+    if (!wabaId || !phoneNumberId) {
+      throw new Error('waba_id/phone_number_id fehlten im Signup-Ereignis: ' + JSON.stringify(session));
+    }
+
+    // 2. App auf die Webhooks dieser WABA abonnieren (Pflichtschritt, sonst
+    //    kommen nie eingehende Nachrichten hier an)
+    const subResp = await fetch(`https://graph.facebook.com/v23.0/${wabaId}/subscribed_apps`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const subData = await subResp.json();
+    if (!subData.success) {
+      throw new Error('Webhook-Abo fehlgeschlagen: ' + JSON.stringify(subData));
+    }
+
+    // 3. Nur UNSERE eigenen Zugangsdaten fuer diese Verbindung speichern -
+    //    die Nummer/App selbst bleibt unangetastet, das ist reine Konfiguration.
+    await env.SELIN_MEMORY.put('connection_waba_id', wabaId);
+    await env.SELIN_MEMORY.put('connection_phone_number_id', phoneNumberId);
+    await env.SELIN_MEMORY.put('connection_access_token', accessToken);
+    await env.SELIN_MEMORY.put('connection_connected_at', new Date().toISOString());
+
+    return json({ ok: true, waba_id: wabaId, phone_number_id: phoneNumberId });
+  } catch (ex) {
+    console.error('Fehler beim Coexistence-Connect:', ex);
+    return json({ ok: false, error: String((ex && ex.message) || ex) }, 500);
+  }
+}
