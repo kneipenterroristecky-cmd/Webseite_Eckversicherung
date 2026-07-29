@@ -341,10 +341,11 @@ async function handleCustomerMedia(env, message, from, kind) {
     const mimeType  = mediaObj.mime_type;
     const extension = kind === 'document' ? 'pdf' : (mimeType.split('/')[1] || 'jpg');
     const filename  = mediaObj.filename || `whatsapp-${kind === 'document' ? 'dokument' : 'bild'}-${mediaId}.${extension}`;
+    const { accessToken } = await getWaConnection(env);
 
     // 1. Media-URL bei Meta abrufen
     const metaResp = await fetch(`https://graph.facebook.com/v19.0/${mediaId}`, {
-      headers: { 'Authorization': `Bearer ${env.WHATSAPP_ACCESS_TOKEN}` }
+      headers: { 'Authorization': `Bearer ${accessToken}` }
     });
     const metaData = await metaResp.json();
     if (!metaData.url) {
@@ -353,7 +354,7 @@ async function handleCustomerMedia(env, message, from, kind) {
 
     // 2. Datei herunterladen
     const fileResp = await fetch(metaData.url, {
-      headers: { 'Authorization': `Bearer ${env.WHATSAPP_ACCESS_TOKEN}` }
+      headers: { 'Authorization': `Bearer ${accessToken}` }
     });
     const buffer = await fileResp.arrayBuffer();
     const base64 = arrayBufferToBase64(buffer);
