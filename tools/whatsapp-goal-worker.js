@@ -24,12 +24,16 @@
  * und mit der bestehenden App-Nutzung kollidieren) - stattdessen ein per
  * Facebook-Login-Popup eingebetteter "Embedded Signup"-Flow, der explizit die
  * "bestehende WhatsApp-Business-App-Nummer weiterverwenden"-Option anbietet.
- * Drei zusaetzliche Secrets dafuer noetig (siehe GET /connect unten):
+ * Nutzt bewusst "Embedded Signup Version 1" (klassischer FB.login mit scope=
+ * whatsapp_business_management,whatsapp_business_messaging + extras.feature=
+ * 'whatsapp_embedded_signup') statt der config_id-basierten Version 2 - V2 ist
+ * fuer Partner/Tech-Provider gedacht, die FREMDE Unternehmen onboarden, und
+ * blockiert Eigennutzung mit "kann aktuell kein Onboarding fuer Kunden
+ * vornehmen" (live am 2026-07-29 so aufgetreten). V1 braucht keine
+ * Facebook-Login-for-Business-Configuration, nur zwei Secrets:
  *   WHATSAPP_APP_ID              – App Dashboard -> Einstellungen -> Basis -> App-ID
  *   WHATSAPP_APP_SECRET          – App Dashboard -> Einstellungen -> Basis -> App-Geheimnis ("Anzeigen")
- *   WHATSAPP_EMBEDDED_CONFIG_ID  – App Dashboard -> Facebook Login for Business -> Configurations ->
- *                                  neue Konfiguration aus WhatsApp-Vorlage, dabei die Option fuer
- *                                  bestehende WhatsApp-Business-App-Nutzer/Coexistence aktivieren
+ * (WHATSAPP_EMBEDDED_CONFIG_ID wird nicht mehr benoetigt, kann als Secret bestehen bleiben, wird ignoriert.)
  * Nach einem erfolgreichen Klick auf der /connect-Seite werden phone_number_id/
  * waba_id/access_token automatisch in SELIN_MEMORY (KV) gespeichert und ab
  * dann von getWaConnection() bevorzugt genutzt - die GitHub-Secrets
