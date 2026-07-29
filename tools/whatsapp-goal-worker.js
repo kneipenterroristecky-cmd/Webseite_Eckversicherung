@@ -712,7 +712,7 @@ async function sophieRespond(env, text, memory, status) {
 // bleibt dabei komplett bei Meta - dieser Worker loest nur den Login-Flow aus
 // und verarbeitet danach den Autorisierungscode.
 function renderConnectPage(env) {
-  const missing = ['WHATSAPP_APP_ID', 'WHATSAPP_EMBEDDED_CONFIG_ID'].filter((k) => !env[k]);
+  const missing = ['WHATSAPP_APP_ID'].filter((k) => !env[k]);
   if (missing.length) {
     return `<!doctype html><html lang="de"><meta charset="utf-8">
       <body style="font-family:sans-serif;max-width:640px;margin:40px auto;line-height:1.5">
