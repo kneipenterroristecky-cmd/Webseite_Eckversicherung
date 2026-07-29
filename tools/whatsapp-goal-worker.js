@@ -13,7 +13,11 @@
  *   DOCUMENT_RELAY_URL      – die Apps-Script-Web-App-URL (siehe Code.gs, dashboard.html Zeile 231)
  *   DOCUMENT_RELAY_SECRET   – frei wählbarer String, MUSS mit DOCUMENT_RELAY_SECRET in Code.gs übereinstimmen
  *   ANTHROPIC_API_KEY       – fuer die Versicherungskontext-Pruefung von PDFs/Bildern (Modell claude-haiku-4-5)
- *   WORKER_ADMIN_SECRET     – frei waehlbarer String, schuetzt die 'teach'-Aktion (siehe unten)
+ *   WORKER_ADMIN_SECRET     – frei waehlbarer String, schuetzt die 'teach'-Aktion UND /api/phone-drops(/ack)
+ *   PHONE_DROP_SECRET       – frei waehlbarer String, schuetzt NUR /phone-drop (siehe unten) - bewusst
+ *                             getrennt von WORKER_ADMIN_SECRET, damit ein auf dem Handy hinterlegtes
+ *                             Secret (im HTTP-Shortcuts-Kurzbefehl) im Verlustfall nicht auch die
+ *                             admin-Aktionen freischaltet.
  *
  * ── /connect: WhatsApp Coexistence Embedded Signup ──────────────────────
  * Verbindet Daniels EINE bestehende private Nummer per "Coexistence" mit
