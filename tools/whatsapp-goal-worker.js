@@ -300,8 +300,18 @@ export default {
   }
 };
 
+// Liefert die aktuell gueltigen Zugangsdaten fuer Daniels Hauptnummer: bevorzugt
+// die per /connect (Coexistence) frisch verbundenen Werte aus KV, faellt sonst
+// auf die statischen GitHub/Cloudflare-Secrets zurueck (Alt-/Testnummer).
+async function getWaConnection(env) {
+  const phoneNumberId = (await env.SELIN_MEMORY.get('connection_phone_number_id')) || env.WHATSAPP_PHONE_NUMBER_ID;
+  const accessToken = (await env.SELIN_MEMORY.get('connection_access_token')) || env.WHATSAPP_ACCESS_TOKEN;
+  return { phoneNumberId, accessToken };
+}
+
 async function sendWhatsApp(env, message) {
-  await sendWhatsAppTo(env, env.WHATSAPP_TO_NUMBER, message, env.WHATSAPP_PHONE_NUMBER_ID, env.WHATSAPP_ACCESS_TOKEN);
+  const { phoneNumberId, accessToken } = await getWaConnection(env);
+  await sendWhatsAppTo(env, env.WHATSAPP_TO_NUMBER, message, phoneNumberId, accessToken);
 }
 
 async function sendWhatsAppTo(env, to, message, phoneNumberId, accessToken) {
