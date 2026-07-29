@@ -101,6 +101,23 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // ── Coexistence-Verbindungsseite (einmaliger, manueller Klick von Daniel) ──
+    if (url.pathname === '/connect' && request.method === 'GET') {
+      return new Response(renderConnectPage(env), {
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
+      });
+    }
+    if (url.pathname === '/connect/complete' && request.method === 'POST') {
+      return await handleConnectComplete(request, env);
+    }
+    if (url.pathname === '/connect/status' && request.method === 'GET') {
+      const phoneNumberId = await env.SELIN_MEMORY.get('connection_phone_number_id');
+      const connectedAt = await env.SELIN_MEMORY.get('connection_connected_at');
+      return new Response(JSON.stringify({ connected: !!phoneNumberId, phoneNumberId, connectedAt }), {
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
     // ── GET: WhatsApp Webhook-Verifizierung ──────────────────────────────
     if (request.method === 'GET') {
       const mode      = url.searchParams.get('hub.mode');
