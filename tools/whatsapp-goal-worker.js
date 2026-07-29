@@ -129,6 +129,78 @@ export default {
       });
     }
 
+    // ── Handy-Kurzbefehl: manuell aus WhatsApp geteilte Datei zwischenspeichern ──
+    // Umgeht die Cloud-API komplett (kein Meta-Zugriff noetig). Das Handy teilt
+    // EINE ausgewaehlte Datei hierher (kein Auto-Sync von allem), sie landet in
+    // KV, bis der GitHub-Actions-Cloud-Pilot (whatsapp-phone-drop-cloud.ps1)
+    // sie per rclone in den echten OneDrive-Ordner "Manuell einwerfen" legt -
+    // danach laeuft sie wie jedes andere Dokument durch Petra/Bilal/Uwe.
+    if (url.pathname === '/phone-drop' && request.method === 'POST') {
+      if (url.searchParams.get('secret') !== env.PHONE_DROP_SECRET) {
+        return json({ ok: false, error: 'Falsches Secret' }, 401);
+      }
+      const filename = request.headers.get('X-Filename') || `datei-${Date.now()}`;
+      const contentType = request.headers.get('Content-Type') || 'application/octet-stream';
+      const bytes = await request.arrayBuffer();
+      if (bytes.byteLength === 0) {
+        return json({ ok: false, error: 'Leerer Dateiinhalt' }, 400);
+      }
+      if (bytes.byteLength > 20 * 1024 * 1024) {
+        return json({ ok: false, error: 'Datei zu gross (>20MB)' }, 400);
+      }
+      const id = crypto.randomUUID();
+      await env.SELIN_MEMORY.put(
+        `phonedrop:${id}`,
+        JSON.stringify({
+          filename,
+          contentType,
+          dataBase64: arrayBufferToBase64(bytes),
+          receivedAt: new Date().toISOString(),
+        })
+      );
+      const queueRaw = (await env.SELIN_MEMORY.get('phonedrop_queue')) || '[]';
+      const queue = JSON.parse(queueRaw);
+      queue.push(id);
+      await env.SELIN_MEMORY.put('phonedrop_queue', JSON.stringify(queue));
+      return json({ ok: true, id });
+    }
+
+    // ── Cloud-Pilot holt anstehende Handy-Drops ab (Secret = WORKER_ADMIN_SECRET) ──
+    if (url.pathname === '/api/phone-drops' && request.method === 'GET') {
+      if (url.searchParams.get('secret') !== env.WORKER_ADMIN_SECRET) {
+        return json({ error: 'Falsches Secret' }, 401);
+      }
+      const queueRaw = (await env.SELIN_MEMORY.get('phonedrop_queue')) || '[]';
+      const queue = JSON.parse(queueRaw);
+      const items = [];
+      for (const id of queue) {
+        const raw = await env.SELIN_MEMORY.get(`phonedrop:${id}`);
+        if (raw) items.push({ id, ...JSON.parse(raw) });
+      }
+      return json({ items });
+    }
+
+    // ── Cloud-Pilot bestaetigt erfolgreich abgelegte Drops (loescht sie aus der Queue) ──
+    if (url.pathname === '/api/phone-drops/ack' && request.method === 'POST') {
+      if (url.searchParams.get('secret') !== env.WORKER_ADMIN_SECRET) {
+        return json({ error: 'Falsches Secret' }, 401);
+      }
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return json({ error: 'Ungueltiges JSON' }, 400);
+      }
+      const ackIds = new Set(body.ids || []);
+      const queueRaw = (await env.SELIN_MEMORY.get('phonedrop_queue')) || '[]';
+      const queue = JSON.parse(queueRaw).filter((id) => !ackIds.has(id));
+      await env.SELIN_MEMORY.put('phonedrop_queue', JSON.stringify(queue));
+      for (const id of ackIds) {
+        await env.SELIN_MEMORY.delete(`phonedrop:${id}`);
+      }
+      return json({ ok: true });
+    }
+
     // ── GET: WhatsApp Webhook-Verifizierung ──────────────────────────────
     if (request.method === 'GET') {
       const mode      = url.searchParams.get('hub.mode');
