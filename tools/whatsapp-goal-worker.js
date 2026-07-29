@@ -792,10 +792,10 @@ function renderConnectPage(env) {
           })
           .catch((e) => log('Netzwerkfehler: ' + e));
       }, {
-        config_id: '${env.WHATSAPP_EMBEDDED_CONFIG_ID}',
+        scope: 'whatsapp_business_management,whatsapp_business_messaging',
         response_type: 'code',
         override_default_response_type: true,
-        extras: { setup: {} }
+        extras: { feature: 'whatsapp_embedded_signup', setup: {} }
       });
     });
   </script>
