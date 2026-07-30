@@ -112,6 +112,59 @@ function json(data, status = 200) {
   });
 }
 
+function escapeHtml(text) {
+  return String(text).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// ── Nette Bestaetigungsseite fuer den "Zum KI Team"-Handy-Kurzbefehl ────────
+// Der Kurzbefehl (HTTP Shortcuts) zeigt die rohe Response direkt in seinem
+// Antwort-Fenster an - bisher landete dort das nackte JSON ({"ok":true,"id":
+// "..."}). Daniel-Wunsch (2026-07-30): eine ansehnliche Bestaetigung im Stil
+// des Kontrollpanels (gleiche Farben/Schrift wie panel-worker/public/index.html)
+// statt rohem JSON. Dieser Worker hat kein [assets]-Binding (siehe
+// tools/wrangler.toml) - deshalb komplett inline, kein Logo-Bild eingebunden,
+// nur Farben/Schrift/Icon per CSS/SVG wie beim bestehenden renderConnectPage().
+function renderPhoneDropResult({ ok, message, filename, id }) {
+  const icon = ok
+    ? '<svg width="52" height="52" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#dcfce7"/><path d="M8 12.5l2.5 2.5L16 9" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    : '<svg width="52" height="52" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#fee2e2"/><path d="M12 7.5v5.5" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16.3" r="1.1" fill="#dc2626"/></svg>';
+
+  return `<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${ok ? 'Zum KI Team – übernommen' : 'Zum KI Team – Fehler'}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter var','Inter',-apple-system,ui-sans-serif,system-ui,sans-serif;background:#f5f6fa;color:#1e293b;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{background:#fff;border-radius:20px;padding:40px 32px;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(23,45,80,.15);text-align:center}
+.icon{margin:0 auto 18px;display:flex;align-items:center;justify-content:center}
+h1{font-size:19px;font-weight:800;color:#172d50;margin-bottom:10px}
+p{font-size:13.5px;color:#64748b;line-height:1.5}
+.badge{display:inline-block;margin-top:18px;padding:7px 16px;background:${ok ? '#eef4fc' : '#fef2f2'};color:${ok ? '#1a50c8' : '#dc2626'};border-radius:20px;font-size:12px;font-weight:700}
+.meta{margin-top:20px;padding-top:16px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">${icon}</div>
+  <h1>${ok ? 'Datei übernommen' : 'Etwas ist schiefgelaufen'}</h1>
+  <p>${escapeHtml(message)}</p>
+  ${ok ? '<div class="badge">Läuft jetzt automatisch durch Petra/Bilal/Uwe</div>' : ''}
+  ${ok ? `<div class="meta">${escapeHtml(filename || '')}${id ? ' · Referenz ' + escapeHtml(id.slice(0, 8)) : ''}</div>` : ''}
+</div>
+</body>
+</html>`;
+}
+
+function htmlResponse(html, status = 200) {
+  return new Response(html, { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
