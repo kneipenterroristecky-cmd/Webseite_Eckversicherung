@@ -172,7 +172,7 @@ Instagram-Caption:
 Antworte NUR als JSON: {{"ok": true}} wenn kein eindeutiger Fehler vorliegt, sonst {{"ok": false, "problem": "kurze konkrete Beschreibung des EINEN wichtigsten Fehlers"}}"""
                 }]
             )
-            raw = pruef_msg.content[0].text
+            raw = next(b.text for b in pruef_msg.content if b.type == "text")
             match = re.search(r'\{.*\}', raw, re.DOTALL)
             ergebnis = json.loads(match.group()) if match else {"ok": True}
             if not ergebnis.get("ok", True):
