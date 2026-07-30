@@ -86,23 +86,11 @@ def _update_blog_index(meta, repo, headers):
     })
 
 
-def _truncate_teaser(text, limit=120):
-    """Kürzt den Teaser auf `limit` Zeichen, ohne ein Wort mittendrin abzuschneiden."""
-    text = text.strip()
-    if len(text) <= limit:
-        return text
-    cut = text[:limit]
-    last_space = cut.rfind(" ")
-    if last_space > 0:
-        cut = cut[:last_space]
-    return cut.rstrip(" ,;:–-")
-
-
 def _update_latest_ticker(meta, repo, headers):
     """Aktualisiert latest-post.json – Datenquelle für den Blog-Ticker in der Topbar."""
     ticker = {
         "title": meta["title"],
-        "teaser": _truncate_teaser(meta.get("social_summary", meta["title"])),
+        "teaser": meta.get("social_summary", meta["title"]).strip(),
         "url": f"blog/posts/{meta['filename']}",
         "date_de": meta["date_de"]
     }
