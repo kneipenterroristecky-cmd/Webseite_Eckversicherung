@@ -170,14 +170,18 @@ jobs:
             cut = s[:n].rsplit(" ", 1)[0].rstrip(",.;:–-")
             return cut + "…"
 
+          def full(s):
+            """Nie abschneiden - die KI begrenzt blog_excerpt/wa_image_text schon selbst kurz genug."""
+            return (s or "").replace("\n", " ").strip()
+
           meta    = json.load(open("tools/draft_meta.json", encoding="utf-8"))
           title   = meta.get("title", "")
           date_de = meta.get("date_de", "")
           # WhatsApp-Template-Parameter duerfen KEINE Zeilenumbrueche enthalten (Meta lehnt den
           # Versand sonst mit Fehler 132018 ab) - deshalb excerpt/fb/ig als 3 GETRENNTE Parameter
           # (jeweils eigene Zeile im STATISCHEN Vorlagentext, nicht im Parameterwert selbst).
-          excerpt    = trunc(meta.get("blog_excerpt", ""), 160)
-          image_text = trunc(meta.get("wa_image_text", ""), 80)
+          excerpt    = full(meta.get("blog_excerpt", ""))
+          image_text = full(meta.get("wa_image_text", ""))
           fb_preview = trunc(meta.get("social_summary", ""), 170)
           ig_preview = trunc(meta.get("instagram_caption", "").split("\n\n")[0], 170)
           # Fallback fuer das alte kombinierte Template: nur solange nutzen, bis blog_entwurf_info_v3
