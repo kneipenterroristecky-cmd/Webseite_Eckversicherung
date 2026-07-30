@@ -194,16 +194,16 @@ export default {
     // danach laeuft sie wie jedes andere Dokument durch Petra/Bilal/Uwe.
     if (url.pathname === '/phone-drop' && request.method === 'POST') {
       if (url.searchParams.get('secret') !== env.PHONE_DROP_SECRET) {
-        return json({ ok: false, error: 'Falsches Secret' }, 401);
+        return htmlResponse(renderPhoneDropResult({ ok: false, message: 'Falsches Secret - der Kurzbefehl ist nicht korrekt eingerichtet.' }), 401);
       }
       const filename = request.headers.get('X-Filename') || `datei-${Date.now()}`;
       const contentType = request.headers.get('Content-Type') || 'application/octet-stream';
       const bytes = await request.arrayBuffer();
       if (bytes.byteLength === 0) {
-        return json({ ok: false, error: 'Leerer Dateiinhalt' }, 400);
+        return htmlResponse(renderPhoneDropResult({ ok: false, message: 'Die Datei kam leer an - bitte nochmal versuchen.' }), 400);
       }
       if (bytes.byteLength > 20 * 1024 * 1024) {
-        return json({ ok: false, error: 'Datei zu gross (>20MB)' }, 400);
+        return htmlResponse(renderPhoneDropResult({ ok: false, message: 'Datei ist groesser als 20 MB und wurde nicht angenommen.' }), 400);
       }
       const id = crypto.randomUUID();
       await env.SELIN_MEMORY.put(
@@ -219,7 +219,12 @@ export default {
       const queue = JSON.parse(queueRaw);
       queue.push(id);
       await env.SELIN_MEMORY.put('phonedrop_queue', JSON.stringify(queue));
-      return json({ ok: true, id });
+      return htmlResponse(renderPhoneDropResult({
+        ok: true,
+        message: 'Landet spaetestens in 15 Minuten im Buero-Ordner "Manuell einwerfen" und wird automatisch eingeordnet.',
+        filename,
+        id,
+      }));
     }
 
     // ── Cloud-Pilot holt anstehende Handy-Drops ab (Secret = WORKER_ADMIN_SECRET) ──
