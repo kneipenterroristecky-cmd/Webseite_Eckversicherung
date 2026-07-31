@@ -302,6 +302,9 @@ function createWindow() {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
     </div>
+    <div class="eck-chat-footer">
+      <button class="eck-chat-close-bottom" id="eck-close-bottom">Schließen ✕</button>
+    </div>
   `;
   document.body.appendChild(win);
 
