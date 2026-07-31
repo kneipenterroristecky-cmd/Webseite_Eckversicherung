@@ -323,6 +323,7 @@ function createWindow() {
 
   // Events
   win.querySelector('#eck-close').onclick = closeChat;
+  win.querySelector('#eck-close-bottom').onclick = closeChat;
   win.querySelector('#eck-send').onclick = () => {
     const val = win.querySelector('#eck-input').value.trim();
     if (val) sendMessage(val);
