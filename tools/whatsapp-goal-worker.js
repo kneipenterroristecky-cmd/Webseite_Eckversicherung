@@ -147,6 +147,8 @@ h1{font-size:19px;font-weight:800;color:#172d50;margin-bottom:10px}
 p{font-size:13.5px;color:#64748b;line-height:1.5}
 .badge{display:inline-block;margin-top:18px;padding:7px 16px;background:${ok ? '#eef4fc' : '#fef2f2'};color:${ok ? '#1a50c8' : '#dc2626'};border-radius:20px;font-size:12px;font-weight:700}
 .meta{margin-top:20px;padding-top:16px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;word-break:break-all}
+.close-btn{margin-top:24px;padding:12px 32px;background:#172d50;color:#fff;border:none;border-radius:24px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.close-btn:active{background:#0f1f3a}
 </style>
 </head>
 <body>
@@ -156,6 +158,7 @@ p{font-size:13.5px;color:#64748b;line-height:1.5}
   <p>${escapeHtml(message)}</p>
   ${ok ? '<div class="badge">Läuft jetzt automatisch durch Petra/Bilal/Uwe</div>' : ''}
   ${ok ? `<div class="meta">${escapeHtml(filename || '')}${id ? ' · Referenz ' + escapeHtml(id.slice(0, 8)) : ''}</div>` : ''}
+  <div><button class="close-btn" onclick="window.close()">Schließen</button></div>
 </div>
 </body>
 </html>`;
