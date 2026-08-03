@@ -95,10 +95,13 @@ jobs:
                 # nicht die veraltete unsplash_query aus dem urspruenglichen Entwurf.
                 topic_title = new_title or meta.get('title', '')
                 fallback = meta.get('og_image') or "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
+                current_match = re.search(r'(photo-[\w-]+)', meta.get('og_image', ''))
+                current_id = current_match.group(1) if current_match else None
                 new_id = find_best_image(
                   topic_title, meta.get('label', 'Ratgeber'),
                   meta.get('unsplash_query', topic_title),
-                  img_client, fallback, unsplash_key
+                  img_client, fallback, unsplash_key,
+                  exclude_id=current_id
                 )
               except Exception as e:
                 print(f"⚠️  Bildauswahl-Fehler: {e}")
