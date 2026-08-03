@@ -57,7 +57,10 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
         photos = r.json().get("results", [])
         # Zu kleine Originale ausschliessen – sonst skaliert Unsplash beim Zuschnitt
         # auf 1080x1920 hoch, was das Bild unscharf/verwaschen macht.
-        photos = [p for p in photos if p.get("width", 0) >= 1080 and p.get("height", 0) >= 1080][:6]
+        photos = [p for p in photos if p.get("width", 0) >= 1080 and p.get("height", 0) >= 1080]
+        if exclude_id:
+            photos = [p for p in photos if p.get("id") != exclude_id]
+        photos = photos[:6]
         if not photos:
             print("   ⚠️  Keine ausreichend hochaufgelösten Unsplash-Ergebnisse – nutze Fallback")
             return fallback_url
