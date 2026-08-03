@@ -7,8 +7,13 @@ import base64
 import requests
 
 
-def find_best_image(topic_title, topic_label, topic_query, client, fallback_url, unsplash_key):
-    """Sucht auf Unsplash und lässt Claude Vision das thematisch passendste Bild wählen."""
+def find_best_image(topic_title, topic_label, topic_query, client, fallback_url, unsplash_key, exclude_id=None):
+    """Sucht auf Unsplash und lässt Claude Vision das thematisch passendste Bild wählen.
+
+    exclude_id: Unsplash-Foto-ID, die NICHT erneut gewählt werden soll (z.B. das aktuell
+    verwendete Bild bei "Neues Bild vorschlagen" – sonst liefert dieselbe Suche+Vision-Wahl
+    deterministisch wieder exakt dasselbe Foto zurück).
+    """
     if not unsplash_key:
         print("   ℹ️  Kein UNSPLASH_ACCESS_KEY – nutze Fallback-Bild")
         return fallback_url
