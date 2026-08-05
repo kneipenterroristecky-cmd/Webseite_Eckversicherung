@@ -124,6 +124,10 @@ function escapeHtml(text) {
 // statt rohem JSON. Dieser Worker hat kein [assets]-Binding (siehe
 // tools/wrangler.toml) - deshalb komplett inline, kein Logo-Bild eingebunden,
 // nur Farben/Schrift/Icon per CSS/SVG wie beim bestehenden renderConnectPage().
+// Bewusst OHNE eigenen "Schliessen"-Button: window.close() wirkt nur bei per
+// Skript geoeffneten Fenstern, nicht beim Antwort-Fenster von HTTP Shortcuts -
+// der Klick waere wirkungslos gewesen (2026-08-05 gefunden/entfernt). Das
+// native "X" der App schliesst zuverlaessig.
 function renderPhoneDropResult({ ok, message, filename, id }) {
   const icon = ok
     ? '<svg width="52" height="52" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#dcfce7"/><path d="M8 12.5l2.5 2.5L16 9" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
