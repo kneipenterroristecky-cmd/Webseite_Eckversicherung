@@ -156,7 +156,6 @@ p{font-size:13.5px;color:#64748b;line-height:1.5}
   <p>${escapeHtml(message)}</p>
   ${ok ? '<div class="badge">Läuft jetzt automatisch durch Petra/Bilal/Uwe</div>' : ''}
   ${ok ? `<div class="meta">${escapeHtml(filename || '')}${id ? ' · Referenz ' + escapeHtml(id.slice(0, 8)) : ''}</div>` : ''}
-  <div><button class="close-btn" onclick="window.close()">Schließen</button></div>
 </div>
 </body>
 </html>`;
