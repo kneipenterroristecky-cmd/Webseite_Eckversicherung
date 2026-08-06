@@ -79,6 +79,30 @@ jobs:
             )
             print(f"pr_befund erstellt: {r5.status_code} – {r5.text[:300]}")
 
+          # buero_dokument_alarm (Buero-Automation/Petra meldet ein wichtiges Kundendokument
+          # zum Maklerverhaeltnis selbst - Willenserklaerung Maklerwechsel/neue Maklervollmacht -
+          # sofort per WhatsApp statt nur per Mail, siehe send-buero-alert-whatsapp.yml)
+          if "buero_dokument_alarm" in templates:
+            st = templates["buero_dokument_alarm"].get("status","?")
+            print(f"✅ buero_dokument_alarm: {st}")
+          else:
+            print("\n⚠️  buero_dokument_alarm fehlt – wird erstellt …")
+            r10 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "buero_dokument_alarm",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [{
+                  "type": "BODY",
+                  "text": "⚠️ Wichtiges Dokument bei Kunde {{1}} eingegangen: {{2}}\n\nBitte zeitnah in Professional Works prüfen.",
+                  "example": {"body_text": [["Nancy Lieding", "Willenserklärung Maklerwechsel"]]}
+                }]
+              }
+            )
+            print(f"buero_dokument_alarm erstellt: {r10.status_code} – {r10.text[:300]}")
+
           # blog_entwurf_freigabe (neuer Entwurf zur Freigabe – ersetzt die Brevo-Mail aus WF1)
           if "blog_entwurf_freigabe" in templates:
             st = templates["blog_entwurf_freigabe"].get("status","?")
