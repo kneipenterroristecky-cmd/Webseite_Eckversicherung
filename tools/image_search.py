@@ -54,7 +54,7 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
     try:
         r = requests.get(
             "https://api.unsplash.com/search/photos",
-            params={"query": search_query, "per_page": 8, "orientation": "landscape", "content_filter": "high"},
+            params={"query": search_query, "per_page": 30, "page": search_page, "orientation": "landscape", "content_filter": "high"},
             headers={"Authorization": f"Client-ID {unsplash_key}"},
             timeout=15
         )
@@ -63,15 +63,26 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
             return fallback_url
 
         photos = r.json().get("results", [])
+        if not photos and search_page > 1:
+            # Seite ohne Treffer (z.B. Suchbegriff hat insgesamt weniger als 30*page
+            # Ergebnisse) – auf Seite 1 zurueckfallen statt komplett leer auszugehen.
+            r = requests.get(
+                "https://api.unsplash.com/search/photos",
+                params={"query": search_query, "per_page": 30, "page": 1, "orientation": "landscape", "content_filter": "high"},
+                headers={"Authorization": f"Client-ID {unsplash_key}"},
+                timeout=15
+            )
+            photos = r.json().get("results", []) if r.status_code == 200 else []
         # Zu kleine Originale ausschliessen – sonst skaliert Unsplash beim Zuschnitt
         # auf 1080x1920 hoch, was das Bild unscharf/verwaschen macht.
         photos = [p for p in photos if p.get("width", 0) >= 1080 and p.get("height", 0) >= 1080]
-        if exclude_id:
-            photos = [p for p in photos if p.get("id") != exclude_id]
-        photos = photos[:6]
+        photos = [p for p in photos if p.get("id") not in exclude_ids]
         if not photos:
-            print("   ⚠️  Keine ausreichend hochaufgelösten Unsplash-Ergebnisse – nutze Fallback")
+            print("   ⚠️  Keine neuen Unsplash-Ergebnisse (alle bereits vorgeschlagen oder zu klein) – nutze Fallback")
             return fallback_url
+        # Zufaellige statt immer gleicher Auswahl der ersten Treffer, damit Claude Vision
+        # nicht wieder auf denselben Kandidaten-Satz konvergiert.
+        photos = random.sample(photos, min(6, len(photos)))
 
         # Schritt 3: Vorschaubilder laden
         candidates = []
