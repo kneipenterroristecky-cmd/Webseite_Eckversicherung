@@ -95,14 +95,23 @@ jobs:
                 # nicht die veraltete unsplash_query aus dem urspruenglichen Entwurf.
                 topic_title = new_title or meta.get('title', '')
                 fallback = meta.get('og_image') or "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop&auto=format"
+                # Alle bei diesem Entwurf bisher gezeigten Bilder ausschliessen, nicht nur
+                # das aktuell angezeigte - sonst kommt bei mehrfachem Klick auf "Neues Bild
+                # vorschlagen" nach 2-3 Versuchen wieder ein frueheres Bild zurueck.
+                shown_ids = set(meta.get('shown_image_ids', []))
                 current_match = re.search(r'(photo-[\w-]+)', meta.get('og_image', ''))
-                current_id = current_match.group(1) if current_match else None
+                if current_match:
+                  shown_ids.add(current_match.group(1))
                 new_id = find_best_image(
                   topic_title, meta.get('label', 'Ratgeber'),
                   meta.get('unsplash_query', topic_title),
                   img_client, fallback, unsplash_key,
-                  exclude_id=current_id
+                  exclude_ids=shown_ids
                 )
+                new_match = re.search(r'(photo-[\w-]+)', new_id or '')
+                if new_match:
+                  shown_ids.add(new_match.group(1))
+                meta['shown_image_ids'] = sorted(shown_ids)
               except Exception as e:
                 print(f"⚠️  Bildauswahl-Fehler: {e}")
           if new_id:
