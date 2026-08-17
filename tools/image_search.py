@@ -20,6 +20,12 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
         print("   ℹ️  Kein UNSPLASH_ACCESS_KEY – nutze Fallback-Bild")
         return fallback_url
 
+    # Bei wiederholten Aufrufen zum selben Thema (z.B. mehrfach "Neues Bild vorschlagen")
+    # liefert Claude Haiku fuer denselben Titel fast immer denselben Suchbegriff. Ein
+    # zufaelliger Seitenversatz sorgt dafuer, dass Unsplash nicht jedes Mal denselben
+    # Ergebnis-Pool zurueckgibt.
+    search_page = random.randint(1, 3)
+
     # Schritt 1: KI generiert optimierten Suchbegriff
     try:
         q_resp = client.messages.create(
