@@ -108,6 +108,8 @@ og_image = find_best_image(
     topic.get("unsplash_query", topic["title"]),
     client, _fallback_url, _unsplash_key
 )
+_og_image_match = re.search(r'(photo-[\w-]+)', og_image)
+_shown_image_ids = [_og_image_match.group(1)] if _og_image_match else []
 
 # Portrait-Crop: Fokuspunkt aus topics.json nehmen wenn vorhanden, sonst KI-Analyse
 _og_base = og_image.split("?")[0] or _FALLBACK_IMG
