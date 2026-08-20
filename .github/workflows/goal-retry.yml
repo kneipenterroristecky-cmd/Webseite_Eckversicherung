@@ -1,8 +1,8 @@
-name: 🔄 Goal Auto-Retry (stündlich)
+name: 🔄 Goal Auto-Retry (alle 4 Stunden)
 
 on:
   schedule:
-    - cron: '0 * * * *'   # Jede volle Stunde
+    - cron: '0 */4 * * *'   # Alle 4 Stunden
   workflow_dispatch:       # Manuell auslösbar
 
 jobs:
