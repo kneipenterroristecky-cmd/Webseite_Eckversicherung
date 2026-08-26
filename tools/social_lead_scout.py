@@ -178,13 +178,35 @@ def run():
         return
 
     print(f"✅ {len(found)} neue(r) Treffer gefunden. Übertrage ins Google Sheet ...")
-    resp = requests.post(secrets["apps_script_url"], json={
+    payload = {
         "action": "social_lead_add",
         "secret": secrets["social_scout_secret"],
         "leads": found,
-    }, timeout=30)
-    resp.raise_for_status()
-    result = resp.json()
+    }
+    result = None
+    last_error = None
+    for versuch in range(1, 4):
+        try:
+            resp = requests.post(secrets["apps_script_url"], json=payload, timeout=45)
+            resp.raise_for_status()
+            result = resp.json()
+            break
+        except Exception as e:
+            last_error = e
+            print(f"⚠️  Übertragung fehlgeschlagen (Versuch {versuch}/3): {e}")
+            if versuch < 3:
+                time.sleep(5 * versuch)
+
+    if result is None:
+        # Gefundene Treffer bleiben in "seen" (kein erneutes Anzeigen naechste Woche),
+        # sind bei einer fehlgeschlagenen Uebertragung aber nicht im Sheet gelandet -
+        # deshalb hier zusaetzlich lokal sichern, statt sie stillschweigend zu verlieren
+        # (live am 2026-08-26 passiert: 46 Treffer durch einen einzelnen 404 verloren).
+        save_json(TOOLS_DIR / "social_lead_scout_failed.json", found)
+        print(f"❌ Übertragung nach 3 Versuchen fehlgeschlagen ({last_error}). "
+              f"Treffer lokal gesichert in social_lead_scout_failed.json.")
+        sys.exit(1)
+
     if not result.get("ok"):
         print(f"❌ Apps-Script-Fehler: {result.get('err')}")
         sys.exit(1)
