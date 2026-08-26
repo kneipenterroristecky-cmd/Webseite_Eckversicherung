@@ -2,11 +2,12 @@
 """
 Social-Lead-Scout – Neukundengewinn über soziale Medien.
 
-Durchsucht (per Google Custom Search API) öffentlich indexierte Beiträge auf
-X/Twitter, Facebook, Instagram, Reddit & Foren nach Sätzen wie
-"Suche Alternative zu ..." oder "Weiß jemand ..." rund um Versicherungsthemen.
-Neue Treffer werden dedupliziert per URL, ins Google Sheet "Social-Leads"
-(via Apps Script, siehe Code.gs) eingetragen und dort per E-Mail zusammengefasst.
+Durchsucht (per SerpApi, das echte Google-Suchergebnisse als JSON liefert)
+öffentlich indexierte Beiträge auf X/Twitter, Facebook, Instagram, Reddit &
+Foren nach Sätzen wie "Suche Alternative zu ..." oder "Weiß jemand ..." rund
+um Versicherungsthemen. Neue Treffer werden dedupliziert per URL, ins Google
+Sheet "Social-Leads" (via Apps Script, siehe Code.gs) eingetragen und dort
+per E-Mail zusammengefasst.
 
 Läuft wöchentlich per GitHub Actions (.github/workflows/social-lead-scout.yml).
 Secrets kommen aus Umgebungsvariablen, Themen/Suchmuster aus
@@ -27,7 +28,7 @@ TOPICS_PATH   = TOOLS_DIR / "social_lead_scout_topics.json"
 SEEN_PATH     = TOOLS_DIR / "social_lead_scout_seen.json"
 ROTATION_PATH = TOOLS_DIR / "social_lead_scout_rotation.json"
 
-GOOGLE_SEARCH_URL = "https://www.googleapis.com/customsearch/v1"
+SERPAPI_URL = "https://serpapi.com/search"
 
 
 def load_json(path, default):
