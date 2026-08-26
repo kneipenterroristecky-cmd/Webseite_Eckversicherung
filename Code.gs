@@ -134,6 +134,12 @@ function doPost(e) {
       return out_({ ok: true });
     }
 
+    if (data.action === 'social_lead_add') {
+      if (data.secret !== SOCIAL_SCOUT_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      var scoutResult = storeSocialLeads_(data.leads || []);
+      return out_({ ok: true, added: scoutResult.added, skipped: scoutResult.skipped });
+    }
+
     save_(data);
     return out_({ ok: true });
   } catch (ex) {
