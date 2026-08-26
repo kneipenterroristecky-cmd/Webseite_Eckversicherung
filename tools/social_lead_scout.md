@@ -23,20 +23,30 @@ und TikTok erlauben das nur für eigene Seiten/Werbekonten). Ein Scraper, der
 das umgeht, würde gegen die Nutzungsbedingungen verstoßen – das baue ich
 dir nicht.
 
-Stattdessen nutzt dieses Tool die **Google-Suche** (Custom Search API), um
+Stattdessen nutzt dieses Tool die **Google-Suche** (über SerpApi), um
 öffentlich zugängliche, von Google indexierte Beiträge zu finden. Das heißt
 konkret:
 
-- **Reddit, Foren (gutefrage.net, wer-weiss-was.de, Quora)**: gute Abdeckung,
-  wird zuverlässig gefunden.
-- **Facebook**: nur öffentliche Seiten/Gruppen-Beiträge, die Google indexiert
-  hat – private Gruppen sieht Google nicht.
-- **Instagram**: nur Bildunterschriften, die Google indexiert hat – eher
-  lückenhaft.
-- **X/Twitter**: seit den API-Änderungen 2023 indexiert Google nur noch
-  einen kleinen Teil der Tweets – Abdeckung ist spürbar schwächer als früher.
+- **Reddit (r/Finanzen, r/Versicherung, r/de), Foren (gutefrage.net,
+  wer-weiss-was.de, Quora)**: gute Abdeckung, wird zuverlässig gefunden.
+- **Facebook**: nur öffentliche Gruppen-Beiträge, die Google indexiert hat
+  – private Gruppen sieht Google nicht.
+- **X/Twitter und Instagram bewusst NICHT durchsucht**: erste Testläufe
+  (2026-08-26) zeigten dort fast nur Profilseiten ohne echten Text-Treffer
+  (X/Twitter wird von Google seit 2023 kaum noch indexiert) bzw. Werbe-
+  Captions von Versicherungsvertretern selbst statt echter Kundenanfragen.
 - **TikTok**: praktisch nicht erfasst (dort steht der Text meist im Video,
-  nicht im indexierbaren Seitentext).
+  nicht im indexierbaren Seitentext) – deshalb nicht in der Plattformliste.
+
+**Qualitätsprüfung durch Claude**: Google findet die zwei Suchbegriffe oft
+unabhängig voneinander irgendwo auf einer Seite (z.B. "suche alternative
+zu" in einem Jobkontext + "Betriebliche Krankenversicherung" als
+Benefit in derselben Stellenanzeige). Reine Stichwort-/Domain-Filter reichen
+dagegen nicht aus, um sowas zuverlässig auszusortieren. Deshalb bewertet
+Claude (Haiku, günstiges Modell) jeden Treffer inhaltlich, bevor er
+gespeichert wird: Jobanzeigen, Vertreter-/Makler-Werbung und sonstige
+Fehltreffer werden aussortiert, auch wenn sie die Stichwort-Filter
+überstanden haben.
 
 Das Tool ist also ein solides Radar für Reddit/Foren/öffentliches Facebook,
 aber kein Ersatz für eine Social-Media-Monitoring-Profi-Lösung (z.B.
