@@ -59,6 +59,17 @@ var CALL_DELAY_HOURS     = 24;   // Stunden nach Anmeldung vor erstem Anruf
 var LEAD_SECRET          = 'ECK_VOICE_2024'; // Spam-Schutz für Lead-Endpoint
 // ─────────────────────────────────────────────────────────────────
 
+// ── SOCIAL-LEAD-SCOUT (Neukundengewinn über soziale Medien) ─────────
+// Muss exakt mit SOCIAL_SCOUT_SECRET in tools/social_lead_scout_config.json
+// übereinstimmen. Das lokale Python-Script durchsucht wöchentlich Google
+// nach Beiträgen wie "Suche Alternative zu ..." zu Versicherungsthemen und
+// trägt neue Treffer hier im Sheet "Social-Leads" ein (Status/Notiz direkt
+// im Sheet bearbeitbar, sortier- und filterbar). Bei neuen Treffern geht
+// zusätzlich eine E-Mail an NOTIFY_EMAIL raus.
+var SOCIAL_LEADS_SHEET  = 'Social-Leads';
+var SOCIAL_SCOUT_SECRET = 'BITTE_EIGENES_GEHEIMWORT_EINTRAGEN'; // ← selbst ein zufälliges Wort eintragen
+// ─────────────────────────────────────────────────────────────────
+
 // ----------------------------------------------------------------
 // GET-Handler: Tracking + Dashboard-Daten
 // ----------------------------------------------------------------
