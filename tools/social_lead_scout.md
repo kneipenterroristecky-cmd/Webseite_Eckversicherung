@@ -31,10 +31,14 @@ konkret:
   wer-weiss-was.de, Quora)**: gute Abdeckung, wird zuverlässig gefunden.
 - **Facebook**: nur öffentliche Gruppen-Beiträge, die Google indexiert hat
   – private Gruppen sieht Google nicht.
-- **X/Twitter und Instagram bewusst NICHT durchsucht**: erste Testläufe
-  (2026-08-26) zeigten dort fast nur Profilseiten ohne echten Text-Treffer
-  (X/Twitter wird von Google seit 2023 kaum noch indexiert) bzw. Werbe-
-  Captions von Versicherungsvertretern selbst statt echter Kundenanfragen.
+- **X/Twitter**: seit 2026-08-26 wieder mit dabei. Der erste Testlauf (noch
+  ohne Zeitfenster/Minus-Wörter/Claude-Prüfung) lieferte fast nur
+  Profilseiten oder Werbe-Captions von Versicherungsvertretern – die
+  seither eingebauten Filter sollen das jetzt zuverlässiger abfangen.
+  X/Twitter wird von Google seit 2023 ohnehin nur noch lückenhaft
+  indexiert, die Trefferzahl bleibt also vermutlich gering.
+- **Instagram bewusst NICHT durchsucht**: der eigentliche Text steht dort
+  meist in Bildern/Stories, nicht im für Google durchsuchbaren Seitentext.
 - **TikTok**: praktisch nicht erfasst (dort steht der Text meist im Video,
   nicht im indexierbaren Seitentext) – deshalb nicht in der Plattformliste.
 
