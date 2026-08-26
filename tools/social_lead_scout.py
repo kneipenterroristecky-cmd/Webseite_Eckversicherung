@@ -140,6 +140,42 @@ def is_makler_domain(url, makler_domains):
     return any(d in url for d in makler_domains)
 
 
+RELEVANZ_PROMPT = """Du prüfst Suchtreffer für einen unabhängigen Versicherungsmakler, der neue Privat-/Geschäftskunden sucht.
+
+Thema: {thema}
+Titel: {titel}
+Textausschnitt: {snippet}
+
+Frage: Ist das ein Beitrag/Post/Kommentar einer echten Privatperson (oder eines Geschäftsinhabers in eigener Sache),
+die/der tatsächlich nach einer {thema} sucht, unzufrieden mit ihrer/seiner aktuellen ist, eine Alternative sucht,
+eine Empfehlung möchte oder eine kündigen/wechseln will?
+
+Antworte NUR mit JA, wenn all das zutrifft. Antworte mit NEIN bei:
+- Jobanzeigen/Stellenausschreibungen (auch wenn die Versicherung nur als Benefit erwähnt wird)
+- Werbe-/Verkaufsposts von Versicherungsvertretern, Maklern, Agenturen oder Finanzberatern (auch wenn sie wie eine Kundenfrage klingen)
+- Allgemeine Ratgeber-/News-Artikel ohne konkrete persönliche Suchabsicht
+- Beiträgen, bei denen das Thema nur zufällig/am Rande erwähnt wird, es aber eigentlich um etwas anderes geht
+- Reiner Produktbeschreibung ohne erkennbare Suchabsicht einer Person
+
+Antworte NUR mit einem einzigen Wort: JA oder NEIN."""
+
+
+def ist_relevanter_lead(client, thema, titel, snippet):
+    if client is None:
+        return True
+    try:
+        resp = client.messages.create(
+            model=CLAUDE_MODEL,
+            max_tokens=5,
+            messages=[{"role": "user", "content": RELEVANZ_PROMPT.format(thema=thema, titel=titel, snippet=snippet)}],
+        )
+        antwort = resp.content[0].text.strip().upper()
+        return antwort.startswith("JA")
+    except Exception as e:
+        print(f"⚠️  Relevanzprüfung fehlgeschlagen ({e}) - Treffer wird sicherheitshalber behalten.")
+        return True
+
+
 def run():
     cfg = load_json(TOPICS_PATH, None)
     if cfg is None:
