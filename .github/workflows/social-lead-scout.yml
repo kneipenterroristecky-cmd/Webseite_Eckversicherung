@@ -25,8 +25,7 @@ jobs:
 
       - name: Suche ausführen
         env:
-          GOOGLE_CSE_API_KEY: ${{ secrets.GOOGLE_CSE_API_KEY }}
-          GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           SOCIAL_SCOUT_SECRET: ${{ secrets.SOCIAL_SCOUT_SECRET }}
         run: python tools/social_lead_scout.py
