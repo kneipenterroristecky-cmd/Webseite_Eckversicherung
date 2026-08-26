@@ -87,7 +87,7 @@ def next_batch(all_queries, cfg):
     return batch
 
 
-def serpapi_search(secrets, query, num):
+def serpapi_search(secrets, query, num, zeitfenster):
     params = {
         "api_key": secrets["serpapi_key"],
         "engine": "google",
@@ -96,6 +96,8 @@ def serpapi_search(secrets, query, num):
         "gl": "de",
         "hl": "de",
     }
+    if zeitfenster:
+        params["tbs"] = zeitfenster
     r = requests.get(SERPAPI_URL, params=params, timeout=20)
     if r.status_code == 429:
         raise RuntimeError("SerpApi: Monatslimit erreicht (429) – Lauf wird abgebrochen.")
