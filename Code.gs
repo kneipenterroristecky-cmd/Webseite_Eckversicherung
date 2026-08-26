@@ -144,6 +144,11 @@ function doPost(e) {
       return out_({ ok: true, added: scoutResult.added, skipped: scoutResult.skipped });
     }
 
+    if (data.action === 'social_scout_sheet_url') {
+      if (data.secret !== SOCIAL_SCOUT_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      return out_({ ok: true, url: SpreadsheetApp.getActiveSpreadsheet().getUrl() });
+    }
+
     save_(data);
     return out_({ ok: true });
   } catch (ex) {
