@@ -192,7 +192,15 @@ def run():
     makler_domains = cfg.get("makler_ausschliessen", [])
     results_per_query = cfg.get("results_per_query", 5)
     zeitfenster = cfg.get("zeitfenster")
+
+    claude = None
+    if secrets["anthropic_api_key"] and anthropic is not None:
+        claude = anthropic.Anthropic(api_key=secrets["anthropic_api_key"])
+    else:
+        print("ℹ️  Keine Relevanzprüfung durch Claude (ANTHROPIC_API_KEY fehlt) - nur Stichwort-/Domain-Filter aktiv.")
+
     found = []
+    verworfen = 0
 
     for item in batch:
         try:
