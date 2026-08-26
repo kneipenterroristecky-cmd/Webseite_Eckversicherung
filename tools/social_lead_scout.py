@@ -87,18 +87,23 @@ def next_batch(all_queries, cfg):
     return batch
 
 
-def google_search(secrets, query, num):
+def serpapi_search(secrets, query, num):
     params = {
-        "key": secrets["google_api_key"],
-        "cx": secrets["google_cx"],
+        "api_key": secrets["serpapi_key"],
+        "engine": "google",
         "q": query,
         "num": num,
+        "gl": "de",
+        "hl": "de",
     }
-    r = requests.get(GOOGLE_SEARCH_URL, params=params, timeout=20)
+    r = requests.get(SERPAPI_URL, params=params, timeout=20)
     if r.status_code == 429:
-        raise RuntimeError("Google Custom Search: Tageslimit erreicht (429) – Lauf wird abgebrochen.")
+        raise RuntimeError("SerpApi: Monatslimit erreicht (429) – Lauf wird abgebrochen.")
     r.raise_for_status()
-    return r.json().get("items", [])
+    data = r.json()
+    if data.get("error"):
+        raise RuntimeError(f"SerpApi-Fehler: {data['error']}")
+    return data.get("organic_results", [])
 
 
 def guess_platform_label(url, fallback):
