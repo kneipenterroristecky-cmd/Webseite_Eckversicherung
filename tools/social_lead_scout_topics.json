@@ -16,13 +16,18 @@
   ],
   "_makler_hinweis": "Bekannte Vergleichsportale/Insurtechs/Maklerverzeichnisse - deren Werbe- und Ratgeberseiten tauchten bei den Testläufen als Treffer auf statt echter Kundenanfragen (live am 2026-08-26 aufgefallen).",
 
+  "ausschluss_stichworte": [
+    "jobs", "stellenangebot", "stellenanzeige", "bewerbung", "gesucht m/w/d", "vertrieb",
+    "verkaufe", "makler", "agentur", "berater werden", "ausbildung", "praktikum", "vertriebspartner"
+  ],
+  "_ausschluss_hinweis": "Als Minus-Wörter an jede Suche angehängt (-jobs -stellenangebot ...) - ohne das kamen ueberwiegend Stellenanzeigen (\"Physiotherapeut gesucht\") und Werbe-Posts von Versicherungsvertretern statt echter Kundenanfragen zurueck (live am 2026-08-26 aufgefallen: von 47 Treffern war nur eine Handvoll relevant).",
+
   "platforms": [
-    { "name": "X/Twitter", "site_filter": "(site:x.com OR site:twitter.com)" },
     { "name": "Facebook", "site_filter": "site:facebook.com/groups" },
-    { "name": "Instagram", "site_filter": "site:instagram.com" },
-    { "name": "Reddit", "site_filter": "site:reddit.com" },
+    { "name": "Reddit", "site_filter": "(site:reddit.com/r/Finanzen OR site:reddit.com/r/Versicherung OR site:reddit.com/r/de)" },
     { "name": "Forum/Sonstige", "site_filter": "(site:gutefrage.net OR site:quora.com OR site:finanztip.de/forum OR site:wer-weiss-was.de)" }
   ],
+  "_platforms_hinweis": "X/Twitter und Instagram entfernt: lieferten beim Testlauf fast nur Profilseiten (kein echter Text-Treffer, X/Twitter wird von Google seit 2023 kaum noch indexiert) bzw. Werbe-Captions von Versicherungsvertretern selbst - keine echten Kundenanfragen (live am 2026-08-26 aufgefallen).",
 
   "phrase_templates": [
     "\"suche alternative zu\" {thema}",
@@ -30,11 +35,9 @@
     "\"weiß jemand\" {thema}",
     "\"weiss jemand\" {thema}",
     "\"kennt jemand\" {thema}",
-    "\"kann jemand empfehlen\" {thema}",
     "\"wer kann mir\" {thema} empfehlen",
     "\"bin unzufrieden mit meiner\" {thema}",
     "\"will meine\" {thema} \"kündigen\"",
-    "\"lohnt sich eine\" {thema} \"noch\"",
     "\"brauche dringend eine\" {thema}",
     "\"auf der suche nach einer guten\" {thema}"
   ],
