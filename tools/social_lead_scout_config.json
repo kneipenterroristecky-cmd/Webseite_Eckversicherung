@@ -1,0 +1,57 @@
+{
+  "_hinweis": "Werte unten ausfüllen, siehe tools/social_lead_scout.md. Diese Datei nicht zu GitHub pushen (enthält Zugangsdaten) – ggf. in .gitignore aufnehmen.",
+
+  "google_api_key": "DEIN_GOOGLE_API_KEY",
+  "google_cx": "DEINE_PROGRAMMABLE_SEARCH_ENGINE_ID",
+
+  "apps_script_url": "DEINE_APPS_SCRIPT_URL/exec",
+  "social_scout_secret": "BITTE_EIGENES_GEHEIMWORT_EINTRAGEN",
+
+  "max_queries_per_run": 30,
+  "results_per_query": 5,
+
+  "eigene_domain_ausschliessen": ["eckversicherung.de", "eckversicherung.netlify.app"],
+
+  "platforms": [
+    { "name": "X/Twitter", "site_filter": "(site:x.com OR site:twitter.com)" },
+    { "name": "Facebook", "site_filter": "site:facebook.com" },
+    { "name": "Instagram", "site_filter": "site:instagram.com" },
+    { "name": "Reddit", "site_filter": "site:reddit.com" },
+    { "name": "Forum/Sonstige", "site_filter": "(site:gutefrage.net OR site:quora.com OR site:finanztip.de/forum OR site:wer-weiss-was.de)" }
+  ],
+
+  "phrase_templates": [
+    "\"suche alternative zu\" {thema}",
+    "\"suche eine alternative zu\" {thema}",
+    "\"weiß jemand\" {thema}",
+    "\"weiss jemand\" {thema}",
+    "\"kennt jemand\" {thema}",
+    "\"kann jemand empfehlen\" {thema}",
+    "\"wer kann mir\" {thema} empfehlen",
+    "\"bin unzufrieden mit meiner\" {thema}",
+    "\"will meine\" {thema} \"kündigen\"",
+    "\"lohnt sich eine\" {thema} \"noch\"",
+    "\"brauche dringend eine\" {thema}",
+    "\"auf der suche nach einer guten\" {thema}"
+  ],
+
+  "themen": [
+    "Berufsunfähigkeitsversicherung",
+    "Betriebliche Krankenversicherung",
+    "Betriebshaftpflichtversicherung",
+    "Privathaftpflichtversicherung",
+    "Hausratversicherung",
+    "Rechtsschutzversicherung",
+    "KFZ-Versicherung",
+    "Krankenzusatzversicherung",
+    "Private Krankenversicherung",
+    "Cyberversicherung",
+    "Berufshaftpflichtversicherung",
+    "Betriebsunterbrechungsversicherung",
+    "Riester-Rente",
+    "Private Rentenversicherung",
+    "Pflegezusatzversicherung",
+    "Gewerbeversicherung",
+    "bAV Betriebsrente"
+  ]
+}
