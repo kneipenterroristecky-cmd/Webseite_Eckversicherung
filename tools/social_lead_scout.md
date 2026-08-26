@@ -119,11 +119,18 @@ Erwartung: Workflow läuft grün durch, neue Zeilen im Google Sheet
 
 ## Zeitpunkt/Häufigkeit ändern
 
-In `.github/workflows/social-lead-scout.yml` die `cron`-Zeile anpassen,
-z.B.:
+Läuft seit 2026-08-26 **täglich** (06:00 UTC = 07:00/08:00 DE), Standard-
+Cron `0 6 * * *` in `.github/workflows/social-lead-scout.yml`. Wegen des
+täglichen Laufs ist `max_queries_per_run` in `social_lead_scout_topics.json`
+auf 8 begrenzt (siehe dortiger Hinweis) – bleibt damit knapp unter dem
+kostenlosen SerpApi-Kontingent von 250 Suchen/Monat. Willst du mehr
+Suchanfragen pro Tag, braucht es einen bezahlten SerpApi-Plan.
 
-- `0 6 * * 1` = jeden Montag 06:00 UTC (Standard)
-- `0 6 * * 1,4` = jeden Montag **und** Donnerstag
+Weitere Beispiele für die `cron`-Zeile:
+
+- `0 6 * * *` = täglich (aktuell)
+- `0 6 * * 1` = nur montags
+- `0 6 * * 1,4` = montags **und** donnerstags
 - `0 6 1,15 * *` = am 1. und 15. jeden Monats
 
 (Uhrzeiten sind UTC – Sommerzeit DE = UTC+2, Winterzeit DE = UTC+1.)
