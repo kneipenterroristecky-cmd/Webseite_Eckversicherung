@@ -367,8 +367,10 @@ function listSocialLeads_() {
 
   var vals = sheet.getRange(2, 1, sheet.getLastRow() - 1, 10).getValues();
   var leads = vals.map(function(r) {
+    var datum = r[1] instanceof Date ? Utilities.formatDate(r[1], 'Europe/Berlin', 'dd.MM.yyyy') : r[1];
+    var uhrzeit = r[2] instanceof Date ? Utilities.formatDate(r[2], 'Europe/Berlin', 'HH:mm') : r[2];
     return {
-      id: r[0], datum: r[1], uhrzeit: r[2], plattform: r[3], thema: r[4],
+      id: r[0], datum: datum, uhrzeit: uhrzeit, plattform: r[3], thema: r[4],
       suchbegriff: r[5], titel: r[6], url: r[7], status: r[8], notiz: r[9]
     };
   });
