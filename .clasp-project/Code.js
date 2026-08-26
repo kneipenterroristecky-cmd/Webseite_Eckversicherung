@@ -159,6 +159,11 @@ function doPost(e) {
       return out_(updateSocialLead_(data.id, data.status, data.notiz));
     }
 
+    if (data.action === 'social_lead_delete') {
+      if (data.secret !== SOCIAL_SCOUT_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      return out_(deleteSocialLead_(data.id));
+    }
+
     save_(data);
     return out_({ ok: true });
   } catch (ex) {
@@ -403,6 +408,27 @@ function updateSocialLead_(id, status, notiz) {
       if (notiz !== undefined && notiz !== null) {
         sheet.getRange(row, 10).setValue(notiz);
       }
+      return { ok: true };
+    }
+  }
+  return { ok: false, err: 'ID nicht gefunden' };
+}
+
+// ----------------------------------------------------------------
+// Social-Lead-Scout: einzelnen Treffer endgueltig loeschen (im
+// Unterschied zu updateSocialLead_/Status "kein Interesse", was den
+// Treffer nur ins Archiv verschiebt) - z.B. fuer eindeutigen Muell,
+// den Daniel gar nicht erst archiviert sehen will.
+// ----------------------------------------------------------------
+function deleteSocialLead_(id) {
+  if (!id) return { ok: false, err: 'id fehlt' };
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SOCIAL_LEADS_SHEET);
+  if (!sheet || sheet.getLastRow() < 2) return { ok: false, err: 'Sheet leer' };
+
+  var ids = sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getValues();
+  for (var i = 0; i < ids.length; i++) {
+    if (String(ids[i][0]) === String(id)) {
+      sheet.deleteRow(i + 2);
       return { ok: true };
     }
   }
