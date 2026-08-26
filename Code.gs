@@ -149,6 +149,11 @@ function doPost(e) {
       return out_({ ok: true, url: SpreadsheetApp.getActiveSpreadsheet().getUrl() });
     }
 
+    if (data.action === 'social_lead_list') {
+      if (data.secret !== SOCIAL_SCOUT_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      return out_({ ok: true, leads: listSocialLeads_(), sheetUrl: SpreadsheetApp.getActiveSpreadsheet().getUrl() });
+    }
+
     save_(data);
     return out_({ ok: true });
   } catch (ex) {
@@ -349,6 +354,28 @@ function storeSocialLeads_(leads) {
   }
 
   return { added: added.length, skipped: skipped };
+}
+
+// ----------------------------------------------------------------
+// Social-Leads fuer die Panel-Anzeige zurueckgeben (neueste zuerst,
+// auf 50 begrenzt - fuers Panel reicht ein aktueller Ausschnitt,
+// vollstaendig/bearbeitbar bleibt ohnehin nur das Sheet selbst).
+// ----------------------------------------------------------------
+function listSocialLeads_() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SOCIAL_LEADS_SHEET);
+  if (!sheet || sheet.getLastRow() < 2) return [];
+
+  var vals = sheet.getRange(2, 1, sheet.getLastRow() - 1, 10).getValues();
+  var leads = vals.map(function(r) {
+    var datum = r[1] instanceof Date ? Utilities.formatDate(r[1], 'Europe/Berlin', 'dd.MM.yyyy') : r[1];
+    var uhrzeit = r[2] instanceof Date ? Utilities.formatDate(r[2], 'Europe/Berlin', 'HH:mm') : r[2];
+    return {
+      id: r[0], datum: datum, uhrzeit: uhrzeit, plattform: r[3], thema: r[4],
+      suchbegriff: r[5], titel: r[6], url: r[7], status: r[8], notiz: r[9]
+    };
+  });
+  leads.reverse();
+  return leads.slice(0, 50);
 }
 
 // ----------------------------------------------------------------
