@@ -21,13 +21,14 @@ jobs:
           python-version: '3.11'
 
       - name: Abhängigkeiten installieren
-        run: pip install requests
+        run: pip install requests anthropic
 
       - name: Suche ausführen
         env:
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           SOCIAL_SCOUT_SECRET: ${{ secrets.SOCIAL_SCOUT_SECRET }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python tools/social_lead_scout.py
 
       - name: Fortschritt (Dedupe/Rotation) committen
