@@ -24,6 +24,10 @@
 //     - Funktion: processCallLeads
 //     - Ereignisquelle: Zeitgesteuert → Stundenbasiert → Jede Stunde
 //     ODER: Funktion setupCallTrigger() einmalig manuell ausführen
+//
+//  SOCIAL-LEAD-SCOUT SETUP: siehe tools/social_lead_scout.md
+//  (Kurzfassung: SOCIAL_SCOUT_SECRET unten selbst setzen, neu bereitstellen,
+//  URL + Geheimwort in tools/social_lead_scout_config.json eintragen)
 // ================================================================
 
 var SHEET        = 'Events';
