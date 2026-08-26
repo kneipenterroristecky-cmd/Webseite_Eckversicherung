@@ -62,6 +62,10 @@ def load_secrets():
         print(f"❌ Fehlende Umgebungsvariablen: {', '.join(missing)}")
         print("   Als GitHub Secrets hinterlegen, siehe tools/social_lead_scout.md.")
         sys.exit(1)
+    # Optional: ohne ANTHROPIC_API_KEY laeuft der Scout weiter, aber ohne
+    # inhaltliche Pruefung (nur Stichwort-/Domain-Filter) - schlechtere Qualitaet,
+    # aber kein harter Abbruch.
+    secrets["anthropic_api_key"] = os.environ.get("ANTHROPIC_API_KEY", "").strip()
     return secrets
 
 
