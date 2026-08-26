@@ -169,6 +169,42 @@ function htmlResponse(html, status = 200) {
   return new Response(html, { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
 }
 
+// ── Handy-Drop sofort verarbeiten lassen statt auf den naechsten 15-Minuten-
+// Cron zu warten (Kosten-Fix 2026-08-26: der reine Zeitplan-Takt hat allein
+// ~1220 der ~2155 GitHub-Actions-Minuten/Monat gekostet, obwohl er die meiste
+// Zeit nichts zu tun hatte). Loest per workflow_dispatch direkt den
+// GitHub-Actions-Workflow im buero-automation-Repo aus - eigenes PAT
+// (BUERO_GITHUB_PAT), bewusst getrennt vom GITHUB_PAT oben (das ist auf das
+// Webseite-Repo ausgelegt). Schlaegt der Dispatch fehl (Token abgelaufen o.ae.),
+// bleibt der Drop trotzdem in der KV-Warteschlange liegen - der verbliebene
+// stuendliche Sicherheitsnetz-Cron in whatsapp-phone-drop-cloud.yml holt ihn
+// dann spaetestens nach.
+async function triggerPhoneDropSync(env) {
+  if (!env.BUERO_GITHUB_PAT) {
+    console.error('BUERO_GITHUB_PAT fehlt - Handy-Drop wartet auf den stuendlichen Sicherheitsnetz-Cron.');
+    return;
+  }
+  try {
+    const resp = await fetch(
+      'https://api.github.com/repos/kneipenterroristecky-cmd/buero-automation/actions/workflows/whatsapp-phone-drop-cloud.yml/dispatches',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${env.BUERO_GITHUB_PAT}`,
+          'Content-Type': 'application/json',
+          'User-Agent': 'WhatsApp-Phone-Drop-Trigger/1.0',
+        },
+        body: JSON.stringify({ ref: 'master', inputs: { dry_run: 'false' } }),
+      }
+    );
+    if (!resp.ok) {
+      console.error('Dispatch fehlgeschlagen (' + resp.status + '):', await resp.text());
+    }
+  } catch (ex) {
+    console.error('Fehler beim Ausloesen des Handy-Drop-Syncs:', ex);
+  }
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -223,9 +259,10 @@ export default {
       const queue = JSON.parse(queueRaw);
       queue.push(id);
       await env.SELIN_MEMORY.put('phonedrop_queue', JSON.stringify(queue));
+      await triggerPhoneDropSync(env);
       return htmlResponse(renderPhoneDropResult({
         ok: true,
-        message: 'Landet spaetestens in 15 Minuten im Buero-Ordner "Manuell einwerfen" und wird automatisch eingeordnet.',
+        message: 'Wird jetzt sofort abgeholt und im Buero-Ordner "Manuell einwerfen" abgelegt.',
         filename,
         id,
       }));
