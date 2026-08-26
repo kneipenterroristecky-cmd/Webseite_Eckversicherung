@@ -19,9 +19,6 @@ screenshots/
 
 # Lokale Konfiguration mit API-Keys (niemals pushen)
 dashboard-config.js
-tools/social_lead_scout_config.json
-tools/social_lead_scout_seen.json
-tools/social_lead_scout_rotation.json
 
 # Wrangler lokaler Cache
 .wrangler/
