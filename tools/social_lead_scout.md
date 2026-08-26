@@ -41,20 +41,22 @@ Plattform-Zugriff und besserer X/TikTok-Abdeckung). Wenn dir die Trefferzahl
 nach ein paar Wochen zu gering ist, sag Bescheid – dann können wir eines
 davon anbinden.
 
-## Einmalige Einrichtung (ca. 15 Minuten)
+## Einmalige Einrichtung (ca. 5 Minuten)
 
-### 1. Google Custom Search API + Suchmaschine anlegen
+### 1. SerpApi-Konto anlegen
 
-1. https://programmablesearchengine.google.com/ → **Neue Suchmaschine
-   erstellen**.
-2. "Im gesamten Web suchen" aktivieren (nicht nur bestimmte Seiten).
-3. Erstellen → auf der Übersichtsseite die **Suchmaschinen-ID** (cx) kopieren.
-4. https://console.cloud.google.com/apis/library/customsearch.googleapis.com
-   → Projekt wählen/anlegen → **Custom Search API aktivieren**.
-5. Dort unter "Anmeldedaten" → **API-Schlüssel erstellen** → kopieren.
-6. Kostenlos: 100 Suchanfragen/Tag. Danach 5 $ pro 1000 Anfragen. Mit der
-   Standard-Einstellung `max_queries_per_run: 30` (einmal pro Woche) bleibst
-   du weit im kostenlosen Rahmen.
+Wir nutzen [SerpApi](https://serpapi.com/) statt der Google Custom Search API
+direkt – Google verlangt für die eigene API inzwischen ein vollständiges
+Bezahlkonto (nicht nur eine Testphase) und das Einrichten war in der Praxis
+zu fehleranfällig. SerpApi liefert dieselben echten Google-Suchergebnisse als
+einfaches JSON, ganz ohne Google-Cloud-Konto:
+
+1. https://serpapi.com/users/sign_up → mit E-Mail oder Google-Konto anmelden
+   (keine Kreditkarte nötig für den kostenlosen Plan).
+2. Im Dashboard unter "Your Private API Key" den Schlüssel kopieren.
+3. Kostenlos: 250 Suchanfragen/Monat. Mit der Standard-Einstellung
+   `max_queries_per_run: 30` (einmal pro Woche = ca. 120/Monat) bleibst du
+   sicher im kostenlosen Rahmen.
 
 ### 2. Apps Script (Code.gs) einrichten
 
