@@ -141,12 +141,14 @@ def run():
 
     seen = set(load_json(SEEN_PATH, []))
     own_domains = cfg.get("eigene_domain_ausschliessen", [])
+    makler_domains = cfg.get("makler_ausschliessen", [])
     results_per_query = cfg.get("results_per_query", 5)
+    zeitfenster = cfg.get("zeitfenster")
     found = []
 
     for item in batch:
         try:
-            results = serpapi_search(secrets, item["query"], results_per_query)
+            results = serpapi_search(secrets, item["query"], results_per_query, zeitfenster)
         except RuntimeError as e:
             print(f"⚠️  {e}")
             break
@@ -156,7 +158,7 @@ def run():
 
         for r in results:
             url = r.get("link", "").strip()
-            if not url or url in seen or is_own_domain(url, own_domains):
+            if not url or url in seen or is_own_domain(url, own_domains) or is_makler_domain(url, makler_domains):
                 continue
             seen.add(url)
             found.append({
