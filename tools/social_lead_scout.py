@@ -140,7 +140,7 @@ def run():
 
     for item in batch:
         try:
-            results = google_search(secrets, item["query"], results_per_query)
+            results = serpapi_search(secrets, item["query"], results_per_query)
         except RuntimeError as e:
             print(f"⚠️  {e}")
             break
