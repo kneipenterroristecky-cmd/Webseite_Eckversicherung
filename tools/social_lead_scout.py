@@ -217,17 +217,27 @@ def run():
             if not url or url in seen or is_own_domain(url, own_domains) or is_makler_domain(url, makler_domains):
                 continue
             seen.add(url)
+            titel = r.get("title", "")
+            snippet = r.get("snippet", "")
+
+            if not ist_relevanter_lead(claude, item["topic"], titel, snippet):
+                verworfen += 1
+                continue
+
             found.append({
                 "platform": guess_platform_label(url, item["platform"]),
                 "topic": item["topic"],
                 "query": item["query"],
-                "title": r.get("title", ""),
-                "snippet": r.get("snippet", ""),
+                "title": titel,
+                "snippet": snippet,
                 "url": url,
                 "found_at": datetime.now(timezone.utc).isoformat(),
             })
 
     save_json(SEEN_PATH, sorted(seen))
+
+    if claude is not None:
+        print(f"🧠 Relevanzprüfung: {verworfen} Treffer aussortiert (Jobanzeigen/Vertreter-Werbung/o.ä.).")
 
     if not found:
         print("ℹ️  Keine neuen Treffer in diesem Lauf.")
