@@ -1,0 +1,44 @@
+name: Social-Lead-Scout (Neukundengewinn soziale Medien)
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Jeden Montag 06:00 UTC = 07:00/08:00 DE
+  workflow_dispatch:      # Auch manuell startbar (Actions-Tab → Run workflow)
+
+jobs:
+  scout:
+    name: Social Media nach Interessenten durchsuchen
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Abhängigkeiten installieren
+        run: pip install requests
+
+      - name: Suche ausführen
+        env:
+          GOOGLE_CSE_API_KEY: ${{ secrets.GOOGLE_CSE_API_KEY }}
+          GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+          SOCIAL_SCOUT_SECRET: ${{ secrets.SOCIAL_SCOUT_SECRET }}
+        run: python tools/social_lead_scout.py
+
+      - name: Fortschritt (Dedupe/Rotation) committen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tools/social_lead_scout_seen.json tools/social_lead_scout_rotation.json
+          git diff --staged --quiet || git commit -m "Social-Lead-Scout: Fortschritt aktualisiert"
+          for i in 1 2 3 4 5; do
+            git push && break
+            git pull --rebase origin master
+            sleep 10
+          done
