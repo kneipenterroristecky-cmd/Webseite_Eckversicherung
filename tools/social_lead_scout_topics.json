@@ -25,9 +25,10 @@
   "platforms": [
     { "name": "Facebook", "site_filter": "site:facebook.com/groups" },
     { "name": "Reddit", "site_filter": "(site:reddit.com/r/Finanzen OR site:reddit.com/r/Versicherung OR site:reddit.com/r/de)" },
-    { "name": "Forum/Sonstige", "site_filter": "(site:gutefrage.net OR site:quora.com OR site:finanztip.de/forum OR site:wer-weiss-was.de)" }
+    { "name": "Forum/Sonstige", "site_filter": "(site:gutefrage.net OR site:quora.com OR site:finanztip.de/forum OR site:wer-weiss-was.de)" },
+    { "name": "X/Twitter", "site_filter": "(site:x.com OR site:twitter.com)" }
   ],
-  "_platforms_hinweis": "X/Twitter und Instagram entfernt: lieferten beim Testlauf fast nur Profilseiten (kein echter Text-Treffer, X/Twitter wird von Google seit 2023 kaum noch indexiert) bzw. Werbe-Captions von Versicherungsvertretern selbst - keine echten Kundenanfragen (live am 2026-08-26 aufgefallen).",
+  "_platforms_hinweis": "X/Twitter am 2026-08-26 auf Daniels Wunsch wieder aufgenommen. Beim ersten Testlauf (noch ohne Zeitfenster/Minus-Woerter/Claude-Pruefung) kamen fast nur Profilseiten oder Vertreter-Werbe-Captions zurueck - diesmal greifen die seither eingebauten Filter (Zeitfenster, ausschluss_stichworte, Claude-Relevanzpruefung in social_lead_scout.py) zusaetzlich, bevor ein Treffer gespeichert wird. Instagram bleibt draussen (dort steht der eigentliche Text meist nur in Bildern/Stories, fuer Google nicht durchsuchbar).",
 
   "phrase_templates": [
     "\"suche alternative zu\" {thema}",
