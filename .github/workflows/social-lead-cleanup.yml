@@ -1,0 +1,26 @@
+name: Social-Lead-Cleanup (Altbestand mit Claude nachpruefen)
+
+on:
+  workflow_dispatch:      # Nur manuell (Actions-Tab → Run workflow), kein Cron
+
+jobs:
+  cleanup:
+    name: Bestehende Leads nachtraeglich pruefen und Fehltreffer archivieren
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Abhängigkeiten installieren
+        run: pip install requests anthropic
+
+      - name: Aufräumen ausführen
+        working-directory: tools
+        env:
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+          SOCIAL_SCOUT_SECRET: ${{ secrets.SOCIAL_SCOUT_SECRET }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python social_lead_cleanup.py
