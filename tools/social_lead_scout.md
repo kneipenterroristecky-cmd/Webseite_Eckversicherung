@@ -73,12 +73,11 @@ einfaches JSON, ganz ohne Google-Cloud-Konto:
 ### 3. GitHub Secrets eintragen
 
 Im Repo auf GitHub: **Settings → Secrets and variables → Actions → New
-repository secret**. Vier Secrets anlegen:
+repository secret**. Drei Secrets anlegen:
 
 | Name | Wert |
 |---|---|
-| `GOOGLE_CSE_API_KEY` | API-Schlüssel aus Schritt 1.5 |
-| `GOOGLE_CSE_CX` | Suchmaschinen-ID aus Schritt 1.3 |
+| `SERPAPI_KEY` | API-Schlüssel aus Schritt 1.2 |
 | `APPS_SCRIPT_URL` | Web-App-URL aus Schritt 2.2 (endet auf `/exec`) |
 | `SOCIAL_SCOUT_SECRET` | dasselbe Geheimwort wie in `Code.gs` |
 
