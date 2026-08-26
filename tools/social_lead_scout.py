@@ -124,6 +124,10 @@ def is_own_domain(url, own_domains):
     return any(d in url for d in own_domains)
 
 
+def is_makler_domain(url, makler_domains):
+    return any(d in url for d in makler_domains)
+
+
 def run():
     cfg = load_json(TOPICS_PATH, None)
     if cfg is None:
