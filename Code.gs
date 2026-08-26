@@ -154,6 +154,11 @@ function doPost(e) {
       return out_({ ok: true, leads: listSocialLeads_(), sheetUrl: SpreadsheetApp.getActiveSpreadsheet().getUrl() });
     }
 
+    if (data.action === 'social_lead_update') {
+      if (data.secret !== SOCIAL_SCOUT_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      return out_(updateSocialLead_(data.id, data.status, data.notiz));
+    }
+
     save_(data);
     return out_({ ok: true });
   } catch (ex) {
