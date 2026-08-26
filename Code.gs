@@ -380,7 +380,33 @@ function listSocialLeads_() {
     };
   });
   leads.reverse();
-  return leads.slice(0, 50);
+  return leads.slice(0, 300);
+}
+
+// ----------------------------------------------------------------
+// Social-Lead-Scout: Status/Notiz eines einzelnen Treffers aus dem
+// Panel heraus aendern (Daniel muss dafuer nicht mehr ins Google
+// Sheet wechseln) - findet die Zeile anhand der ID (Spalte A).
+// ----------------------------------------------------------------
+function updateSocialLead_(id, status, notiz) {
+  if (!id) return { ok: false, err: 'id fehlt' };
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SOCIAL_LEADS_SHEET);
+  if (!sheet || sheet.getLastRow() < 2) return { ok: false, err: 'Sheet leer' };
+
+  var ids = sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getValues();
+  for (var i = 0; i < ids.length; i++) {
+    if (String(ids[i][0]) === String(id)) {
+      var row = i + 2;
+      if (status !== undefined && status !== null && status !== '') {
+        sheet.getRange(row, 9).setValue(status);
+      }
+      if (notiz !== undefined && notiz !== null) {
+        sheet.getRange(row, 10).setValue(notiz);
+      }
+      return { ok: true };
+    }
+  }
+  return { ok: false, err: 'ID nicht gefunden' };
 }
 
 // ----------------------------------------------------------------
