@@ -286,6 +286,103 @@ function initLeadsSheet_(ss) {
 }
 
 // ----------------------------------------------------------------
+// Social-Lead-Scout: neue Treffer speichern (mit Dedupe über URL) +
+// bei neuen Treffern E-Mail-Digest verschicken
+// ----------------------------------------------------------------
+function storeSocialLeads_(leads) {
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SOCIAL_LEADS_SHEET) || initSocialLeadsSheet_(ss);
+
+  var lastRow = sheet.getLastRow();
+  var existingUrls = {};
+  if (lastRow > 1) {
+    sheet.getRange(2, 8, lastRow - 1, 1).getValues().forEach(function(r) {
+      if (r[0]) existingUrls[String(r[0]).trim()] = true;
+    });
+  }
+
+  var now     = new Date();
+  var added   = [];
+  var skipped = 0;
+
+  leads.forEach(function(lead) {
+    var url = String(lead.url || '').trim();
+    if (!url || existingUrls[url]) { skipped++; return; }
+    existingUrls[url] = true;
+
+    var id = 'SL_' + now.getTime() + '_' + Math.floor(Math.random() * 10000);
+    var row = [
+      id,
+      Utilities.formatDate(now, 'Europe/Berlin', 'dd.MM.yyyy'),
+      Utilities.formatDate(now, 'Europe/Berlin', 'HH:mm'),
+      lead.platform || '',
+      lead.topic    || '',
+      lead.query    || '',
+      lead.title || lead.snippet || '',
+      url,
+      'neu',
+      ''
+    ];
+    sheet.appendRow(row);
+    added.push(row);
+  });
+
+  if (added.length) {
+    var startRow = sheet.getLastRow() - added.length + 1;
+    var statusRange = sheet.getRange(startRow, 9, added.length, 1);
+    statusRange.setDataValidation(
+      SpreadsheetApp.newDataValidation()
+        .requireValueInList(['neu', 'in Bearbeitung', 'erledigt', 'kein Interesse'], true)
+        .setAllowInvalid(false)
+        .build()
+    );
+    try { notifySocialLeadsDigest_(added, ss.getUrl()); } catch (ex) {}
+  }
+
+  return { added: added.length, skipped: skipped };
+}
+
+// ----------------------------------------------------------------
+// Social-Leads Sheet initialisieren
+// ----------------------------------------------------------------
+function initSocialLeadsSheet_(ss) {
+  var s = ss.insertSheet(SOCIAL_LEADS_SHEET);
+  var h = ['ID', 'Datum', 'Uhrzeit', 'Plattform', 'Thema', 'Suchbegriff', 'Titel/Text', 'URL', 'Status', 'Notiz'];
+  s.appendRow(h);
+  s.setFrozenRows(1);
+  s.getRange(1, 1, 1, h.length)
+    .setBackground('#0c1c3e').setFontColor('#ffffff').setFontWeight('bold');
+  [140, 90, 70, 100, 160, 220, 320, 260, 110, 220].forEach(function(w, i) {
+    s.setColumnWidth(i + 1, w);
+  });
+  try { s.getRange(1, 1, 1, h.length).createFilter(); } catch (ex) {}
+  return s;
+}
+
+// ----------------------------------------------------------------
+// Daniel per E-Mail über neue Social-Media-Treffer informieren
+// ----------------------------------------------------------------
+function notifySocialLeadsDigest_(rows, sheetUrl) {
+  var lines = rows.map(function(r) {
+    // Spalten: ID,Datum,Uhrzeit,Plattform,Thema,Suchbegriff,Titel/Text,URL,Status,Notiz
+    return '• [' + r[3] + ' / ' + r[4] + ']\n  ' + r[6] + '\n  ' + r[7];
+  }).join('\n\n');
+
+  MailApp.sendEmail({
+    to:      NOTIFY_EMAIL,
+    subject: '🔎 ' + rows.length + ' neue Social-Media-Treffer – Neukundengewinn',
+    body:
+      'Hallo Daniel,\n\n'
+    + 'dein Social-Lead-Scout hat ' + rows.length + ' neue(n) Beitrag/Beiträge gefunden, '
+    + 'in denen jemand nach Versicherungsthemen fragt:\n\n'
+    + lines + '\n\n'
+    + 'Alle Treffer (mit Status/Notiz-Spalte zum Bearbeiten, sortier- und filterbar) im Sheet "Social-Leads":\n'
+    + sheetUrl + '\n\n'
+    + '– Dein Social-Lead-Scout'
+  });
+}
+
+// ----------------------------------------------------------------
 // processCallLeads – stündlich per Trigger ausgeführt
 // Prüft Zeitfenster und startet Vapi-Anrufe für reife Leads
 // ----------------------------------------------------------------
