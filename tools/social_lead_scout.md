@@ -1,12 +1,16 @@
 # Social-Lead-Scout – Neukundengewinn über soziale Medien
 
 Durchsucht wöchentlich (Zeitpunkt/Häufigkeit einstellbar) öffentlich von
-Google indexierte Beiträge auf X/Twitter, Facebook, Instagram, Reddit und
-Foren nach Formulierungen wie *"Suche Alternative zu ..."*, *"Weiß
-jemand ..."*, *"Wer kann mir ... empfehlen"* rund um deine
-Versicherungsthemen. Neue Treffer landen automatisch im Google Sheet
-"Social-Leads" (Status- und Notiz-Spalte direkt dort bearbeitbar, sortier-
-und filterbar) und werden dir per E-Mail zusammengefasst.
+Google indexierte Beiträge auf Facebook-Gruppen, Reddit und Foren nach
+Formulierungen wie *"Suche Alternative zu ..."*, *"Weiß jemand ..."*,
+*"Wer kann mir ... empfehlen"* rund um deine Versicherungsthemen. Jeder
+Treffer wird zusätzlich von Claude (Haiku) inhaltlich geprüft, bevor er
+gespeichert wird – Jobanzeigen, Werbe-Posts von Versicherungsvertretern/
+-maklern und sonstige Fehltreffer werden aussortiert, nur echte Anfragen
+von Privatpersonen kommen durch (Details siehe unten). Neue Treffer landen
+automatisch im Google Sheet "Social-Leads" (Status- und Notiz-Spalte direkt
+dort bearbeitbar, sortier- und filterbar) und werden dir per E-Mail
+zusammengefasst.
 
 Läuft – genau wie der automatische Blog-Beitrag (`weekly-blog-post.yml`) –
 als GitHub Action in der Cloud. Dein PC muss dafür nicht an sein.
