@@ -1,12 +1,15 @@
 # Social-Lead-Scout – Neukundengewinn über soziale Medien
 
-Durchsucht wöchentlich (Intervall einstellbar) öffentlich von Google
-indexierte Beiträge auf X/Twitter, Facebook, Instagram, Reddit und Foren
-nach Formulierungen wie *"Suche Alternative zu ..."*, *"Weiß jemand ..."*,
-*"Wer kann mir ... empfehlen"* rund um deine Versicherungsthemen. Neue
-Treffer landen automatisch im Google Sheet "Social-Leads" (Status- und
-Notiz-Spalte direkt dort bearbeitbar, sortier- und filterbar) und werden dir
-per E-Mail zusammengefasst.
+Durchsucht wöchentlich (Zeitpunkt/Häufigkeit einstellbar) öffentlich von
+Google indexierte Beiträge auf X/Twitter, Facebook, Instagram, Reddit und
+Foren nach Formulierungen wie *"Suche Alternative zu ..."*, *"Weiß
+jemand ..."*, *"Wer kann mir ... empfehlen"* rund um deine
+Versicherungsthemen. Neue Treffer landen automatisch im Google Sheet
+"Social-Leads" (Status- und Notiz-Spalte direkt dort bearbeitbar, sortier-
+und filterbar) und werden dir per E-Mail zusammengefasst.
+
+Läuft – genau wie der automatische Blog-Beitrag (`weekly-blog-post.yml`) –
+als GitHub Action in der Cloud. Dein PC muss dafür nicht an sein.
 
 ## Wichtig: was das Tool kann – und was nicht
 
@@ -58,22 +61,28 @@ davon anbinden.
 1. In `Code.gs` ist bereits alles vorbereitet (Sheet "Social-Leads",
    Aktion `social_lead_add`). Trage nur noch bei
    `SOCIAL_SCOUT_SECRET` ein eigenes, zufälliges Geheimwort ein (ersetzt
-   `BITTE_EIGENES_GEHEIMWORT_EINTRAGEN`).
+   `BITTE_EIGENES_GEHEIMWORT_EINTRAGEN`) und speichere/aktualisiere das
+   Skript im Apps-Script-Editor.
 2. Falls die Web-App noch nicht (neu) bereitgestellt ist: im Apps-Script-
    Editor → **Bereitstellen → Neue Bereitstellung** → Typ "Web-App" →
    Ausführen als "Ich" → Zugriff "Jeder" → Bereitstellen → URL kopieren.
-   (Dieselbe URL nutzt du auch für `analytics.js`, falls die dort noch
-   fehlt.)
+   (Dieselbe URL brauchst du auch für `analytics.js`, falls dort noch leer.)
 
-### 3. Lokale Konfiguration ausfüllen
+### 3. GitHub Secrets eintragen
 
-Öffne `tools/social_lead_scout_config.json` und trage ein:
+Im Repo auf GitHub: **Settings → Secrets and variables → Actions → New
+repository secret**. Vier Secrets anlegen:
 
-- `google_api_key`, `google_cx` → aus Schritt 1
-- `apps_script_url` → die `.../exec`-URL aus Schritt 2
-- `social_scout_secret` → dasselbe Geheimwort wie in `Code.gs`
+| Name | Wert |
+|---|---|
+| `GOOGLE_CSE_API_KEY` | API-Schlüssel aus Schritt 1.5 |
+| `GOOGLE_CSE_CX` | Suchmaschinen-ID aus Schritt 1.3 |
+| `APPS_SCRIPT_URL` | Web-App-URL aus Schritt 2.2 (endet auf `/exec`) |
+| `SOCIAL_SCOUT_SECRET` | dasselbe Geheimwort wie in `Code.gs` |
 
-Optional anpassen:
+Themen, Suchmuster und Plattformen (keine Geheimnisse) stehen stattdessen
+direkt im Repo in `tools/social_lead_scout_topics.json` – dort kannst du
+jederzeit anpassen:
 
 - `themen` → Liste deiner Versicherungsthemen (Standard: die wichtigsten
   Produkte deiner Website)
@@ -81,31 +90,24 @@ Optional anpassen:
 - `platforms` → welche Plattformen/Foren durchsucht werden
 - `max_queries_per_run` → wie viele Suchanfragen pro Lauf (Kosten-Bremse)
 
-Diese Datei enthält Zugangsdaten – nicht committen/pushen.
-
 ### 4. Einmal manuell testen
 
-```
-python tools/social_lead_scout.py
-```
+GitHub → Reiter **Actions** → Workflow "Social-Lead-Scout (Neukundengewinn
+soziale Medien)" → **Run workflow** → grünen Button klicken.
 
-Erwartung: Konsolen-Ausgabe mit Trefferzahl, neue Zeilen im Sheet
-"Social-Leads", ggf. eine Test-E-Mail.
+Erwartung: Workflow läuft grün durch, neue Zeilen im Google Sheet
+"Social-Leads" (falls Treffer da sind), ggf. eine E-Mail.
 
-### 5. Wöchentlichen Lauf einrichten
+## Zeitpunkt/Häufigkeit ändern
 
-```powershell
-powershell -File tools/register_social_lead_scout_task.ps1
-```
+In `.github/workflows/social-lead-scout.yml` die `cron`-Zeile anpassen,
+z.B.:
 
-Standard: jeden Montag 07:00 Uhr. Andere Zeit/Intervall:
+- `0 6 * * 1` = jeden Montag 06:00 UTC (Standard)
+- `0 6 * * 1,4` = jeden Montag **und** Donnerstag
+- `0 6 1,15 * *` = am 1. und 15. jeden Monats
 
-```powershell
-powershell -File tools/register_social_lead_scout_task.ps1 -DayOfWeek Friday -Time "08:30" -IntervalWeeks 2
-```
-
-Der Task läuft dann selbstständig im Hintergrund (Windows Task Scheduler),
-auch ohne offenes Terminal – der PC muss dafür zur eingestellten Zeit an sein.
+(Uhrzeiten sind UTC – Sommerzeit DE = UTC+2, Winterzeit DE = UTC+1.)
 
 ## Tägliche Nutzung
 
@@ -117,5 +119,6 @@ auch ohne offenes Terminal – der PC muss dafür zur eingestellten Zeit an sein
   Bedarf, nur Frust über alten Vertrag" etc.).
 - Sheet ist über den normalen Google-Sheets-Filter (Spaltenkopf-Icons)
   sortier- und filterbar – z.B. nach Thema oder Status filtern.
-- Wiederholte URLs werden automatisch übersprungen (lokale Datei
-  `tools/social_lead_scout_seen.json` + Abgleich im Sheet selbst).
+- Wiederholte URLs werden automatisch übersprungen (der Workflow committet
+  seinen Fortschritt nach jedem Lauf zurück ins Repo, zusätzlich prüft auch
+  das Sheet selbst gegen bestehende URLs).
