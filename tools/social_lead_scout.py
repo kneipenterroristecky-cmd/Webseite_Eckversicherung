@@ -46,19 +46,12 @@ def save_json(path, data):
 
 def load_secrets():
     secrets = {
-        "google_api_key": os.environ.get("GOOGLE_CSE_API_KEY", "").strip(),
-        "google_cx": os.environ.get("GOOGLE_CSE_CX", "").strip(),
+        "serpapi_key": os.environ.get("SERPAPI_KEY", "").strip(),
         "apps_script_url": os.environ.get("APPS_SCRIPT_URL", "").strip(),
         "social_scout_secret": os.environ.get("SOCIAL_SCOUT_SECRET", "").strip(),
     }
     missing = [k.upper() for k, v in secrets.items() if not v]
     if missing:
-        env_names = {
-            "GOOGLE_API_KEY": "GOOGLE_CSE_API_KEY",
-            "GOOGLE_CX": "GOOGLE_CSE_CX",
-            "APPS_SCRIPT_URL": "APPS_SCRIPT_URL",
-            "SOCIAL_SCOUT_SECRET": "SOCIAL_SCOUT_SECRET",
-        }
         print(f"❌ Fehlende Umgebungsvariablen: {', '.join(missing)}")
         print("   Als GitHub Secrets hinterlegen, siehe tools/social_lead_scout.md.")
         sys.exit(1)
