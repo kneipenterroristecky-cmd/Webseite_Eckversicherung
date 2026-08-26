@@ -24,12 +24,18 @@ from pathlib import Path
 
 import requests
 
+try:
+    import anthropic
+except ImportError:
+    anthropic = None
+
 TOOLS_DIR     = Path(__file__).resolve().parent
 TOPICS_PATH   = TOOLS_DIR / "social_lead_scout_topics.json"
 SEEN_PATH     = TOOLS_DIR / "social_lead_scout_seen.json"
 ROTATION_PATH = TOOLS_DIR / "social_lead_scout_rotation.json"
 
 SERPAPI_URL = "https://serpapi.com/search"
+CLAUDE_MODEL = "claude-haiku-4-5-20251001"
 
 
 def load_json(path, default):
