@@ -415,6 +415,27 @@ function updateSocialLead_(id, status, notiz) {
 }
 
 // ----------------------------------------------------------------
+// Social-Lead-Scout: einzelnen Treffer endgueltig loeschen (im
+// Unterschied zu updateSocialLead_/Status "kein Interesse", was den
+// Treffer nur ins Archiv verschiebt) - z.B. fuer eindeutigen Muell,
+// den Daniel gar nicht erst archiviert sehen will.
+// ----------------------------------------------------------------
+function deleteSocialLead_(id) {
+  if (!id) return { ok: false, err: 'id fehlt' };
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SOCIAL_LEADS_SHEET);
+  if (!sheet || sheet.getLastRow() < 2) return { ok: false, err: 'Sheet leer' };
+
+  var ids = sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getValues();
+  for (var i = 0; i < ids.length; i++) {
+    if (String(ids[i][0]) === String(id)) {
+      sheet.deleteRow(i + 2);
+      return { ok: true };
+    }
+  }
+  return { ok: false, err: 'ID nicht gefunden' };
+}
+
+// ----------------------------------------------------------------
 // Social-Leads Sheet initialisieren
 // ----------------------------------------------------------------
 function initSocialLeadsSheet_(ss) {
