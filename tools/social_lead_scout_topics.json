@@ -1,7 +1,7 @@
 {
   "_hinweis": "Keine Geheimnisse hier – API-Keys liegen als GitHub Secrets (siehe tools/social_lead_scout.md). Diese Datei kann bedenkenlos angepasst und committet werden.",
 
-  "max_queries_per_run": 30,
+  "max_queries_per_run": 8,
   "results_per_query": 5,
 
   "zeitfenster": "qdr:m",
