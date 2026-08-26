@@ -4,11 +4,21 @@
   "max_queries_per_run": 30,
   "results_per_query": 5,
 
+  "zeitfenster": "qdr:m",
+  "_zeitfenster_hinweis": "SerpApi/Google-Zeitfilter: qdr:w = letzte Woche, qdr:m = letzter Monat, qdr:y = letztes Jahr. Ohne diesen Filter kamen auch 15-20 Jahre alte Forenbeiträge zurück (live am 2026-08-26 aufgefallen).",
+
   "eigene_domain_ausschliessen": ["eckversicherung.de", "eckversicherung.netlify.app"],
+
+  "makler_ausschliessen": [
+    "check24.de", "verivox.de", "financescout24.de", "finanzfluss.de", "transparo.de",
+    "geld.de", "aboutinsurance.de", "clark.de", "getsafe.de", "wefox.de", "friendsurance.de",
+    "hypoport.de", "versicherungsmakler-verzeichnis.de", "makler.de", "vergleich.de", "test.de"
+  ],
+  "_makler_hinweis": "Bekannte Vergleichsportale/Insurtechs/Maklerverzeichnisse - deren Werbe- und Ratgeberseiten tauchten bei den Testläufen als Treffer auf statt echter Kundenanfragen (live am 2026-08-26 aufgefallen).",
 
   "platforms": [
     { "name": "X/Twitter", "site_filter": "(site:x.com OR site:twitter.com)" },
-    { "name": "Facebook", "site_filter": "site:facebook.com" },
+    { "name": "Facebook", "site_filter": "site:facebook.com/groups" },
     { "name": "Instagram", "site_filter": "site:instagram.com" },
     { "name": "Reddit", "site_filter": "site:reddit.com" },
     { "name": "Forum/Sonstige", "site_filter": "(site:gutefrage.net OR site:quora.com OR site:finanztip.de/forum OR site:wer-weiss-was.de)" }
