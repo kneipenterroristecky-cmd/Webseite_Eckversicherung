@@ -22,8 +22,21 @@ jobs:
       - name: Playwright Chromium installieren
         run: playwright install chromium --with-deps
 
+      - name: "Panel: Jonas startet"
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py jonas "erstellt die Social-Media-Bilder"
+
       - name: Social Images rendern
         run: python tools/generate_social_image.py
+
+      - name: "Panel: Status leeren"
+        if: always()
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py clear
 
       - name: Änderungen committen
         run: |

@@ -239,6 +239,23 @@ style.textContent = `
   }
   .eck-chat-send:hover { background: #1a50c8; transform: scale(1.05); }
   .eck-chat-send:disabled { background: #e2e8f0; cursor: not-allowed; transform: none; }
+  .eck-chat-footer {
+    display: flex;
+    justify-content: center;
+    padding: 4px 16px 12px;
+  }
+  .eck-chat-close-bottom {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #94a3b8;
+    font-family: Inter, sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 4px 10px;
+    transition: color .2s;
+  }
+  .eck-chat-close-bottom:hover { color: #172d50; }
   @media (max-width: 480px) {
     #eck-chat-window { width: calc(100vw - 32px); right: 16px; bottom: 90px; }
     #eck-chat-btn { right: 16px; bottom: 90px; }
@@ -285,6 +302,9 @@ function createWindow() {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
     </div>
+    <div class="eck-chat-footer">
+      <button class="eck-chat-close-bottom" id="eck-close-bottom">Schließen ✕</button>
+    </div>
   `;
   document.body.appendChild(win);
 
@@ -303,6 +323,7 @@ function createWindow() {
 
   // Events
   win.querySelector('#eck-close').onclick = closeChat;
+  win.querySelector('#eck-close-bottom').onclick = closeChat;
   win.querySelector('#eck-send').onclick = () => {
     const val = win.querySelector('#eck-input').value.trim();
     if (val) sendMessage(val);

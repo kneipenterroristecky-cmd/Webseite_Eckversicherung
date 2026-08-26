@@ -1,0 +1,71 @@
+name: Büro-Automation - WhatsApp-Alarm senden
+
+# Wird von der Büro-Automation (Petra/Uwe, siehe upload-to-pw.ps1) ueber den
+# Panel-Worker (buero-panel-api, Endpunkt /api/buero-whatsapp-alarm) ausgeloest,
+# wenn ein besonders wichtiges Kundendokument zum Maklerverhaeltnis selbst
+# eingeht (Willenserklaerung Maklerwechsel / neue Maklervollmacht) - zusaetzlich
+# zur sofortigen Mail. Nutzt dieselbe Meta-WhatsApp-Business-Nummer/Template-
+# Infrastruktur wie die Blog-Freigabe-Nachrichten (siehe create-wa-template.yml,
+# Template "buero_dokument_alarm").
+
+on:
+  workflow_dispatch:
+    inputs:
+      kunde:
+        description: 'Name des betroffenen Kunden'
+        required: true
+        type: string
+      dokumentart:
+        description: 'Dokumentart, z.B. "Willenserklärung Maklerwechsel" oder "Maklervollmacht"'
+        required: true
+        type: string
+
+jobs:
+  senden:
+    name: WhatsApp-Alarm senden
+    runs-on: ubuntu-latest
+    steps:
+      - name: WhatsApp-Nachricht senden
+        env:
+          WA_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WA_TO: ${{ secrets.WHATSAPP_TO_NUMBER }}
+          KUNDE: ${{ inputs.kunde }}
+          DOKUMENTART: ${{ inputs.dokumentart }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, sys, requests as req
+
+          token       = os.environ.get("WA_TOKEN", "").strip()
+          phone_id    = os.environ.get("WA_PHONE_ID", "").strip()
+          wa_to       = os.environ.get("WA_TO", "").strip()
+          kunde       = os.environ.get("KUNDE", "").strip()
+          dokumentart = os.environ.get("DOKUMENTART", "").strip()
+          if not all([token, phone_id, wa_to, kunde, dokumentart]):
+            print("❌ Fehlende WhatsApp-Secrets oder Eingaben!")
+            sys.exit(1)
+
+          r = req.post(
+            f"https://graph.facebook.com/v19.0/{phone_id}/messages",
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+            json={
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "template",
+              "template": {
+                "name": "buero_dokument_alarm",
+                "language": {"code": "de"},
+                "components": [{
+                  "type": "body",
+                  "parameters": [
+                    {"type": "text", "text": kunde},
+                    {"type": "text", "text": dokumentart},
+                  ]
+                }]
+              }
+            })
+          print(f"WhatsApp Status: {r.status_code}")
+          if r.status_code >= 300:
+            print(f"Fehler: {r.text[:500]}")
+            sys.exit(1)
+          PYEOF

@@ -56,6 +56,53 @@ jobs:
               }
             )
 
+          # pr_befund (Herr Brandt meldet ein Problem VOR der Freigabe-Anfrage - sofortige
+          # Info an Daniel, statt bis zu Frau Nowaks naechster Tagespruefung zu warten)
+          if "pr_befund" in templates:
+            st = templates["pr_befund"].get("status","?")
+            print(f"✅ pr_befund: {st}")
+          else:
+            print("\n⚠️  pr_befund fehlt – wird erstellt …")
+            r5 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "pr_befund",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [{
+                  "type": "BODY",
+                  "text": "⚠️ Herr Brandt hat beim PR-Team einen Befund gemeldet:\n\n{{1}}\n\nDie WhatsApp-Freigabe-Anfrage wurde deshalb zurückgehalten.",
+                  "example": {"body_text": [["Blog-Datei nicht gefunden: blog/posts/beispiel.html"]]}
+                }]
+              }
+            )
+            print(f"pr_befund erstellt: {r5.status_code} – {r5.text[:300]}")
+
+          # buero_dokument_alarm (Buero-Automation/Petra meldet ein wichtiges Kundendokument
+          # zum Maklerverhaeltnis selbst - Willenserklaerung Maklerwechsel/neue Maklervollmacht -
+          # sofort per WhatsApp statt nur per Mail, siehe send-buero-alert-whatsapp.yml)
+          if "buero_dokument_alarm" in templates:
+            st = templates["buero_dokument_alarm"].get("status","?")
+            print(f"✅ buero_dokument_alarm: {st}")
+          else:
+            print("\n⚠️  buero_dokument_alarm fehlt – wird erstellt …")
+            r10 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "buero_dokument_alarm",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [{
+                  "type": "BODY",
+                  "text": "⚠️ Wichtiges Dokument bei Kunde {{1}} eingegangen: {{2}}\n\nBitte zeitnah in Professional Works prüfen.",
+                  "example": {"body_text": [["Nancy Lieding", "Willenserklärung Maklerwechsel"]]}
+                }]
+              }
+            )
+            print(f"buero_dokument_alarm erstellt: {r10.status_code} – {r10.text[:300]}")
+
           # blog_entwurf_freigabe (neuer Entwurf zur Freigabe – ersetzt die Brevo-Mail aus WF1)
           if "blog_entwurf_freigabe" in templates:
             st = templates["blog_entwurf_freigabe"].get("status","?")
@@ -109,6 +156,129 @@ jobs:
               }
             )
             print(f"blog_entwurf_aktualisiert erstellt: {r4.status_code} – {r4.text[:300]}")
+
+          # blog_entwurf_freigabe_v2 (wie blog_entwurf_freigabe, aber zusaetzlich mit
+          # FB/IG-Text - ersetzt v1 in weekly-blog-post.yml, sobald freigegeben)
+          if "blog_entwurf_freigabe_v2" in templates:
+            st = templates["blog_entwurf_freigabe_v2"].get("status","?")
+            print(f"✅ blog_entwurf_freigabe_v2: {st}")
+          else:
+            print("\n⚠️  blog_entwurf_freigabe_v2 fehlt – wird erstellt …")
+            r6 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "blog_entwurf_freigabe_v2",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [{
+                  "type": "BODY",
+                  "text": "📝 Neuer Blog-Entwurf: {{1}}\nDatum: {{2}}\n\n📣 Text für Facebook/Instagram:\n{{3}}\n\n✅ Freigeben & veröffentlichen:\n{{4}}\n\n🖼️ Neues Bild vorschlagen:\n{{5}}\n\n✏️ Änderung beantragen:\n{{6}}\n\n(Automatische Nachricht)",
+                  "example": {"body_text": [[
+                    "Sterbegeldversicherung: Würdevoll vorsorgen", "20.07.2026",
+                    "Eine Zahnkrone kostet schnell 500–1.000 Euro Eigenanteil. Mit der richtigen Zusatzversicherung sparen Sie Tausende.",
+                    "https://example.com/approve?token=abc",
+                    "https://example.com/suggest-image?token=abc",
+                    "https://example.com/change?token=abc"
+                  ]]}
+                }]
+              }
+            )
+            print(f"blog_entwurf_freigabe_v2 erstellt: {r6.status_code} – {r6.text[:300]}")
+
+          # blog_entwurf_aktualisiert_v2 (wie blog_entwurf_aktualisiert, aber zusaetzlich
+          # mit FB/IG-Text - ersetzt v1 in request-changes.yml, sobald freigegeben)
+          if "blog_entwurf_aktualisiert_v2" in templates:
+            st = templates["blog_entwurf_aktualisiert_v2"].get("status","?")
+            print(f"✅ blog_entwurf_aktualisiert_v2: {st}")
+          else:
+            print("\n⚠️  blog_entwurf_aktualisiert_v2 fehlt – wird erstellt …")
+            r7 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "blog_entwurf_aktualisiert_v2",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [{
+                  "type": "BODY",
+                  "text": "✏️ Entwurf aktualisiert: {{1}}\nDatum: {{2}}\n\n📣 Text für Facebook/Instagram:\n{{3}}\n\n✅ Freigeben & veröffentlichen:\n{{4}}\n\n🖼️ Neues Bild vorschlagen:\n{{5}}\n\n✏️ Nochmal ändern:\n{{6}}\n\n(Automatische Nachricht)",
+                  "example": {"body_text": [[
+                    "Sterbegeldversicherung: Würdevoll vorsorgen", "20.07.2026",
+                    "Eine Zahnkrone kostet schnell 500–1.000 Euro Eigenanteil. Mit der richtigen Zusatzversicherung sparen Sie Tausende.",
+                    "https://example.com/approve?token=abc",
+                    "https://example.com/suggest-image?token=abc",
+                    "https://example.com/change?token=abc"
+                  ]]}
+                }]
+              }
+            )
+            print(f"blog_entwurf_aktualisiert_v2 erstellt: {r7.status_code} – {r7.text[:300]}")
+
+          # blog_entwurf_info_v3 (Titel/Datum + Zusammenfassung/Bildtext/Facebook/Instagram als
+          # GETRENNTE, eigenstaendig beschriftete Felder - Links/Buttons kommen als eigene
+          # Nachrichten ueber blog_aktion, siehe unten)
+          if "blog_entwurf_info_v3" in templates:
+            st = templates["blog_entwurf_info_v3"].get("status","?")
+            print(f"✅ blog_entwurf_info_v3: {st}")
+          else:
+            print("\n⚠️  blog_entwurf_info_v3 fehlt – wird erstellt …")
+            r8 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "blog_entwurf_info_v3",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [{
+                  "type": "BODY",
+                  "text": "📝 Neuer Blog-Entwurf zur Prüfung: {{1}}\nDatum: {{2}}\n\n📄 Zusammenfassung:\n{{3}}\n\n🖼️ Bildtext:\n{{4}}\n\n📘 Facebook:\n{{5}}\n\n📸 Instagram:\n{{6}}\n\nDie Freigabe-Optionen folgen als eigene Nachricht mit Buttons.\n\n(Automatische Nachricht)",
+                  "example": {"body_text": [[
+                    "Sterbegeldversicherung: Würdevoll vorsorgen", "20.07.2026",
+                    "Die Sterbegeldversicherung deckt die Bestattungskosten und entlastet die Angehörigen im Trauerfall.",
+                    "Würdevoll vorsorgen – Für Ihre Familie",
+                    "Bestattungskosten liegen oft bei 8.000 bis 10.000 Euro. Mit der richtigen Vorsorge belasten Sie Ihre Familie nicht.",
+                    "Wer trägt die Kosten, wenn Sie einmal nicht mehr da sind? Ein unbequemes Thema – aber eines, das sich lohnt."
+                  ]]}
+                }]
+              }
+            )
+            print(f"blog_entwurf_info_v3 erstellt: {r8.status_code} – {r8.text[:300]}")
+
+          # blog_aktion (eine Aktion = ein echter Button statt Link im Fliesstext - wird 3x mit
+          # unterschiedlichem Body-Text und Button-Ziel-Suffix wiederverwendet: Freigeben,
+          # Neues Bild vorschlagen, Aenderung beantragen. Domain ist fest der Approve-Worker.)
+          if "blog_aktion" in templates:
+            st = templates["blog_aktion"].get("status","?")
+            print(f"✅ blog_aktion: {st}")
+          else:
+            print("\n⚠️  blog_aktion fehlt – wird erstellt …")
+            r9 = requests.post(
+              f"https://graph.facebook.com/v19.0/{waba_id}/message_templates",
+              headers=headers,
+              json={
+                "name": "blog_aktion",
+                "language": "de",
+                "category": "UTILITY",
+                "components": [
+                  {
+                    "type": "BODY",
+                    "text": "👉 Nächster Schritt: {{1}}\n\nTippen Sie auf den Button unten.",
+                    "example": {"body_text": [["Freigeben & veröffentlichen"]]}
+                  },
+                  {
+                    "type": "BUTTONS",
+                    "buttons": [{
+                      "type": "URL",
+                      "text": "Öffnen",
+                      "url": "https://blog-approve.kneipenterroristecky.workers.dev/{{1}}",
+                      "example": ["approve?token=abcdef123456"]
+                    }]
+                  }
+                ]
+              }
+            )
+            print(f"blog_aktion erstellt: {r9.status_code} – {r9.text[:300]}")
 
           # social_bild (Bild-Template – das eigentliche Haupt-Template)
           if "social_bild" in templates:

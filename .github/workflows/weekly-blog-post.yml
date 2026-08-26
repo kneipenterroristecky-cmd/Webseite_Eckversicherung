@@ -53,6 +53,12 @@ jobs:
       - name: Abhängigkeiten installieren
         run: pip install anthropic requests playwright pillow
 
+      - name: "Panel: Nadine startet"
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py nadine "schreibt den Blog-Beitrag und die Instagram-Caption"
+
       - name: Blog-Beitrag generieren
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -63,8 +69,21 @@ jobs:
       - name: Playwright Chromium installieren
         run: playwright install chromium --with-deps
 
+      - name: "Panel: Jonas startet"
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py jonas "erstellt die Social-Media-Bilder"
+
       - name: Social-Media-Bild rendern
         run: python tools/generate_social_image.py
+
+      - name: "Panel: Status leeren (wartet jetzt auf Daniels Freigabe)"
+        if: always()
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py clear
 
       - name: Entwurf ins Repository committen
         run: |
@@ -76,6 +95,46 @@ jobs:
           git add blog/posts/ tools/draft_meta.json social/latest-ig.html social/latest-ig.png social/latest-ig-heiko.html social/latest-ig-heiko.png social/latest-ig-beide.html social/latest-ig-beide.png social/latest-ig-clean.png
           TITLE=$(python3 -c "import json; print(json.load(open('tools/draft_meta.json'))['title'])")
           git commit -m "Blog-Entwurf: $TITLE"
+          for i in 1 2 3 4 5; do
+            git push && break
+            echo "Push-Versuch $i fehlgeschlagen, warte 15 Sekunden..."
+            sleep 15
+          done
+
+      - name: Regelkreis - Herr Brandt prüft, Nadine bessert bei Bedarf nach (max. 3 Versuche)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+          WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WHATSAPP_TO_NUMBER: ${{ secrets.WHATSAPP_TO_NUMBER }}
+        run: python tools/pr_loop.py
+
+      - name: "Panel: Status leeren"
+        if: always()
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py clear
+
+      - name: Änderungen aus der Nachbesserung committen
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git stash --include-untracked
+            STASHED=1
+          else
+            STASHED=0
+          fi
+          git pull --rebase origin master
+          if [ "$STASHED" -eq 1 ]; then
+            git stash pop
+          fi
+          git add blog/posts/ tools/draft_meta.json
+          git diff --staged --quiet || git commit -m "Entwurf von Herrn Brandts Regelkreis nachgebessert"
           for i in 1 2 3 4 5; do
             git push && break
             echo "Push-Versuch $i fehlgeschlagen, warte 15 Sekunden..."
@@ -103,9 +162,34 @@ jobs:
           python3 - <<'PYEOF'
           import os, json, requests as req, sys
 
+          def trunc(s, n):
+            """Kuerzt an der letzten Wortgrenze statt hart mitten im Wort abzuschneiden."""
+            s = (s or "").replace("\n", " ").strip()
+            if len(s) <= n:
+              return s
+            cut = s[:n].rsplit(" ", 1)[0].rstrip(",.;:–-")
+            return cut + "…"
+
+          def full(s):
+            """Nie abschneiden - die KI begrenzt blog_excerpt/wa_image_text schon selbst kurz genug."""
+            return (s or "").replace("\n", " ").strip()
+
           meta    = json.load(open("tools/draft_meta.json", encoding="utf-8"))
           title   = meta.get("title", "")
           date_de = meta.get("date_de", "")
+          # WhatsApp-Template-Parameter duerfen KEINE Zeilenumbrueche enthalten (Meta lehnt den
+          # Versand sonst mit Fehler 132018 ab) - deshalb excerpt/fb/ig als 3 GETRENNTE Parameter
+          # (jeweils eigene Zeile im STATISCHEN Vorlagentext, nicht im Parameterwert selbst).
+          excerpt    = full(meta.get("blog_excerpt", ""))
+          image_text = full(meta.get("wa_image_text", ""))
+          fb_preview = trunc(meta.get("social_summary", ""), 170)
+          ig_preview = trunc(meta.get("instagram_caption", "").split("\n\n")[0], 170)
+          # Fallback fuer das alte kombinierte Template: nur solange nutzen, bis blog_entwurf_info_v3
+          # freigegeben ist. Dort ist wegen der 3 mit reingepackten Link-URLs nicht genug Platz fuer
+          # excerpt+FB+IG komplett - FB/IG muessen laut Vorgabe VOLLSTAENDIG erscheinen, deshalb faellt
+          # hier der Excerpt weg statt FB/IG anzuschneiden.
+          summary = f"📘 Facebook: {fb_preview} • 📸 Instagram: {ig_preview}"
+          og_image = meta.get("og_image", "")
 
           repo        = os.environ.get("GITHUB_REPOSITORY", "")
           worker_url  = os.environ.get("APPROVE_WORKER_URL", "").strip().rstrip("/")
@@ -128,28 +212,123 @@ jobs:
           if not all([token, phone_id, wa_to]):
             print("❌ Fehlende WhatsApp-Secrets!"); sys.exit(1)
 
-          r = req.post(
-            f"https://graph.facebook.com/v19.0/{phone_id}/messages",
-            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
-            json={
+          msg_api = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          auth_headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+
+          # Vorschau-Bild vorab senden (bereits freigegebenes Template, kein neues Approval noetig).
+          # Erst hochladen und per media-id senden statt per "link" - "link" wird von Meta
+          # asynchron nachgeladen und schlaegt dabei manchmal unbemerkt fehl (Status bleibt trotzdem
+          # 200); der Upload-Weg ist derselbe zuverlaessige Mechanismus wie bei den Social-Bildern
+          # in publish-blog-post.yml/wa-images.yml.
+          if og_image:
+            img_r = req.get(og_image, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
+            if img_r.ok:
+              up = req.post(f"https://graph.facebook.com/v19.0/{phone_id}/media",
+                headers={"Authorization": f"Bearer {token}"},
+                data={"messaging_product": "whatsapp"},
+                files={"file": ("vorschau.jpg", img_r.content, img_r.headers.get("content-type", "image/jpeg"))})
+              media_id = up.json().get("id") if up.status_code < 300 else None
+              print(f"Vorschau-Bild Upload: {up.status_code}{' (' + str(len(img_r.content)//1024) + ' KB)' if media_id else ' ' + up.text[:200]}")
+              if media_id:
+                r_img = req.post(msg_api, headers=auth_headers, json={
+                  "messaging_product": "whatsapp",
+                  "to": wa_to,
+                  "type": "template",
+                  "template": {
+                    "name": "social_bild",
+                    "language": {"code": "de"},
+                    "components": [{"type": "header", "parameters": [
+                      {"type": "image", "image": {"id": media_id}}
+                    ]}]
+                  }
+                })
+                print(f"Vorschau-Bild Status: {r_img.status_code}")
+                if r_img.status_code >= 300:
+                  print(f"  (kein Abbruch) Fehler: {r_img.text[:300]}")
+            else:
+              print(f"Vorschau-Bild Download fehlgeschlagen: {img_r.status_code}")
+
+          def sende_freigabe(template_name, mit_summary):
+            params = [
+              {"type": "text", "text": title},
+              {"type": "text", "text": date_de},
+            ]
+            if mit_summary:
+              params.append({"type": "text", "text": summary})
+            params += [
+              {"type": "text", "text": approve_url},
+              {"type": "text", "text": suggest_img_url},
+              {"type": "text", "text": change_url},
+            ]
+            return req.post(msg_api, headers=auth_headers, json={
               "messaging_product": "whatsapp",
               "to": wa_to,
               "type": "template",
               "template": {
-                "name": "blog_entwurf_freigabe",
+                "name": template_name,
                 "language": {"code": "de"},
-                "components": [{
-                  "type": "body",
-                  "parameters": [
-                    {"type": "text", "text": title},
-                    {"type": "text", "text": date_de},
-                    {"type": "text", "text": approve_url},
-                    {"type": "text", "text": suggest_img_url},
-                    {"type": "text", "text": change_url},
-                  ]
-                }]
+                "components": [{"type": "body", "parameters": params}]
               }
             })
+
+          def sende_aktion_button(label, url_suffix):
+            return req.post(msg_api, headers=auth_headers, json={
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "template",
+              "template": {
+                "name": "blog_aktion",
+                "language": {"code": "de"},
+                "components": [
+                  {"type": "body", "parameters": [{"type": "text", "text": label}]},
+                  {"type": "button", "sub_type": "url", "index": "0",
+                   "parameters": [{"type": "text", "text": url_suffix}]}
+                ]
+              }
+            })
+
+          # Neues Template (Info-Text ohne Links + 3 eigene Nachrichten mit echtem Button)
+          # versuchen, bei Meta evtl. noch nicht freigegeben -> dann auf die bewaehrte
+          # Text-Link-Version zurueckfallen, damit immer ein Weg zum Handeln da ist.
+          r_info = req.post(msg_api, headers=auth_headers, json={
+            "messaging_product": "whatsapp",
+            "to": wa_to,
+            "type": "template",
+            "template": {
+              "name": "blog_entwurf_info_v3",
+              "language": {"code": "de"},
+              "components": [{"type": "body", "parameters": [
+                {"type": "text", "text": title},
+                {"type": "text", "text": date_de},
+                {"type": "text", "text": excerpt or "(keine Zusammenfassung verfügbar)"},
+                {"type": "text", "text": image_text or "(kein Bildtext verfügbar)"},
+                {"type": "text", "text": fb_preview or "(kein Facebook-Text verfügbar)"},
+                {"type": "text", "text": ig_preview or "(kein Instagram-Text verfügbar)"},
+              ]}]
+            }
+          })
+          print(f"Info-Nachricht Status: {r_info.status_code}")
+          if r_info.status_code >= 300:
+            print(f"  {r_info.text[:300]}")
+
+          if r_info.status_code < 300:
+            for label, suffix in [
+              ("✅ Freigeben & veröffentlichen", f"approve?token={approve_tok}"),
+              ("🖼️ Neues Bild vorschlagen", f"suggest-image?token={approve_tok}"),
+              ("✏️ Änderung beantragen (Titel/Text ändern)", f"change?token={approve_tok}"),
+            ]:
+              r_btn = sende_aktion_button(label, suffix)
+              print(f"Aktion '{label}': {r_btn.status_code}")
+              if r_btn.status_code >= 300:
+                print(f"  Fehler: {r_btn.text[:200]}")
+            r = r_info
+          else:
+            print(f"  blog_entwurf_info noch nicht nutzbar: {r_info.text[:200]} – falle auf altes Template zurueck.")
+            r = sende_freigabe("blog_entwurf_freigabe_v2", mit_summary=True)
+            if r.status_code >= 300:
+              print(f"blog_entwurf_freigabe_v2 noch nicht nutzbar ({r.status_code}: {r.text[:200]}) – falle auf v1 zurueck.")
+              r = sende_freigabe("blog_entwurf_freigabe", mit_summary=False)
+
           print(f"WhatsApp Status: {r.status_code}")
           if r.status_code >= 300:
             print(f"Fehler: {r.text[:500]}")

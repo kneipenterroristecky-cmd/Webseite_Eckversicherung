@@ -3,15 +3,47 @@
  *
  * Secrets (im Cloudflare Dashboard unter Workers → Settings → Variables eintragen):
  *   WHATSAPP_VERIFY_TOKEN   – frei wählbarer String, z.B. "mein-geheimer-token-2025"
- *   WHATSAPP_ACCESS_TOKEN   – aus Meta Developer Console (bereits als GitHub Secret vorhanden)
- *   WHATSAPP_PHONE_NUMBER_ID – aus Meta Developer Console (bereits als GitHub Secret vorhanden)
+ *   WHATSAPP_ACCESS_TOKEN   – aus Meta Developer Console (bereits als GitHub Secret vorhanden) -
+ *                             dient nur noch als FALLBACK, siehe getWaConnection() unten
+ *   WHATSAPP_PHONE_NUMBER_ID – aus Meta Developer Console (bereits als GitHub Secret vorhanden) -
+ *                             dient nur noch als FALLBACK, siehe getWaConnection() unten
  *   WHATSAPP_TO_NUMBER      – deine WhatsApp-Nummer mit Ländervorwahl, OHNE +, z.B. "4917432258850"
  *   GITHUB_PAT              – der PAT_WORKFLOW Token aus GitHub Secrets
  *   GITHUB_REPO             – "kneipenterroristecky-cmd/Webseite_Eckversicherung"
  *   DOCUMENT_RELAY_URL      – die Apps-Script-Web-App-URL (siehe Code.gs, dashboard.html Zeile 231)
  *   DOCUMENT_RELAY_SECRET   – frei wählbarer String, MUSS mit DOCUMENT_RELAY_SECRET in Code.gs übereinstimmen
  *   ANTHROPIC_API_KEY       – fuer die Versicherungskontext-Pruefung von PDFs/Bildern (Modell claude-haiku-4-5)
- *   WORKER_ADMIN_SECRET     – frei waehlbarer String, schuetzt die 'teach'-Aktion (siehe unten)
+ *   WORKER_ADMIN_SECRET     – frei waehlbarer String, schuetzt die 'teach'-Aktion UND /api/phone-drops(/ack)
+ *   PHONE_DROP_SECRET       – frei waehlbarer String, schuetzt NUR /phone-drop (siehe unten) - bewusst
+ *                             getrennt von WORKER_ADMIN_SECRET, damit ein auf dem Handy hinterlegtes
+ *                             Secret (im HTTP-Shortcuts-Kurzbefehl) im Verlustfall nicht auch die
+ *                             admin-Aktionen freischaltet.
+ *
+ * ── /connect: WhatsApp Coexistence Embedded Signup ──────────────────────
+ * Verbindet Daniels EINE bestehende private Nummer per "Coexistence" mit
+ * dieser Business-Plattform - die normale WhatsApp-Business-App bleibt dabei
+ * voll nutzbar, NICHTS an der Nummer selbst wird migriert/geloescht/verschoben.
+ * Das ist bewusst NICHT der normale "Telefonnummer hinzufuegen"-Dialog im
+ * Meta Business Manager (der wuerde die Nummer exklusiv uebernehmen wollen
+ * und mit der bestehenden App-Nutzung kollidieren) - stattdessen ein per
+ * Facebook-Login-Popup eingebetteter "Embedded Signup"-Flow, der explizit die
+ * "bestehende WhatsApp-Business-App-Nummer weiterverwenden"-Option anbietet.
+ * Nutzt bewusst "Embedded Signup Version 1" (klassischer FB.login mit scope=
+ * whatsapp_business_management,whatsapp_business_messaging + extras.feature=
+ * 'whatsapp_embedded_signup') statt der config_id-basierten Version 2 - V2 ist
+ * fuer Partner/Tech-Provider gedacht, die FREMDE Unternehmen onboarden, und
+ * blockiert Eigennutzung mit "kann aktuell kein Onboarding fuer Kunden
+ * vornehmen" (live am 2026-07-29 so aufgetreten). V1 braucht keine
+ * Facebook-Login-for-Business-Configuration, nur zwei Secrets:
+ *   WHATSAPP_APP_ID              – App Dashboard -> Einstellungen -> Basis -> App-ID
+ *   WHATSAPP_APP_SECRET          – App Dashboard -> Einstellungen -> Basis -> App-Geheimnis ("Anzeigen")
+ * (WHATSAPP_EMBEDDED_CONFIG_ID wird nicht mehr benoetigt, kann als Secret bestehen bleiben, wird ignoriert.)
+ * Nach einem erfolgreichen Klick auf der /connect-Seite werden phone_number_id/
+ * waba_id/access_token automatisch in SELIN_MEMORY (KV) gespeichert und ab
+ * dann von getWaConnection() bevorzugt genutzt - die GitHub-Secrets
+ * WHATSAPP_PHONE_NUMBER_ID/WHATSAPP_ACCESS_TOKEN muessen dafuer NICHT
+ * angefasst werden (bleiben nur als Fallback/fuer die GitHub-Actions-Skripte
+ * bestehen, die direkt auf diese Secrets zugreifen).
  *
  * KV-Namespace-Bindung (siehe tools/wrangler.toml):
  *   SELIN_MEMORY – dauerhaftes Gedaechtnis fuer Selin (analog zu memory/*.md in der
@@ -73,9 +105,167 @@
  * neue Anweisung von Daniel nicht aufgeweicht werden.
  */
 
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+  });
+}
+
+function escapeHtml(text) {
+  return String(text).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// ── Nette Bestaetigungsseite fuer den "Zum KI Team"-Handy-Kurzbefehl ────────
+// Der Kurzbefehl (HTTP Shortcuts) zeigt die rohe Response direkt in seinem
+// Antwort-Fenster an - bisher landete dort das nackte JSON ({"ok":true,"id":
+// "..."}). Daniel-Wunsch (2026-07-30): eine ansehnliche Bestaetigung im Stil
+// des Kontrollpanels (gleiche Farben/Schrift wie panel-worker/public/index.html)
+// statt rohem JSON. Dieser Worker hat kein [assets]-Binding (siehe
+// tools/wrangler.toml) - deshalb komplett inline, kein Logo-Bild eingebunden,
+// nur Farben/Schrift/Icon per CSS/SVG wie beim bestehenden renderConnectPage().
+// Bewusst OHNE eigenen "Schliessen"-Button: window.close() wirkt nur bei per
+// Skript geoeffneten Fenstern, nicht beim Antwort-Fenster von HTTP Shortcuts -
+// der Klick waere wirkungslos gewesen (2026-08-05 gefunden/entfernt). Das
+// native "X" der App schliesst zuverlaessig.
+function renderPhoneDropResult({ ok, message, filename, id }) {
+  const icon = ok
+    ? '<svg width="52" height="52" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#dcfce7"/><path d="M8 12.5l2.5 2.5L16 9" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    : '<svg width="52" height="52" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#fee2e2"/><path d="M12 7.5v5.5" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16.3" r="1.1" fill="#dc2626"/></svg>';
+
+  return `<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${ok ? 'Zum KI Team – übernommen' : 'Zum KI Team – Fehler'}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter var','Inter',-apple-system,ui-sans-serif,system-ui,sans-serif;background:#f5f6fa;color:#1e293b;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{background:#fff;border-radius:20px;padding:40px 32px;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(23,45,80,.15);text-align:center}
+.icon{margin:0 auto 18px;display:flex;align-items:center;justify-content:center}
+h1{font-size:19px;font-weight:800;color:#172d50;margin-bottom:10px}
+p{font-size:13.5px;color:#64748b;line-height:1.5}
+.badge{display:inline-block;margin-top:18px;padding:7px 16px;background:${ok ? '#eef4fc' : '#fef2f2'};color:${ok ? '#1a50c8' : '#dc2626'};border-radius:20px;font-size:12px;font-weight:700}
+.meta{margin-top:20px;padding-top:16px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">${icon}</div>
+  <h1>${ok ? 'Datei übernommen' : 'Etwas ist schiefgelaufen'}</h1>
+  <p>${escapeHtml(message)}</p>
+  ${ok ? '<div class="badge">Läuft jetzt automatisch durch Petra/Bilal/Uwe</div>' : ''}
+  ${ok ? `<div class="meta">${escapeHtml(filename || '')}${id ? ' · Referenz ' + escapeHtml(id.slice(0, 8)) : ''}</div>` : ''}
+</div>
+</body>
+</html>`;
+}
+
+function htmlResponse(html, status = 200) {
+  return new Response(html, { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    // ── Coexistence-Verbindungsseite (einmaliger, manueller Klick von Daniel) ──
+    if (url.pathname === '/connect' && request.method === 'GET') {
+      return new Response(renderConnectPage(env), {
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
+      });
+    }
+    if (url.pathname === '/connect/complete' && request.method === 'POST') {
+      return await handleConnectComplete(request, env);
+    }
+    if (url.pathname === '/connect/status' && request.method === 'GET') {
+      const phoneNumberId = await env.SELIN_MEMORY.get('connection_phone_number_id');
+      const connectedAt = await env.SELIN_MEMORY.get('connection_connected_at');
+      return new Response(JSON.stringify({ connected: !!phoneNumberId, phoneNumberId, connectedAt }), {
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
+    // ── Handy-Kurzbefehl: manuell aus WhatsApp geteilte Datei zwischenspeichern ──
+    // Umgeht die Cloud-API komplett (kein Meta-Zugriff noetig). Das Handy teilt
+    // EINE ausgewaehlte Datei hierher (kein Auto-Sync von allem), sie landet in
+    // KV, bis der GitHub-Actions-Cloud-Pilot (whatsapp-phone-drop-cloud.ps1)
+    // sie per rclone in den echten OneDrive-Ordner "Manuell einwerfen" legt -
+    // danach laeuft sie wie jedes andere Dokument durch Petra/Bilal/Uwe.
+    if (url.pathname === '/phone-drop' && request.method === 'POST') {
+      if (url.searchParams.get('secret') !== env.PHONE_DROP_SECRET) {
+        return htmlResponse(renderPhoneDropResult({ ok: false, message: 'Falsches Secret - der Kurzbefehl ist nicht korrekt eingerichtet.' }), 401);
+      }
+      const filename = request.headers.get('X-Filename') || `datei-${Date.now()}`;
+      const contentType = request.headers.get('Content-Type') || 'application/octet-stream';
+      const bytes = await request.arrayBuffer();
+      if (bytes.byteLength === 0) {
+        return htmlResponse(renderPhoneDropResult({ ok: false, message: 'Die Datei kam leer an - bitte nochmal versuchen.' }), 400);
+      }
+      if (bytes.byteLength > 20 * 1024 * 1024) {
+        return htmlResponse(renderPhoneDropResult({ ok: false, message: 'Datei ist groesser als 20 MB und wurde nicht angenommen.' }), 400);
+      }
+      const id = crypto.randomUUID();
+      await env.SELIN_MEMORY.put(
+        `phonedrop:${id}`,
+        JSON.stringify({
+          filename,
+          contentType,
+          dataBase64: arrayBufferToBase64(bytes),
+          receivedAt: new Date().toISOString(),
+        })
+      );
+      const queueRaw = (await env.SELIN_MEMORY.get('phonedrop_queue')) || '[]';
+      const queue = JSON.parse(queueRaw);
+      queue.push(id);
+      await env.SELIN_MEMORY.put('phonedrop_queue', JSON.stringify(queue));
+      return htmlResponse(renderPhoneDropResult({
+        ok: true,
+        message: 'Landet spaetestens in 15 Minuten im Buero-Ordner "Manuell einwerfen" und wird automatisch eingeordnet.',
+        filename,
+        id,
+      }));
+    }
+
+    // ── Cloud-Pilot holt anstehende Handy-Drops ab (Secret = WORKER_ADMIN_SECRET) ──
+    if (url.pathname === '/api/phone-drops' && request.method === 'GET') {
+      if (url.searchParams.get('secret') !== env.WORKER_ADMIN_SECRET) {
+        return json({ error: 'Falsches Secret' }, 401);
+      }
+      const queueRaw = (await env.SELIN_MEMORY.get('phonedrop_queue')) || '[]';
+      const queue = JSON.parse(queueRaw);
+      const items = [];
+      for (const id of queue) {
+        const raw = await env.SELIN_MEMORY.get(`phonedrop:${id}`);
+        if (raw) items.push({ id, ...JSON.parse(raw) });
+      }
+      return json({ items });
+    }
+
+    // ── Cloud-Pilot bestaetigt erfolgreich abgelegte Drops (loescht sie aus der Queue) ──
+    if (url.pathname === '/api/phone-drops/ack' && request.method === 'POST') {
+      if (url.searchParams.get('secret') !== env.WORKER_ADMIN_SECRET) {
+        return json({ error: 'Falsches Secret' }, 401);
+      }
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return json({ error: 'Ungueltiges JSON' }, 400);
+      }
+      const ackIds = new Set(body.ids || []);
+      const queueRaw = (await env.SELIN_MEMORY.get('phonedrop_queue')) || '[]';
+      const queue = JSON.parse(queueRaw).filter((id) => !ackIds.has(id));
+      await env.SELIN_MEMORY.put('phonedrop_queue', JSON.stringify(queue));
+      for (const id of ackIds) {
+        await env.SELIN_MEMORY.delete(`phonedrop:${id}`);
+      }
+      return json({ ok: true });
+    }
 
     // ── GET: WhatsApp Webhook-Verifizierung ──────────────────────────────
     if (request.method === 'GET') {
@@ -259,8 +449,18 @@ export default {
   }
 };
 
+// Liefert die aktuell gueltigen Zugangsdaten fuer Daniels Hauptnummer: bevorzugt
+// die per /connect (Coexistence) frisch verbundenen Werte aus KV, faellt sonst
+// auf die statischen GitHub/Cloudflare-Secrets zurueck (Alt-/Testnummer).
+async function getWaConnection(env) {
+  const phoneNumberId = (await env.SELIN_MEMORY.get('connection_phone_number_id')) || env.WHATSAPP_PHONE_NUMBER_ID;
+  const accessToken = (await env.SELIN_MEMORY.get('connection_access_token')) || env.WHATSAPP_ACCESS_TOKEN;
+  return { phoneNumberId, accessToken };
+}
+
 async function sendWhatsApp(env, message) {
-  await sendWhatsAppTo(env, env.WHATSAPP_TO_NUMBER, message, env.WHATSAPP_PHONE_NUMBER_ID, env.WHATSAPP_ACCESS_TOKEN);
+  const { phoneNumberId, accessToken } = await getWaConnection(env);
+  await sendWhatsAppTo(env, env.WHATSAPP_TO_NUMBER, message, phoneNumberId, accessToken);
 }
 
 async function sendWhatsAppTo(env, to, message, phoneNumberId, accessToken) {
@@ -290,10 +490,11 @@ async function handleCustomerMedia(env, message, from, kind) {
     const mimeType  = mediaObj.mime_type;
     const extension = kind === 'document' ? 'pdf' : (mimeType.split('/')[1] || 'jpg');
     const filename  = mediaObj.filename || `whatsapp-${kind === 'document' ? 'dokument' : 'bild'}-${mediaId}.${extension}`;
+    const { accessToken } = await getWaConnection(env);
 
     // 1. Media-URL bei Meta abrufen
     const metaResp = await fetch(`https://graph.facebook.com/v19.0/${mediaId}`, {
-      headers: { 'Authorization': `Bearer ${env.WHATSAPP_ACCESS_TOKEN}` }
+      headers: { 'Authorization': `Bearer ${accessToken}` }
     });
     const metaData = await metaResp.json();
     if (!metaData.url) {
@@ -302,7 +503,7 @@ async function handleCustomerMedia(env, message, from, kind) {
 
     // 2. Datei herunterladen
     const fileResp = await fetch(metaData.url, {
-      headers: { 'Authorization': `Bearer ${env.WHATSAPP_ACCESS_TOKEN}` }
+      headers: { 'Authorization': `Bearer ${accessToken}` }
     });
     const buffer = await fileResp.arrayBuffer();
     const base64 = arrayBufferToBase64(buffer);
@@ -635,4 +836,171 @@ async function sophieRespond(env, text, memory, status) {
   const data = await resp.json();
   const textBlock = (data.content || []).find(b => b.type === 'text');
   return JSON.parse(textBlock.text);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// WHATSAPP COEXISTENCE - EMBEDDED SIGNUP ("/connect")
+// ══════════════════════════════════════════════════════════════════════
+//
+// Diese Seite ersetzt bewusst NICHT den normalen Meta-Business-Manager-Dialog
+// ("Telefonnummer hinzufuegen") - der wuerde die Nummer exklusiv fuer die
+// Cloud-API beanspruchen und mit der laufenden WhatsApp-Business-App-Nutzung
+// kollidieren ("Diese Telefonnummer ist bereits einem WhatsApp-Konto
+// zugeordnet"). Stattdessen der von Meta vorgesehene Weg fuer genau diesen
+// Fall: ein per Facebook-Login-Popup eingebetteter "Embedded Signup"-Flow mit
+// einer speziell dafuer eingerichteten Configuration (WHATSAPP_EMBEDDED_CONFIG_ID),
+// die explizit die Option "bestehende WhatsApp-Business-App-Nummer
+// weiterverwenden" (Coexistence) anbietet. Die App-/Nummern-Verwaltung selbst
+// bleibt dabei komplett bei Meta - dieser Worker loest nur den Login-Flow aus
+// und verarbeitet danach den Autorisierungscode.
+function renderConnectPage(env) {
+  const missing = ['WHATSAPP_APP_ID'].filter((k) => !env[k]);
+  if (missing.length) {
+    return `<!doctype html><html lang="de"><meta charset="utf-8">
+      <body style="font-family:sans-serif;max-width:640px;margin:40px auto;line-height:1.5">
+      <h1>WhatsApp verbinden</h1>
+      <p style="color:#b00">Fehlende Konfiguration: ${missing.join(', ')}.</p>
+      <p>Diese Secrets muessen zuerst im Cloudflare Worker gesetzt sein
+      (App Dashboard von Meta &rarr; Einstellungen/Facebook Login for Business),
+      bevor diese Seite funktioniert.</p>
+      </body></html>`;
+  }
+
+  return `<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhatsApp verbinden</title>
+</head>
+<body style="font-family:sans-serif;max-width:640px;margin:40px auto;line-height:1.5">
+  <h1>WhatsApp-Nummer verbinden (Coexistence)</h1>
+  <p>Verbindet deine bestehende WhatsApp-Business-App-Nummer mit dieser
+  Business-Plattform. Die App bleibt danach ganz normal nutzbar - deine Nummer
+  wird dabei <strong>nicht</strong> migriert, geloescht oder verschoben.</p>
+  <p>Voraussetzung: Die Nummer muss bereits in der WhatsApp Business App aktiv
+  sein (nicht in der normalen WhatsApp-App).</p>
+  <button id="launch" style="font-size:1.1em;padding:10px 20px;cursor:pointer">
+    Verbindung herstellen
+  </button>
+  <pre id="log" style="white-space:pre-wrap;background:#f4f4f4;padding:12px;margin-top:20px;min-height:60px"></pre>
+
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({ appId: '${env.WHATSAPP_APP_ID}', autoLogAppEvents: true, xfbml: false, version: 'v23.0' });
+    };
+  </script>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/de_DE/sdk.js"></script>
+
+  <script>
+    const logEl = document.getElementById('log');
+    function log(msg) { logEl.textContent += msg + "\\n"; }
+
+    let sessionInfo = null;
+    window.addEventListener('message', (event) => {
+      if (!event.origin.endsWith('facebook.com')) return;
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'WA_EMBEDDED_SIGNUP') {
+          log('Signup-Ereignis: ' + data.event);
+          if (data.data && (data.data.waba_id || data.data.phone_number_id)) {
+            sessionInfo = data.data;
+          }
+        }
+      } catch (e) { /* keine WA_EMBEDDED_SIGNUP-Nachricht, ignorieren */ }
+    });
+
+    document.getElementById('launch').addEventListener('click', function () {
+      log('Starte Facebook-Login...');
+      FB.login(function (response) {
+        if (!response.authResponse || !response.authResponse.code) {
+          log('Abgebrochen oder keine Berechtigung erteilt.');
+          return;
+        }
+        log('Autorisierung erhalten, verbinde mit dem Worker...');
+        fetch('/connect/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: response.authResponse.code, session: sessionInfo })
+        })
+          .then((r) => r.json())
+          .then((result) => {
+            if (result.ok) {
+              log('Fertig! Nummer erfolgreich verbunden (phone_number_id: ' + result.phone_number_id + ').');
+              log('Du kannst WhatsApp jetzt ganz normal weiter nutzen.');
+            } else {
+              log('Fehler: ' + result.error);
+            }
+          })
+          .catch((e) => log('Netzwerkfehler: ' + e));
+      }, {
+        scope: 'whatsapp_business_management,whatsapp_business_messaging',
+        response_type: 'code',
+        override_default_response_type: true,
+        extras: { feature: 'whatsapp_embedded_signup', setup: {} }
+      });
+    });
+  </script>
+</body>
+</html>`;
+}
+
+async function handleConnectComplete(request, env) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ ok: false, error: 'Ungueltiges JSON' }, 400);
+  }
+
+  const { code, session } = body;
+  if (!code) {
+    return json({ ok: false, error: 'Kein Autorisierungscode erhalten' }, 400);
+  }
+  if (!env.WHATSAPP_APP_SECRET || !env.WHATSAPP_APP_ID) {
+    return json({ ok: false, error: 'WHATSAPP_APP_ID/WHATSAPP_APP_SECRET fehlen als Worker-Secret' }, 500);
+  }
+
+  try {
+    // 1. Autorisierungscode gegen ein Access Token tauschen
+    const tokenUrl = new URL('https://graph.facebook.com/v23.0/oauth/access_token');
+    tokenUrl.searchParams.set('client_id', env.WHATSAPP_APP_ID);
+    tokenUrl.searchParams.set('client_secret', env.WHATSAPP_APP_SECRET);
+    tokenUrl.searchParams.set('code', code);
+    const tokenResp = await fetch(tokenUrl.toString());
+    const tokenData = await tokenResp.json();
+    if (!tokenData.access_token) {
+      throw new Error('Token-Tausch fehlgeschlagen: ' + JSON.stringify(tokenData));
+    }
+    const accessToken = tokenData.access_token;
+
+    const wabaId = session && session.waba_id;
+    const phoneNumberId = session && session.phone_number_id;
+    if (!wabaId || !phoneNumberId) {
+      throw new Error('waba_id/phone_number_id fehlten im Signup-Ereignis: ' + JSON.stringify(session));
+    }
+
+    // 2. App auf die Webhooks dieser WABA abonnieren (Pflichtschritt, sonst
+    //    kommen nie eingehende Nachrichten hier an)
+    const subResp = await fetch(`https://graph.facebook.com/v23.0/${wabaId}/subscribed_apps`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const subData = await subResp.json();
+    if (!subData.success) {
+      throw new Error('Webhook-Abo fehlgeschlagen: ' + JSON.stringify(subData));
+    }
+
+    // 3. Nur UNSERE eigenen Zugangsdaten fuer diese Verbindung speichern -
+    //    die Nummer/App selbst bleibt unangetastet, das ist reine Konfiguration.
+    await env.SELIN_MEMORY.put('connection_waba_id', wabaId);
+    await env.SELIN_MEMORY.put('connection_phone_number_id', phoneNumberId);
+    await env.SELIN_MEMORY.put('connection_access_token', accessToken);
+    await env.SELIN_MEMORY.put('connection_connected_at', new Date().toISOString());
+
+    return json({ ok: true, waba_id: wabaId, phone_number_id: phoneNumberId });
+  } catch (ex) {
+    console.error('Fehler beim Coexistence-Connect:', ex);
+    return json({ ok: false, error: String((ex && ex.message) || ex) }, 500);
+  }
 }

@@ -1,0 +1,138 @@
+name: Test – WhatsApp-Testnachricht (mit Links)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-message:
+    name: Testnachricht senden
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Testnachricht per WhatsApp senden (echte aktuelle Entwurfsdaten)
+        env:
+          WA_TOKEN:   ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WA_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WA_TO:      ${{ secrets.WHATSAPP_TO_NUMBER }}
+          APPROVE_WORKER_URL: ${{ secrets.APPROVE_WORKER_URL }}
+          APPROVE_TOKEN: ${{ secrets.APPROVE_TOKEN }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, json, requests as req, sys
+
+          token    = os.environ.get("WA_TOKEN", "").strip()
+          phone_id = os.environ.get("WA_PHONE_ID", "").strip()
+          wa_to    = os.environ.get("WA_TO", "").strip()
+          if not all([token, phone_id, wa_to]):
+            print("❌ Fehlende WhatsApp-Secrets!"); sys.exit(1)
+
+          def trunc(s, n):
+            s = (s or "").replace("\n", " ").strip()
+            if len(s) <= n:
+              return s
+            cut = s[:n].rsplit(" ", 1)[0].rstrip(",.;:–-")
+            return cut + "…"
+
+          def full(s):
+            """Nie abschneiden - die KI begrenzt blog_excerpt/wa_image_text schon selbst kurz genug."""
+            return (s or "").replace("\n", " ").strip()
+
+          if not os.path.exists("tools/draft_meta.json"):
+            print("❌ Kein tools/draft_meta.json vorhanden - erst Workflow 1 laufen lassen."); sys.exit(1)
+          meta = json.load(open("tools/draft_meta.json", encoding="utf-8"))
+          title   = "[TEST] " + meta.get("title", "")
+          date_de = meta.get("date_de", "")
+          excerpt    = full(meta.get("blog_excerpt", ""))
+          image_text = full(meta.get("wa_image_text", ""))
+          fb_preview = trunc(meta.get("social_summary", ""), 170)
+          ig_preview = trunc(meta.get("instagram_caption", "").split("\n\n")[0], 170)
+          summary = f"📘 Facebook: {fb_preview} • 📸 Instagram: {ig_preview}"
+          og_image = meta.get("og_image", "")
+
+          worker_url  = os.environ.get("APPROVE_WORKER_URL", "").strip().rstrip("/")
+          approve_tok = os.environ.get("APPROVE_TOKEN", "").strip()
+          approve_url      = f"{worker_url}/approve?token=TEST-NICHT-ECHT" if worker_url else "https://example.com/test-freigeben"
+          suggest_img_url  = f"{worker_url}/suggest-image?token=TEST-NICHT-ECHT" if worker_url else "https://example.com/test-neues-bild"
+          change_url       = f"{worker_url}/change?token=TEST-NICHT-ECHT" if worker_url else "https://example.com/test-aendern"
+
+          msg_api = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+          auth_headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+
+          # 1) Vorschau-Bild (Upload statt Link, wie im echten Workflow)
+          if og_image:
+            img_r = req.get(og_image, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
+            if img_r.ok:
+              up = req.post(f"https://graph.facebook.com/v19.0/{phone_id}/media",
+                headers={"Authorization": f"Bearer {token}"},
+                data={"messaging_product": "whatsapp"},
+                files={"file": ("vorschau.jpg", img_r.content, img_r.headers.get("content-type", "image/jpeg"))})
+              media_id = up.json().get("id") if up.status_code < 300 else None
+              print(f"Vorschau-Bild Upload: {up.status_code}")
+              if media_id:
+                r_img = req.post(msg_api, headers=auth_headers, json={
+                  "messaging_product": "whatsapp", "to": wa_to, "type": "template",
+                  "template": {"name": "social_bild", "language": {"code": "de"},
+                    "components": [{"type": "header", "parameters": [{"type": "image", "image": {"id": media_id}}]}]}
+                })
+                print(f"Vorschau-Bild Status: {r_img.status_code}")
+            else:
+              print(f"Vorschau-Bild Download fehlgeschlagen: {img_r.status_code}")
+
+          # 2) Info-Text: neues Template mit 6 getrennten Feldern versuchen, sonst Fallback
+          r_info = req.post(msg_api, headers=auth_headers, json={
+            "messaging_product": "whatsapp", "to": wa_to, "type": "template",
+            "template": {"name": "blog_entwurf_info_v3", "language": {"code": "de"},
+              "components": [{"type": "body", "parameters": [
+                {"type": "text", "text": title},
+                {"type": "text", "text": date_de},
+                {"type": "text", "text": excerpt or "(keine Zusammenfassung verfügbar)"},
+                {"type": "text", "text": image_text or "(kein Bildtext verfügbar)"},
+                {"type": "text", "text": fb_preview or "(kein Facebook-Text verfügbar)"},
+                {"type": "text", "text": ig_preview or "(kein Instagram-Text verfügbar)"},
+              ]}]}
+          })
+          print(f"Info-Nachricht (v3, 6 getrennte Felder) Status: {r_info.status_code}")
+          if r_info.status_code >= 300:
+            print(f"  {r_info.text[:300]}")
+            print("  -> falle auf altes kombiniertes Template zurueck …")
+            r_fallback = req.post(msg_api, headers=auth_headers, json={
+              "messaging_product": "whatsapp", "to": wa_to, "type": "template",
+              "template": {"name": "blog_entwurf_freigabe_v2", "language": {"code": "de"},
+                "components": [{"type": "body", "parameters": [
+                  {"type": "text", "text": title},
+                  {"type": "text", "text": date_de},
+                  {"type": "text", "text": summary},
+                  {"type": "text", "text": approve_url},
+                  {"type": "text", "text": suggest_img_url},
+                  {"type": "text", "text": change_url},
+                ]}]}
+            })
+            print(f"Fallback-Nachricht Status: {r_fallback.status_code}")
+            if r_fallback.status_code >= 300:
+              print(f"  {r_fallback.text[:300]}"); sys.exit(1)
+          else:
+            # 3) Aktions-Buttons einzeln (nur wenn Info-Nachricht mit neuem Template geklappt hat)
+            for label, suffix in [
+              ("Freigeben & veröffentlichen", "approve?token=TEST-NICHT-ECHT"),
+              ("Neues Bild vorschlagen", "suggest-image?token=TEST-NICHT-ECHT"),
+              ("Änderung beantragen", "change?token=TEST-NICHT-ECHT"),
+            ]:
+              r_btn = req.post(msg_api, headers=auth_headers, json={
+                "messaging_product": "whatsapp", "to": wa_to, "type": "template",
+                "template": {"name": "blog_aktion", "language": {"code": "de"},
+                  "components": [
+                    {"type": "body", "parameters": [{"type": "text", "text": label}]},
+                    {"type": "button", "sub_type": "url", "index": "0",
+                     "parameters": [{"type": "text", "text": suffix}]}
+                  ]}
+              })
+              print(f"Aktion '{label}': {r_btn.status_code}")
+              if r_btn.status_code >= 300:
+                print(f"  {r_btn.text[:300]}")
+
+          print("✅ Test abgeschlossen.")
+          PYEOF

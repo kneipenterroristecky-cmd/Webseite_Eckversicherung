@@ -2,10 +2,24 @@
 """
 Erstellt einen wöchentlichen Blog-Beitrag mit Claude (KI) im Stil von Daniel Eck.
 """
-import os, json, re, datetime, base64, requests, anthropic
+import os, json, re, time, datetime, base64, requests, anthropic
 from image_search import find_best_image
 
 SITE_URL = os.environ.get("SITE_URL", "https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung")
+
+
+def create_with_retry(client, **kwargs):
+    """Wie client.messages.create(), aber mit Wiederholung bei temporaerer
+    Serverueberlastung (z.B. 529 Overloaded) statt sofortigem Abbruch."""
+    delays = [15, 45, 90]
+    for i in range(len(delays) + 1):
+        try:
+            return client.messages.create(**kwargs)
+        except anthropic.APIStatusError as e:
+            if e.status_code not in (429, 500, 502, 503, 529) or i == len(delays):
+                raise
+            print(f"   ⏳ Anthropic-API überlastet ({e.status_code}) – warte {delays[i]}s und versuche erneut …")
+            time.sleep(delays[i])
 
 # ── Thema der Woche bestimmen ─────────────────────────────────────────────────
 today_preview = datetime.date.today()
@@ -94,6 +108,8 @@ og_image = find_best_image(
     topic.get("unsplash_query", topic["title"]),
     client, _fallback_url, _unsplash_key
 )
+_og_image_match = re.search(r'(photo-[\w-]+)', og_image)
+_shown_image_ids = [_og_image_match.group(1)] if _og_image_match else []
 
 # Portrait-Crop: Fokuspunkt aus topics.json nehmen wenn vorhanden, sonst KI-Analyse
 _og_base = og_image.split("?")[0] or _FALLBACK_IMG
@@ -141,7 +157,7 @@ else:
 ig_img_url_global = f"{_og_base}?w=1080&h=1920&fit=crop&{_ig_crop}&auto=format"
 
 # ── Blog-Beitrag schreiben ────────────────────────────────────────────────────
-beitrag = client.messages.create(
+beitrag = create_with_retry(client,
     model="claude-opus-4-5",
     max_tokens=4000,
     messages=[{
@@ -182,7 +198,7 @@ Gib NUR den HTML-Inhalt aus (h2, p, ul, li Tags). Kein html/head/body."""
 content_html = beitrag.content[0].text
 
 # ── Meta-Daten für Social Media generieren ────────────────────────────────────
-meta_msg = client.messages.create(
+meta_msg = create_with_retry(client,
     model="claude-haiku-4-5-20251001",
     max_tokens=1200,
     messages=[{
@@ -194,11 +210,18 @@ WICHTIG: Die Social-Media-Texte müssen inhaltlich EXAKT zum folgenden Artikel p
 Artikelinhalt:
 {content_html}
 
+Facebook und Instagram haben unterschiedliches Publikum – die beiden Texte unten sollen sich
+spürbar unterscheiden, nicht nur in der Länge:
+- Facebook-Publikum ist im Schnitt älter, sachlicher, will direkt den konkreten Nutzen/die Zahl sehen.
+- Instagram-Publikum ist im Schnitt jünger, visueller, reagiert besser auf einen persönlichen,
+  bildhaften Einstiegssatz statt auf trockene Fakten zuerst.
+
 Ausgabe als JSON (keine weiteren Erklärungen):
 {{
   "title": "Überschrift max 60 Zeichen",
-  "social_summary": "Facebook-Post: max 120 Zeichen, Ich-Form, ein einziger Satz mit Mehrwert. IMMER Sie/Ihnen/Ihre (niemals du/dich)",
-  "instagram_caption": "Instagram-Caption mit echtem Mehrwert – da kein direkter Link möglich ist, muss der Text alleine überzeugen. Aufbau: 1 starker Einstiegssatz, dann 3-4 konkrete Punkte oder Tipps aus dem Artikel (als kurze Absätze mit Zeilenumbrüchen), abschließend ein Satz der zum Handeln einlädt (z.B. 'Schreiben Sie mir einfach.' oder 'Ich schaue das gerne für Sie durch.'). Danach Leerzeile + 7-10 passende Hashtags. Gesamtlänge: 600-900 Zeichen. IMMER Sie/Ihnen/Ihre (niemals du/dich). Hashtags NUR korrekte deutsche Wörter, keine Abkürzungen. z.B. #Versicherung #Elementarschutz #Schmalkalden #Versicherungsmakler",
+  "blog_excerpt": "Sachlicher 2-3 Satz Auszug, der wiedergibt worum es im Artikel inhaltlich geht (keine Marketing-Anmache, sondern eine ehrliche Kurzfassung des Inhalts, wie ein Klappentext). Max 220 Zeichen. IMMER Sie/Ihnen/Ihre (niemals du/dich)",
+  "social_summary": "Facebook-Post: max 120 Zeichen, Ich-Form, ein einziger Satz mit Mehrwert – sachlich, konkreter Nutzen/Zahl zuerst. IMMER Sie/Ihnen/Ihre (niemals du/dich)",
+  "instagram_caption": "Instagram-Caption mit echtem Mehrwert – da kein direkter Link möglich ist, muss der Text alleine überzeugen. Aufbau: 1 starker, persönlicher/bildhafter Einstiegssatz (bewusst anders als der Facebook-Text formuliert), dann 3-4 konkrete Punkte oder Tipps aus dem Artikel (als kurze Absätze mit Zeilenumbrüchen), abschließend ein Satz der zum Handeln einlädt (z.B. 'Schreiben Sie mir einfach.' oder 'Ich schaue das gerne für Sie durch.'). Danach Leerzeile + 7-10 passende Hashtags. Gesamtlänge: 600-900 Zeichen. IMMER Sie/Ihnen/Ihre (niemals du/dich). Hashtags NUR korrekte deutsche Wörter, keine Abkürzungen. z.B. #Versicherung #Elementarschutz #Schmalkalden #Versicherungsmakler",
   "slug": "url-freundlicher-dateiname-ohne-umlaute-nur-bindestriche",
   "ig_before": "Schlagzeile vor dem Highlight, max 20 Zeichen, kann leer sein",
   "ig_highlight": "Ein markantes Wort oder kurze Phrase die blau hervorgehoben wird, max 15 Zeichen",
@@ -332,6 +355,7 @@ draft_meta = {
     "date_de": date_de,
     "date_iso": date_iso,
     "slug": meta['slug'],
+    "blog_excerpt": meta.get('blog_excerpt', ''),
     "social_summary": meta['social_summary'],
     "instagram_caption": meta['instagram_caption'],
     "post_url": post_url,
@@ -339,7 +363,9 @@ draft_meta = {
     "label": topic['label'],
     "unsplash_query": topic.get("unsplash_query", "insurance finance"),
     "og_image": og_image,
-    "social_image_url": social_image_url
+    "shown_image_ids": _shown_image_ids,
+    "social_image_url": social_image_url,
+    "wa_image_text": " ".join(x for x in [ig_before, ig_highlight, ig_after] if x) + (f" – {ig_sub}" if ig_sub else "")
 }
 
 with open("tools/draft_meta.json", "w", encoding="utf-8") as f:

@@ -90,7 +90,7 @@ def _update_latest_ticker(meta, repo, headers):
     """Aktualisiert latest-post.json – Datenquelle für den Blog-Ticker in der Topbar."""
     ticker = {
         "title": meta["title"],
-        "teaser": meta.get("social_summary", meta["title"])[:120].strip(),
+        "teaser": meta.get("social_summary", meta["title"]).strip(),
         "url": f"blog/posts/{meta['filename']}",
         "date_de": meta["date_de"]
     }

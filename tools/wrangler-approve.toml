@@ -1,0 +1,3 @@
+name = "blog-approve"
+main = "approve-worker.js"
+compatibility_date = "2026-07-13"

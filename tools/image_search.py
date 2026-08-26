@@ -3,15 +3,28 @@
 Wird von generate_post.py (Workflow 1) und request-changes.yml (Workflow 3) genutzt.
 """
 import re
+import random
 import base64
 import requests
 
 
-def find_best_image(topic_title, topic_label, topic_query, client, fallback_url, unsplash_key):
-    """Sucht auf Unsplash und lässt Claude Vision das thematisch passendste Bild wählen."""
+def find_best_image(topic_title, topic_label, topic_query, client, fallback_url, unsplash_key, exclude_ids=None):
+    """Sucht auf Unsplash und lässt Claude Vision das thematisch passendste Bild wählen.
+
+    exclude_ids: Menge/Liste von Unsplash-Foto-IDs, die NICHT erneut gewählt werden sollen
+    (z.B. alle bei diesem Entwurf bereits gezeigten Bilder – sonst liefert dieselbe
+    Suche+Vision-Wahl deterministisch wieder eines der schon gezeigten Fotos zurück).
+    """
+    exclude_ids = set(exclude_ids or [])
     if not unsplash_key:
         print("   ℹ️  Kein UNSPLASH_ACCESS_KEY – nutze Fallback-Bild")
         return fallback_url
+
+    # Bei wiederholten Aufrufen zum selben Thema (z.B. mehrfach "Neues Bild vorschlagen")
+    # liefert Claude Haiku fuer denselben Titel fast immer denselben Suchbegriff. Ein
+    # zufaelliger Seitenversatz sorgt dafuer, dass Unsplash nicht jedes Mal denselben
+    # Ergebnis-Pool zurueckgibt.
+    search_page = random.randint(1, 3)
 
     # Schritt 1: KI generiert optimierten Suchbegriff
     try:
@@ -41,7 +54,7 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
     try:
         r = requests.get(
             "https://api.unsplash.com/search/photos",
-            params={"query": search_query, "per_page": 8, "orientation": "landscape", "content_filter": "high"},
+            params={"query": search_query, "per_page": 30, "page": search_page, "orientation": "landscape", "content_filter": "high"},
             headers={"Authorization": f"Client-ID {unsplash_key}"},
             timeout=15
         )
@@ -50,12 +63,26 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
             return fallback_url
 
         photos = r.json().get("results", [])
+        if not photos and search_page > 1:
+            # Seite ohne Treffer (z.B. Suchbegriff hat insgesamt weniger als 30*page
+            # Ergebnisse) – auf Seite 1 zurueckfallen statt komplett leer auszugehen.
+            r = requests.get(
+                "https://api.unsplash.com/search/photos",
+                params={"query": search_query, "per_page": 30, "page": 1, "orientation": "landscape", "content_filter": "high"},
+                headers={"Authorization": f"Client-ID {unsplash_key}"},
+                timeout=15
+            )
+            photos = r.json().get("results", []) if r.status_code == 200 else []
         # Zu kleine Originale ausschliessen – sonst skaliert Unsplash beim Zuschnitt
         # auf 1080x1920 hoch, was das Bild unscharf/verwaschen macht.
-        photos = [p for p in photos if p.get("width", 0) >= 1080 and p.get("height", 0) >= 1080][:6]
+        photos = [p for p in photos if p.get("width", 0) >= 1080 and p.get("height", 0) >= 1080]
+        photos = [p for p in photos if p.get("id") not in exclude_ids]
         if not photos:
-            print("   ⚠️  Keine ausreichend hochaufgelösten Unsplash-Ergebnisse – nutze Fallback")
+            print("   ⚠️  Keine neuen Unsplash-Ergebnisse (alle bereits vorgeschlagen oder zu klein) – nutze Fallback")
             return fallback_url
+        # Zufaellige statt immer gleicher Auswahl der ersten Treffer, damit Claude Vision
+        # nicht wieder auf denselben Kandidaten-Satz konvergiert.
+        photos = random.sample(photos, min(6, len(photos)))
 
         # Schritt 3: Vorschaubilder laden
         candidates = []
@@ -110,7 +137,11 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
         pick = int(pick_match.group()) - 1
         pick = max(0, min(pick, len(candidates) - 1))
         chosen = candidates[pick]
-        result_url = f"{chosen['raw']}?w=1200&h=630&fit=crop&auto=format"
+        # chosen['raw'] enthaelt bei Unsplash bereits einen Query-String (ixid/ixlib) -
+        # ein zweites "?" wuerde die URL kaputt machen (w/h landen dann in ixlib statt
+        # als eigene Parameter, das Bild kommt unskaliert/zu gross zurueck).
+        sep = "&" if "?" in chosen['raw'] else "?"
+        result_url = f"{chosen['raw']}{sep}w=1200&h=630&fit=crop&auto=format"
         print(f"   ✅ KI wählte Bild {pick + 1}/{len(candidates)} (Unsplash-ID: {chosen['id']})")
         return result_url
 

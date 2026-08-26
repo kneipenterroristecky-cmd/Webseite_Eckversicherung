@@ -42,12 +42,36 @@ const PAGE_STYLE = `
     button{width:100%;margin-top:18px;background:#16a34a;color:#fff;border:none;padding:14px;
       border-radius:6px;font-size:15px;font-weight:700}
     .status{font-size:40px;text-align:center;margin-bottom:4px}
+    .btn-close{width:100%;margin-top:10px;background:#fff;color:#475569;border:1px solid #cbd5e1;
+      padding:12px;border-radius:6px;font-size:14px;font-weight:600}
+    .close-hint{display:none;text-align:center;font-size:12px;color:#94a3b8;margin-top:10px}
   </style>
+`;
+
+// Schliesst den Tab per window.close() (funktioniert bei Tabs, die per Link-Tap aus
+// WhatsApp o.ae. ohne eigene Verlaufshistorie geoeffnet wurden, in den meisten mobilen
+// Browsern zuverlaessig). Falls der Browser es doch blockiert, bleibt die Seite offen -
+// dann erscheint nach kurzer Wartezeit ein Hinweis, den Tab manuell zu schliessen,
+// statt dass der Klick wirkungslos ins Leere geht (siehe tools/whatsapp-goal-worker.js
+// fuer den Fall, wo das genau deshalb frueher entfernt wurde).
+const CLOSE_SCRIPT = `
+  <script>
+    function closeTab(){
+      window.close();
+      setTimeout(function(){
+        var hint = document.getElementById('closeHint');
+        if (hint) hint.style.display = 'block';
+      }, 300);
+    }
+  </script>
 `;
 
 function page(title, bodyHtml) {
   return `<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><title>${title}</title>${PAGE_STYLE}</head>
-  <body><div class="card">${bodyHtml}</div></body></html>`;
+  <body><div class="card">${bodyHtml}
+    <button type="button" class="btn-close" onclick="closeTab()">Schließen</button>
+    <p class="close-hint" id="closeHint">Der Tab konnte nicht automatisch geschlossen werden – bitte oben im Browser manuell schließen.</p>
+  </div>${CLOSE_SCRIPT}</body></html>`;
 }
 
 async function dispatchWorkflow(env, workflowFile, inputs) {

@@ -20,6 +20,12 @@ jobs:
       - name: Abhängigkeiten installieren
         run: pip install requests
 
+      - name: "Panel: Melissa startet"
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py melissa "veröffentlicht den Beitrag auf Blog, Facebook und Instagram"
+
       - name: Überall veröffentlichen
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -101,3 +107,10 @@ jobs:
           if fehler:
             sys.exit(1)
           PYEOF
+
+      - name: "Panel: Status leeren"
+        if: always()
+        env:
+          PANEL_WORKER_URL: ${{ secrets.PANEL_WORKER_URL }}
+          PANEL_SYNC_SECRET: ${{ secrets.PANEL_SYNC_SECRET }}
+        run: python tools/panel_heartbeat.py clear
