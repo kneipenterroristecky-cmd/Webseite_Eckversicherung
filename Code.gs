@@ -71,7 +71,7 @@ var LEAD_SECRET          = 'ECK_VOICE_2024'; // Spam-Schutz für Lead-Endpoint
 // im Sheet bearbeitbar, sortier- und filterbar). Bei neuen Treffern geht
 // zusätzlich eine E-Mail an NOTIFY_EMAIL raus.
 var SOCIAL_LEADS_SHEET  = 'Social-Leads';
-var SOCIAL_SCOUT_SECRET = 'BITTE_EIGENES_GEHEIMWORT_EINTRAGEN'; // ← selbst ein zufälliges Wort eintragen
+var SOCIAL_SCOUT_SECRET = 'Qz-RNoFpzWuEPJ74UoxMOv4Uf2QX5x07';
 // ─────────────────────────────────────────────────────────────────
 
 // ----------------------------------------------------------------
