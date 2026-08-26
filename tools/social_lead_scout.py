@@ -61,12 +61,13 @@ def load_secrets():
 
 def build_all_queries(cfg):
     """Alle Kombinationen aus Thema x Phrase x Plattform (fest sortiert, damit die Rotation stabil bleibt)."""
+    ausschluss = " ".join(f'-{w}' if " " not in w else f'-"{w}"' for w in cfg.get("ausschluss_stichworte", []))
     queries = []
     for thema in cfg["themen"]:
         for phrase in cfg["phrase_templates"]:
             phrase_txt = phrase.format(thema=f'"{thema}"')
             for plat in cfg["platforms"]:
-                q = f'{phrase_txt} {plat["site_filter"]}'
+                q = f'{phrase_txt} {plat["site_filter"]} {ausschluss}'.strip()
                 queries.append({"query": q, "topic": thema, "platform": plat["name"]})
     return queries
 
