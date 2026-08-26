@@ -2,7 +2,7 @@ name: Social-Lead-Scout (Neukundengewinn soziale Medien)
 
 on:
   schedule:
-    - cron: '0 6 * * 1'  # Jeden Montag 06:00 UTC = 07:00/08:00 DE
+    - cron: '0 6 * * *'  # Taeglich 06:00 UTC = 07:00/08:00 DE
   workflow_dispatch:      # Auch manuell startbar (Actions-Tab → Run workflow)
 
 jobs:
