@@ -114,8 +114,10 @@ Für Videos: `"type": "video"`, `filePath` zeigt auf die `.mp4`.
   Kosten, Dateipfad.
 - Baue die Daten **inline** als JSON in ein `<script>`-Tag im HTML ein
   (kein separates `fetch('library.json')`, das scheitert bei `file://` an
-  CORS in manchen Browsern). Beim Neubauen: `library.json` lesen, in die
-  HTML-Vorlage einsetzen, Datei überschreiben.
+  CORS in manchen Browsern). Die Vorlage `media-ai/gallery.html` hat dafür
+  schon ein `<script id="library-data" type="application/json">[]</script>`
+  – beim Neubauen einfach dessen Inhalt durch den aktuellen Inhalt von
+  `library.json` ersetzen, Rest der Datei unverändert lassen.
 - Bildpfade in der Galerie relativ (`generated/...`), da `gallery.html` im
   selben Ordner `media-ai/` liegt.
 - Nach dem Neubau: Datei nicht automatisch im Browser öffnen (keine
