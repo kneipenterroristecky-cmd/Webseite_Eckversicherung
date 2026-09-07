@@ -15,10 +15,22 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
     (z.B. alle bei diesem Entwurf bereits gezeigten Bilder – sonst liefert dieselbe
     Suche+Vision-Wahl deterministisch wieder eines der schon gezeigten Fotos zurück).
     """
+    results = find_best_images(topic_title, topic_label, topic_query, client, fallback_url, unsplash_key, exclude_ids, n=1)
+    return results[0]["url"] if results else fallback_url
+
+
+def find_best_images(topic_title, topic_label, topic_query, client, fallback_url, unsplash_key, exclude_ids=None, n=4):
+    """Wie find_best_image, liefert aber die Top-n Kandidaten als von Claude Vision
+    gerankte Liste zurück (bestes zuerst) statt nur den einen besten Treffer -
+    z.B. damit der Kunde sich in WhatsApp zwischen mehreren Bildern entscheiden kann.
+
+    Rückgabe: Liste von {"url": ..., "id": ...}, bestes zuerst. Bei Fehlern/fehlendem
+    Key: Liste mit nur dem Fallback-Bild.
+    """
     exclude_ids = set(exclude_ids or [])
     if not unsplash_key:
         print("   ℹ️  Kein UNSPLASH_ACCESS_KEY – nutze Fallback-Bild")
-        return fallback_url
+        return [{"url": fallback_url, "id": None}]
 
     # Bei wiederholten Aufrufen zum selben Thema (z.B. mehrfach "Neues Bild vorschlagen")
     # liefert Claude Haiku fuer denselben Titel fast immer denselben Suchbegriff. Ein
