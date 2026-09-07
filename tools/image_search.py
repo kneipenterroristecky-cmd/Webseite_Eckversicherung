@@ -72,7 +72,7 @@ def find_best_images(topic_title, topic_label, topic_query, client, fallback_url
         )
         if r.status_code != 200:
             print(f"   ⚠️  Unsplash API {r.status_code} – nutze Fallback")
-            return fallback_url
+            return [{"url": fallback_url, "id": None}]
 
         photos = r.json().get("results", [])
         if not photos and search_page > 1:
@@ -91,10 +91,12 @@ def find_best_images(topic_title, topic_label, topic_query, client, fallback_url
         photos = [p for p in photos if p.get("id") not in exclude_ids]
         if not photos:
             print("   ⚠️  Keine neuen Unsplash-Ergebnisse (alle bereits vorgeschlagen oder zu klein) – nutze Fallback")
-            return fallback_url
+            return [{"url": fallback_url, "id": None}]
         # Zufaellige statt immer gleicher Auswahl der ersten Treffer, damit Claude Vision
-        # nicht wieder auf denselben Kandidaten-Satz konvergiert.
-        photos = random.sample(photos, min(6, len(photos)))
+        # nicht wieder auf denselben Kandidaten-Satz konvergiert. Pool etwas groesser als n,
+        # damit Claude Vision beim Ranken echte Auswahl hat.
+        pool_size = max(6, n + 2)
+        photos = random.sample(photos, min(pool_size, len(photos)))
 
         # Schritt 3: Vorschaubilder laden
         candidates = []
