@@ -372,6 +372,7 @@ draft_meta = {
     "unsplash_query": topic.get("unsplash_query", "insurance finance"),
     "og_image": og_image,
     "shown_image_ids": _shown_image_ids,
+    "image_candidates": [{"id": c["id"], "url": c["url"], "ig_url": c["ig_url"]} for c in _image_candidates],
     "social_image_url": social_image_url,
     "wa_image_text": " ".join(x for x in [ig_before, ig_highlight, ig_after] if x) + (f" – {ig_sub}" if ig_sub else "")
 }
