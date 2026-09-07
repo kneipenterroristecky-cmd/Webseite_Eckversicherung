@@ -99,6 +99,10 @@ def next_batch(all_queries, cfg):
     return batch
 
 
+class SerpApiQuotaError(RuntimeError):
+    """Monatslimit erreicht - hier lohnt es sich nicht, weitere Anfragen im selben Lauf zu versuchen."""
+
+
 def serpapi_search(secrets, query, num, zeitfenster):
     params = {
         "api_key": secrets["serpapi_key"],
@@ -112,10 +116,13 @@ def serpapi_search(secrets, query, num, zeitfenster):
         params["tbs"] = zeitfenster
     r = requests.get(SERPAPI_URL, params=params, timeout=20)
     if r.status_code == 429:
-        raise RuntimeError("SerpApi: Monatslimit erreicht (429) – Lauf wird abgebrochen.")
+        raise SerpApiQuotaError("SerpApi: Monatslimit erreicht (429) – Lauf wird abgebrochen.")
     r.raise_for_status()
     data = r.json()
     if data.get("error"):
+        # z.B. "Google hasn't returned any results for this query." - kein Fehler,
+        # der die uebrigen Anfragen im Batch ungueltig macht, also nur diese eine
+        # Anfrage ueberspringen statt den ganzen Lauf abzubrechen.
         raise RuntimeError(f"SerpApi-Fehler: {data['error']}")
     return data.get("organic_results", [])
 
