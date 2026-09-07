@@ -54,3 +54,21 @@ render("social/latest-ig.html",       "social/latest-ig.png")
 render("social/latest-ig-heiko.html", "social/latest-ig-heiko.png")
 render("social/latest-ig-beide.html", "social/latest-ig-beide.png")
 render("social/latest-ig.html",       "social/latest-ig-clean.png", hide_cta=True)
+
+# ── Bildauswahl-Vorschau: bis zu 4 Bildkandidaten mit demselben Layout rendern,
+# damit Daniel sich in WhatsApp für eins entscheiden kann (siehe draft_meta.json
+# "image_candidates", befüllt von generate_post.py). Kandidat 1 ist bereits oben
+# als latest-ig.png gerendert - der wird hier einfach dafür wiederverwendet.
+if os.path.exists("tools/draft_meta.json"):
+    with open("tools/draft_meta.json", encoding="utf-8") as f:
+        _draft_meta = json.load(f)
+    _candidates = _draft_meta.get("image_candidates", [])
+    import shutil
+    if _candidates and os.path.exists("social/latest-ig.png"):
+        shutil.copyfile("social/latest-ig.png", "social/latest-ig-opt1.png")
+    for _i, _cand in enumerate(_candidates[1:4], start=2):
+        _ig_url = _cand.get("ig_url")
+        if not _ig_url:
+            continue
+        render("social/latest-ig.html", f"social/latest-ig-opt{_i}.png",
+               override_img_url=_ig_url, tmp_suffix=f"-opt{_i}")
