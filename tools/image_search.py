@@ -176,4 +176,4 @@ def find_best_images(topic_title, topic_label, topic_query, client, fallback_url
 
     except Exception as e:
         print(f"   ⚠️  Dynamische Bildauswahl fehlgeschlagen: {e} – nutze Fallback")
-        return fallback_url
+        return [{"url": fallback_url, "id": None}]
