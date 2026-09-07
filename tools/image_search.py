@@ -8,6 +8,14 @@ import base64
 import requests
 
 
+def _photo_slug(p):
+    """Extrahiert das 'photo-<epoch>-<hash>'-Slug aus der raw-URL eines Unsplash-
+    Suchergebnisses - das ist die ID, die ueberall sonst im Projekt verwendet wird
+    (draft_meta.json shown_image_ids, request-changes.yml new_unsplash_id)."""
+    m = re.search(r'(photo-[\w-]+)', p.get("urls", {}).get("raw", ""))
+    return m.group(1) if m else p.get("id")
+
+
 def find_best_image(topic_title, topic_label, topic_query, client, fallback_url, unsplash_key, exclude_ids=None):
     """Sucht auf Unsplash und lässt Claude Vision das thematisch passendste Bild wählen.
 
