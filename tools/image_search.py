@@ -111,53 +111,68 @@ def find_best_images(topic_title, topic_label, topic_query, client, fallback_url
                 pass
 
         if not candidates:
-            return fallback_url
+            return [{"url": fallback_url, "id": None}]
 
-        # Schritt 4: Claude Vision wählt das beste Bild
+        # Schritt 4: Claude Vision rankt die Bilder (bestes zuerst)
         msg_content = []
         for i, c in enumerate(candidates):
             msg_content.append({"type": "image", "source": {"type": "base64", "media_type": c["mime"], "data": c["b64"]}})
             msg_content.append({"type": "text", "text": f"Bild {i + 1}"})
 
+        n_wanted = max(1, min(n, len(candidates)))
         msg_content.append({"type": "text", "text": (
             f'Thema: "{topic_title}" (Kategorie: {topic_label})\n\n'
-            "Welches Bild passt am BESTEN zu diesem deutschen Versicherungsthema?\n"
-            "Wähle das Bild das:\n"
-            "✓ Das Thema direkt und konkret zeigt (z.B. echtes Auto für KFZ, Arzt für Kranken)\n"
-            "✓ Scharf und klar fokussiert ist – KEIN verschwommenes/unscharfes Hauptmotiv, "
+            "Ranke diese Bilder für dieses deutsche Versicherungsthema, bestes zuerst.\n"
+            "Ein gutes Bild:\n"
+            "✓ Zeigt das Thema direkt und konkret (z.B. echtes Auto für KFZ, Arzt für Kranken)\n"
+            "✓ Ist scharf und klar fokussiert – KEIN verschwommenes/unscharfes Hauptmotiv, "
             "kein starker Bokeh-/Weichzeichner-Effekt, kein Bewegungsunschärfe\n"
-            "✓ Hell und freundlich wirkt – kein düsteres Stimmungsbild\n"
-            "✓ Ein gepflegtes, intaktes Haus/Zuhause zeigt – KEINE verlassene, heruntergekommene "
+            "✓ Wirkt hell und freundlich – kein düsteres Stimmungsbild\n"
+            "✓ Zeigt ein gepflegtes, intaktes Haus/Zuhause – KEINE verlassene, heruntergekommene "
             "oder verwahrloste Ruine, auch wenn das Thema Einbruch/Schaden ist\n"
-            "✓ Keinen englischen Text enthält\n"
-            "✓ Echten Alltag zeigt – keine Hologramme, keine abstrakten Grafiken\n"
-            "✓ Europäischen/deutschen Kontext hat\n\n"
-            "Ein professioneller Versicherungsmakler nutzt dieses Bild für seine Social-Media-Werbung – "
-            "es muss gestochen scharf sein.\n\n"
-            f"Antworte NUR mit einer Zahl (1–{len(candidates)}). Kein weiterer Text."
+            "✓ Enthält keinen englischen Text\n"
+            "✓ Zeigt echten Alltag – keine Hologramme, keine abstrakten Grafiken\n"
+            "✓ Hat europäischen/deutschen Kontext\n\n"
+            "Ein professioneller Versicherungsmakler nutzt diese Bilder für seine Social-Media-Werbung – "
+            "sie müssen gestochen scharf sein.\n\n"
+            f"Antworte NUR mit den {n_wanted} besten Bildnummern als kommagetrennte Liste, bestes zuerst "
+            f"(z.B. \"3,1,5,2\"). Kein weiterer Text."
         )})
 
         pick_resp = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=5,
+            max_tokens=30,
             messages=[{"role": "user", "content": msg_content}]
         )
 
-        pick_match = re.search(r'\d+', pick_resp.content[0].text)
-        if not pick_match:
-            print(f"   ⚠️  Unerwartete KI-Antwort – nutze Fallback")
-            return fallback_url
+        picks = [int(x) - 1 for x in re.findall(r'\d+', pick_resp.content[0].text)]
+        picks = [p for p in picks if 0 <= p < len(candidates)]
+        # Duplikate entfernen, Reihenfolge (= Ranking) beibehalten
+        seen_picks = []
+        for p in picks:
+            if p not in seen_picks:
+                seen_picks.append(p)
+        # Falls die KI weniger als gewuenscht liefert (z.B. Parsing-Fehler), mit den
+        # restlichen Kandidaten in Originalreihenfolge auffuellen statt Faelle zu verlieren.
+        for i in range(len(candidates)):
+            if len(seen_picks) >= n_wanted:
+                break
+            if i not in seen_picks:
+                seen_picks.append(i)
 
-        pick = int(pick_match.group()) - 1
-        pick = max(0, min(pick, len(candidates) - 1))
-        chosen = candidates[pick]
-        # chosen['raw'] enthaelt bei Unsplash bereits einen Query-String (ixid/ixlib) -
-        # ein zweites "?" wuerde die URL kaputt machen (w/h landen dann in ixlib statt
-        # als eigene Parameter, das Bild kommt unskaliert/zu gross zurueck).
-        sep = "&" if "?" in chosen['raw'] else "?"
-        result_url = f"{chosen['raw']}{sep}w=1200&h=630&fit=crop&auto=format"
-        print(f"   ✅ KI wählte Bild {pick + 1}/{len(candidates)} (Unsplash-ID: {chosen['id']})")
-        return result_url
+        results = []
+        for pick in seen_picks[:n_wanted]:
+            chosen = candidates[pick]
+            # chosen['raw'] enthaelt bei Unsplash bereits einen Query-String (ixid/ixlib) -
+            # ein zweites "?" wuerde die URL kaputt machen (w/h landen dann in ixlib statt
+            # als eigene Parameter, das Bild kommt unskaliert/zu gross zurueck).
+            sep = "&" if "?" in chosen['raw'] else "?"
+            results.append({
+                "url": f"{chosen['raw']}{sep}w=1200&h=630&fit=crop&auto=format",
+                "id": chosen["id"],
+            })
+        print(f"   ✅ KI rankte {len(results)} Bild(er) (bestes: {results[0]['id']})")
+        return results
 
     except Exception as e:
         print(f"   ⚠️  Dynamische Bildauswahl fehlgeschlagen: {e} – nutze Fallback")
