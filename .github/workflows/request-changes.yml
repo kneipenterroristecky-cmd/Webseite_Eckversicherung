@@ -306,31 +306,75 @@ jobs:
           msg_api = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
           auth_headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
-          if og_image:
+          def sende_bild(bild_bytes, content_type, dateiname="vorschau.jpg"):
+            """Laedt ein Bild hoch und schickt es per media-id statt per 'link' -
+            'link' wird von Meta asynchron nachgeladen und schlaegt dabei manchmal
+            unbemerkt fehl (Status bleibt trotzdem 200)."""
+            up = req.post(f"https://graph.facebook.com/v19.0/{phone_id}/media",
+              headers={"Authorization": f"Bearer {token}"},
+              data={"messaging_product": "whatsapp"},
+              files={"file": (dateiname, bild_bytes, content_type)})
+            media_id = up.json().get("id") if up.status_code < 300 else None
+            print(f"Bild-Upload: {up.status_code}{' (' + str(len(bild_bytes)//1024) + ' KB)' if media_id else ' ' + up.text[:200]}")
+            if not media_id:
+              return None
+            r_img = req.post(msg_api, headers=auth_headers, json={
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "template",
+              "template": {
+                "name": "social_bild",
+                "language": {"code": "de"},
+                "components": [{"type": "header", "parameters": [
+                  {"type": "image", "image": {"id": media_id}}
+                ]}]
+              }
+            })
+            print(f"Bild-Nachricht Status: {r_img.status_code}")
+            if r_img.status_code >= 300:
+              print(f"  (kein Abbruch) Fehler: {r_img.text[:300]}")
+            return r_img
+
+          def sende_aktion_button(label, url_suffix):
+            return req.post(msg_api, headers=auth_headers, json={
+              "messaging_product": "whatsapp",
+              "to": wa_to,
+              "type": "template",
+              "template": {
+                "name": "blog_aktion",
+                "language": {"code": "de"},
+                "components": [
+                  {"type": "body", "parameters": [{"type": "text", "text": label}]},
+                  {"type": "button", "sub_type": "url", "index": "0",
+                   "parameters": [{"type": "text", "text": url_suffix}]}
+                ]
+              }
+            })
+
+          # Bei komplett neuem Thema (new_topic) hat generate_post.py frische
+          # image_candidates erzeugt - dann wieder alle 4 mit Auswahl-Button zeigen,
+          # genau wie beim woechentlichen Auto-Lauf. Bei reinen Detail-Aenderungen
+          # (Titel/Text/ein einzelnes neues Bild) reicht die eine aktuelle Vorschau.
+          if os.environ.get("NEW_TOPIC_RUN") == "true":
+            image_candidates = meta.get("image_candidates", [])
+            for idx, cand in enumerate(image_candidates[:4], start=1):
+              cand_url = cand.get("url", "")
+              if not cand_url:
+                continue
+              img_r = req.get(cand_url, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
+              if not img_r.ok:
+                print(f"Bild {idx}/4 Download fehlgeschlagen: {img_r.status_code}")
+                continue
+              sende_bild(img_r.content, img_r.headers.get("content-type", "image/jpeg"), f"bild{idx}.jpg")
+              if cand.get("id"):
+                r_choose = sende_aktion_button(f"🖼️ Bild {idx} wählen ✅", f"choose-image?token={approve_tok}&img={cand['id']}")
+                print(f"Bild {idx} waehlen-Button: {r_choose.status_code}")
+                if r_choose.status_code >= 300:
+                  print(f"  Fehler: {r_choose.text[:200]}")
+          elif og_image:
             img_r = req.get(og_image, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
             if img_r.ok:
-              up = req.post(f"https://graph.facebook.com/v19.0/{phone_id}/media",
-                headers={"Authorization": f"Bearer {token}"},
-                data={"messaging_product": "whatsapp"},
-                files={"file": ("vorschau.jpg", img_r.content, img_r.headers.get("content-type", "image/jpeg"))})
-              media_id = up.json().get("id") if up.status_code < 300 else None
-              print(f"Vorschau-Bild Upload: {up.status_code}{' (' + str(len(img_r.content)//1024) + ' KB)' if media_id else ' ' + up.text[:200]}")
-              if media_id:
-                r_img = req.post(msg_api, headers=auth_headers, json={
-                  "messaging_product": "whatsapp",
-                  "to": wa_to,
-                  "type": "template",
-                  "template": {
-                    "name": "social_bild",
-                    "language": {"code": "de"},
-                    "components": [{"type": "header", "parameters": [
-                      {"type": "image", "image": {"id": media_id}}
-                    ]}]
-                  }
-                })
-                print(f"Vorschau-Bild Status: {r_img.status_code}")
-                if r_img.status_code >= 300:
-                  print(f"  (kein Abbruch) Fehler: {r_img.text[:300]}")
+              sende_bild(img_r.content, img_r.headers.get("content-type", "image/jpeg"))
             else:
               print(f"Vorschau-Bild Download fehlgeschlagen: {img_r.status_code}")
 
