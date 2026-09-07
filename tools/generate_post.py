@@ -156,6 +156,14 @@ else:
         print(f"   📸 Bild: {_og_base} (Fallback: entropy – {e})")
 ig_img_url_global = f"{_og_base}?w=1080&h=1920&fit=crop&{_ig_crop}&auto=format"
 
+# ── Hochformat-Vorschau-URLs für alle 4 Bildkandidaten (WhatsApp-Bildauswahl) ────
+# Nur Kandidat 1 (der oben gewählte) bekommt den teuren KI-Fokuspunkt - für 2-4
+# reicht ein automatischer Entropy-Crop, die sind nur Vorschläge zur Auswahl.
+_image_candidates[0]["ig_url"] = ig_img_url_global
+for _c in _image_candidates[1:]:
+    _base = _c["url"].split("?")[0]
+    _c["ig_url"] = f"{_base}?w=1080&h=1920&fit=crop&crop=entropy&auto=format"
+
 # ── Blog-Beitrag schreiben ────────────────────────────────────────────────────
 beitrag = create_with_retry(client,
     model="claude-opus-4-5",
