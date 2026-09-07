@@ -88,7 +88,11 @@ def find_best_images(topic_title, topic_label, topic_query, client, fallback_url
         # Zu kleine Originale ausschliessen – sonst skaliert Unsplash beim Zuschnitt
         # auf 1080x1920 hoch, was das Bild unscharf/verwaschen macht.
         photos = [p for p in photos if p.get("width", 0) >= 1080 and p.get("height", 0) >= 1080]
-        photos = [p for p in photos if p.get("id") not in exclude_ids]
+        # exclude_ids/shown_image_ids verwenden ueberall sonst im Code (draft_meta.json,
+        # request-changes.yml new_unsplash_id) das "photo-<epoch>-<hash>"-Slug aus der
+        # Bild-URL, NICHT Unsplash' kurze API-"id" - deshalb hier konsistent denselben
+        # Slug fuer den Abgleich nehmen statt p["id"].
+        photos = [p for p in photos if _photo_slug(p) not in exclude_ids]
         if not photos:
             print("   ⚠️  Keine neuen Unsplash-Ergebnisse (alle bereits vorgeschlagen oder zu klein) – nutze Fallback")
             return [{"url": fallback_url, "id": None}]
