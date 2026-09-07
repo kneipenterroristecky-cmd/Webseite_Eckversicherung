@@ -9,6 +9,8 @@
  * Endpunkte:
  *   GET  /approve?token=...          → Workflow 2 (veröffentlichen), keine Eingaben nötig
  *   GET  /suggest-image?token=...    → Workflow 3 mit suggest_new_image=true
+ *   GET  /choose-image?token=...&img=<unsplash-foto-id>  → Workflow 3 mit new_unsplash_id=<img>
+ *                                     (einer der 4 Bildvorschläge aus der Freigabe-Nachricht)
  *   GET  /change?token=...           → zeigt ein kleines Handy-Formular (Titel/Text ändern)
  *   POST /change?token=...           → verarbeitet das Formular, löst Workflow 3 aus
  *
