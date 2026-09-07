@@ -110,7 +110,7 @@ def find_best_images(topic_title, topic_label, topic_query, client, fallback_url
                 img_r.raise_for_status()
                 b64 = base64.b64encode(img_r.content).decode()
                 mime = img_r.headers.get("content-type", "image/jpeg").split(";")[0]
-                candidates.append({"raw": p["urls"]["raw"], "b64": b64, "mime": mime, "id": p["id"]})
+                candidates.append({"raw": p["urls"]["raw"], "b64": b64, "mime": mime, "id": _photo_slug(p)})
             except Exception:
                 pass
 
