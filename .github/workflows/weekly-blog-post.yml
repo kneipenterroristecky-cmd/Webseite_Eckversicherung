@@ -307,22 +307,6 @@ jobs:
               }
             })
 
-          def sende_aktion_button(label, url_suffix):
-            return req.post(msg_api, headers=auth_headers, json={
-              "messaging_product": "whatsapp",
-              "to": wa_to,
-              "type": "template",
-              "template": {
-                "name": "blog_aktion",
-                "language": {"code": "de"},
-                "components": [
-                  {"type": "body", "parameters": [{"type": "text", "text": label}]},
-                  {"type": "button", "sub_type": "url", "index": "0",
-                   "parameters": [{"type": "text", "text": url_suffix}]}
-                ]
-              }
-            })
-
           # Neues Template (Info-Text ohne Links + 3 eigene Nachrichten mit echtem Button)
           # versuchen, bei Meta evtl. noch nicht freigegeben -> dann auf die bewaehrte
           # Text-Link-Version zurueckfallen, damit immer ein Weg zum Handeln da ist.
