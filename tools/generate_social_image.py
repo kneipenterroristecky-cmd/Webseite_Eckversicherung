@@ -6,8 +6,8 @@ zu social/latest-ig.png und social/latest-ig-heiko.png (1080×1920).
 import os, re, json, base64, requests
 from playwright.sync_api import sync_playwright
 
-def render(html_path, output_path, hide_cta=False):
-    tmp_path = html_path.replace(".html", "-render.html")
+def render(html_path, output_path, hide_cta=False, override_img_url=None, tmp_suffix=""):
+    tmp_path = html_path.replace(".html", f"-render{tmp_suffix}.html")
     if not os.path.exists(html_path):
         print(f"❌ Datei nicht gefunden: {html_path}")
         return
@@ -17,7 +17,7 @@ def render(html_path, output_path, hide_cta=False):
 
     img_match = re.search(r'<img class="bg-img" src="([^"]+)"', html)
     if img_match:
-        img_url = img_match.group(1)
+        img_url = override_img_url or img_match.group(1)
         try:
             r = requests.get(img_url, timeout=25, headers={"User-Agent": "Mozilla/5.0"})
             r.raise_for_status()
