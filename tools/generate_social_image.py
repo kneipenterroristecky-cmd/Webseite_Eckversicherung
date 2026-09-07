@@ -17,13 +17,14 @@ def render(html_path, output_path, hide_cta=False, override_img_url=None, tmp_su
 
     img_match = re.search(r'<img class="bg-img" src="([^"]+)"', html)
     if img_match:
-        img_url = override_img_url or img_match.group(1)
+        original_src = img_match.group(1)
+        img_url = override_img_url or original_src
         try:
             r = requests.get(img_url, timeout=25, headers={"User-Agent": "Mozilla/5.0"})
             r.raise_for_status()
             mime = r.headers.get("content-type", "image/jpeg").split(";")[0]
             b64 = base64.b64encode(r.content).decode()
-            html = html.replace(f'src="{img_url}"', f'src="data:{mime};base64,{b64}"')
+            html = html.replace(f'src="{original_src}"', f'src="data:{mime};base64,{b64}"')
             print(f"   ✅ Bild eingebettet ({len(r.content)//1024} KB)")
         except Exception as e:
             print(f"   ⚠️  Bild-Download fehlgeschlagen: {e} – Screenshot trotzdem versuchen")
