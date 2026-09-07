@@ -212,7 +212,7 @@ def run():
     for item in batch:
         try:
             results = serpapi_search(secrets, item["query"], results_per_query, zeitfenster)
-        except RuntimeError as e:
+        except SerpApiQuotaError as e:
             print(f"⚠️  {e}")
             break
         except Exception as e:
