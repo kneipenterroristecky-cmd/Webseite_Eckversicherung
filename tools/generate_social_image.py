@@ -3,7 +3,7 @@
 Rendert social/latest-ig.html und social/latest-ig-heiko.html
 zu social/latest-ig.png und social/latest-ig-heiko.png (1080×1920).
 """
-import os, re, base64, requests
+import os, re, json, base64, requests
 from playwright.sync_api import sync_playwright
 
 def render(html_path, output_path, hide_cta=False):
