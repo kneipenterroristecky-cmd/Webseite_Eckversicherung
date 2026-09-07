@@ -103,13 +103,13 @@ _FALLBACK_IMG = "https://images.unsplash.com/photo-1554224155-6726b3ff858f"
 
 _fallback_url = topic.get("og_image") or f"{_FALLBACK_IMG}?w=1200&h=630&fit=crop&auto=format"
 _unsplash_key = os.environ.get("UNSPLASH_ACCESS_KEY", "").strip()
-og_image = find_best_image(
+_image_candidates = find_best_images(
     topic["title"], topic["label"],
     topic.get("unsplash_query", topic["title"]),
-    client, _fallback_url, _unsplash_key
+    client, _fallback_url, _unsplash_key, n=4
 )
-_og_image_match = re.search(r'(photo-[\w-]+)', og_image)
-_shown_image_ids = [_og_image_match.group(1)] if _og_image_match else []
+og_image = _image_candidates[0]["url"]
+_shown_image_ids = [c["id"] for c in _image_candidates if c.get("id")]
 
 # Portrait-Crop: Fokuspunkt aus topics.json nehmen wenn vorhanden, sonst KI-Analyse
 _og_base = og_image.split("?")[0] or _FALLBACK_IMG
