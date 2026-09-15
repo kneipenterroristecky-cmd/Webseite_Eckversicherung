@@ -3,11 +3,11 @@
 Rendert social/latest-ig.html und social/latest-ig-heiko.html
 zu social/latest-ig.png und social/latest-ig-heiko.png (1080×1920).
 """
-import os, re, base64, requests
+import os, re, json, base64, requests
 from playwright.sync_api import sync_playwright
 
-def render(html_path, output_path, hide_cta=False):
-    tmp_path = html_path.replace(".html", "-render.html")
+def render(html_path, output_path, hide_cta=False, override_img_url=None, tmp_suffix=""):
+    tmp_path = html_path.replace(".html", f"-render{tmp_suffix}.html")
     if not os.path.exists(html_path):
         print(f"❌ Datei nicht gefunden: {html_path}")
         return
@@ -17,13 +17,14 @@ def render(html_path, output_path, hide_cta=False):
 
     img_match = re.search(r'<img class="bg-img" src="([^"]+)"', html)
     if img_match:
-        img_url = img_match.group(1)
+        original_src = img_match.group(1)
+        img_url = override_img_url or original_src
         try:
             r = requests.get(img_url, timeout=25, headers={"User-Agent": "Mozilla/5.0"})
             r.raise_for_status()
             mime = r.headers.get("content-type", "image/jpeg").split(";")[0]
             b64 = base64.b64encode(r.content).decode()
-            html = html.replace(f'src="{img_url}"', f'src="data:{mime};base64,{b64}"')
+            html = html.replace(f'src="{original_src}"', f'src="data:{mime};base64,{b64}"')
             print(f"   ✅ Bild eingebettet ({len(r.content)//1024} KB)")
         except Exception as e:
             print(f"   ⚠️  Bild-Download fehlgeschlagen: {e} – Screenshot trotzdem versuchen")
@@ -53,3 +54,21 @@ render("social/latest-ig.html",       "social/latest-ig.png")
 render("social/latest-ig-heiko.html", "social/latest-ig-heiko.png")
 render("social/latest-ig-beide.html", "social/latest-ig-beide.png")
 render("social/latest-ig.html",       "social/latest-ig-clean.png", hide_cta=True)
+
+# ── Bildauswahl-Vorschau: bis zu 4 Bildkandidaten mit demselben Layout rendern,
+# damit Daniel sich in WhatsApp für eins entscheiden kann (siehe draft_meta.json
+# "image_candidates", befüllt von generate_post.py). Kandidat 1 ist bereits oben
+# als latest-ig.png gerendert - der wird hier einfach dafür wiederverwendet.
+if os.path.exists("tools/draft_meta.json"):
+    with open("tools/draft_meta.json", encoding="utf-8") as f:
+        _draft_meta = json.load(f)
+    _candidates = _draft_meta.get("image_candidates", [])
+    import shutil
+    if _candidates and os.path.exists("social/latest-ig.png"):
+        shutil.copyfile("social/latest-ig.png", "social/latest-ig-opt1.png")
+    for _i, _cand in enumerate(_candidates[1:4], start=2):
+        _ig_url = _cand.get("ig_url")
+        if not _ig_url:
+            continue
+        render("social/latest-ig.html", f"social/latest-ig-opt{_i}.png",
+               override_img_url=_ig_url, tmp_suffix=f"-opt{_i}")

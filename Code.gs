@@ -24,6 +24,10 @@
 //     - Funktion: processCallLeads
 //     - Ereignisquelle: Zeitgesteuert → Stundenbasiert → Jede Stunde
 //     ODER: Funktion setupCallTrigger() einmalig manuell ausführen
+//
+//  SOCIAL-LEAD-SCOUT SETUP: siehe tools/social_lead_scout.md
+//  (Kurzfassung: SOCIAL_SCOUT_SECRET unten selbst setzen, neu bereitstellen,
+//  URL + Geheimwort in tools/social_lead_scout_config.json eintragen)
 // ================================================================
 
 var SHEET        = 'Events';
@@ -57,6 +61,17 @@ var CALL_HOUR_FROM       = 10;   // Anrufe ab 10:00 Uhr (Europe/Berlin)
 var CALL_HOUR_TO         = 18;   // Anrufe bis 18:00 Uhr (Europe/Berlin)
 var CALL_DELAY_HOURS     = 24;   // Stunden nach Anmeldung vor erstem Anruf
 var LEAD_SECRET          = 'ECK_VOICE_2024'; // Spam-Schutz für Lead-Endpoint
+// ─────────────────────────────────────────────────────────────────
+
+// ── SOCIAL-LEAD-SCOUT (Neukundengewinn über soziale Medien) ─────────
+// Muss exakt mit SOCIAL_SCOUT_SECRET in tools/social_lead_scout_config.json
+// übereinstimmen. Das lokale Python-Script durchsucht wöchentlich Google
+// nach Beiträgen wie "Suche Alternative zu ..." zu Versicherungsthemen und
+// trägt neue Treffer hier im Sheet "Social-Leads" ein (Status/Notiz direkt
+// im Sheet bearbeitbar, sortier- und filterbar). Bei neuen Treffern geht
+// zusätzlich eine E-Mail an NOTIFY_EMAIL raus.
+var SOCIAL_LEADS_SHEET  = 'Social-Leads';
+var SOCIAL_SCOUT_SECRET = 'Qz-RNoFpzWuEPJ74UoxMOv4Uf2QX5x07';
 // ─────────────────────────────────────────────────────────────────
 
 // ----------------------------------------------------------------
@@ -121,6 +136,32 @@ function doPost(e) {
       if (data.secret !== SOPHIE_SECRET) return out_({ ok: false, err: 'Unauthorized' });
       sophieMarkChangeApplied_(data.id);
       return out_({ ok: true });
+    }
+
+    if (data.action === 'social_lead_add') {
+      if (data.secret !== SOCIAL_SCOUT_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      var scoutResult = storeSocialLeads_(data.leads || []);
+      return out_({ ok: true, added: scoutResult.added, skipped: scoutResult.skipped });
+    }
+
+    if (data.action === 'social_scout_sheet_url') {
+      if (data.secret !== SOCIAL_SCOUT_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      return out_({ ok: true, url: SpreadsheetApp.getActiveSpreadsheet().getUrl() });
+    }
+
+    if (data.action === 'social_lead_list') {
+      if (data.secret !== SOCIAL_SCOUT_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      return out_({ ok: true, leads: listSocialLeads_(), sheetUrl: SpreadsheetApp.getActiveSpreadsheet().getUrl() });
+    }
+
+    if (data.action === 'social_lead_update') {
+      if (data.secret !== SOCIAL_SCOUT_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      return out_(updateSocialLead_(data.id, data.status, data.notiz));
+    }
+
+    if (data.action === 'social_lead_delete') {
+      if (data.secret !== SOCIAL_SCOUT_SECRET) return out_({ ok: false, err: 'Unauthorized' });
+      return out_(deleteSocialLead_(data.id));
     }
 
     save_(data);
@@ -266,6 +307,172 @@ function initLeadsSheet_(ss) {
     s.setColumnWidth(i + 1, w);
   });
   return s;
+}
+
+// ----------------------------------------------------------------
+// Social-Lead-Scout: neue Treffer speichern (mit Dedupe über URL) +
+// bei neuen Treffern E-Mail-Digest verschicken
+// ----------------------------------------------------------------
+function storeSocialLeads_(leads) {
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SOCIAL_LEADS_SHEET) || initSocialLeadsSheet_(ss);
+
+  var lastRow = sheet.getLastRow();
+  var existingUrls = {};
+  if (lastRow > 1) {
+    sheet.getRange(2, 8, lastRow - 1, 1).getValues().forEach(function(r) {
+      if (r[0]) existingUrls[String(r[0]).trim()] = true;
+    });
+  }
+
+  var now     = new Date();
+  var added   = [];
+  var skipped = 0;
+
+  leads.forEach(function(lead) {
+    var url = String(lead.url || '').trim();
+    if (!url || existingUrls[url]) { skipped++; return; }
+    existingUrls[url] = true;
+
+    var id = 'SL_' + now.getTime() + '_' + Math.floor(Math.random() * 10000);
+    var row = [
+      id,
+      Utilities.formatDate(now, 'Europe/Berlin', 'dd.MM.yyyy'),
+      Utilities.formatDate(now, 'Europe/Berlin', 'HH:mm'),
+      lead.platform || '',
+      lead.topic    || '',
+      lead.query    || '',
+      lead.title || lead.snippet || '',
+      url,
+      'neu',
+      ''
+    ];
+    sheet.appendRow(row);
+    added.push(row);
+  });
+
+  if (added.length) {
+    var startRow = sheet.getLastRow() - added.length + 1;
+    var statusRange = sheet.getRange(startRow, 9, added.length, 1);
+    statusRange.setDataValidation(
+      SpreadsheetApp.newDataValidation()
+        .requireValueInList(['neu', 'in Bearbeitung', 'erledigt', 'kein Interesse'], true)
+        .setAllowInvalid(false)
+        .build()
+    );
+    try { notifySocialLeadsDigest_(added, ss.getUrl()); } catch (ex) {}
+  }
+
+  return { added: added.length, skipped: skipped };
+}
+
+// ----------------------------------------------------------------
+// Social-Leads fuer die Panel-Anzeige zurueckgeben (neueste zuerst,
+// auf 50 begrenzt - fuers Panel reicht ein aktueller Ausschnitt,
+// vollstaendig/bearbeitbar bleibt ohnehin nur das Sheet selbst).
+// ----------------------------------------------------------------
+function listSocialLeads_() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SOCIAL_LEADS_SHEET);
+  if (!sheet || sheet.getLastRow() < 2) return [];
+
+  var vals = sheet.getRange(2, 1, sheet.getLastRow() - 1, 10).getValues();
+  var leads = vals.map(function(r) {
+    var datum = r[1] instanceof Date ? Utilities.formatDate(r[1], 'Europe/Berlin', 'dd.MM.yyyy') : r[1];
+    var uhrzeit = r[2] instanceof Date ? Utilities.formatDate(r[2], 'Europe/Berlin', 'HH:mm') : r[2];
+    return {
+      id: r[0], datum: datum, uhrzeit: uhrzeit, plattform: r[3], thema: r[4],
+      suchbegriff: r[5], titel: r[6], url: r[7], status: r[8], notiz: r[9]
+    };
+  });
+  leads.reverse();
+  return leads.slice(0, 300);
+}
+
+// ----------------------------------------------------------------
+// Social-Lead-Scout: Status/Notiz eines einzelnen Treffers aus dem
+// Panel heraus aendern (Daniel muss dafuer nicht mehr ins Google
+// Sheet wechseln) - findet die Zeile anhand der ID (Spalte A).
+// ----------------------------------------------------------------
+function updateSocialLead_(id, status, notiz) {
+  if (!id) return { ok: false, err: 'id fehlt' };
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SOCIAL_LEADS_SHEET);
+  if (!sheet || sheet.getLastRow() < 2) return { ok: false, err: 'Sheet leer' };
+
+  var ids = sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getValues();
+  for (var i = 0; i < ids.length; i++) {
+    if (String(ids[i][0]) === String(id)) {
+      var row = i + 2;
+      if (status !== undefined && status !== null && status !== '') {
+        sheet.getRange(row, 9).setValue(status);
+      }
+      if (notiz !== undefined && notiz !== null) {
+        sheet.getRange(row, 10).setValue(notiz);
+      }
+      return { ok: true };
+    }
+  }
+  return { ok: false, err: 'ID nicht gefunden' };
+}
+
+// ----------------------------------------------------------------
+// Social-Lead-Scout: einzelnen Treffer endgueltig loeschen (im
+// Unterschied zu updateSocialLead_/Status "kein Interesse", was den
+// Treffer nur ins Archiv verschiebt) - z.B. fuer eindeutigen Muell,
+// den Daniel gar nicht erst archiviert sehen will.
+// ----------------------------------------------------------------
+function deleteSocialLead_(id) {
+  if (!id) return { ok: false, err: 'id fehlt' };
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SOCIAL_LEADS_SHEET);
+  if (!sheet || sheet.getLastRow() < 2) return { ok: false, err: 'Sheet leer' };
+
+  var ids = sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getValues();
+  for (var i = 0; i < ids.length; i++) {
+    if (String(ids[i][0]) === String(id)) {
+      sheet.deleteRow(i + 2);
+      return { ok: true };
+    }
+  }
+  return { ok: false, err: 'ID nicht gefunden' };
+}
+
+// ----------------------------------------------------------------
+// Social-Leads Sheet initialisieren
+// ----------------------------------------------------------------
+function initSocialLeadsSheet_(ss) {
+  var s = ss.insertSheet(SOCIAL_LEADS_SHEET);
+  var h = ['ID', 'Datum', 'Uhrzeit', 'Plattform', 'Thema', 'Suchbegriff', 'Titel/Text', 'URL', 'Status', 'Notiz'];
+  s.appendRow(h);
+  s.setFrozenRows(1);
+  s.getRange(1, 1, 1, h.length)
+    .setBackground('#0c1c3e').setFontColor('#ffffff').setFontWeight('bold');
+  [140, 90, 70, 100, 160, 220, 320, 260, 110, 220].forEach(function(w, i) {
+    s.setColumnWidth(i + 1, w);
+  });
+  try { s.getRange(1, 1, 1, h.length).createFilter(); } catch (ex) {}
+  return s;
+}
+
+// ----------------------------------------------------------------
+// Daniel per E-Mail über neue Social-Media-Treffer informieren
+// ----------------------------------------------------------------
+function notifySocialLeadsDigest_(rows, sheetUrl) {
+  var lines = rows.map(function(r) {
+    // Spalten: ID,Datum,Uhrzeit,Plattform,Thema,Suchbegriff,Titel/Text,URL,Status,Notiz
+    return '• [' + r[3] + ' / ' + r[4] + ']\n  ' + r[6] + '\n  ' + r[7];
+  }).join('\n\n');
+
+  MailApp.sendEmail({
+    to:      NOTIFY_EMAIL,
+    subject: '🔎 ' + rows.length + ' neue Social-Media-Treffer – Neukundengewinn',
+    body:
+      'Hallo Daniel,\n\n'
+    + 'dein Social-Lead-Scout hat ' + rows.length + ' neue(n) Beitrag/Beiträge gefunden, '
+    + 'in denen jemand nach Versicherungsthemen fragt:\n\n'
+    + lines + '\n\n'
+    + 'Alle Treffer (mit Status/Notiz-Spalte zum Bearbeiten, sortier- und filterbar) im Sheet "Social-Leads":\n'
+    + sheetUrl + '\n\n'
+    + '– Dein Social-Lead-Scout'
+  });
 }
 
 // ----------------------------------------------------------------

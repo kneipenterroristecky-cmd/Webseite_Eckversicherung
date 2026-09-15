@@ -19,6 +19,10 @@ screenshots/
 
 # Lokale Konfiguration mit API-Keys (niemals pushen)
 dashboard-config.js
+.env
+
+# Lokale KI-Bild/Video-Werkstatt (Media-Skill) - nie ins öffentliche Repo
+media-ai/
 
 # Wrangler lokaler Cache
 .wrangler/

@@ -8,6 +8,14 @@ import base64
 import requests
 
 
+def _photo_slug(p):
+    """Extrahiert das 'photo-<epoch>-<hash>'-Slug aus der raw-URL eines Unsplash-
+    Suchergebnisses - das ist die ID, die ueberall sonst im Projekt verwendet wird
+    (draft_meta.json shown_image_ids, request-changes.yml new_unsplash_id)."""
+    m = re.search(r'(photo-[\w-]+)', p.get("urls", {}).get("raw", ""))
+    return m.group(1) if m else p.get("id")
+
+
 def find_best_image(topic_title, topic_label, topic_query, client, fallback_url, unsplash_key, exclude_ids=None):
     """Sucht auf Unsplash und lässt Claude Vision das thematisch passendste Bild wählen.
 
@@ -15,10 +23,22 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
     (z.B. alle bei diesem Entwurf bereits gezeigten Bilder – sonst liefert dieselbe
     Suche+Vision-Wahl deterministisch wieder eines der schon gezeigten Fotos zurück).
     """
+    results = find_best_images(topic_title, topic_label, topic_query, client, fallback_url, unsplash_key, exclude_ids, n=1)
+    return results[0]["url"] if results else fallback_url
+
+
+def find_best_images(topic_title, topic_label, topic_query, client, fallback_url, unsplash_key, exclude_ids=None, n=4):
+    """Wie find_best_image, liefert aber die Top-n Kandidaten als von Claude Vision
+    gerankte Liste zurück (bestes zuerst) statt nur den einen besten Treffer -
+    z.B. damit der Kunde sich in WhatsApp zwischen mehreren Bildern entscheiden kann.
+
+    Rückgabe: Liste von {"url": ..., "id": ...}, bestes zuerst. Bei Fehlern/fehlendem
+    Key: Liste mit nur dem Fallback-Bild.
+    """
     exclude_ids = set(exclude_ids or [])
     if not unsplash_key:
         print("   ℹ️  Kein UNSPLASH_ACCESS_KEY – nutze Fallback-Bild")
-        return fallback_url
+        return [{"url": fallback_url, "id": None}]
 
     # Bei wiederholten Aufrufen zum selben Thema (z.B. mehrfach "Neues Bild vorschlagen")
     # liefert Claude Haiku fuer denselben Titel fast immer denselben Suchbegriff. Ein
@@ -60,7 +80,7 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
         )
         if r.status_code != 200:
             print(f"   ⚠️  Unsplash API {r.status_code} – nutze Fallback")
-            return fallback_url
+            return [{"url": fallback_url, "id": None}]
 
         photos = r.json().get("results", [])
         if not photos and search_page > 1:
@@ -76,13 +96,19 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
         # Zu kleine Originale ausschliessen – sonst skaliert Unsplash beim Zuschnitt
         # auf 1080x1920 hoch, was das Bild unscharf/verwaschen macht.
         photos = [p for p in photos if p.get("width", 0) >= 1080 and p.get("height", 0) >= 1080]
-        photos = [p for p in photos if p.get("id") not in exclude_ids]
+        # exclude_ids/shown_image_ids verwenden ueberall sonst im Code (draft_meta.json,
+        # request-changes.yml new_unsplash_id) das "photo-<epoch>-<hash>"-Slug aus der
+        # Bild-URL, NICHT Unsplash' kurze API-"id" - deshalb hier konsistent denselben
+        # Slug fuer den Abgleich nehmen statt p["id"].
+        photos = [p for p in photos if _photo_slug(p) not in exclude_ids]
         if not photos:
             print("   ⚠️  Keine neuen Unsplash-Ergebnisse (alle bereits vorgeschlagen oder zu klein) – nutze Fallback")
-            return fallback_url
+            return [{"url": fallback_url, "id": None}]
         # Zufaellige statt immer gleicher Auswahl der ersten Treffer, damit Claude Vision
-        # nicht wieder auf denselben Kandidaten-Satz konvergiert.
-        photos = random.sample(photos, min(6, len(photos)))
+        # nicht wieder auf denselben Kandidaten-Satz konvergiert. Pool etwas groesser als n,
+        # damit Claude Vision beim Ranken echte Auswahl hat.
+        pool_size = max(6, n + 2)
+        photos = random.sample(photos, min(pool_size, len(photos)))
 
         # Schritt 3: Vorschaubilder laden
         candidates = []
@@ -92,59 +118,74 @@ def find_best_image(topic_title, topic_label, topic_query, client, fallback_url,
                 img_r.raise_for_status()
                 b64 = base64.b64encode(img_r.content).decode()
                 mime = img_r.headers.get("content-type", "image/jpeg").split(";")[0]
-                candidates.append({"raw": p["urls"]["raw"], "b64": b64, "mime": mime, "id": p["id"]})
+                candidates.append({"raw": p["urls"]["raw"], "b64": b64, "mime": mime, "id": _photo_slug(p)})
             except Exception:
                 pass
 
         if not candidates:
-            return fallback_url
+            return [{"url": fallback_url, "id": None}]
 
-        # Schritt 4: Claude Vision wählt das beste Bild
+        # Schritt 4: Claude Vision rankt die Bilder (bestes zuerst)
         msg_content = []
         for i, c in enumerate(candidates):
             msg_content.append({"type": "image", "source": {"type": "base64", "media_type": c["mime"], "data": c["b64"]}})
             msg_content.append({"type": "text", "text": f"Bild {i + 1}"})
 
+        n_wanted = max(1, min(n, len(candidates)))
         msg_content.append({"type": "text", "text": (
             f'Thema: "{topic_title}" (Kategorie: {topic_label})\n\n'
-            "Welches Bild passt am BESTEN zu diesem deutschen Versicherungsthema?\n"
-            "Wähle das Bild das:\n"
-            "✓ Das Thema direkt und konkret zeigt (z.B. echtes Auto für KFZ, Arzt für Kranken)\n"
-            "✓ Scharf und klar fokussiert ist – KEIN verschwommenes/unscharfes Hauptmotiv, "
+            "Ranke diese Bilder für dieses deutsche Versicherungsthema, bestes zuerst.\n"
+            "Ein gutes Bild:\n"
+            "✓ Zeigt das Thema direkt und konkret (z.B. echtes Auto für KFZ, Arzt für Kranken)\n"
+            "✓ Ist scharf und klar fokussiert – KEIN verschwommenes/unscharfes Hauptmotiv, "
             "kein starker Bokeh-/Weichzeichner-Effekt, kein Bewegungsunschärfe\n"
-            "✓ Hell und freundlich wirkt – kein düsteres Stimmungsbild\n"
-            "✓ Ein gepflegtes, intaktes Haus/Zuhause zeigt – KEINE verlassene, heruntergekommene "
+            "✓ Wirkt hell und freundlich – kein düsteres Stimmungsbild\n"
+            "✓ Zeigt ein gepflegtes, intaktes Haus/Zuhause – KEINE verlassene, heruntergekommene "
             "oder verwahrloste Ruine, auch wenn das Thema Einbruch/Schaden ist\n"
-            "✓ Keinen englischen Text enthält\n"
-            "✓ Echten Alltag zeigt – keine Hologramme, keine abstrakten Grafiken\n"
-            "✓ Europäischen/deutschen Kontext hat\n\n"
-            "Ein professioneller Versicherungsmakler nutzt dieses Bild für seine Social-Media-Werbung – "
-            "es muss gestochen scharf sein.\n\n"
-            f"Antworte NUR mit einer Zahl (1–{len(candidates)}). Kein weiterer Text."
+            "✓ Enthält keinen englischen Text\n"
+            "✓ Zeigt echten Alltag – keine Hologramme, keine abstrakten Grafiken\n"
+            "✓ Hat europäischen/deutschen Kontext\n\n"
+            "Ein professioneller Versicherungsmakler nutzt diese Bilder für seine Social-Media-Werbung – "
+            "sie müssen gestochen scharf sein.\n\n"
+            f"Antworte NUR mit den {n_wanted} besten Bildnummern als kommagetrennte Liste, bestes zuerst "
+            f"(z.B. \"3,1,5,2\"). Kein weiterer Text."
         )})
 
         pick_resp = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=5,
+            max_tokens=30,
             messages=[{"role": "user", "content": msg_content}]
         )
 
-        pick_match = re.search(r'\d+', pick_resp.content[0].text)
-        if not pick_match:
-            print(f"   ⚠️  Unerwartete KI-Antwort – nutze Fallback")
-            return fallback_url
+        picks = [int(x) - 1 for x in re.findall(r'\d+', pick_resp.content[0].text)]
+        picks = [p for p in picks if 0 <= p < len(candidates)]
+        # Duplikate entfernen, Reihenfolge (= Ranking) beibehalten
+        seen_picks = []
+        for p in picks:
+            if p not in seen_picks:
+                seen_picks.append(p)
+        # Falls die KI weniger als gewuenscht liefert (z.B. Parsing-Fehler), mit den
+        # restlichen Kandidaten in Originalreihenfolge auffuellen statt Faelle zu verlieren.
+        for i in range(len(candidates)):
+            if len(seen_picks) >= n_wanted:
+                break
+            if i not in seen_picks:
+                seen_picks.append(i)
 
-        pick = int(pick_match.group()) - 1
-        pick = max(0, min(pick, len(candidates) - 1))
-        chosen = candidates[pick]
-        # chosen['raw'] enthaelt bei Unsplash bereits einen Query-String (ixid/ixlib) -
-        # ein zweites "?" wuerde die URL kaputt machen (w/h landen dann in ixlib statt
-        # als eigene Parameter, das Bild kommt unskaliert/zu gross zurueck).
-        sep = "&" if "?" in chosen['raw'] else "?"
-        result_url = f"{chosen['raw']}{sep}w=1200&h=630&fit=crop&auto=format"
-        print(f"   ✅ KI wählte Bild {pick + 1}/{len(candidates)} (Unsplash-ID: {chosen['id']})")
-        return result_url
+        results = []
+        for pick in seen_picks[:n_wanted]:
+            chosen = candidates[pick]
+            # chosen['raw'] enthaelt bei Unsplash bereits einen Query-String (ixid/ixlib) -
+            # ein zweites "?" wuerde die URL kaputt machen (w/h landen dann in ixlib statt
+            # als eigene Parameter, das Bild kommt unskaliert/zu gross zurueck).
+            sep = "&" if "?" in chosen['raw'] else "?"
+            results.append({
+                "url": f"{chosen['raw']}{sep}w=1200&h=630&fit=crop&auto=format",
+                "id": chosen["id"],
+            })
+        print(f"   ✅ KI rankte {len(results)} Bild(er) (bestes: {results[0]['id']})")
+        return results
 
     except Exception as e:
         print(f"   ⚠️  Dynamische Bildauswahl fehlgeschlagen: {e} – nutze Fallback")
-        return fallback_url
+        return [{"url": fallback_url, "id": None}]

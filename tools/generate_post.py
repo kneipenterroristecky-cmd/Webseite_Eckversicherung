@@ -3,7 +3,7 @@
 Erstellt einen wöchentlichen Blog-Beitrag mit Claude (KI) im Stil von Daniel Eck.
 """
 import os, json, re, time, datetime, base64, requests, anthropic
-from image_search import find_best_image
+from image_search import find_best_images
 
 SITE_URL = os.environ.get("SITE_URL", "https://kneipenterroristecky-cmd.github.io/Webseite_Eckversicherung")
 
@@ -103,13 +103,13 @@ _FALLBACK_IMG = "https://images.unsplash.com/photo-1554224155-6726b3ff858f"
 
 _fallback_url = topic.get("og_image") or f"{_FALLBACK_IMG}?w=1200&h=630&fit=crop&auto=format"
 _unsplash_key = os.environ.get("UNSPLASH_ACCESS_KEY", "").strip()
-og_image = find_best_image(
+_image_candidates = find_best_images(
     topic["title"], topic["label"],
     topic.get("unsplash_query", topic["title"]),
-    client, _fallback_url, _unsplash_key
+    client, _fallback_url, _unsplash_key, n=4
 )
-_og_image_match = re.search(r'(photo-[\w-]+)', og_image)
-_shown_image_ids = [_og_image_match.group(1)] if _og_image_match else []
+og_image = _image_candidates[0]["url"]
+_shown_image_ids = [c["id"] for c in _image_candidates if c.get("id")]
 
 # Portrait-Crop: Fokuspunkt aus topics.json nehmen wenn vorhanden, sonst KI-Analyse
 _og_base = og_image.split("?")[0] or _FALLBACK_IMG
@@ -155,6 +155,14 @@ else:
         _ig_crop = "crop=entropy"
         print(f"   📸 Bild: {_og_base} (Fallback: entropy – {e})")
 ig_img_url_global = f"{_og_base}?w=1080&h=1920&fit=crop&{_ig_crop}&auto=format"
+
+# ── Hochformat-Vorschau-URLs für alle 4 Bildkandidaten (WhatsApp-Bildauswahl) ────
+# Nur Kandidat 1 (der oben gewählte) bekommt den teuren KI-Fokuspunkt - für 2-4
+# reicht ein automatischer Entropy-Crop, die sind nur Vorschläge zur Auswahl.
+_image_candidates[0]["ig_url"] = ig_img_url_global
+for _c in _image_candidates[1:]:
+    _base = _c["url"].split("?")[0]
+    _c["ig_url"] = f"{_base}?w=1080&h=1920&fit=crop&crop=entropy&auto=format"
 
 # ── Blog-Beitrag schreiben ────────────────────────────────────────────────────
 beitrag = create_with_retry(client,
@@ -364,6 +372,7 @@ draft_meta = {
     "unsplash_query": topic.get("unsplash_query", "insurance finance"),
     "og_image": og_image,
     "shown_image_ids": _shown_image_ids,
+    "image_candidates": [{"id": c["id"], "url": c["url"], "ig_url": c["ig_url"]} for c in _image_candidates],
     "social_image_url": social_image_url,
     "wa_image_text": " ".join(x for x in [ig_before, ig_highlight, ig_after] if x) + (f" – {ig_sub}" if ig_sub else "")
 }

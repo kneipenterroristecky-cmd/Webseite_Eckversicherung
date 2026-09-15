@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Cloudflare Worker: WhatsApp → GitHub Goal Trigger + Kunden-Dokumenten-Weiterleitung
  *
  * Secrets (im Cloudflare Dashboard unter Workers → Settings → Variables eintragen):
@@ -169,8 +169,44 @@ function htmlResponse(html, status = 200) {
   return new Response(html, { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
 }
 
+// ── Handy-Drop sofort verarbeiten lassen statt auf den naechsten 15-Minuten-
+// Cron zu warten (Kosten-Fix 2026-08-26: der reine Zeitplan-Takt hat allein
+// ~1220 der ~2155 GitHub-Actions-Minuten/Monat gekostet, obwohl er die meiste
+// Zeit nichts zu tun hatte). Loest per workflow_dispatch direkt den
+// GitHub-Actions-Workflow im buero-automation-Repo aus - eigenes PAT
+// (BUERO_GITHUB_PAT), bewusst getrennt vom GITHUB_PAT oben (das ist auf das
+// Webseite-Repo ausgelegt). Schlaegt der Dispatch fehl (Token abgelaufen o.ae.),
+// bleibt der Drop trotzdem in der KV-Warteschlange liegen - der verbliebene
+// stuendliche Sicherheitsnetz-Cron in whatsapp-phone-drop-cloud.yml holt ihn
+// dann spaetestens nach.
+async function triggerPhoneDropSync(env) {
+  if (!env.BUERO_GITHUB_PAT) {
+    console.error('BUERO_GITHUB_PAT fehlt - Handy-Drop wartet auf den stuendlichen Sicherheitsnetz-Cron.');
+    return;
+  }
+  try {
+    const resp = await fetch(
+      'https://api.github.com/repos/kneipenterroristecky-cmd/buero-automation/actions/workflows/whatsapp-phone-drop-cloud.yml/dispatches',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${env.BUERO_GITHUB_PAT}`,
+          'Content-Type': 'application/json',
+          'User-Agent': 'WhatsApp-Phone-Drop-Trigger/1.0',
+        },
+        body: JSON.stringify({ ref: 'master', inputs: { dry_run: 'false' } }),
+      }
+    );
+    if (!resp.ok) {
+      console.error('Dispatch fehlgeschlagen (' + resp.status + '):', await resp.text());
+    }
+  } catch (ex) {
+    console.error('Fehler beim Ausloesen des Handy-Drop-Syncs:', ex);
+  }
+}
+
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env) {
     const url = new URL(request.url);
 
     // ── Coexistence-Verbindungsseite (einmaliger, manueller Klick von Daniel) ──
@@ -193,8 +229,9 @@ export default {
     // ── Handy-Kurzbefehl: manuell aus WhatsApp geteilte Datei zwischenspeichern ──
     // Umgeht die Cloud-API komplett (kein Meta-Zugriff noetig). Das Handy teilt
     // EINE ausgewaehlte Datei hierher (kein Auto-Sync von allem), sie landet in
-    // KV. WhatsApp Klaus wird per Webhook einmalig benachrichtigt (kein Polling),
-    // holt ab und laedt nach PW — Cloudflare-schonend, PC darf aus sein.
+    // KV, bis der GitHub-Actions-Cloud-Pilot (whatsapp-phone-drop-cloud.ps1)
+    // sie per rclone in den echten OneDrive-Ordner "Manuell einwerfen" legt -
+    // danach laeuft sie wie jedes andere Dokument durch Petra/Bilal/Uwe.
     if (url.pathname === '/phone-drop' && request.method === 'POST') {
       if (url.searchParams.get('secret') !== env.PHONE_DROP_SECRET) {
         return htmlResponse(renderPhoneDropResult({ ok: false, message: 'Falsches Secret - der Kurzbefehl ist nicht korrekt eingerichtet.' }), 401);
@@ -222,23 +259,16 @@ export default {
       const queue = JSON.parse(queueRaw);
       queue.push(id);
       await env.SELIN_MEMORY.put('phonedrop_queue', JSON.stringify(queue));
-
-      // Sofort in Cloudflare verarbeiten (event-driven, 1 Lauf pro Teilen).
-      if (ctx && ctx.waitUntil) {
-        ctx.waitUntil(processPhoneDropToPw(env, { id, filename, contentType, bytes }));
-      } else {
-        // Fallback falls ctx fehlt
-        await processPhoneDropToPw(env, { id, filename, contentType, bytes });
-      }
-
+      await triggerPhoneDropSync(env);
       return htmlResponse(renderPhoneDropResult({
         ok: true,
-        message: 'Angekommen. Cloudflare verarbeitet das Dokument jetzt und laedt es nach Professional Works hoch.',
+        message: 'Wird jetzt sofort abgeholt und im Buero-Ordner "Manuell einwerfen" abgelegt.',
         filename,
         id,
       }));
     }
 
+    // ── Cloud-Pilot holt anstehende Handy-Drops ab (Secret = WORKER_ADMIN_SECRET) ──
     if (url.pathname === '/api/phone-drops' && request.method === 'GET') {
       if (url.searchParams.get('secret') !== env.WORKER_ADMIN_SECRET) {
         return json({ error: 'Falsches Secret' }, 401);
@@ -459,262 +489,6 @@ export default {
 // Liefert die aktuell gueltigen Zugangsdaten fuer Daniels Hauptnummer: bevorzugt
 // die per /connect (Coexistence) frisch verbundenen Werte aus KV, faellt sonst
 // auf die statischen GitHub/Cloudflare-Secrets zurueck (Alt-/Testnummer).
-
-// === Phone-Drop Sofortverarbeitung in Cloudflare (kein GitHub, kein PC) ===
-async function processPhoneDropToPw(env, { id, filename, contentType, bytes }) {
-  const base64 = arrayBufferToBase64(bytes);
-  const mime = (contentType || "application/octet-stream").split(";")[0].trim();
-  const kind = mime === "application/pdf" ? "document" : "image";
-  const safeName = filename || `whatsapp-${id}.bin`;
-
-  try {
-    // 1) Versicherungsbezug
-    const relevant = await hatVersicherungsbezug(env, base64, mime, kind);
-    if (!relevant) {
-      console.log("Phone-Drop ohne Versicherungsbezug verworfen:", safeName, id);
-      await ackPhoneDrops(env, [id]);
-      return { ok: true, skipped: "kein_versicherungsbezug" };
-    }
-
-    // 2) Kundenname per Claude
-    const identity = await extractClientIdentity(env, base64, mime, kind);
-    const clients = await searchPwClients(env, identity);
-    if (!clients.length) {
-      console.log("Phone-Drop: kein PW-Kunde — Mail an Daniel:", identity, id);
-      await mailPhoneDropFallback(env, {
-        filename: safeName,
-        mime,
-        base64,
-        reason: "Kein eindeutiger Kunde in PW gefunden",
-        identity,
-      });
-      await ackPhoneDrops(env, [id]);
-      return { ok: false, mailed: true, needsMatch: true, identity };
-    }
-    if (clients.length > 1) {
-      console.log("Phone-Drop: mehrere PW-Treffer — Mail an Daniel:", clients.map(c => c.id), id);
-      await mailPhoneDropFallback(env, {
-        filename: safeName,
-        mime,
-        base64,
-        reason: "Mehrere mögliche Kunden in PW (" + clients.length + " Treffer)",
-        identity,
-        candidates: clients.slice(0, 5).map((c) => ({
-          id: c.id,
-          name: [c.first_name, c.last_name, c.company_name || c.name].filter(Boolean).join(" "),
-        })),
-      });
-      await ackPhoneDrops(env, [id]);
-      return { ok: false, mailed: true, needsMatch: true, identity, candidates: clients.length };
-    }
-    const client = clients[0];
-
-    // 3) Upload
-    const upload = await uploadPwFile(env, {
-      clientId: client.id,
-      filename: safeName,
-      mime,
-      bytes,
-      note: `WhatsApp Zum-KI-Team ${new Date().toISOString()}`,
-    });
-    if (!upload.ok) {
-      console.error("Phone-Drop PW-Upload fehlgeschlagen — Mail an Daniel:", upload);
-      await mailPhoneDropFallback(env, {
-        filename: safeName,
-        mime,
-        base64,
-        reason: "PW-Upload fehlgeschlagen (HTTP " + (upload.status || "?") + ")",
-        identity,
-        upload,
-      });
-      await ackPhoneDrops(env, [id]);
-      return { ok: false, mailed: true, upload };
-    }
-    await ackPhoneDrops(env, [id]);
-    console.log("Phone-Drop nach PW hochgeladen:", safeName, "client", client.id, "file", upload.fileId);
-    return { ok: true, clientId: client.id, fileId: upload.fileId };
-  } catch (ex) {
-    console.error("Phone-Drop Verarbeitung fehlgeschlagen — Mail an Daniel:", ex);
-    try {
-      await mailPhoneDropFallback(env, {
-        filename: safeName,
-        mime,
-        base64,
-        reason: "Verarbeitungsfehler: " + String(ex && ex.message ? ex.message : ex),
-      });
-      await ackPhoneDrops(env, [id]);
-      return { ok: false, mailed: true, error: String(ex) };
-    } catch (mailEx) {
-      console.error("Auch Fallback-Mail fehlgeschlagen, Datei bleibt in Queue:", mailEx);
-      return { ok: false, mailed: false, error: String(ex), mailError: String(mailEx) };
-    }
-  }
-}
-
-async function mailPhoneDropFallback(env, { filename, mime, base64, reason, identity, candidates, upload }) {
-  if (!env.DOCUMENT_RELAY_URL || !env.DOCUMENT_RELAY_SECRET) {
-    throw new Error("DOCUMENT_RELAY_URL/SECRET fehlen — kann Dokument nicht per Mail schicken");
-  }
-  const detail = {
-    reason: reason || "nicht verarbeitet",
-    identity: identity || null,
-    candidates: candidates || null,
-    uploadStatus: upload && upload.status ? upload.status : null,
-  };
-  const resp = await fetch(env.DOCUMENT_RELAY_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      action: "whatsapp_pdf",
-      secret: env.DOCUMENT_RELAY_SECRET,
-      filename,
-      mimeType: mime || "application/octet-stream",
-      pdfBase64: base64,
-      from: "phone-drop-fallback",
-      note: "WhatsApp Zum-KI-Team — bitte manuell prüfen: " + JSON.stringify(detail),
-    }),
-  });
-  if (!resp.ok) {
-    throw new Error("DOCUMENT_RELAY HTTP " + resp.status + " " + (await resp.text()));
-  }
-}
-
-async function ackPhoneDrops(env, ids) {
-  const ackIds = new Set(ids || []);
-  const queueRaw = (await env.SELIN_MEMORY.get("phonedrop_queue")) || "[]";
-  const queue = JSON.parse(queueRaw).filter((id) => !ackIds.has(id));
-  await env.SELIN_MEMORY.put("phonedrop_queue", JSON.stringify(queue));
-  for (const id of ackIds) {
-    await env.SELIN_MEMORY.delete(`phonedrop:${id}`);
-  }
-}
-
-async function extractClientIdentity(env, base64, mime, kind) {
-  try {
-    const contentBlock = kind === "document"
-      ? { type: "document", source: { type: "base64", media_type: "application/pdf", data: base64 } }
-      : { type: "image", source: { type: "base64", media_type: mime, data: base64 } };
-    const body = {
-      model: "claude-haiku-4-5",
-      max_tokens: 300,
-      messages: [{
-        role: "user",
-        content: [
-          contentBlock,
-          { type: "text", text: "Extrahiere den Versicherungsnehmer / Kunden aus diesem Dokument. Antworte nur JSON." }
-        ]
-      }],
-      output_config: {
-        format: {
-          type: "json_schema",
-          schema: {
-            type: "object",
-            properties: {
-              first_name: { type: "string" },
-              last_name: { type: "string" },
-              company_name: { type: "string" },
-              query: { type: "string" }
-            },
-            required: ["query"],
-            additionalProperties: false
-          }
-        }
-      }
-    };
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "x-api-key": env.ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    if (!resp.ok) throw new Error("Claude identity HTTP " + resp.status);
-    const data = await resp.json();
-    const textBlock = (data.content || []).find((b) => b.type === "text");
-    return JSON.parse(textBlock.text);
-  } catch (ex) {
-    console.error("extractClientIdentity failed:", ex);
-    return { query: "" };
-  }
-}
-
-async function searchPwClients(env, identity) {
-  if (!env.PW_API_TOKEN) return [];
-  const agency = env.PW_AGENCY_ID || "57324";
-  const root = (env.PW_API_BASE || "https://api.professional.works").replace(/\/$/, "") + "/api/v1/" + agency;
-  const headers = { Authorization: "Bearer " + env.PW_API_TOKEN, Accept: "application/json" };
-  const tries = [];
-  if (identity.last_name) {
-    const q = new URLSearchParams();
-    q.set("last_name", identity.last_name);
-    if (identity.first_name) q.set("first_name", identity.first_name);
-    q.set("per_page", "20");
-    tries.push(root + "/clients?" + q.toString());
-  }
-  if (identity.company_name) {
-    const q = new URLSearchParams();
-    q.set("name", identity.company_name);
-    q.set("per_page", "20");
-    tries.push(root + "/clients?" + q.toString());
-  }
-  if (identity.query) {
-    // fallback: try last token as last_name
-    const parts = String(identity.query).trim().split(/\s+/);
-    if (parts.length >= 2) {
-      const q = new URLSearchParams();
-      q.set("first_name", parts[0]);
-      q.set("last_name", parts.slice(1).join(" "));
-      q.set("per_page", "20");
-      tries.push(root + "/clients?" + q.toString());
-    }
-  }
-  const found = [];
-  const seen = new Set();
-  for (const url of tries) {
-    try {
-      const resp = await fetch(url, { headers });
-      if (!resp.ok) continue;
-      const data = await resp.json();
-      const list = Array.isArray(data) ? data : (data.data || data.clients || []);
-      for (const c of list) {
-        if (c && c.id != null && !seen.has(c.id)) {
-          seen.add(c.id);
-          found.push(c);
-        }
-      }
-    } catch (ex) {
-      console.error("PW search failed", url, ex);
-    }
-  }
-  return found;
-}
-
-async function uploadPwFile(env, { clientId, filename, mime, bytes, note }) {
-  const agency = env.PW_AGENCY_ID || "57324";
-  const root = (env.PW_API_BASE || "https://api.professional.works").replace(/\/$/, "") + "/api/v1/" + agency;
-  const form = new FormData();
-  form.append("client_id", String(clientId));
-  form.append("document_type_id", "50");
-  form.append("file", new Blob([bytes], { type: mime || "application/octet-stream" }), filename);
-  if (note) {
-    form.append("note[content]", note);
-    form.append("note[client_id]", String(clientId));
-  }
-  const resp = await fetch(root + "/clients/files", {
-    method: "POST",
-    headers: { Authorization: "Bearer " + env.PW_API_TOKEN },
-    body: form,
-  });
-  const text = await resp.text();
-  let data = null;
-  try { data = JSON.parse(text); } catch { data = { raw: text.slice(0, 500) }; }
-  if (!resp.ok) return { ok: false, status: resp.status, data };
-  return { ok: true, status: resp.status, fileId: data?.data?.id, data };
-}
-
-
 async function getWaConnection(env) {
   const phoneNumberId = (await env.SELIN_MEMORY.get('connection_phone_number_id')) || env.WHATSAPP_PHONE_NUMBER_ID;
   const accessToken = (await env.SELIN_MEMORY.get('connection_access_token')) || env.WHATSAPP_ACCESS_TOKEN;

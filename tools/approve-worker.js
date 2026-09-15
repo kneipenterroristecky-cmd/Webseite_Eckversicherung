@@ -9,6 +9,8 @@
  * Endpunkte:
  *   GET  /approve?token=...          → Workflow 2 (veröffentlichen), keine Eingaben nötig
  *   GET  /suggest-image?token=...    → Workflow 3 mit suggest_new_image=true
+ *   GET  /choose-image?token=...&img=<unsplash-foto-id>  → Workflow 3 mit new_unsplash_id=<img>
+ *                                     (einer der 4 Bildvorschläge aus der Freigabe-Nachricht)
  *   GET  /change?token=...           → zeigt ein kleines Handy-Formular (Titel/Text ändern)
  *   POST /change?token=...           → verarbeitet das Formular, löst Workflow 3 aus
  *
@@ -123,6 +125,28 @@ export default {
         <div class="status">🖼️</div>
         <h1>Neues Bild wird gesucht</h1>
         <p>Die KI sucht jetzt ein passenderes Bild und schickt in ein paar Minuten eine neue Vorschau-Mail.</p>
+      ` : `
+        <div class="status">❌</div>
+        <h1>Fehler beim Starten</h1>
+        <p>Bitte kurz warten und den Link nochmal antippen, oder Daniel Bescheid geben.</p>
+      `), { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+    }
+
+    // ── Eines der 4 vorgeschlagenen Bilder wählen (Workflow 3, new_unsplash_id) ──
+    if (url.pathname === '/choose-image') {
+      const img = url.searchParams.get('img');
+      if (!img) {
+        return new Response(page('Fehlendes Bild', `
+          <div class="status">⚠️</div>
+          <h1>Kein Bild angegeben</h1>
+          <p>Dieser Link ist unvollständig. Bitte die aktuelle Mail/Nachricht verwenden.</p>
+        `), { status: 400, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+      }
+      const resp = await dispatchWorkflow(env, 'request-changes.yml', { new_unsplash_id: img });
+      return new Response(page('Bild gewählt', resp.ok ? `
+        <div class="status">🖼️</div>
+        <h1>Bild übernommen</h1>
+        <p>Der Entwurf wird mit diesem Bild aktualisiert. In ein paar Minuten kommt die finale Vorschau mit dem "Freigeben"-Button.</p>
       ` : `
         <div class="status">❌</div>
         <h1>Fehler beim Starten</h1>
