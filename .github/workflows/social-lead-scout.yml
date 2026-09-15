@@ -1,8 +1,9 @@
 name: Social-Lead-Scout (Neukundengewinn soziale Medien)
 
 on:
-  schedule:
-    - cron: '0 6 * * *'  # Taeglich 06:00 UTC = 07:00/08:00 DE
+  # DEAKTIVIERT 2026-09-15 auf Anweisung (alle Claude-Automatisierungen abstellen)
+  # schedule:
+  #   - cron: '0 6 * * *'  # Taeglich 06:00 UTC = 07:00/08:00 DE
   workflow_dispatch:      # Auch manuell startbar (Actions-Tab → Run workflow)
 
 jobs:
