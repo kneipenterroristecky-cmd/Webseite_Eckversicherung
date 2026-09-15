@@ -1,8 +1,9 @@
 name: 🔄 Goal Auto-Retry (stündlich)
 
 on:
-  schedule:
-    - cron: '0 * * * *'   # Jede volle Stunde
+  # DEAKTIVIERT 2026-09-15 auf Anweisung (alle Claude-Automatisierungen abstellen)
+  # schedule:
+  #   - cron: '0 * * * *'   # Jede volle Stunde
   workflow_dispatch:       # Manuell auslösbar
 
 jobs:
