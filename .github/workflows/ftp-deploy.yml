@@ -1,0 +1,76 @@
+# Deploys the public site files on push to master to the 1blu webroot via FTP.
+# Required repo secrets: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD
+# If the secrets are not set yet, this workflow succeeds with a skip notice
+# instead of failing.
+
+name: Deploy to 1blu FTP
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: ftp-deploy
+  cancel-in-progress: true
+
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check FTP secrets
+        id: check
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          if [ -z "$FTP_SERVER" ] || [ -z "$FTP_USERNAME" ] || [ -z "$FTP_PASSWORD" ]; then
+            echo "missing=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::FTP-Secrets fehlen noch (FTP_SERVER, FTP_USERNAME, FTP_PASSWORD). Deploy wird übersprungen. Secrets unter Settings → Secrets and variables → Actions eintragen."
+          else
+            echo "missing=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.check.outputs.missing == 'false'
+
+      - name: Deploy site files to 1blu webroot
+        if: steps.check.outputs.missing == 'false'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          local-dir: ./
+          server-dir: /
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/.github/**/**
+            **/.claude/**
+            **/.clasp-project/**
+            **/.wrangler/**
+            **/.env
+            **/.env.example
+            **/tools/**
+            **/bkv-kampagne/**
+            **/Calendly/**
+            **/dashboard.html
+            **/dashboard-config.js
+            **/email-preview.html
+            **/foto-storyboard.html
+            **/hero-badge-varianten.html
+            **/test-logo-stempel.html
+            **/schrift-preview.html
+            **/google-bewertungskarte.html
+            **/Code.gs
+            **/Claude.md
+            **/BLOG_SETUP.md
+            **/Webseite_TODO.txt
+            **/.htaccess
+            **/__pycache__/**
+            **/*.pyc
