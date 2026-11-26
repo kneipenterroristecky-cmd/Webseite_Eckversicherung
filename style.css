@@ -79,6 +79,7 @@ p   { line-height: 1.7; }
   transition: opacity .2s;
 }
 .topbar-ticker:hover { opacity: .75; }
+.topbar-ticker:hover .topbar-ticker-track { animation-play-state: paused; }
 .topbar-ticker-viewport {
   width: 460px;
   overflow: hidden;
@@ -89,7 +90,7 @@ p   { line-height: 1.7; }
 .topbar-ticker-track {
   display: inline-flex;
   white-space: nowrap;
-  animation: topbar-ticker-scroll 16s linear infinite;
+  animation: topbar-ticker-scroll 32s linear infinite;
 }
 .topbar-ticker-run { padding-right: 48px; }
 @keyframes topbar-ticker-scroll {
